@@ -14,7 +14,7 @@ class HomeController extends Controller {
     {  
         $Productos      = ArticulosUMK::getArticulos();
         $Clientes       = Clientes::getClientes();
-        $Vendedor       = Vendedor::getClientes();
-        //return view('Principal.Home', compact('Productos','Clientes'));         
+        $Vendedor       = Vendedor::getVendedor();
+        return view('Principal.Home', compact('Productos','Clientes'));         
     }
 }
