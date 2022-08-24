@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 
 
-class Vendedores extends Model
+class Vendedor extends Model
 {
     protected $connection = 'sqlsrv';
     public $timestamps = false;
@@ -14,6 +14,6 @@ class Vendedores extends Model
 
     public static function getVendedor()
     {  
-        return Vendedores::whereNotIn('VENDEDOR',['F01','F02','F04'])->get();;
+        return Vendedor::whereNotIn('VENDEDOR',['F01','F02','F04'])->get();;
     }
 }
