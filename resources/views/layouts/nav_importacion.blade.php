@@ -54,7 +54,7 @@
     <div class="dropdown-menu dropdown-menu-end py-0" aria-labelledby="navbarDropdownUser">
       <div class="bg-white dark__bg-1000 rounded-2 py-2">            
       <a class="dropdown-item fw-bold text-warning" href="{{ route('ArticuloFavorito') }}"><span class="fas fa-crown me-1"></span><span>Art. Favs.</span></a>
-      <a class="dropdown-item" href="{{ route('Home') }}"> <span class="fas fa-user-tie me-1"></span>Usuario </a>
+      <a class="dropdown-item" href="{{ route('Usuarios') }}"> <span class="fas fa-user-tie me-1"></span>Usuario </a>
       
       <div class="dropdown-divider"></div>
       <a class="dropdown-item" href="{{ route('Home') }}">Salir</a>
