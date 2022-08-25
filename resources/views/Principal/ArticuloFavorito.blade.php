@@ -1,6 +1,6 @@
 @extends('layouts.lyt_gumadesk')
 @section('metodosjs')
-@include('jsViews.js_home');
+@include('jsViews.js_ArticuloFavorito');
 @endsection
 @section('content')
 
@@ -15,10 +15,8 @@
               <div class="card">
                 <div class="card-header d-flex flex-between-center ps-0 py-0 border-bottom">
                   <ul class="nav nav-tabs border-0 flex-nowrap tab-active-caret" id="crm-revenue-chart-tab" role="tablist" data-tab-has-echarts="data-tab-has-echarts">
-                    <li class="nav-item" role="presentation"><a class="nav-link py-3 mb-0 active" id="crm-revenue-tab" data-bs-toggle="tab" href="#crm-revenue" role="tab" aria-controls="crm-revenue" aria-selected="true">Inventario</a></li>
-                    <li class="nav-item" role="presentation"><a class="nav-link py-3 mb-0" id="crm-profit-tab" data-bs-toggle="tab" href="#crm-profit" role="tab" aria-controls="crm-profit" aria-selected="false">Clientes</a></li>
-                    <li class="nav-item" role="presentation"><a class="nav-link py-3 mb-0" id="crm-users-tab" data-bs-toggle="tab" href="#crm-users" role="tab" aria-controls="crm-users" aria-selected="false">Liquidacion 12 Meses</a></li>
-                    <li class="nav-item" role="presentation"><a class="nav-link py-3 mb-0" id="crm-deals-tab" data-bs-toggle="tab" href="#crm-deals" role="tab" aria-controls="crm-deals" aria-selected="false">Liquidacion 6 Meses</a></li>                    
+                    <li class="nav-item" role="presentation"><a class="nav-link py-3 mb-0 active" id="crm-revenue-tab" data-bs-toggle="tab" href="#crm-revenue" role="tab" aria-controls="crm-revenue" aria-selected="true">Articulos Favoritos</a></li>
+                    <li class="nav-item" role="presentation"><a class="nav-link py-3 mb-0" id="crm-profit-tab" data-bs-toggle="tab" href="#crm-profit" role="tab" aria-controls="crm-profit" aria-selected="false">Inventario</a></li>                    
                   </ul>
                   <div class="dropdown font-sans-serif btn-reveal-trigger">
                     <div id="id_loading" class="spinner-border" role="status"><span class="visually-hidden">Loading...</span></div>
@@ -29,16 +27,10 @@
                     <div class="col-xxl-12">
                       <div class="tab-content">
                         <div class="tab-pane active" id="crm-revenue" role="tabpanel" aria-labelledby="crm-revenue-tab">
-                          <table id="tbl_inventario" class="display" style="width:100%"></table>
-                        </div>
-                        <div class="tab-pane" id="crm-users" role="tabpanel" aria-labelledby="crm-users-tab">
-                            <table id="tbl_inventario_liq_12" class="display" style="width:100%"></table>
-                        </div>
-                        <div class="tab-pane" id="crm-deals" role="tabpanel" aria-labelledby="crm-deals-tab">
-                          <table id="tbl_inventario_liq_6" class="display" style="width:100%"></table>
+                          <table id="tbl_inventario_fav" class="display" style="width:100%"></table>
                         </div>
                         <div class="tab-pane" id="crm-profit" role="tabpanel" aria-labelledby="crm-profit-tab">
-                          <table id="tbl_mst_clientes" class="display" style="width:100%"></table>
+                          <table id="tbl_inventario" class="display" style="width:100%"></table>
                         </div>
                       </div>
                     </div>
@@ -205,22 +197,22 @@
                       <h6 class="mt-5 mt-lg-0">Saldos en Mora</h6>
                       <div class="d-flex flex-between-center rounded-3 bg-light p-3 mb-2"><a href="#!">
                       <h6 class="mb-0"><span class="fas fa-circle fs--1 me-3 text-primary"></span>No Vencido</h6>
-                    </a><a class="fs--2 text-600 mb-0" href="#!">C$  <span id="no_fact">0.00</span> </a></div>
+                    </a><a class="fs--2 text-600 mb-0" href="#!">C$  <span id="no_fact"></span> </a></div>
                   <div class="d-flex flex-between-center rounded-3 bg-light p-3 mb-2"><a href="#!">
                       <h6 class="mb-0"><span class="fas fa-circle fs--1 me-3 text-warning"></span>30 Dias</h6>
-                    </a><a class="fs--2 text-600 mb-0" href="#!">C$ <span id="30_dias">0.00</a></div>
+                    </a><a class="fs--2 text-600 mb-0" href="#!">C$ <span id="30_dias"></a></div>
                   <div class="d-flex flex-between-center rounded-3 bg-light p-3 mb-2"><a href="#!">
                       <h6 class="mb-0"><span class="fas fa-circle fs--1 me-3 text-secondary"></span>60 Dias</h6>
-                    </a><a class="fs--2 text-600 mb-0" href="#!">C$ <span id="60_dias">0.00</a></div>
+                    </a><a class="fs--2 text-600 mb-0" href="#!">C$ <span id="60_dias"></a></div>
                   <div class="d-flex flex-between-center rounded-3 bg-light p-3"><a href="#!">
                       <h6 class="mb-0"><span class="fas fa-circle fs--1 me-3 text-info"></span>90 Dias</h6>
-                    </a><a class="fs--2 text-600 mb-0" href="#!">C$ <span id="90_dias">0.00</a></div>
+                    </a><a class="fs--2 text-600 mb-0" href="#!">C$ <span id="90_dias"></a></div>
                     <div class="d-flex flex-between-center rounded-3 bg-light p-3 mb-2"><a href="#!">
                       <h6 class="mb-0"><span class="fas fa-circle fs--1 me-3 text-primary"></span>120 Dias</h6>
-                    </a><a class="fs--2 text-600 mb-0" href="#!">C$ <span id="120_dias">0.00</a></div>
+                    </a><a class="fs--2 text-600 mb-0" href="#!">C$ <span id="120_dias"></a></div>
                   <div class="d-flex flex-between-center rounded-3 bg-light p-3 mb-2"><a href="#!">
                       <h6 class="mb-0"><span class="fas fa-circle fs--1 me-3 text-warning"></span>Mas 120 Dias</h6>
-                    </a><a class="fs--2 text-600 mb-0" href="#!">C$ <span id="mas_120_dias">0.00</a></div>
+                    </a><a class="fs--2 text-600 mb-0" href="#!">C$ <span id="mas_120_dias"></a></div>
                     </div>
                   </div>
                 </div>

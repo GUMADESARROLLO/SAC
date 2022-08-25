@@ -2,14 +2,13 @@
 <nav class="navbar navbar-light navbar-glass navbar-top navbar-expand">
 
 
-<a class="navbar-brand me-1 me-sm-3" href="{{ url('/Importacion') }}">
+<a class="navbar-brand me-1 me-sm-3" href="{{ url('/') }}">
   <div class="row gx-0 align-items-center">
     <h6 class="text-primary fs--1 mb-0">Bienvenido a </h6>
     <h4 class="text-primary fw-bold mb-0">PLATAFORMA <span class="text-info fw-medium">SAC</span></h4>
   </div>
 </a>
 
-<img class="ms-n4 d-md-none d-lg-block" src="../assets/img/illustrations/crm-line-chart.png" alt="" width="150" />
 <ul class="navbar-nav navbar-nav-icons ms-auto flex-row align-items-center ">
   <li class="nav-item dropdown invisible">
     <a class="nav-link notification-indicator notification-indicator-primary px-0 fa-icon-wait" id="navbarDropdownNotification" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="fas fa-bell" data-fa-transform="shrink-6" style="font-size: 33px;"></span></a>
@@ -53,12 +52,12 @@
       </div>
     </a>
     <div class="dropdown-menu dropdown-menu-end py-0" aria-labelledby="navbarDropdownUser">
-      <div class="bg-white dark__bg-1000 rounded-2 py-2">      
-      <a class="dropdown-item fw-bold text-primary" href="#!" id="id_btn_new_po"><span class="fab fa-docker me-1"></span><span>Crear Nº P . O </span></a>
-
-      <div class="dropdown-divider"></div>
-      <div class="dropdown-divider"></div>
+      <div class="bg-white dark__bg-1000 rounded-2 py-2">            
+      <a class="dropdown-item fw-bold text-warning" href="{{ route('ArticuloFavorito') }}"><span class="fas fa-crown me-1"></span><span>Art. Favs.</span></a>
+      <a class="dropdown-item" href="{{ route('Home') }}"> <span class="fas fa-user-tie me-1"></span>Usuario </a>
       
+      <div class="dropdown-divider"></div>
+      <a class="dropdown-item" href="{{ route('Home') }}">Salir</a>
       </div>
     </div>
   </li>

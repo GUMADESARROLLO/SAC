@@ -8,6 +8,10 @@ use App\Models\Liquidacion_a_12meses;
 use App\Models\ClientesHistorico3M;
 use App\Models\ClientesMora;
 use App\Models\ClientesHistoricoFactura;
+use App\Models\NivelPrecio;
+use App\Models\Bodega;
+use App\Models\ArticuloFavoritos;
+use Illuminate\Http\Request;
 
 class HomeController extends Controller {
     public function __construct()
@@ -20,9 +24,14 @@ class HomeController extends Controller {
         return view('Principal.Home');         
     }
 
+    public function getArticuloFavorito()
+    {  
+        return view('Principal.ArticuloFavorito');         
+    }
+
     public function getData(){
         $dtaHome[] = array(
-            'Inventario'    => Inventario::getArticulos(),
+            'Inventario'    => Inventario::getArticulosFavoritos(),
             'Liq6Meses'     => Liquidacion_a_6meses::getArticulos(),
             'Liq12Meses'    => Liquidacion_a_12meses::getArticulos(),
             'Clientes'      => Clientes::getClientes(),
@@ -30,6 +39,19 @@ class HomeController extends Controller {
         );
         
         return response()->json($dtaHome);
+    }
+    public function getArticulosFavoritos(){
+        $dtaHome[] = array(
+            'ArticulosFav'      => Inventario::getArticulosFavoritos(),
+            'Inventario'        => Inventario::getArticulosSinFav(),
+        );
+        
+        return response()->json($dtaHome);
+    }
+    public function AddFavs(Request $request)
+    {
+        $response = ArticuloFavoritos::AddFavs($request);
+        return response()->json($response);
     }
     public function getDataCliente($idCliente){
 
@@ -44,6 +66,19 @@ class HomeController extends Controller {
         );
 
         return response()->json($dtaCliente);
+
+        return ;
+
+    }
+    public function getDataArticulo($idArticulo){
+
+        $dtaArticulo[] = array(
+            'InfoArticulo'          => Inventario::where('ARTICULO', $idArticulo)->get(),
+            'NivelPrecio'           => NivelPrecio::getNivelPrecio($idArticulo),
+            'Bodega'                => Bodega::getBodega($idArticulo),
+        );
+
+        return response()->json($dtaArticulo);
 
         return ;
 
