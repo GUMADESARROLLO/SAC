@@ -84,31 +84,59 @@
                   <div class="row g-3">
                 <div class="col-12">
                   <div class="card h-100">
-                  
+                    <div class="card-header">
+                      <div class="row flex-between-center">
+                        <div class="col-auto">
+                          <h6 class="mb-2" id="id_reglas">Cargando ... </h6>
+                        </div>
+                        <div class="col-auto">
+                          <div class="row g-sm-4">
+                            <div class="col-12 col-sm-auto">
+                              <div class="mb-3 pe-4 border-sm-end border-200">
+                                <h6 class="fs--2 text-600 mb-1">FARMACIA</h6>
+                                <div class="d-flex align-items-center">
+                                  <h5 class="fs-0 text-900 mb-0 me-2" id="id_precio_farmacia">C$ 0.00</h5>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="col-12 col-sm-auto">
+                              <div class="mb-3 pe-4 border-sm-end border-200">
+                                <h6 class="fs--2 text-600 mb-1">MAYORISTA</h6>
+                                <div class="d-flex align-items-center">
+                                  <h5 class="fs-0 text-900 mb-0 me-2" id="id_precio_mayorista">C$ 0.00</h5>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="col-12 col-sm-auto">
+                              <div class="mb-3 pe-4 border-sm-end border-200">
+                                <h6 class="fs--2 text-600 mb-1">INS. PUB</h6>
+                                <div class="d-flex align-items-center">
+                                  <h5 class="fs-0 text-900 mb-0 me-2" id="id_precio_inst_pub">C$ 0.00</h5>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="col-12 col-sm-auto">
+                              <div class="mb-3 pe-0">
+                                <h6 class="fs--2 text-600 mb-1">PUBLICO</h6>
+                                <div class="d-flex align-items-center">
+                                  <h5 class="fs-0 text-900 mb-0 me-2" id="id_precio_mayortista">C$ 0.00</h5>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
                     <div class="card-header">                    
                       <div class="row flex-between-center">                        
-                        <div class="col-md-12 col-xxl-12">                          
-                        <p class="mb-0 fs--1"> <div id="id_reglas"></div></p>
-                          <div class="card h-100">
-                            <div class="card-header d-flex flex-between-center border-bottom border-200 py-2">
-                              <h6 class="mb-0">Bodegas</h6>                            
-                            </div>
-                            <div class="card-body">
-                              
+                        <div class="col-md-12 col-xxl-12">           
+                          <div class="card h-100">                           
+                            <div class="card-body">                              
                               <table id="tbl_bodegas" class="display" style="width:100%"></table>
                             </div>
                           </div>
                         </div>
-                        <div class="mt-3 col-xxl-12">
-                          <div class="card h-100">
-                            <div class="card-header d-flex flex-between-center border-bottom py-2">
-                              <h6 class="mb-0">Nivel de precios</h6></a>
-                            </div>
-                            <div class="card-body">                  
-                              <table id="tbl_lista_precios" class="display" style="width:100%"></table>
-                            </div>
-                          </div>
-                        </div>
+                        
                       </div>
                     </div>
                    
