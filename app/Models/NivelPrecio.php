@@ -12,11 +12,18 @@ class NivelPrecio extends Model{
 
     public static function getNivelPrecio($IdArticulo)
     {
-        $Rol = 1;
-        if ($Rol==1) {
-            return DB::connection('sqlsrv')->select("EXEC PRODUCCION.dbo.sp_iweb_precios '$IdArticulo' ");
-        } else {
-            return NivelPrecio::where('ARTICULO',$IdArticulo)->whereIn('NIVEL_PRECIO',['FARMACIA','PUBLICO','MAYORISTA'])->get();
+        $filterNivelPrecio = array();
+        $ShowListView = ['','FARMACIA','MAYORISTA','INST.PUB. C$','PUBLICO'];
+        $NivelesPrecio = DB::connection('sqlsrv')->select("EXEC PRODUCCION.dbo.sp_iweb_precios '$IdArticulo' ");
+        $i = 0;        
+        foreach ($NivelesPrecio as $rec){
+            if (array_search($rec->NIVEL_PRECIO, $ShowListView) > 0) {
+                $filterNivelPrecio[$i]['NIVEL_PRECIO']  = $rec->NIVEL_PRECIO;
+                $filterNivelPrecio[$i]['PRECIO']        = number_format($rec->PRECIO,2);
+                $i++;
+            }
         }
+
+        return $filterNivelPrecio;
     }
 }

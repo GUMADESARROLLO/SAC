@@ -12,6 +12,7 @@ use App\Models\NivelPrecio;
 use App\Models\Bodega;
 use App\Models\ArticuloFavoritos;
 use Illuminate\Http\Request;
+use App\Models\Lotes;
 
 class HomeController extends Controller {
     public function __construct()
@@ -29,7 +30,8 @@ class HomeController extends Controller {
         return view('Principal.ArticuloFavorito');         
     }
 
-    public function getData(){
+    public function getData()
+    {
         $dtaHome[] = array(
             'Inventario'    => Inventario::getArticulosFavoritos(),
             'Liq6Meses'     => Liquidacion_a_6meses::getArticulos(),
@@ -40,7 +42,8 @@ class HomeController extends Controller {
         
         return response()->json($dtaHome);
     }
-    public function getArticulosFavoritos(){
+    public function getArticulosFavoritos()
+    {
         $dtaHome[] = array(
             'ArticulosFav'      => Inventario::getArticulosFavoritos(),
             'Inventario'        => Inventario::getArticulosSinFav(),
@@ -53,7 +56,8 @@ class HomeController extends Controller {
         $response = ArticuloFavoritos::AddFavs($request);
         return response()->json($response);
     }
-    public function getDataCliente($idCliente){
+    public function getDataCliente($idCliente)
+    {
 
         $dtaCliente[] = array(
             'InfoCliente'                   => Clientes::where('CLIENTE', $idCliente)->get(),
@@ -66,12 +70,9 @@ class HomeController extends Controller {
         );
 
         return response()->json($dtaCliente);
-
-        return ;
-
     }
-    public function getDataArticulo($idArticulo){
-
+    public function getDataArticulo($idArticulo)
+    {
         $dtaArticulo[] = array(
             'InfoArticulo'          => Inventario::where('ARTICULO', $idArticulo)->get(),
             'NivelPrecio'           => NivelPrecio::getNivelPrecio($idArticulo),
@@ -79,8 +80,11 @@ class HomeController extends Controller {
         );
 
         return response()->json($dtaArticulo);
+    }
 
-        return ;
-
+    public function getLotes($BODEGA,$ARTICULO)
+    {
+        $LOTES = Lotes::getLotes($BODEGA,$ARTICULO);
+        return response()->json($LOTES);
     }
 }
