@@ -4,9 +4,9 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 Route::get('Home', 'HomeController@getHome')->name('Home');
-Route::get('/', 'HomeController@getHome');
+//Route::get('/', 'HomeController@getHome');
 Auth::routes();
-//Route::get('/', 'Auth\LoginController@showLoginForm');
+Route::get('/', 'Auth\LoginController@showLoginForm');
 
 
 

@@ -14,7 +14,7 @@
             <div class="row justify-content-center g-0">
               <div class="col-lg-9 col-xl-8 col-xxl-6">
                 <div class="card">
-                  <div class="card-header bg-circle-shape bg-shape text-center p-2"><a class="font-sans-serif fw-bolder fs-4 z-index-1 position-relative link-light light" href="!#">Logistica</a></div>
+                  <div class="card-header bg-circle-shape bg-shape text-center p-2"><a class="font-sans-serif fw-bolder fs-4 z-index-1 position-relative link-light light" href="!#">SAC UNIMARK S,A</a></div>
                   <div class="card-body p-4">
                     <div class="row flex-between-center">
                       <div class="col-auto">
