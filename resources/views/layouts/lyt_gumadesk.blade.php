@@ -79,7 +79,9 @@ if ( typeof jQuery != "undefined" )
         }
     </style>
 </head>
-
+<form id="logout-form" action="{{ route('logout') }}" method="post">
+    @csrf
+</form>
 <body>
 
     <!-- ===============================================-->

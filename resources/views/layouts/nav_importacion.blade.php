@@ -46,18 +46,33 @@
 
   </li>
   <li class="nav-item dropdown"><a class="nav-link pe-0" id="navbarDropdownUser" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-      <div class="avatar avatar-xl">
-        <img class="rounded-circle" src="{{ asset('images/user/avatar-4.jpg') }}" />
-
+      
+  <div class="d-flex align-items-center position-relative">
+      <div class="flex-1">
+        <h6 class="mb-0 fw-semi-bold"><div class="stretched-link text-900">{{Session::get('name_session')}}</div></h6>
+        <p class="text-500 fs--2 mb-0">{{Session::get('name_rol')}}</p>
       </div>
+      <div class="avatar avatar-xl ms-3">
+        <img class="rounded-circle" src="{{ asset('images/user/avatar-4.jpg') }}"   />
+      </div>
+    </div>
+
+
+    
+
+      
     </a>
     <div class="dropdown-menu dropdown-menu-end py-0" aria-labelledby="navbarDropdownUser">
-      <div class="bg-white dark__bg-1000 rounded-2 py-2">            
-      <a class="dropdown-item fw-bold text-warning" href="{{ route('ArticuloFavorito') }}"><span class="fas fa-crown me-1"></span><span>Art. Favs.</span></a>
-      <a class="dropdown-item" href="{{ route('Usuarios') }}"> <span class="fas fa-user-tie me-1"></span>Usuario </a>
-      
-      <div class="dropdown-divider"></div>
-      <a class="dropdown-item" href="{{ route('Home') }}">Salir</a>
+      <div class="bg-white dark__bg-1000 rounded-2 py-2"> 
+        @if( Session::get('rol') == '1')
+          <a class="dropdown-item fw-bold text-warning" href="{{ route('ArticuloFavorito') }}"><span class="fas fa-crown me-1"></span><span>Art. Favs.</span></a>
+          <a class="dropdown-item" href="{{ route('Usuarios') }}"> <span class="fas fa-user-tie me-1"></span>Usuario </a>
+          <div class="dropdown-divider"></div>
+        @endif
+        
+        
+        <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit()">Salir</a>
+        
       </div>
     </div>
   </li>

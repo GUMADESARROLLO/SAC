@@ -7,32 +7,17 @@ use App\Providers\RouteServiceProvider;
 use Illuminate\Http\Request;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Support\Facades\DB;
+use App\Models\Usuario;
 
 class LoginController extends Controller
 {
-    /*
-    |--------------------------------------------------------------------------
-    | Login Controller
-    |--------------------------------------------------------------------------
-    |
-    | This controller handles authenticating users for the application and
-    | redirecting them to your home screen. The controller uses a trait
-    | to conveniently provide its functionality to your applications.
-    |
-    */
+
 
     use AuthenticatesUsers;
 
-    /**
-     * Where to redirect users after login.
-     *
-     * @var string
-     */
-    //protected $redirectTo = RouteServiceProvider::HOME;
     public function redirectTo() {
 
-        // rol de usuario
-        $role = Auth::User()->activeRole();
+        /*$role = Auth::User()->activeRole();
 
         switch ($role) {
             case '1':
@@ -41,7 +26,9 @@ class LoginController extends Controller
             default:
                 return '/login';
             break;
-        }
+            
+        }*/
+        return 'Home';
     }
 
     /**
@@ -71,14 +58,20 @@ class LoginController extends Controller
 
 
         $user = $request->username;
-        $queryResult = DB::table('tbl_usuario')->where('Usuario', $user)->where('activo', 'S')->pluck('id');
-
-        dd($this->attemptLogin($request));
-
+        $queryResult = DB::table('users')->where('username', $user)->where('activo', 'S')->pluck('id');
         if (!$queryResult->isEmpty()) {
             if ($this->attemptLogin($request)) {
+
+                $Info_usuario = Usuario::find($queryResult);
+
+                foreach($Info_usuario as $user)
+                {
+                    $request->session()->put('name_session', $user->nombre);
+                    $request->session()->put('name_rol', $user->RolName->descripcion);
+                    $request->session()->put('rol', $user->id_rol);
+                }
                 //$rol = DB::table('usuario_rol')->where('usuario_id', $queryResult)->pluck('rol_id');
-                //$request->session()->put('rol', $rol);
+                //;
                 return $this->sendLoginResponse($request);
             }
         }

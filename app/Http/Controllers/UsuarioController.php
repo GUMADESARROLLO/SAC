@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use App\Models\Usuario;
 use App\Models\Vendedor;
 use App\Models\UsuarioRutas;
+use App\Models\Roles;
 
 class UsuarioController extends Controller {
     public function __construct()
@@ -12,8 +13,9 @@ class UsuarioController extends Controller {
     }
     public function getUsuarios()
     {  
-        $Usuarios = Usuario::getUsuarios();
-        return view('Usuario.Home', compact('Usuarios'));
+        $Usuarios   = Usuario::getUsuarios();
+        $Roles      = Roles::getRoles();
+        return view('Usuario.Home', compact('Usuarios','Roles'));
     }
     public function SaveUsuario(Request $request)
     {

@@ -2,6 +2,35 @@
     var Selectors = {
         TABLE_SETTING: '#modal_new_product',
     };
+    var vTableUsuario = $('#tbl_usuarios').DataTable({
+            "destroy": true,
+            "info": false,
+            "bPaginate": false,
+            "order": [
+                [0, "asc"]
+            ],
+            "lengthMenu": [
+                [5, -1],
+                [5, "Todo"]
+            ],
+            "language": {
+                "zeroRecords": "NO HAY COINCIDENCIAS",
+                "paginate": {
+                    "first": "Primera",
+                    "last": "Última ",
+                    "next": "Siguiente",
+                    "previous": "Anterior"
+                },
+                "lengthMenu": "MOSTRAR _MENU_",
+                "emptyTable": "-",
+                "search": "BUSCAR"
+            }
+        });
+    $("#tbl_usuarios_filter").hide();
+    $('#id_txt_buscar').on('keyup', function() {      
+        console.log(this.value)  
+        vTableUsuario.search(this.value).draw();
+    });
     $("#id_btn_new").click(function(){
 
         $("#id_remover").hide();
@@ -24,8 +53,9 @@
 
         $("#id_modal_state").html(Obj.id);
 
-        $("#id_nombre_usuario").val(Obj.Usuario);   
+        $("#id_nombre_usuario").val(Obj.username);   
         $("#id_nombre_completo").val(Obj.nombre);
+        $("#id_tipo_usuaro").val(Obj.id_rol).change();
         $("#id_password").val("");
 
         var TABLE_SETTING = document.querySelector(Selectors.TABLE_SETTING);
@@ -199,6 +229,7 @@
         var nombre      = $("#id_nombre_completo").val();   
         var passwprd    = $("#id_password").val();
         var Estado      = $("#id_modal_state").text();
+        var id_rol      = $("#id_tipo_usuaro option:selected").val();  
 
         usuario      = isValue(usuario,'N/D',true)
         nombre       = isValue(nombre,'N/D',true)
@@ -214,7 +245,8 @@
                     usuario     : usuario,
                     nombre      : nombre,
                     passwprd    : passwprd,
-                    Estado:Estado,
+                    id_rol      : id_rol,
+                    Estado      : Estado,
                     _token  : "{{ csrf_token() }}" 
                 },
                 async: true,
