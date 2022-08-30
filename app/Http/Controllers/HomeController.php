@@ -22,10 +22,7 @@ class HomeController extends Controller {
 
     public function getHome()
     {  
-        $Productos      = ArticulosUMK::getArticulos();
-        $Clientes       = Clientes::getClientes();
-        $Vendedor       = Vendedor::getVendedor();
-        return view('Principal.Home', compact('Productos','Clientes'));         
+        return view('Principal.Home');         
     }
 
     public function getArticuloFavorito()
