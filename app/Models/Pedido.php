@@ -1,0 +1,107 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Http\Request;
+use Auth;
+use Session;
+class Pedido extends Model {
+    protected $connection = 'mysql_pedido';    
+    protected $table = "tbl_order";
+
+    public function CountsComments(){
+        return $this->hasMany('App\Models\PedidoComentario','orden_code','code')->count();    
+    }
+
+    public static function getPedidos(Request $request)
+    {
+        $Rutas_Usuario = array();
+
+        $Estados = ['PENDIENTE','PROCESADO','CANCELADO'];
+        $ColorSt = ['danger','success','info'];
+
+        $start      = $request->input('DateStart');
+        $end        = $request->input('DateEnds');
+        $Estado     = $request->input('Estado');
+
+        $start   = $start.' 00:00:00';
+        $end     = $end.' 23:59:59';
+
+
+        $rol = Session::get('rol');
+
+
+        if($rol == 1 || $rol ==2){            
+            if($Estado != -1){
+                $query = Pedido::whereBetween('date_time', [$start, $end])->where('status',$Estado)->get();
+            }else{
+                $query = Pedido::whereBetween('date_time', [$start, $end])->get();
+            }
+        }else{
+            
+
+            $Usuario = Usuario::where('id',Auth::id())->get();
+            foreach ($Usuario as $rec){            
+                foreach ($rec->Detalles as $Rts){
+                    $Rutas_Usuario[] = $Rts->RUTA;
+                }
+            }
+            if($Estado != -1){
+                $query = Pedido::where('name',$Rutas_Usuario)->whereBetween('date_time', [$start, $end])->where('status',$Estado)->get();
+            }else{
+                $query = Pedido::where('name',$Rutas_Usuario)->whereBetween('date_time', [$start, $end])->get();
+            }
+        }
+
+
+        $i = 0;
+        $json = array();
+        foreach ($query as $fila) {
+            $json[$i]["id"]             = $fila["id"];
+            $json[$i]["code"]           = $fila["code"];
+            $json[$i]["CLIENTE"]        = $fila["email"];
+            $json[$i]["DESCRIPCION"]    = $fila["phone"];
+            $json[$i]["DIRECCION"]      = $fila["address"];
+
+            $json[$i]["RUTA"]           = $fila["name"];
+            $json[$i]["VENDEDOR"]       = Vendedor::where('VENDEDOR',$fila["name"])->get()->pluck('NOMBRE')[0];            
+            $json[$i]["FECHA"]          = $fila["date_time"];
+            $json[$i]["ARTICULOS"]      = $fila["order_list"];
+            $json[$i]["MONTO"]          = $fila["order_total"];
+            $json[$i]["COMMENT"]        = $fila["comment"];
+            $json[$i]["ESTADO"]         = $Estados[$fila["status"]];
+            $json[$i]["COLOR"]          = $ColorSt[$fila["status"]];
+            $json[$i]["CountsComments"]          = $fila->CountsComments();
+
+            
+            $i++;
+        }
+        return $json;
+    }
+    public static function ChancesStatus(Request $request)
+    {
+        if ($request->ajax()) {
+            try {
+
+                $id     = $request->input('id');
+                $Valor  = $request->input('Valor');
+
+                $response =   Pedido::where('id',  $id)->update([
+                    "status" => $Valor,
+                ]);
+
+                return response()->json($response);
+
+
+            } catch (Exception $e) {
+                $mensaje =  'Excepción capturada: ' . $e->getMessage() . "\n";
+                return response()->json($mensaje);
+            }
+        }
+
+    }
+
+
+
+}
