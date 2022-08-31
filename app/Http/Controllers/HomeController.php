@@ -13,6 +13,9 @@ use App\Models\Bodega;
 use App\Models\ArticuloFavoritos;
 use Illuminate\Http\Request;
 use App\Models\Lotes;
+use App\Models\Pedido;
+use App\Models\PedidoComentario;
+
 
 class HomeController extends Controller {
     public function __construct()
@@ -38,6 +41,7 @@ class HomeController extends Controller {
             'Liq12Meses'    => Liquidacion_a_12meses::getArticulos(),
             'Clientes'      => Clientes::getClientes(),
             'Vendedor'      => Vendedor::getVendedor(),            
+            //'Pedidos'       => Pedido::getPedidos(),
         );
         
         return response()->json($dtaHome);
@@ -87,4 +91,33 @@ class HomeController extends Controller {
         $LOTES = Lotes::getLotes($BODEGA,$ARTICULO);
         return response()->json($LOTES);
     }
+
+    public function ChancesStatus(Request $request)
+    {
+        $response = Pedido::ChancesStatus($request);
+        return response()->json($response);
+    }
+    public function getCommentPedido(Request $request)
+    {
+        $response = PedidoComentario::getCommentPedido($request);
+        return response()->json($response);
+    }
+    public function AddCommentPedido(Request $request)
+    {
+        $response = PedidoComentario::AddCommentPedido($request);
+        return response()->json($response);
+    }
+    public function DeleteCommentPedido(Request $request)
+    {
+        $response = PedidoComentario::DeleteCommentPedido($request);
+        return response()->json($response);
+    }
+
+    public function getPedidosRangeDates(Request $request)
+    {
+        $response = Pedido::getPedidos($request);
+        return response()->json($response);
+    }
+
+    
 }

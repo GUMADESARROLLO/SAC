@@ -2,8 +2,129 @@
     var Selectors = {
         id_mdl_info_producto: '#modal_info_inventario',
         id_mdl_info_cliente : '#modal_info_cliente',
+        MODAL_COMMENT: '#IdmdlComment',
     };
+    const startOfMonth = moment().startOf('month').format('YYYY-MM-DD');
+    const endOfMonth   = moment().subtract(0, "days").format("YYYY-MM-DD");
+    
+    RangeStat(startOfMonth,endOfMonth)
 
+    var labelRange = startOfMonth + " to " + endOfMonth;
+    $('#id_range_select').val(labelRange);
+
+    tbl_header_pedido =  [     
+                {"title": "","data": "ARTICULO","className":'detalles-Pedido align-items-center', "render": function(data, type, row, meta) {
+                    return `<span class="fas fa-arrow-alt-circle-down text-success"></span>`
+                }},           
+                {"title": "PEDIDO","data": "ARTICULO", "render": function(data, type, row, meta) {
+
+                    var btns = '';
+                    if(row.ESTADO  === 'PENDIENTE' ){
+
+                        var btns = `<div class="col-auto"><a class="rounded-2 d-flex align-items-center me-3" href="#!" onclick="ChancesStatus(`+row.id + ',1'+`)"><span class="ms-1 fas fa-pencil-alt text-primary"></span><span class="ms-1">Procesar</span></a></div>
+                                    <div class="col-auto"><a class="rounded-2 d-flex align-items-center me-3 text-700" href="#!" onclick="ChancesStatus(`+row.id + ',2'+`)"><span class="ms-1 fas fa-trash-alt text-danger" ></span><span class="ms-1">Cancelar</span></a></div>`;
+
+                    }
+                return `<div class="card">
+                            <div class="card-header bg-light">
+                              <div class="row justify-content-between">
+                                <div class="col">
+                                  <div class="d-flex">
+                                    <div class="avatar avatar-2xl status-online">
+                                      <img class="rounded-circle" src="{{ asset('images/item.png') }}" alt="" />
+                                    </div>
+                                    <div class="flex-1 align-self-center ms-2">
+                                        <h6 class="mb-1 fs-1 fw-semi-bold">`+ row.CLIENTE + row.DESCRIPCION +`</h6>
+                                        <p class="mb-0 fs--1">`+row.DIRECCION +` &bull; ` + moment(row.FECHA).format("D MMM, YYYY h:mm:ss") + `
+                                            <span class="badge rounded-pill ms-3 badge-soft-`+row.COLOR + `"><span class="fas fa-check"></span> `+row.ESTADO + `</span>
+                                        </p>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="card-footer bg-light pt-0">
+                                <div class="row flex-between-center g-0">
+                                    <div class="col-auto">
+                                    <div class="row g-0 fw-semi-bold text-center py-2 fs--1">
+                                        <div class="col-auto"><a class="rounded-2 d-flex align-items-center me-3" href="#!"><span class="ms-1 text-primary">C$ `+ numeral(row.MONTO).format('0,00.00')   +`</span></a></div>
+                                        `+btns+ `
+                                        <div class="col-auto"><a class="rounded-2 d-flex align-items-center me-3 text-700" href="#!" onclick="AddComment('${encodeURIComponent(JSON.stringify(row))}')"><span class="ms-1 fas fa-comment text-primary" ></span><span class="ms-1"> `+ row.CountsComments+` </span></a></div>
+                                    </div>
+                                   
+                                    
+                                    </div>
+                                    <div class="col-auto">
+                                        Realizado por  `+ row.RUTA  + `  `+ row.VENDEDOR  + `
+                                    </div>
+                                </div>
+                              
+                              
+                            </div>
+                          </div>`
+                }},
+                ] 
+
+    $('#id_range_select').change(function () {
+        Fechas = $(this).val().split("to");
+        if(Object.keys(Fechas).length >= 2 ){
+            RangeStat(Fechas[0],Fechas[1]);
+        } 
+    });
+    $( "#frm_lab_row").change(function() {
+        var table = $('#tbl_mst_pedido').DataTable();
+        table.page.len(this.value).draw();
+    });
+
+    $("#id_btn_new").click(function(){
+        $("#id_loading").show();
+        RangeStat(startOfMonth,endOfMonth)
+    });
+
+    $( "#id_select_status").change(function() {
+        var table = $('#tbl_mst_pedido').DataTable();
+
+        var selectedText  = this.selectedOptions[0].text;
+        if(selectedText == "Todo"){
+            table.search("").draw();
+        }else{
+            table.search(selectedText).draw();
+        }
+    });
+    function RangeStat(Start,Ends){
+        Start       = $.trim(Start)
+        Ends        = $.trim(Ends)        
+        Estado      = $("#id_select_status option:selected").val();  
+        $.ajax({
+            url: "getPedidosRangeDates",
+            type: 'post',
+            dataType: 'json',
+            data: {
+                DateStart   : Start,
+                DateEnds    : Ends,
+                Estado      : Estado,
+                _token  : "{{ csrf_token() }}" 
+            },
+            async: true,
+            success: function(Pedidos) {
+
+                initTable('#tbl_mst_pedido',Pedidos,tbl_header_pedido);
+
+                $("#tbl_mst_pedido_length").hide();
+                $("#tbl_mst_pedido_filter").hide();
+
+                $("#id_loading").hide();
+
+
+            }
+        })
+        
+    }
+    
+    $('#id_txt_buscar').on('keyup', function() {        
+        var vTablePedido = $('#tbl_mst_pedido').DataTable();
+        vTablePedido.search(this.value).draw();
+    });
     tbl_header_inventarios =  [                
                 {"title": "ARTICULO","data": "ARTICULO", "render": function(data, type, row, meta) {
                 var regla='';
@@ -99,12 +220,251 @@
                 </td> `
                 }},
                 ]
+        
+                $('#tbl_mst_pedido').on('click', 'td.detalles-Pedido', function () {
+                    var table = $('#tbl_mst_pedido').DataTable();
 
+                    var tr = $(this).closest('tr');
+                    var row = table.row(tr);
+                    var data = table.row( $(this).parents('tr') ).data();
+
+
+                    if ( row.child.isShown() ) {
+                        $("#dv-"+data.id).hide();
+                        row.child.hide();
+                        tr.removeClass('shown');
+                    }
+                    else {
+                        $("#dv-"+data.id).show();
+                        show_detalles_pedido(row.child,data);
+                        tr.addClass('shown');
+                    }
+
+                });
+                function AddComment(row){
+                    obj = JSON.parse(decodeURIComponent(row))
+
+                    var fecha_humana = moment(obj.FECHA).format("D MMM, YYYY")
+
+                    $("#id_modal_name_item").text(obj.CLIENTE + obj.DESCRIPCION)
+                    $("#id_modal_articulo").text(obj.DIRECCION)
+                    $("#id_modal_nSoli").text(obj.code)
+                    $("#id_modal_Fecha").text(fecha_humana)
+
+
+                    $("#id_modal_vendedor").text(obj.VENDEDOR)
+                    $("#id_comentario_pedido").text(obj.COMMENT)
+                    
+                    
+                    var addcomment_ = document.querySelector(Selectors.MODAL_COMMENT);
+                    var mdl_comment = new window.bootstrap.Modal(addcomment_);
+                
+                    mdl_comment.show();
+                    getComment(obj.code)
+
+                }
+
+
+                function show_detalles_pedido(callback,detalles_pedido) {
+                    var tbody = '';
+
+                    var lineas_pedido = detalles_pedido.ARTICULOS.split('],')   
+                    
+                    lineas_pedido = lineas_pedido.splice(0,lineas_pedido.length-1) ;
+                    $.each( lineas_pedido, function( key, value ) {
+                        var Lineas_detalles     = value.split(';') 
+                        tbody += `<tr>
+                                    <td class="align-middle">
+                                        <h6 class="mb-0 text-nowrap">` +Lineas_detalles[2] + `</h6>
+                                        <p class="mb-0">` +Lineas_detalles[1] + `</p>
+                                    </td>
+                                    <td class="align-middle text-center">` +Lineas_detalles[0].replace("[","") + `</td>
+                                    <td class="align-middle text-center">` +Lineas_detalles[3] + `</td>
+                                    <td class="align-middle text-end">` +Lineas_detalles[4] + `</td>
+                                </tr>`
+                    });
+
+                    var template =`
+                        <div class="card">
+                            <div class="card-body">                            
+                                <div class="table-responsive scrollbar mt-4 fs--1">
+                                    <table class="table table-striped border-bottom">
+                                        <thead class="light">
+                                            <tr class="bg-primary text-white dark__bg-1000">
+                                            <th class="border-0">ARTICULO</th>
+                                            <th class="border-0 text-center">CANTIDAD</th>
+                                            <th class="border-0 text-center">BONIFICADO</th>
+                                            <th class="border-0 text-end">VALOR</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            ` + tbody + `                                    
+                                        </tbody>
+                                    </table>
+                                </div>                            
+                            </div>
+                            <div class="card-footer bg-light">
+                                <p class="fs--1 mb-0"><strong>Nota: </strong> ` + detalles_pedido.COMMENT +`</p>
+                            </div>
+                        </div>`
+
+                    callback($(template)).show();
+        
+                
+            }
+            function getComment(Id){
+                var items_comment = '';
+                $("#id_textarea_comment").val(items_comment)
+                $.ajax({
+                    url: 'getCommentPedido',
+                    type: 'post',
+                    data: {
+                        id_item     : Id,                  
+                        _token      : "{{ csrf_token() }}" 
+                    }, 
+                    async: false,
+                    dataType: "json",
+                    success: function(data){
+                        $.each(data,function(key, c) {
+                            var var_borrar = ''
+
+                            var_borrar = '<a href="#!" onClick="DeleteComment('+c.id_coment+' , '+ "'" +Id + "'" +' )">Borrar</a> &bull; '                             
+
+                            var date_comment = moment(c.date_coment).format("D MMM, YYYY")
+                            items_comment += ' <div class="d-flex mt-3">'+
+                                                    '<div class="avatar avatar-xl">'+
+                                                        '<img class="rounded-circle" src="{{ asset("images/user/avatar-4.jpg") }}" alt="" />'+
+                                                    '</div>'+
+                                                    '<div class="flex-1 ms-2 fs--1">'+
+                                                        '<p class="mb-1 bg-200 rounded-3 p-2">'+
+                                                        '<a class="fw-semi-bold" href="!#">'+c.player_id.toUpperCase()+'</a> '+
+                                                        ' '+c.orden_comment+'  </p>'+
+                                                        '<div class="px-2">'+
+                                                        var_borrar+
+                                                        date_comment+'</div>'+
+                                                    '</div>'+
+                                                '</div>'
+                        }); 	 
+                    },
+                    error: function(data) {
+                        //alert('error');
+                    }
+                }); 
+
+                $("#id_comment_item").html(items_comment)
+            }
+    function DeleteComment(id_comment,id_pedido){
+        Swal.fire({
+            title: '¿Estas Seguro de borrar el Comentario?',
+            text: "¡Esta acción no podrá ser revertida!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Si!',
+            target:"",
+            showLoaderOnConfirm: true,
+            preConfirm: () => {
+                $.ajax({
+                    url: "DeleteCommentPedido",
+                    type: 'post',
+                    data: {
+                        id      : id_comment,
+                        _token  : "{{ csrf_token() }}" 
+                    },
+                    async: true,
+                    success: function(response) {
+                        //Swal.fire("Exito!", "Guardado exitosamente", "success");
+                    },
+                    error: function(response) {
+                        //Swal.fire("Oops", "No se ha podido guardar!", "error");
+                    }
+                }).done(function(data) {
+                    getComment(id_pedido)
+                });
+            },
+            allowOutsideClick: () => !Swal.isLoading()
+        });
+    }           
+    $('#id_textarea_comment').keydown(function(event){
+        if (event.which == 13){
+
+            var id_Item = $("#id_modal_nSoli").text()
+            var value = $(this).val();
+
+            $.ajax({
+                url: "AddCommentPedido",
+                type: 'post',
+                data: {
+                    id_item     : id_Item,
+                    comment     : value,                    
+                    _token      : "{{ csrf_token() }}" 
+                },
+                async: true,
+                success: function(response) {
+                    getComment(id_Item)
+                },
+                error: function(response) {
+                   // Swal.fire("Oops", "No se ha podido guardar!", "error");
+                }
+            }).done(function(data) {
+                //location.reload();
+            });
+        }
+    });             
+    function ChancesStatus(id_producto,Valor){
+        Swal.fire({
+            title: '¿Estas Seguro de Cancelar el Pedido?',
+            text: "¡Esta acción no podrá ser revertida!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Si!',
+            target:"",
+            showLoaderOnConfirm: true,
+            preConfirm: () => {
+                $.ajax({
+                    url: "ChancesStatus",
+                    type: 'post',
+                    data: {
+                        id      : id_producto,
+                        Valor   : Valor,
+                        _token  : "{{ csrf_token() }}" 
+                    },
+                    async: true,
+                    success: function(response) {
+                        if(response.original){
+                        Swal.fire({
+                        title: 'Correcto',
+                        icon: 'success',
+                        showCancelButton: false,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'OK'
+                        }).then((result) => {
+                        if (result.isConfirmed) {
+                            location.reload();
+                            }
+                        })
+                    }
+                    },
+                    error: function(response) {
+                    }
+                }).done(function(data) {
+                    
+                });
+            },
+            allowOutsideClick: () => !Swal.isLoading()
+        });
+    }
     $.get( "getData", function( data ) {
         initTable('#tbl_inventario',data[0].Inventario,tbl_header_inventarios);
         initTable('#tbl_inventario_liq_12',data[0].Liq12Meses,tbl_header_inventarios_liq);
         initTable('#tbl_inventario_liq_6',data[0].Liq6Meses,tbl_header_inventarios_liq);
         initTable('#tbl_mst_clientes',data[0].Clientes,tbl_header_clientes);
+
+       
 
         TBLCL = $("#tbl_mst_clientes").DataTable();
 
@@ -316,8 +676,8 @@
        
 
         var id_mdl_info_producto = document.querySelector(Selectors.id_mdl_info_producto);
-        var modal = new window.bootstrap.Modal(id_mdl_info_producto);
-        modal.show();
+        var modal_articulo = new window.bootstrap.Modal(id_mdl_info_producto);
+        modal_articulo.show();
 
        
     }

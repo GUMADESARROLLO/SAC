@@ -1,8 +1,10 @@
 <?php
 
 namespace App\Models;
-
+use Session;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
+
 
 class Bodega extends Model
 {
@@ -12,11 +14,11 @@ class Bodega extends Model
 
     public static function getBodega($IdArticulo)
     {
-        $Rol = 1;
-        if ($Rol==1) {
+        $Rol = Session::get('rol');
+        if ($Rol==1 || $Rol==2) {
             return Bodega::WHERE('ARTICULO',$IdArticulo)->get();
         } else {
-            return Bodega::WHERE('ARTICULO',$IdArticulo)->whereIn('BODEGA',['002','005','006'])->get();
+            return Bodega::WHERE('ARTICULO',$IdArticulo)->whereNotIn('BODEGA',['001','003','006'])->get();
         }
         
         

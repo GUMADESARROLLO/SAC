@@ -29,3 +29,9 @@ Route::get('getRutas', 'UsuarioController@getRutas')->name('getRutas');
 
 Route::post('AsignarRuta', 'UsuarioController@AsignarRuta')->name('AsignarRuta');
 Route::post('RemoverRutaAsignada', 'UsuarioController@RemoverRutaAsignada')->name('RemoverRutaAsignada');
+
+Route::post('ChancesStatus', 'HomeController@ChancesStatus')->name('ChancesStatus');
+Route::post('getCommentPedido', 'HomeController@getCommentPedido')->name('getCommentPedido');
+Route::post('AddCommentPedido', 'HomeController@AddCommentPedido')->name('AddCommentPedido');
+Route::post('DeleteCommentPedido', 'HomeController@DeleteCommentPedido')->name('DeleteCommentPedido');
+Route::post('getPedidosRangeDates', 'HomeController@getPedidosRangeDates')->name('getPedidosRangeDates');

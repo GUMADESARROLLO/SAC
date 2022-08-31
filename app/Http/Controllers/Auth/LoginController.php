@@ -63,12 +63,20 @@ class LoginController extends Controller
             if ($this->attemptLogin($request)) {
 
                 $Info_usuario = Usuario::find($queryResult);
+                $Rutas = '';
 
                 foreach($Info_usuario as $user)
                 {
                     $request->session()->put('name_session', $user->nombre);
                     $request->session()->put('name_rol', $user->RolName->descripcion);
                     $request->session()->put('rol', $user->id_rol);
+
+                    foreach ($user->Detalles as $Rts){
+                        $Rutas .= $Rts->RUTA . ' - ';
+
+                    }
+                    /**/
+                    $request->session()->put('Rutas', $Rutas);
                 }
                 //$rol = DB::table('usuario_rol')->where('usuario_id', $queryResult)->pluck('rol_id');
                 //;
