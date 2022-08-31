@@ -7,7 +7,7 @@
     const startOfMonth = moment().startOf('month').format('YYYY-MM-DD');
     const endOfMonth   = moment().subtract(0, "days").format("YYYY-MM-DD");
     
-    RangeStat(startOfMonth,endOfMonth)
+    //RangeStat(startOfMonth,endOfMonth)
 
     var labelRange = startOfMonth + " to " + endOfMonth;
     $('#id_range_select').val(labelRange);
