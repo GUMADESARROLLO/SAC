@@ -7,6 +7,7 @@ Route::get('Home', 'HomeController@getHome')->name('Home');
 //Route::get('/', 'HomeController@getHome');
 Auth::routes();
 Route::get('/', 'Auth\LoginController@showLoginForm');
+Route::get('/logout', 'Auth\LoginController@logout');
 
 
 

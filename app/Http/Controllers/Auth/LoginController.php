@@ -44,7 +44,10 @@ class LoginController extends Controller
     public function username() {
         return 'username';
     }
-
+    public function logout () {        
+        auth()->logout();
+        return redirect('/');
+    }
     public function login(Request $request) {
 
         $this->validateLogin($request);
