@@ -42,7 +42,9 @@ class PedidoComentario extends Model {
                 $ObjComment->orden_comment    = $Comment; 
                 $ObjComment->date_coment      = date('Y-m-d h:i:s');      
                 $ObjComment->player_id        = Session::get('name_session');           
-                $ObjComment->save();                
+                $ObjComment->save();      
+                
+                //PedidoComentario::SendNotifications($request);
 
                 return response()->json($ObjComment);
 
@@ -71,5 +73,47 @@ class PedidoComentario extends Model {
             }
         }
 
+    }
+
+    public static function SendNotifications(Request $request){
+        if ($request->ajax()) {
+            try {
+
+                $id          = $request->input('id_item');
+                
+                $getPedido   = Pedido::where('code', $id)->first(['phone', 'player_id']);
+                $NameCliente = $getPedido->phone;
+                $Player_id   = $getPedido->player_id;
+        
+                $content = array("en" => "Nuevo Comentario $NameCliente ");
+        
+                $fields = array(
+                    'app_id' => env('ONESIGNAL_APP_ID'),
+                    'include_player_ids' => array($Player_id),
+                    'data' => array("foo" => "bar", "cat_id"=> "1010101010"),
+                    'headings'=> array("en" => "Notificacion"),
+                    'contents' => $content    
+                );
+        
+                $fields = json_encode($fields);
+        
+                $ch = curl_init();
+                curl_setopt($ch, CURLOPT_URL, env('ONESIGNAL_URL'));
+                curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json; charset=utf-8',
+                                                    'Authorization: Basic '.env('ONESIGNAL_REST_KEY')));
+                curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+                curl_setopt($ch, CURLOPT_HEADER, FALSE);
+                curl_setopt($ch, CURLOPT_POST, TRUE);
+                curl_setopt($ch, CURLOPT_POSTFIELDS, $fields);
+                curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
+        
+                $response = curl_exec($ch);
+                curl_close($ch);
+                
+            } catch (Exception $e) {
+                $mensaje =  'Excepción capturada: ' . $e->getMessage() . "\n";
+                return response()->json($mensaje);
+            }
+        }
     }
 }

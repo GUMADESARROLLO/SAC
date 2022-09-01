@@ -38,8 +38,7 @@ class Pedido extends Model {
             }else{
                 $query = Pedido::whereBetween('date_time', [$start, $end])->get();
             }
-        }else{
-            
+        }else{           
 
             $Usuario = Usuario::where('id',Auth::id())->get();
             foreach ($Usuario as $rec){            
@@ -48,9 +47,9 @@ class Pedido extends Model {
                 }
             }
             if($Estado != -1){
-                $query = Pedido::where('name',$Rutas_Usuario)->whereBetween('date_time', [$start, $end])->where('status',$Estado)->get();
+                $query = Pedido::whereIn('name',$Rutas_Usuario)->whereBetween('date_time', [$start, $end])->where('status',$Estado)->get();
             }else{
-                $query = Pedido::where('name',$Rutas_Usuario)->whereBetween('date_time', [$start, $end])->get();
+                $query = Pedido::whereIn('name',$Rutas_Usuario)->whereBetween('date_time', [$start, $end])->get();
             }
         }
 
@@ -66,7 +65,7 @@ class Pedido extends Model {
 
             $json[$i]["RUTA"]           = $fila["name"];
             $json[$i]["VENDEDOR"]       = Vendedor::where('VENDEDOR',$fila["name"])->get()->pluck('NOMBRE')[0];            
-            $json[$i]["FECHA"]          = $fila["date_time"];
+            $json[$i]["FECHA"]          = date('M d, Y h:i A', strtotime($fila["date_time"])) ;
             $json[$i]["ARTICULOS"]      = $fila["order_list"];
             $json[$i]["MONTO"]          = $fila["order_total"];
             $json[$i]["COMMENT"]        = $fila["comment"];
@@ -91,6 +90,8 @@ class Pedido extends Model {
                     "status" => $Valor,
                 ]);
 
+                //Pedido::SendNotifications($request);
+
                 return response()->json($response);
 
 
@@ -100,6 +101,51 @@ class Pedido extends Model {
             }
         }
 
+    }
+    public static function SendNotifications(Request $request){
+        if ($request->ajax()) {
+            try {
+
+                $id     = $request->input('id');
+                $Valor  = $request->input('Valor');                
+
+                $lblAccions  = ($Valor==1) ? 'Procesado' : 'Cancelado' ;
+                
+                $getPedido   = Pedido::where('id', $id)->first(['phone', 'player_id']);
+
+                $NameCliente = $getPedido->phone;
+                $Player_id   = $getPedido->player_id;
+        
+                $content = array("en" => "La orden de: $NameCliente ha sido $lblAccions.");
+        
+                $fields = array(
+                    'app_id' => env('ONESIGNAL_APP_ID'),
+                    'include_player_ids' => array($Player_id),
+                    'data' => array("foo" => "bar", "cat_id"=> "1010101010"),
+                    'headings'=> array("en" => $lblAccions),
+                    'contents' => $content    
+                );
+        
+                $fields = json_encode($fields);
+        
+                $ch = curl_init();
+                curl_setopt($ch, CURLOPT_URL, env('ONESIGNAL_URL'));
+                curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json; charset=utf-8',
+                                                    'Authorization: Basic '.env('ONESIGNAL_REST_KEY')));
+                curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+                curl_setopt($ch, CURLOPT_HEADER, FALSE);
+                curl_setopt($ch, CURLOPT_POST, TRUE);
+                curl_setopt($ch, CURLOPT_POSTFIELDS, $fields);
+                curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
+        
+                $response = curl_exec($ch);
+                curl_close($ch);
+                
+            } catch (Exception $e) {
+                $mensaje =  'Excepción capturada: ' . $e->getMessage() . "\n";
+                return response()->json($mensaje);
+            }
+        }
     }
 
 

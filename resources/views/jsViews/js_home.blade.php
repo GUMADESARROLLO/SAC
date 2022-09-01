@@ -4,12 +4,15 @@
         id_mdl_info_cliente : '#modal_info_cliente',
         MODAL_COMMENT: '#IdmdlComment',
     };
-    const startOfMonth = moment().startOf('month').format('YYYY-MM-DD');
+    const startOfMonth = moment().subtract(1,'days').format('YYYY-MM-DD');
     const endOfMonth   = moment().subtract(0, "days").format("YYYY-MM-DD");
     
-    //RangeStat(startOfMonth,endOfMonth)
+    $("#id_select_status").val(0).change();
+    
+    RangeStat(startOfMonth,endOfMonth)
 
     var labelRange = startOfMonth + " to " + endOfMonth;
+    
     $('#id_range_select').val(labelRange);
 
     tbl_header_pedido =  [     
@@ -35,7 +38,7 @@
                                     </div>
                                     <div class="flex-1 align-self-center ms-2">
                                         <h6 class="mb-1 fs-1 fw-semi-bold">`+ row.CLIENTE + row.DESCRIPCION +`</h6>
-                                        <p class="mb-0 fs--1">`+row.DIRECCION +` &bull; ` + moment(row.FECHA).format("D MMM, YYYY h:mm:ss") + `
+                                        <p class="mb-0 fs--1">`+row.DIRECCION +` &bull; ` + row.FECHA + `
                                             <span class="badge rounded-pill ms-3 badge-soft-`+row.COLOR + `"><span class="fas fa-check"></span> `+row.ESTADO + `</span>
                                         </p>
                                     </div>
@@ -244,7 +247,7 @@
                 function AddComment(row){
                     obj = JSON.parse(decodeURIComponent(row))
 
-                    var fecha_humana = moment(obj.FECHA).format("D MMM, YYYY")
+                    var fecha_humana = obj.FECHA
 
                     $("#id_modal_name_item").text(obj.CLIENTE + obj.DESCRIPCION)
                     $("#id_modal_articulo").text(obj.DIRECCION)
@@ -413,8 +416,11 @@
         }
     });             
     function ChancesStatus(id_producto,Valor){
+
+        lblModal = (Valor ==1)? 'Procesar': 'Cancelar'
+
         Swal.fire({
-            title: '¿Estas Seguro de Cancelar el Pedido?',
+            title: '¿Estas Seguro de '+lblModal+' el Pedido?',
             text: "¡Esta acción no podrá ser revertida!",
             icon: 'warning',
             showCancelButton: true,
