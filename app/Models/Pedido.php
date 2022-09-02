@@ -24,20 +24,23 @@ class Pedido extends Model {
         $start      = $request->input('DateStart');
         $end        = $request->input('DateEnds');
         $Estado     = $request->input('Estado');
+        $SAC        = $request->input('SAC');
 
-        $start   = $start.' 00:00:00';
-        $end     = $end.' 23:59:59';
+        $start      = $start.' 00:00:00';
+        $end        = $end.' 23:59:59';
 
 
         $rol = Session::get('rol');
 
-
-        if($rol == 1 || $rol ==2){            
+        
+        if($rol == 1 || $rol ==2){       
+            
+            $query = Pedido::whereBetween('date_time', [$start, $end])->get();
             if($Estado != -1){
                 $query = Pedido::whereBetween('date_time', [$start, $end])->where('status',$Estado)->get();
-            }else{
-                $query = Pedido::whereBetween('date_time', [$start, $end])->get();
             }
+
+
         }else{           
 
             $Usuario = Usuario::where('id',Auth::id())->get();
@@ -46,10 +49,18 @@ class Pedido extends Model {
                     $Rutas_Usuario[] = $Rts->RUTA;
                 }
             }
+
+            
+            $query = Pedido::whereIn('name',$Rutas_Usuario)->whereBetween('date_time', [$start, $end])->get();
+
             if($Estado != -1){
                 $query = Pedido::whereIn('name',$Rutas_Usuario)->whereBetween('date_time', [$start, $end])->where('status',$Estado)->get();
             }else{
-                $query = Pedido::whereIn('name',$Rutas_Usuario)->whereBetween('date_time', [$start, $end])->get();
+                
+            }
+
+            if($SAC != '0'){
+                $query = Pedido::whereIn('name',$Rutas_Usuario)->whereBetween('date_time', [$start, $end])->where('status',$Estado)->where('name',$SAC)->get();
             }
         }
 

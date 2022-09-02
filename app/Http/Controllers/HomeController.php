@@ -15,6 +15,7 @@ use Illuminate\Http\Request;
 use App\Models\Lotes;
 use App\Models\Pedido;
 use App\Models\PedidoComentario;
+use App\Models\Usuario;
 
 
 class HomeController extends Controller {
@@ -41,7 +42,8 @@ class HomeController extends Controller {
             'Liq12Meses'    => Liquidacion_a_12meses::getArticulos(),
             'Clientes'      => Clientes::getClientes(),
             'Vendedor'      => Vendedor::getVendedor(),            
-            //'Pedidos'       => Pedido::getPedidos(),
+            'SAC'           => Usuario::where('activo','S')->where('id_rol',9)->get(),            
+            
         );
         
         return response()->json($dtaHome);

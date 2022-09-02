@@ -41,40 +41,48 @@
 
                         <div class="tab-pane active" id="crm-pedido" role="tabpanel" aria-labelledby="crm-pedido-tab">
                         <div class="row flex-between-center">
-                            <div class="col-4 col-sm-auto d-flex align-items-center pe-0">
+                            <div class="col-4 col-sm-auto d-flex align-items-center">
                             <form class="row align-items-center g-3">
-                              <div class="col-auto"><h6 class="text-700 mb-0">Mostrando datos para: </h6></div>
+                              <div class="col-auto"><h6 class="text-700 mb-0"> </h6></div>
                               <div class="col-md-auto position-relative">
                                 <span class="fas fa-calendar-alt text-primary position-absolute translate-middle-y ms-2 mt-3"> </span>
                                 <input id="id_range_select" class="form-control form-control-sm datetimepicker ps-4" type="text" data-options='{"mode":"range","dateFormat":"Y-m-d","disableMobile":true}'/>
                               </div>
-                            </form>
+                            </form>                            
                             </div>
-                            <div class="col-8 col-sm-auto text-end ps-2">
-                                <div id="table-customers-replace-element">
-                                    <div class="input-group" >
-                                        <input class="form-control form-control-sm shadow-none search" type="search" placeholder="Buscar..." aria-label="search" id="id_txt_buscar" />
-                                        <div class="input-group-text bg-transparent">
-                                            <span class="fa fa-search fs--1 text-600"></span>
-                                        </div>
-                                        <div class="input-group-text bg-transparent" id="id_btn_new">
-                                            <span class="fas fa-history fs--1 text-600"></span>
-                                        </div>
-                                        <select class="form-select form-select-sm" aria-label=".form-select-sm example" id="id_select_status">
-                                          <option value="-1">Todos</option>
-                                          <option value="0">Pendientes</option>
-                                          <option value="1">Procesado</option>
-                                          <option value="2">Cancelado</option>
-                                        </select>
-                                        <select class="form-select form-select-sm" aria-label=".form-select-sm example" id="frm_lab_row">
-                                          
-                                          <option selected="" value="5">5</option>
-                                          <option value="10">10</option>
-                                          <option value="20">20</option>
-                                          <option value="-1">*</option>
-                                        </select>
+                            <div class="col-8 col-sm-auto text-end ">
+                              <div class="row g-3 needs-validation" >
+                                <div class="col-md-5">
+                                  <div class="input-group" >
+                                      <input class="form-control form-control-sm shadow-none search" type="search" placeholder="Buscar..." aria-label="search" id="id_txt_buscar" />
+                                      <div class="input-group-text bg-transparent">
+                                          <span class="fa fa-search fs--1 text-600"></span>
+                                      </div>
+                                      <div class="input-group-text bg-transparent" id="id_btn_new">
+                                          <span class="fas fa-history fs--1 text-600"></span>
+                                      </div>
                                     </div>
+                                  </div>
+                                <div class="col-md-3">
+                                  <select class="form-select form-select-sm" aria-label=".form-select-sm example" id="id_select_status">
+                                    <option value="-1">Todos</option>
+                                    <option value="0">Pendientes</option>
+                                    <option value="1">Procesado</option>
+                                    <option value="2">Cancelado</option>
+                                  </select>
                                 </div>
+                                <div class="col-md-2">
+                                  <select class="form-select form-select-sm" aria-label=".form-select-sm example" id="id_select_sac"></select>
+                                </div> 
+                                <div class="col-md-2">
+                                  <select class="form-select form-select-sm" aria-label=".form-select-sm example" id="frm_lab_row">                                          
+                                    <option selected="" value="5">5</option>
+                                    <option value="10">10</option>
+                                    <option value="20">20</option>
+                                    <option value="-1">*</option>
+                                  </select>
+                                </div> 
+                              </div>
                             </div>
                         </div>
                           <table id="tbl_mst_pedido" class="display" style="width:100%"></table>

@@ -19,7 +19,7 @@
                 {"title": "","data": "ARTICULO","className":'detalles-Pedido align-items-center', "render": function(data, type, row, meta) {
                     return `<span class="fas fa-arrow-alt-circle-down text-success"></span>`
                 }},           
-                {"title": "PEDIDO","data": "ARTICULO", "render": function(data, type, row, meta) {
+                {"title": "","data": "ARTICULO", "render": function(data, type, row, meta) {
 
                     var btns = '';
                     if(row.ESTADO  === 'PENDIENTE' ){
@@ -98,6 +98,7 @@
         Start       = $.trim(Start)
         Ends        = $.trim(Ends)        
         Estado      = $("#id_select_status option:selected").val();  
+        SAC         = $("#id_select_sac option:selected").val();  
         $.ajax({
             url: "getPedidosRangeDates",
             type: 'post',
@@ -106,6 +107,7 @@
                 DateStart   : Start,
                 DateEnds    : Ends,
                 Estado      : Estado,
+                SAC         : SAC,
                 _token  : "{{ csrf_token() }}" 
             },
             async: true,
@@ -465,12 +467,18 @@
         });
     }
     $.get( "getData", function( data ) {
+        var Users = ''
         initTable('#tbl_inventario',data[0].Inventario,tbl_header_inventarios);
         initTable('#tbl_inventario_liq_12',data[0].Liq12Meses,tbl_header_inventarios_liq);
         initTable('#tbl_inventario_liq_6',data[0].Liq6Meses,tbl_header_inventarios_liq);
         initTable('#tbl_mst_clientes',data[0].Clientes,tbl_header_clientes);
 
-       
+        Users += '<option value="0" >Todas</option>'
+        $.each(data[0].SAC, function(i, x) {
+            Users += '<option value="' + x['username'] + '" >' + x['nombre'] + '</option>'
+        });
+
+        $("#id_select_sac").empty().append(Users);
 
         TBLCL = $("#tbl_mst_clientes").DataTable();
 
