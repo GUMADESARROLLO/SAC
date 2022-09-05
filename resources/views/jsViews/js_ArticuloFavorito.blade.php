@@ -30,7 +30,7 @@
                         <div class="row g-0 fw-semi-bold text-center py-2"> 
                             <div class="col-auto">
                                 <a class="rounded-2 d-flex align-items-center me-3 text-700" href="#!">
-                                    <span class="ms-1 fas fa-boxes text-primary" ></span><span class="ms-1"> `+ numeral(row.EXISTENCIA).format('0,00.00')  +` `+ row.UNIDAD +`</span>
+                                    <span class="ms-1 fas fa-boxes text-primary" ></span><span class="ms-1"> `+ numeral(row.total).format('0,00.00')  +` `+ row.UNIDAD_ALMACEN +`</span>
                                 </a>
                             </div>
                             <div class="col-auto d-flex align-items-center"><span class="badge rounded-pill ms-3 badge-soft-primary">
@@ -68,7 +68,7 @@
                         <div class="flex-1 ms-3">
                         
                         <div class="d-flex align-items-center">
-                            <h6 class="mb-1 fw-semi-bold text-nowrap"><a href="#!" onclick=" OpenModal(`+"'" + row.ARTICULO+"'" +`)"> <strong>`+  row.ARTICULO +`</strong></a> : `+row.DESCRIPCION.toUpperCase() +`</h6>
+                            <h6 class="mb-1 fw-semi-bold text-nowrap"><a href="#!"> <strong>`+  row.ARTICULO +`</strong></a> : `+row.DESCRIPCION.toUpperCase() +`</h6>
                             `+  regla +`
                             
                         </div>
@@ -77,7 +77,7 @@
                         <div class="row g-0 fw-semi-bold text-center py-2"> 
                             <div class="col-auto">
                                 <a class="rounded-2 d-flex align-items-center me-3 text-700" href="#!">
-                                    <span class="ms-1 fas fa-boxes text-primary" ></span><span class="ms-1"> `+ numeral(row.EXISTENCIA).format('0,00.00')  +` `+ row.UNIDAD +`</span>
+                                    <span class="ms-1 fas fa-boxes text-primary" ></span><span class="ms-1"> `+ numeral(row.total).format('0,00.00')  +` `+ row.UNIDAD_ALMACEN +`</span>
                                 </a>
                             </div>
                             <div class="col-auto d-flex align-items-center"><span class="badge rounded-pill ms-3 badge-soft-primary">
@@ -206,7 +206,7 @@
                     return `<span class="badge rounded-pill ms-3 badge-soft-danger ">`+row.NOMBRE+`</span> `
                 }},
                 {"title": "DISPONIBLE","data": "DISPONIBLE", "render": function(data, type, row, meta) {
-                    return `<span class="badge rounded-pill ms-3 badge-soft-info ">C$  `+ numeral(row.CANT_DISPONIBLE).format('0,00.00')  +`</span> `
+                    return `<span class="badge rounded-pill ms-3 badge-soft-info ">C$  `+ numeral(row.TOTAL).format('0,00.00')  +`</span> `
                 }},
                 ]
     tbl_header_nivel_precio =  [
