@@ -26,7 +26,9 @@ class HomeController extends Controller {
 
     public function getHome()
     {  
-        return view('Principal.Home');         
+        $Lista_SAC = Usuario::getUsuariosSAC();        
+        return view('Principal.Home', compact('Lista_SAC'));
+        
     }
 
     public function getArticuloFavorito()
@@ -41,9 +43,7 @@ class HomeController extends Controller {
             'Liq6Meses'     => Liquidacion_a_6meses::getArticulos(),
             'Liq12Meses'    => Liquidacion_a_12meses::getArticulos(),
             'Clientes'      => Clientes::getClientes(),
-            'Vendedor'      => Vendedor::getVendedor(),            
-            'SAC'           => Usuario::where('activo','S')->where('id_rol',9)->get(),            
-            
+            'Vendedor'      => Vendedor::getVendedor(), 
         );
         
         return response()->json($dtaHome);

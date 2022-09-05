@@ -22,6 +22,11 @@ class Usuario extends Model {
         return Usuario::where('activo','S')->get();
     }
 
+    public static function getUsuariosSAC()
+    {
+        return Usuario::where('activo','S')->where('id_rol',9)->get();
+    }
+
     public static function SaveUsuario(Request $request) {
         if ($request->ajax()) {
             try {

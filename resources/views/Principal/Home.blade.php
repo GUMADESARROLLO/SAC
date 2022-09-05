@@ -52,7 +52,8 @@
                             </div>
                             <div class="col-8 col-sm-auto text-end ">
                               <div class="row g-3 needs-validation" >
-                                <div class="col-md-5">
+                              
+                                <div class="col-md-auto">
                                   <div class="input-group" >
                                       <input class="form-control form-control-sm shadow-none search" type="search" placeholder="Buscar..." aria-label="search" id="id_txt_buscar" />
                                       <div class="input-group-text bg-transparent">
@@ -63,7 +64,17 @@
                                       </div>
                                     </div>
                                   </div>
-                                <div class="col-md-3">
+                                  @if( Session::get('rol') == '1' || Session::get('rol') == '2')
+                                <div class="col-md-auto">
+                                  <select class="form-select form-select-sm" aria-label=".form-select-sm example" id="id_select_sac">
+                                      <option value="0" >Todas</option>                                      
+                                      @foreach ($Lista_SAC as $vnd)
+                                        <option value="{{$vnd->username}}">{{$vnd->nombre}}</option>
+                                      @endforeach
+                                  </select>
+                                </div> 
+                                @endif
+                                <div class="col-md-auto">
                                   <select class="form-select form-select-sm" aria-label=".form-select-sm example" id="id_select_status">
                                     <option value="-1">Todos</option>
                                     <option value="0">Pendientes</option>
@@ -71,10 +82,8 @@
                                     <option value="2">Cancelado</option>
                                   </select>
                                 </div>
-                                <div class="col-md-2">
-                                  <select class="form-select form-select-sm" aria-label=".form-select-sm example" id="id_select_sac"></select>
-                                </div> 
-                                <div class="col-md-2">
+                               
+                                <div class="col-md-auto">
                                   <select class="form-select form-select-sm" aria-label=".form-select-sm example" id="frm_lab_row">                                          
                                     <option selected="" value="5">5</option>
                                     <option value="10">10</option>

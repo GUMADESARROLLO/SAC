@@ -13,56 +13,61 @@ class Pedido extends Model {
     public function CountsComments(){
         return $this->hasMany('App\Models\PedidoComentario','orden_code','code')->count();    
     }
-
+    public function show(Order $order){
+        \DB::connection()->enableQueryLog();
+        $data = $order->all();
+        $queries = \DB::getQueryLog();
+        return dd($queries);
+    }
     public static function getPedidos(Request $request)
     {
-        $Rutas_Usuario = array();
+        $Rutas          = array();
+        $Condicionales  = array();
 
-        $Estados = ['PENDIENTE','PROCESADO','CANCELADO'];
-        $ColorSt = ['danger','success','info'];
+        $Estados        = ['PENDIENTE','PROCESADO','CANCELADO'];
+        $ColorSt        = ['danger','success','info'];        
 
-        $start      = $request->input('DateStart');
-        $end        = $request->input('DateEnds');
+        $start      = $request->input('DateStart').' 00:00:00';
+        $end        = $request->input('DateEnds').' 23:59:59';
+        
         $Estado     = $request->input('Estado');
         $SAC        = $request->input('SAC');
 
-        $start      = $start.' 00:00:00';
-        $end        = $end.' 23:59:59';
-
-
         $rol = Session::get('rol');
-
         
-        if($rol == 1 || $rol ==2){       
-            
-            $query = Pedido::whereBetween('date_time', [$start, $end])->get();
-            if($Estado != -1){
-                $query = Pedido::whereBetween('date_time', [$start, $end])->where('status',$Estado)->get();
+        if($rol == 1 || $rol ==2){
+
+            if($SAC == '0'){
+                $Vendedor = Vendedor::getVendedor();
+                foreach ($Vendedor as $v){
+                    $Rutas[] = $v->VENDEDOR;
+                }
+            }else{
+                $Usuario = Usuario::where('username',$SAC)->get();
+                foreach ($Usuario as $rec){            
+                    foreach ($rec->Detalles as $Rts){
+                        $Rutas[] = $Rts->RUTA;
+                    }
+                }
             }
-
-
-        }else{           
-
+            
+        }else{
+            
             $Usuario = Usuario::where('id',Auth::id())->get();
             foreach ($Usuario as $rec){            
                 foreach ($rec->Detalles as $Rts){
-                    $Rutas_Usuario[] = $Rts->RUTA;
+                    $Rutas[] = $Rts->RUTA;
                 }
             }
-
-            
-            $query = Pedido::whereIn('name',$Rutas_Usuario)->whereBetween('date_time', [$start, $end])->get();
-
-            if($Estado != -1){
-                $query = Pedido::whereIn('name',$Rutas_Usuario)->whereBetween('date_time', [$start, $end])->where('status',$Estado)->get();
-            }else{
-                
-            }
-
-            if($SAC != '0'){
-                $query = Pedido::whereIn('name',$Rutas_Usuario)->whereBetween('date_time', [$start, $end])->where('status',$Estado)->where('name',$SAC)->get();
-            }
         }
+
+        if($Estado != -1){
+            $Condicionales[] = ['status', '=', $Estado];
+        }
+
+        $query = Pedido::whereBetween('date_time', [$start, $end])->where($Condicionales)->whereIn('name',$Rutas)->get();
+
+ 
 
 
         $i = 0;

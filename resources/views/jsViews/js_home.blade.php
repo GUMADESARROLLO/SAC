@@ -6,15 +6,17 @@
     };
     const startOfMonth = moment().subtract(1,'days').format('YYYY-MM-DD');
     const endOfMonth   = moment().subtract(0, "days").format("YYYY-MM-DD");
+    var labelRange = startOfMonth + " to " + endOfMonth;
+    $('#id_range_select').val(labelRange);
+
+    RangeStat(startOfMonth,endOfMonth)
+
     
     $("#id_select_status").val(0).change();
     
-    RangeStat(startOfMonth,endOfMonth)
-
-    var labelRange = startOfMonth + " to " + endOfMonth;
     
-    $('#id_range_select').val(labelRange);
 
+   
     tbl_header_pedido =  [     
                 {"title": "","data": "ARTICULO","className":'detalles-Pedido align-items-center', "render": function(data, type, row, meta) {
                     return `<span class="fas fa-arrow-alt-circle-down text-success"></span>`
@@ -81,7 +83,10 @@
 
     $("#id_btn_new").click(function(){
         $("#id_loading").show();
-        RangeStat(startOfMonth,endOfMonth)
+        Fechas = $('#id_range_select').val().split("to");
+        if(Object.keys(Fechas).length >= 2 ){
+            RangeStat(Fechas[0],Fechas[1]);
+        } 
     });
 
     $( "#id_select_status").change(function() {
@@ -472,13 +477,6 @@
         initTable('#tbl_inventario_liq_12',data[0].Liq12Meses,tbl_header_inventarios_liq);
         initTable('#tbl_inventario_liq_6',data[0].Liq6Meses,tbl_header_inventarios_liq);
         initTable('#tbl_mst_clientes',data[0].Clientes,tbl_header_clientes);
-
-        Users += '<option value="0" >Todas</option>'
-        $.each(data[0].SAC, function(i, x) {
-            Users += '<option value="' + x['username'] + '" >' + x['nombre'] + '</option>'
-        });
-
-        $("#id_select_sac").empty().append(Users);
 
         TBLCL = $("#tbl_mst_clientes").DataTable();
 
