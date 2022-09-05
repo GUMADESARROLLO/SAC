@@ -8,7 +8,7 @@ class Inventario extends Model
 {
     protected $connection = 'sqlsrv';
     public $timestamps = false;
-    protected $table = "PRODUCCION.dbo.GMV_mstr_articulos";
+    protected $table = "PRODUCCION.dbo.iweb_articulos";
 
     public static function getArticulos()
     {
