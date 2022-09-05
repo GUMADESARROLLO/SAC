@@ -69,7 +69,7 @@ class HomeController extends Controller {
             'InfoCliente'                   => Clientes::where('CLIENTE', $idCliente)->get(),
             'Historico3M'                   => ClientesHistorico3M::where('CLIENTE', $idCliente)->get(),
             'ClienteMora'                   => ClientesMora::where('CLIENTE', $idCliente)->get(),
-            'ClientesHistoricoFactura'      => ClientesHistoricoFactura::where('COD_CLIENTE', $idCliente)->get(),            
+            'ClientesHistoricoFactura'      => ClientesHistoricoFactura::where('COD_CLIENTE', $idCliente)->orderBy('Dia', 'DESC')->get(),            
             'ArticulosNoFacturado'          => Inventario::whereNotIn('ARTICULO', function($q)  use ($idCliente){
                                                     $q->select('ARTICULO')->from('PRODUCCION.dbo.GMV3_hstCompra_3M')->where("CLIENTE", $idCliente);
                                                 })->get(),            

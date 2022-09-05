@@ -118,7 +118,7 @@
             async: true,
             success: function(Pedidos) {
 
-                initTable('#tbl_mst_pedido',Pedidos,tbl_header_pedido);
+                initTable('#tbl_mst_pedido',Pedidos,tbl_header_pedido,[[0, "asc"]],[]);
 
                 $("#tbl_mst_pedido_length").hide();
                 $("#tbl_mst_pedido_filter").hide();
@@ -473,10 +473,10 @@
     }
     $.get( "getData", function( data ) {
         var Users = ''
-        initTable('#tbl_inventario',data[0].Inventario,tbl_header_inventarios);
-        initTable('#tbl_inventario_liq_12',data[0].Liq12Meses,tbl_header_inventarios_liq);
-        initTable('#tbl_inventario_liq_6',data[0].Liq6Meses,tbl_header_inventarios_liq);
-        initTable('#tbl_mst_clientes',data[0].Clientes,tbl_header_clientes);
+        initTable('#tbl_inventario',data[0].Inventario,tbl_header_inventarios,[[0, "asc"]],[]);
+        initTable('#tbl_inventario_liq_12',data[0].Liq12Meses,tbl_header_inventarios_liq,[[0, "asc"]],[]);
+        initTable('#tbl_inventario_liq_6',data[0].Liq6Meses,tbl_header_inventarios_liq,[[0, "asc"]],[]);
+        initTable('#tbl_mst_clientes',data[0].Clientes,tbl_header_clientes,[[0, "asc"]],[]);
 
         TBLCL = $("#tbl_mst_clientes").DataTable();
 
@@ -491,15 +491,13 @@
     })
 
 
-    function initTable(id,datos,Header){
+    function initTable(id,datos,Header,Order,Show){
         $(id).DataTable({
             "data": datos,
             "destroy": true,
             "info": false,
             "bPaginate": true,
-            "order": [
-                [0, "asc"]
-            ],
+            "order": Order,
             "lengthMenu": [
                 [5, -1],
                 [5, "Todo"]
@@ -517,6 +515,13 @@
                 "search": "BUSCAR"
             },
             'columns': Header,
+            "columnDefs": [
+                {
+                    "visible": false,
+                    "searchable": false,
+                    "targets": Show
+                },
+            ],
         });
     }
     function initTable_modal(id,datos,Header){
@@ -709,16 +714,12 @@
                         </div>
                         
                         <div class="row g-0 fw-semi-bold text-center py-2 fs--1"> 
-                                <div class="col-auto"><a class="rounded-2 d-flex align-items-center me-3 text-700" href="#!"><span class="ms-1"> `+ moment(row.Dia).format("D MMM, YYYY") +`</span></a></div>
-                                
-                                
-                        </div>
-                        <p class="fw-semi-bold mb-0 text-500"></p>   
-                        
+                            <div class="col-auto"><a class="rounded-2 d-flex align-items-center me-3 text-700" href="#!"><span class="ms-1"> `+ moment(row.Dia).format("D MMM, YYYY") +`</span></a></div>
                         </div>
                     </div>
                 </td> `
                 }},
+                {"title": "Dia","data": "Dia"}
                 ]
         tbl_header_historico_3m =  [                
                 {"title": "FACTURA","data": "FACTURA", "render": function(data, type, row, meta) {
@@ -781,9 +782,9 @@
                 $("#mas_120_dias").html(numeral(data[0].ClienteMora[0].Mas120).format('0,00.00'))
             }
 
-            initTable('#tbl_historico_factura',data[0].ClientesHistoricoFactura,tbl_header_historico_factura);
-            initTable('#tbl_ultm_3m',data[0].Historico3M,tbl_header_historico_3m);
-            initTable('#tbl_no_facturado',data[0].ArticulosNoFacturado,tbl_header_no_Facturado);
+            initTable('#tbl_historico_factura',data[0].ClientesHistoricoFactura,tbl_header_historico_factura,[[1, "DESC"]],[1]);
+            initTable('#tbl_ultm_3m',data[0].Historico3M,tbl_header_historico_3m,[[0, "asc"]],[]);
+            initTable('#tbl_no_facturado',data[0].ArticulosNoFacturado,tbl_header_no_Facturado,[[0, "asc"]],[]);
             
         })
 
