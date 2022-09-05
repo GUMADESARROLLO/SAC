@@ -16,11 +16,19 @@
               <div class="card">
                 <div class="card-header d-flex flex-between-center ps-0 py-0 border-bottom">
                   <ul class="nav nav-tabs border-0 flex-nowrap tab-active-caret" id="crm-revenue-chart-tab" role="tablist" data-tab-has-echarts="data-tab-has-echarts">
-                    <li class="nav-item" role="presentation"><a class="nav-link py-3 mb-0 active" id="crm-pedido-tab" data-bs-toggle="tab" href="#crm-pedido" role="tab" aria-controls="crm-pedido" aria-selected="false">Pedidos</a></li>  
-                    <li class="nav-item" role="presentation"><a class="nav-link py-3 mb-0" id="crm-revenue-tab" data-bs-toggle="tab" href="#crm-revenue" role="tab" aria-controls="crm-revenue" aria-selected="true">Inventario</a></li>
-                    <li class="nav-item" role="presentation"><a class="nav-link py-3 mb-0" id="crm-profit-tab" data-bs-toggle="tab" href="#crm-profit" role="tab" aria-controls="crm-profit" aria-selected="false">Clientes</a></li>                    
-                    <li class="nav-item" role="presentation"><a class="nav-link py-3 mb-0" id="crm-users-tab" data-bs-toggle="tab" href="#crm-users" role="tab" aria-controls="crm-users" aria-selected="false">Liquidacion 12 Meses</a></li>
-                    <li class="nav-item" role="presentation"><a class="nav-link py-3 mb-0" id="crm-deals-tab" data-bs-toggle="tab" href="#crm-deals" role="tab" aria-controls="crm-deals" aria-selected="false">Liquidacion 6 Meses</a></li>                    
+                  
+
+                    @if (Session::get('rol') == '1' || Session::get('rol') == '2' || Session::get('rol') == '9' )
+                      <li class="nav-item" role="presentation"><a class="nav-link py-3 mb-0 {{$Normal}}" id="crm-pedido-tab" data-bs-toggle="tab" href="#crm-pedido" role="tab" aria-controls="crm-pedido" aria-selected="false">Pedidos</a></li>  
+                      <li class="nav-item" role="presentation"><a class="nav-link py-3 mb-0" id="crm-revenue-tab" data-bs-toggle="tab" href="#crm-revenue" role="tab" aria-controls="crm-revenue" aria-selected="true">Inventario</a></li>
+                      <li class="nav-item" role="presentation"><a class="nav-link py-3 mb-0" id="crm-profit-tab" data-bs-toggle="tab" href="#crm-profit" role="tab" aria-controls="crm-profit" aria-selected="false">Clientes</a></li>                    
+                      <li class="nav-item" role="presentation"><a class="nav-link py-3 mb-0" id="crm-users-tab" data-bs-toggle="tab" href="#crm-users" role="tab" aria-controls="crm-users" aria-selected="false">Liquidacion 12 Meses</a></li>
+                      <li class="nav-item" role="presentation"><a class="nav-link py-3 mb-0" id="crm-deals-tab" data-bs-toggle="tab" href="#crm-deals" role="tab" aria-controls="crm-deals" aria-selected="false">Liquidacion 6 Meses</a></li> 
+                    @elseif (Session::get('rol') == '10')                    
+                    <li class="nav-item" role="presentation"><a class="nav-link py-3 mb-0 {{$Normal}}" id="crm-revenue-tab" data-bs-toggle="tab" href="#crm-revenue" role="tab" aria-controls="crm-revenue" aria-selected="true">Inventario</a></li>
+                    @endif
+                                       
+
                   </ul>
                   <div class="dropdown font-sans-serif btn-reveal-trigger">
                     <div id="id_loading" class="spinner-border" role="status"><span class="visually-hidden">Loading...</span></div>
@@ -31,7 +39,7 @@
                     <div class="col-xxl-12">
                       <div class="tab-content">
                         
-                      <div class="tab-pane" id="crm-revenue" role="tabpanel" aria-labelledby="crm-revenue-tab">
+                      <div class="tab-pane {{$Normal}}" id="crm-revenue" role="tabpanel" aria-labelledby="crm-revenue-tab">
                           <table id="tbl_inventario" class="display" style="width:100%"></table>
                         </div>
 
@@ -39,7 +47,7 @@
                           <table id="tbl_mst_clientes" class="display" style="width:100%"></table>
                         </div>
 
-                        <div class="tab-pane active" id="crm-pedido" role="tabpanel" aria-labelledby="crm-pedido-tab">
+                        <div class="tab-pane {{$SAC}}" id="crm-pedido" role="tabpanel" aria-labelledby="crm-pedido-tab">
                         <div class="row flex-between-center">
                             <div class="col-4 col-sm-auto d-flex align-items-center">
                             <form class="row align-items-center g-3">

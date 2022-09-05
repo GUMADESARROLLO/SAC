@@ -16,7 +16,7 @@ use App\Models\Lotes;
 use App\Models\Pedido;
 use App\Models\PedidoComentario;
 use App\Models\Usuario;
-
+use Session;
 
 class HomeController extends Controller {
     public function __construct()
@@ -26,8 +26,17 @@ class HomeController extends Controller {
 
     public function getHome()
     {  
-        $Lista_SAC = Usuario::getUsuariosSAC();        
-        return view('Principal.Home', compact('Lista_SAC'));
+        $Normal ='';
+        $SAC = '';
+        $Lista_SAC = Usuario::getUsuariosSAC();  
+        
+        if (Session::get('rol') == '1' || Session::get('rol') == '2' || Session::get('rol') == '9') {
+            $SAC = 'active';
+        } else {
+            $Normal = 'active';
+        }
+        
+        return view('Principal.Home', compact('Lista_SAC','SAC','Normal'));
         
     }
 
