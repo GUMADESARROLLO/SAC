@@ -175,6 +175,9 @@
                                 </div>
                               </div>
                             </div>
+
+                            
+                            @if (Session::get('rol') == '1' || Session::get('rol') == '2' || Session::get('rol') == '9' )
                             <div class="col-12 col-sm-auto">
                               <div class="mb-3 pe-4 border-sm-end border-200">
                                 <h6 class="fs--2 text-600 mb-1">INS. PUB</h6>
@@ -183,6 +186,7 @@
                                 </div>
                               </div>
                             </div>
+                            @endif
                             <div class="col-12 col-sm-auto">
                               <div class="mb-3 pe-0">
                                 <h6 class="fs--2 text-600 mb-1">PUBLICO</h6>
