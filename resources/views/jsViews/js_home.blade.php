@@ -9,10 +9,12 @@
     var labelRange = startOfMonth + " to " + endOfMonth;
     $('#id_range_select').val(labelRange);
 
+    $("#id_select_status").val(0).change();
+    
     RangeStat(startOfMonth,endOfMonth)
 
     
-    $("#id_select_status").val(0).change();
+    
     
     
 
