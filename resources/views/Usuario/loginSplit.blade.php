@@ -5,7 +5,7 @@
        
         <div class="row min-vh-100 bg-100">
           <div class="col-6 d-none d-lg-block position-relative">
-            <div class="bg-holder" style="background-image:url(images/14.jpg);background-position: 50% 20%;">
+            <div class="bg-holder" style="background-image:url(images/15.jpg);background-position: 50% 20%;">
             </div>
             <!--/.bg-holder-->
 
