@@ -16,6 +16,7 @@ use App\Models\Lotes;
 use App\Models\Pedido;
 use App\Models\PedidoComentario;
 use App\Models\Usuario;
+use App\Models\Factura;
 use Session;
 
 class HomeController extends Controller {
@@ -74,6 +75,14 @@ class HomeController extends Controller {
     public function getDataCliente($idCliente)
     {
 
+        $articulos_favoritos = array();
+
+        $Lista_articulos_Favoritos = ArticuloFavoritos::all();
+        
+        foreach ($Lista_articulos_Favoritos as $rec){
+            $articulos_favoritos[] = $rec->Articulo;
+        }
+
         $dtaCliente[] = array(
             'InfoCliente'                   => Clientes::where('CLIENTE', $idCliente)->get(),
             'Historico3M'                   => ClientesHistorico3M::where('CLIENTE', $idCliente)->get(),
@@ -81,7 +90,7 @@ class HomeController extends Controller {
             'ClientesHistoricoFactura'      => ClientesHistoricoFactura::where('COD_CLIENTE', $idCliente)->orderBy('Dia', 'DESC')->get(),            
             'ArticulosNoFacturado'          => Inventario::whereNotIn('ARTICULO', function($q)  use ($idCliente){
                                                     $q->select('ARTICULO')->from('PRODUCCION.dbo.GMV3_hstCompra_3M')->where("CLIENTE", $idCliente);
-                                                })->get(),            
+                                                })->whereIn('ARTICULO',$articulos_favoritos)->get(),            
         );
 
         return response()->json($dtaCliente);
@@ -102,10 +111,14 @@ class HomeController extends Controller {
         $LOTES = Lotes::getLotes($BODEGA,$ARTICULO);
         return response()->json($LOTES);
     }
-
     public function ChancesStatus(Request $request)
     {
         $response = Pedido::ChancesStatus($request);
+        return response()->json($response);
+    }
+    public function getDetallesFactura($Factura)
+    {
+        $response = Factura::getDetalles($Factura);
         return response()->json($response);
     }
     public function getCommentPedido(Request $request)

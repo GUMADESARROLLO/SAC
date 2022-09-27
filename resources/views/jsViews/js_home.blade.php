@@ -33,7 +33,7 @@
 
                     }
                 return `<div class="card">
-                            <div class="card-header bg-light">
+                            <div class="card-header">
                               <div class="row justify-content-between">
                                 <div class="col">
                                   <div class="d-flex">
@@ -253,6 +253,26 @@
                     }
 
                 });
+
+                $('#tbl_historico_factura').on('click', 'td.detalles-factura', function () {
+                    var table = $('#tbl_historico_factura').DataTable();
+
+                    var tr = $(this).closest('tr');
+                    var row = table.row(tr);
+                    var data = table.row( $(this).parents('tr') ).data();
+                    
+                    if ( row.child.isShown() ) {
+                        $("#dv-"+data.FACTURA).hide();
+                        row.child.hide();
+                        tr.removeClass('shown');
+                    }
+                    else {
+                        $("#dv-"+data.FACTURA).show();
+                        show_detalles_factura(row.child,data);
+                        tr.addClass('shown');
+                    }
+
+                });
                 function AddComment(row){
                     obj = JSON.parse(decodeURIComponent(row))
 
@@ -277,26 +297,72 @@
                 }
 
 
-                function show_detalles_pedido(callback,detalles_pedido) {
+            function show_detalles_pedido(callback,detalles_pedido) {
+                var tbody = '';
+
+                var lineas_pedido = detalles_pedido.ARTICULOS.split('],')   
+                
+                lineas_pedido = lineas_pedido.splice(0,lineas_pedido.length-1) ;
+                $.each( lineas_pedido, function( key, value ) {
+                    var Lineas_detalles     = value.split(';') 
+                    tbody += `<tr>
+                                <td class="align-middle">
+                                    <h6 class="mb-0 text-nowrap">` +Lineas_detalles[2] + `</h6>
+                                    <p class="mb-0">` +Lineas_detalles[1] + `</p>
+                                </td>
+                                <td class="align-middle text-center">` +Lineas_detalles[0].replace("[","") + `</td>
+                                <td class="align-middle text-center">` +Lineas_detalles[3] + `</td>
+                                <td class="align-middle text-end">` +Lineas_detalles[4] + `</td>
+                            </tr>`
+                });
+
+                var template =`
+                    <div class="card">
+                        <div class="card-body">                            
+                            <div class="table-responsive scrollbar mt-4 fs--1">
+                                <table class="table table-striped border-bottom">
+                                    <thead class="light">
+                                        <tr class="bg-primary text-white dark__bg-1000">
+                                        <th class="border-0">ARTICULO</th>
+                                        <th class="border-0 text-center">CANTIDAD</th>
+                                        <th class="border-0 text-center">BONIFICADO</th>
+                                        <th class="border-0 text-end">VALOR</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        ` + tbody + `                                    
+                                    </tbody>
+                                </table>
+                            </div>                            
+                        </div>
+                        <div class="card-footer bg-light">
+                            <p class="fs--1 mb-0"><strong>Nota: </strong> ` + detalles_pedido.COMMENT +`</p>
+                        </div>
+                    </div>`
+
+                callback($(template)).show();
+            }
+
+            function show_detalles_factura(callback,detalles_pedido) {
+                $.get( "getDetallesFactura/" + detalles_pedido.FACTURA, function( data ) {
+
                     var tbody = '';
 
-                    var lineas_pedido = detalles_pedido.ARTICULOS.split('],')   
-                    
-                    lineas_pedido = lineas_pedido.splice(0,lineas_pedido.length-1) ;
-                    $.each( lineas_pedido, function( key, value ) {
-                        var Lineas_detalles     = value.split(';') 
-                        tbody += `<tr>
-                                    <td class="align-middle">
-                                        <h6 class="mb-0 text-nowrap">` +Lineas_detalles[2] + `</h6>
-                                        <p class="mb-0">` +Lineas_detalles[1] + `</p>
-                                    </td>
-                                    <td class="align-middle text-center">` +Lineas_detalles[0].replace("[","") + `</td>
-                                    <td class="align-middle text-center">` +Lineas_detalles[3] + `</td>
-                                    <td class="align-middle text-end">` +Lineas_detalles[4] + `</td>
-                                </tr>`
-                    });
+                    $.each( data, function( key, value ) {
 
-                    var template =`
+                        tbody += `<tr>
+                                <td class="align-middle">
+                                    <h6 class="mb-0 text-nowrap"> `+value.DESCRIPCION+` </h6>
+                                    <p class="mb-0"> `+value.ARTICULO+` </p>
+                                </td>
+                                <td class="align-middle text-center"> `+numeral(value.CANTIDAD).format('0,00.00') +` </td>
+                                <td class="align-middle text-center">C$. `+numeral(value.PRECIO_UNITARIO).format('0,00.00') +` </td>
+                                <td class="align-middle text-end"> C$. `+numeral(value.PRECIO_TOTAL).format('0,00.00') +` </td>
+                            </tr>`
+                        
+                        });
+
+                        var template =`
                         <div class="card">
                             <div class="card-body">                            
                                 <div class="table-responsive scrollbar mt-4 fs--1">
@@ -315,15 +381,15 @@
                                     </table>
                                 </div>                            
                             </div>
-                            <div class="card-footer bg-light">
-                                <p class="fs--1 mb-0"><strong>Nota: </strong> ` + detalles_pedido.COMMENT +`</p>
-                            </div>
                         </div>`
 
-                    callback($(template)).show();
-        
+                        callback($(template)).show();
+
+                })
                 
             }
+
+
             function getComment(Id){
                 var items_comment = '';
                 $("#id_textarea_comment").val(items_comment)
@@ -703,7 +769,10 @@
 
     function Modal_Cliente(Id){
         $("#id_load_cliente").show();
-        tbl_header_historico_factura =  [                
+        tbl_header_historico_factura =  [   
+                {"title": "","data": "FACTURA","className":'detalles-factura', "render": function(data, type, row, meta) {
+                    return `<span class="fas fa-arrow-alt-circle-down text-success"></span>`
+                }},              
                 {"title": "FACTURA","data": "FACTURA", "render": function(data, type, row, meta) {
                 return ` <td class="align-middle">
                     <div class="d-flex align-items-center position-relative"><img class="rounded-1 border border-200" src="{{ asset('images/item.png') }}"alt="" width="60">
@@ -731,11 +800,10 @@
                         
                         <div class="d-flex align-items-center">                            
                             <h6 class="mb-1 fw-semi-bold text-nowrap"><a href="#!"><strong>`+ row.ARTICULO +`</strong></a> : `+ row.DESCRIPCION +`</h6>
-                           
                         </div>
                         
                         <div class="flex-1 align-self-center ms-2">
-                          <p class="mb-0 fs--1"> C$. `+ numeral(row.Venta).format('0,00.00') +` &bull;  Cant. `+ numeral(row.CANTIDAD).format('0,00.00') +`  &bull; `+ row.Dia +` &bull; <span class="fas fa-globe-americas"></span></p>
+                            <p class="mb-0 fs--1"> C$. `+ numeral(row.Venta).format('0,00.00') +` &bull;  Cant. `+ numeral(row.CANTIDAD).format('0,00.00') +`  &bull; `+ row.Dia +` &bull; <span class="fas fa-globe-americas"></span></p>
                         </div>  
                         
                         </div>
@@ -751,9 +819,13 @@
                         
                         <div class="d-flex align-items-center">                            
                             <h6 class="mb-1 fw-semi-bold text-nowrap"><a href="#!"><strong>`+ row.ARTICULO +`</strong></a> : `+ row.DESCRIPCION +`</h6>
-                           
                         </div>
-                     
+
+                       
+                        <div class="row g-0 fw-semi-bold text-center py-2 fs--1"> 
+                            <div class="col-auto"><a class="rounded-2 d-flex align-items-center me-3 text-700" href="#!"><span class="ms-1"> Disponible. `+ numeral(row.total).format('0,00.00') + " " + row.UNIDAD_ALMACEN +`</span></a></div>
+                        </div>
+                        
                         </div>
                     </div>
                 </td> `
@@ -784,7 +856,7 @@
                 $("#mas_120_dias").html(numeral(data[0].ClienteMora[0].Mas120).format('0,00.00'))
             }
 
-            initTable('#tbl_historico_factura',data[0].ClientesHistoricoFactura,tbl_header_historico_factura,[[1, "DESC"]],[1]);
+            initTable('#tbl_historico_factura',data[0].ClientesHistoricoFactura,tbl_header_historico_factura,[[2, "DESC"]],[2]);
             initTable('#tbl_ultm_3m',data[0].Historico3M,tbl_header_historico_3m,[[0, "asc"]],[]);
             initTable('#tbl_no_facturado',data[0].ArticulosNoFacturado,tbl_header_no_Facturado,[[0, "asc"]],[]);
             

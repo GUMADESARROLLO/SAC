@@ -17,7 +17,7 @@ Route::get('getArticulosFavoritos', 'HomeController@getArticulosFavoritos')->nam
 Route::get('getDataArticulo/{ID}', 'HomeController@getDataArticulo')->name('getDataArticulo');
 Route::post('AddFavs', 'HomeController@AddFavs')->name('AddFavs');
 Route::get('getLotes/{BODEGA}/{ARTICULO}', 'HomeController@getLotes')->name('getLotes');
-
+Route::get('getDetallesFactura/{ID}', 'HomeController@getDetallesFactura')->name('getDetallesFactura');
 
 Route::get('getDataCliente', 'HomeController@getDataCliente')->name('getDataCliente');
 Route::get('getDataCliente/{ID}', 'HomeController@getDataCliente')->name('getDataCliente');

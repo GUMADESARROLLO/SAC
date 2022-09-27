@@ -102,7 +102,7 @@
                               </div>
                             </div>
                         </div>
-                          <table id="tbl_mst_pedido" class="display" style="width:100%"></table>
+                          <table id="tbl_mst_pedido" class="table table-striped overflow-hidden" style="width:100%"></table>
                         </div>
                         
                         <div class="tab-pane" id="crm-users" role="tabpanel" aria-labelledby="crm-users-tab">
