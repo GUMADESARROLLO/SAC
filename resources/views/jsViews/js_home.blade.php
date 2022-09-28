@@ -14,13 +14,8 @@
     RangeStat(startOfMonth,endOfMonth)
 
     
-    
-    
-    
-
-   
     tbl_header_pedido =  [     
-                {"title": "","data": "ARTICULO","className":'detalles-Pedido align-items-center', "render": function(data, type, row, meta) {
+                {"title": "","data": "ARTICULO","className":'detalles-Pedido align-middle ', "render": function(data, type, row, meta) {
                     return `<span class="fas fa-arrow-alt-circle-down text-success"></span>`
                 }},           
                 {"title": "","data": "ARTICULO", "render": function(data, type, row, meta) {
@@ -90,6 +85,82 @@
             RangeStat(Fechas[0],Fechas[1]);
         } 
     });
+
+
+    $( "#tbl_select_inventario").change(function() {
+        var table = $('#tbl_inventario').DataTable();
+        table.page.len(this.value).draw();
+    });
+
+    $('#tbl_buscar_inventario').on('keyup', function() {        
+        var vTablePedido = $('#tbl_inventario').DataTable();
+        vTablePedido.search(this.value).draw();
+    });
+
+
+    $( "#tbl_select_cliente").change(function() {
+        var table = $('#tbl_mst_clientes').DataTable();
+        table.page.len(this.value).draw();
+    });
+
+    $('#tbl_buscar_cliente').on('keyup', function() {        
+        var vTablePedido = $('#tbl_mst_clientes').DataTable();
+        vTablePedido.search(this.value).draw();
+    });
+
+
+    $( "#tbl_select_liq6").change(function() {
+        var table = $('#tbl_inventario_liq_6').DataTable();
+        table.page.len(this.value).draw();
+    });
+
+    $('#tbl_buscar_liq6').on('keyup', function() {        
+        var vTablePedido = $('#tbl_inventario_liq_6').DataTable();
+        vTablePedido.search(this.value).draw();
+    });
+
+    $( "#tbl_select_liq12").change(function() {
+        var table = $('#tbl_inventario_liq_12').DataTable();
+        table.page.len(this.value).draw();
+    });
+
+    $('#tbl_buscar_liq12').on('keyup', function() {        
+        var vTablePedido = $('#tbl_inventario_liq_12').DataTable();
+        vTablePedido.search(this.value).draw();
+    });
+
+
+    $( "#tbl_select_history_factura").change(function() {
+        var table = $('#tbl_historico_factura').DataTable();
+        table.page.len(this.value).draw();
+    });
+
+    $('#tbl_buscar_history_factura').on('keyup', function() {        
+        var vTablePedido = $('#tbl_historico_factura').DataTable();
+        vTablePedido.search(this.value).draw();
+    });
+
+    $( "#tbl_select_last3m").change(function() {
+        var table = $('#tbl_ultm_3m').DataTable();
+        table.page.len(this.value).draw();
+    });
+
+    $('#tbl_buscar_last3m').on('keyup', function() {        
+        var vTablePedido = $('#tbl_ultm_3m').DataTable();
+        vTablePedido.search(this.value).draw();
+    });
+
+
+    $( "#tbl_select_nofacturado").change(function() {
+        var table = $('#tbl_no_facturado').DataTable();
+        table.page.len(this.value).draw();
+    });
+
+    $('#tbl_search_nofacturado').on('keyup', function() {        
+        var vTablePedido = $('#tbl_no_facturado').DataTable();
+        vTablePedido.search(this.value).draw();
+    });
+
 
     $( "#id_select_status").change(function() {
         var table = $('#tbl_mst_pedido').DataTable();
@@ -179,7 +250,7 @@
                         <div class="d-flex align-items-center position-relative">
                                 
                             <div class="avatar avatar-2xl status-online">
-                                <img class="rounded-circle" src="{{ asset('images/item.png') }}" alt="" />
+                                <img class="rounded-circle" src="{{ asset('images/user/avatar-4.jpg') }}" alt="" />
                             </div>
 
                             <div class="flex-1 ms-3">
@@ -546,12 +617,24 @@
         initTable('#tbl_inventario_liq_6',data[0].Liq6Meses,tbl_header_inventarios_liq,[[0, "asc"]],[]);
         initTable('#tbl_mst_clientes',data[0].Clientes,tbl_header_clientes,[[0, "asc"]],[]);
 
+        $("#tbl_mst_clientes_length").hide();
+        $("#tbl_mst_clientes_filter").hide();
+
+        $("#tbl_inventario_length").hide();
+        $("#tbl_inventario_filter").hide();
+
+        $("#tbl_inventario_liq_6_length").hide();
+        $("#tbl_inventario_liq_6_filter").hide();
+
+        $("#tbl_inventario_liq_12_length").hide();
+        $("#tbl_inventario_liq_12_filter").hide();
+
         TBLCL = $("#tbl_mst_clientes").DataTable();
 
-            TBLCL.rows().every( function () {
+        TBLCL.rows().every( function () {
             rowNode = this.node();
             rowData = this.data();
-            (rowData.MOROSO === 'S')?  $(rowNode).addClass( 'bg-soft-danger' ) : ''
+            //(rowData.MOROSO === 'S')?  $(rowNode).addClass( 'bg-soft-danger' ) : ''
 
         } );
 
@@ -770,7 +853,7 @@
     function Modal_Cliente(Id){
         $("#id_load_cliente").show();
         tbl_header_historico_factura =  [   
-                {"title": "","data": "FACTURA","className":'detalles-factura', "render": function(data, type, row, meta) {
+                {"title": "","data": "FACTURA","className":'detalles-factura align-middle', "render": function(data, type, row, meta) {
                     return `<span class="fas fa-arrow-alt-circle-down text-success"></span>`
                 }},              
                 {"title": "FACTURA","data": "FACTURA", "render": function(data, type, row, meta) {
@@ -859,6 +942,15 @@
             initTable('#tbl_historico_factura',data[0].ClientesHistoricoFactura,tbl_header_historico_factura,[[2, "DESC"]],[2]);
             initTable('#tbl_ultm_3m',data[0].Historico3M,tbl_header_historico_3m,[[0, "asc"]],[]);
             initTable('#tbl_no_facturado',data[0].ArticulosNoFacturado,tbl_header_no_Facturado,[[0, "asc"]],[]);
+
+            $("#tbl_historico_factura_length").hide();
+            $("#tbl_historico_factura_filter").hide();
+
+            $("#tbl_ultm_3m_length").hide();
+            $("#tbl_ultm_3m_filter").hide();
+
+            $("#tbl_no_facturado_length").hide();
+            $("#tbl_no_facturado_filter").hide();
             
         })
 

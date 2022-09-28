@@ -40,15 +40,59 @@
                       <div class="tab-content">
                         
                       <div class="tab-pane {{$Normal}}" id="crm-revenue" role="tabpanel" aria-labelledby="crm-revenue-tab">
-                          <table id="tbl_inventario" class="display" style="width:100%"></table>
+                          <div class="row flex-between-center mb-3 ">
+                            <div class="col-4 col-sm-auto d-flex align-items-center">
+                              <select class="form-select form-select-sm" aria-label=".form-select-sm example" id="tbl_select_inventario">                                          
+                                <option selected="" value="5">5</option>
+                                <option value="10">10</option>
+                                <option value="20">20</option>
+                                <option value="-1">*</option>
+                              </select>                      
+                            </div>
+                            <div class="col-8 col-sm-auto text-end ">
+                              <div class="row g-3 needs-validation" >                              
+                                <div class="col-md-auto">
+                                  <div class="input-group" >
+                                    <input class="form-control form-control-sm shadow-none search" type="search" placeholder="Buscar..." aria-label="search" id="tbl_buscar_inventario" />
+                                    <div class="input-group-text bg-transparent">
+                                        <span class="fa fa-search fs--1 text-600"></span>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <table id="tbl_inventario" class="table table-striped overflow-hidden" style="width:100%"></table>
                         </div>
 
                         <div class="tab-pane" id="crm-profit" role="tabpanel" aria-labelledby="crm-profit-tab">
-                          <table id="tbl_mst_clientes" class="display" style="width:100%"></table>
+                          <div class="row flex-between-center mb-3 ">
+                            <div class="col-4 col-sm-auto d-flex align-items-center">
+                              <select class="form-select form-select-sm" aria-label=".form-select-sm example" id="tbl_select_cliente">                                          
+                                <option selected="" value="5">5</option>
+                                <option value="10">10</option>
+                                <option value="20">20</option>
+                                <option value="-1">*</option>
+                              </select>                      
+                            </div>
+                            <div class="col-8 col-sm-auto text-end ">
+                              <div class="row g-3 needs-validation" >                              
+                                <div class="col-md-auto">
+                                  <div class="input-group" >
+                                    <input class="form-control form-control-sm shadow-none search" type="search" placeholder="Buscar..." aria-label="search" id="tbl_buscar_cliente" />
+                                    <div class="input-group-text bg-transparent">
+                                        <span class="fa fa-search fs--1 text-600"></span>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <table id="tbl_mst_clientes" class="table table-striped overflow-hidden" style="width:100%"></table>
                         </div>
 
                         <div class="tab-pane {{$SAC}}" id="crm-pedido" role="tabpanel" aria-labelledby="crm-pedido-tab">
-                        <div class="row flex-between-center">
+                          <div class="row flex-between-center">
                             <div class="col-4 col-sm-auto d-flex align-items-center">
                             <form class="row align-items-center g-3">
                               <div class="col-auto"><h6 class="text-700 mb-0"> </h6></div>
@@ -106,11 +150,55 @@
                         </div>
                         
                         <div class="tab-pane" id="crm-users" role="tabpanel" aria-labelledby="crm-users-tab">
-                            <table id="tbl_inventario_liq_12" class="display" style="width:100%"></table>
+                            <div class="row flex-between-center mb-3 ">
+                              <div class="col-4 col-sm-auto d-flex align-items-center">
+                                <select class="form-select form-select-sm" aria-label=".form-select-sm example" id="tbl_select_liq12">                                          
+                                  <option selected="" value="5">5</option>
+                                  <option value="10">10</option>
+                                  <option value="20">20</option>
+                                  <option value="-1">*</option>
+                                </select>                      
+                              </div>
+                              <div class="col-8 col-sm-auto text-end ">
+                                <div class="row g-3 needs-validation" >                              
+                                  <div class="col-md-auto">
+                                    <div class="input-group" >
+                                      <input class="form-control form-control-sm shadow-none search" type="search" placeholder="Buscar..." aria-label="search" id="tbl_buscar_liq12" />
+                                      <div class="input-group-text bg-transparent">
+                                          <span class="fa fa-search fs--1 text-600"></span>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>                          
+                            <table id="tbl_inventario_liq_12" class="table table-striped overflow-hidden" style="width:100%"></table>
                         </div>
                         
                         <div class="tab-pane" id="crm-deals" role="tabpanel" aria-labelledby="crm-deals-tab">
-                          <table id="tbl_inventario_liq_6" class="display" style="width:100%"></table>
+                          <div class="row flex-between-center mb-3 ">
+                            <div class="col-4 col-sm-auto d-flex align-items-center">
+                              <select class="form-select form-select-sm" aria-label=".form-select-sm example" id="tbl_select_liq6">                                          
+                                <option selected="" value="5">5</option>
+                                <option value="10">10</option>
+                                <option value="20">20</option>
+                                <option value="-1">*</option>
+                              </select>                      
+                            </div>
+                            <div class="col-8 col-sm-auto text-end ">
+                              <div class="row g-3 needs-validation" >                              
+                                <div class="col-md-auto">
+                                  <div class="input-group" >
+                                    <input class="form-control form-control-sm shadow-none search" type="search" placeholder="Buscar..." aria-label="search" id="tbl_buscar_liq6" />
+                                    <div class="input-group-text bg-transparent">
+                                        <span class="fa fa-search fs--1 text-600"></span>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <table id="tbl_inventario_liq_6" class="table table-striped overflow-hidden" style="width:100%"></table>
                         </div>
                         
                       </div>
@@ -204,7 +292,7 @@
                         <div class="col-md-12 col-xxl-12">           
                           <div class="card h-100">                           
                             <div class="card-body">                              
-                              <table id="tbl_bodegas" class="display" style="width:100%"></table>
+                              <table id="tbl_bodegas" class="table table-striped overflow-hidden" style="width:100%"></table>
                             </div>
                           </div>
                         </div>
@@ -286,14 +374,80 @@
                     <div class="col-xxl-12">
                       <div class="tab-content">
                         <div class="tab-pane active" id="historico-factura" role="tabpanel" aria-labelledby="historico-factura-tab">
-                          <table id="tbl_historico_factura" class="display" style="width:100%"></table>
+                        <div class="row flex-between-center mb-3 ">
+                              <div class="col-4 col-sm-auto d-flex align-items-center">
+                                <select class="form-select form-select-sm" aria-label=".form-select-sm example" id="tbl_select_history_factura">                                          
+                                  <option selected="" value="5">5</option>
+                                  <option value="10">10</option>
+                                  <option value="20">20</option>
+                                  <option value="-1">*</option>
+                                </select>                      
+                              </div>
+                              <div class="col-8 col-sm-auto text-end ">
+                                <div class="row g-3 needs-validation" >                              
+                                  <div class="col-md-auto">
+                                    <div class="input-group" >
+                                      <input class="form-control form-control-sm shadow-none search" type="search" placeholder="Buscar..." aria-label="search" id="tbl_buscar_history_factura" />
+                                      <div class="input-group-text bg-transparent">
+                                          <span class="fa fa-search fs--1 text-600"></span>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          <table id="tbl_historico_factura" class="table table-striped overflow-hidden" style="width:100%"></table>
                         </div>
                         <div class="tab-pane" id="Ultm-3meses" role="tabpanel" aria-labelledby="Ultm-3meses-tab">
-                          <table id="tbl_ultm_3m" class="display" style="width:100%"></table>
+                        <div class="row flex-between-center mb-3 ">
+                              <div class="col-4 col-sm-auto d-flex align-items-center">
+                                <select class="form-select form-select-sm" aria-label=".form-select-sm example" id="tbl_select_last3m">                                          
+                                  <option selected="" value="5">5</option>
+                                  <option value="10">10</option>
+                                  <option value="20">20</option>
+                                  <option value="-1">*</option>
+                                </select>                      
+                              </div>
+                              <div class="col-8 col-sm-auto text-end ">
+                                <div class="row g-3 needs-validation" >                              
+                                  <div class="col-md-auto">
+                                    <div class="input-group" >
+                                      <input class="form-control form-control-sm shadow-none search" type="search" placeholder="Buscar..." aria-label="search" id="tbl_buscar_last3m" />
+                                      <div class="input-group-text bg-transparent">
+                                          <span class="fa fa-search fs--1 text-600"></span>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          <table id="tbl_ultm_3m" class="table table-striped overflow-hidden" style="width:100%"></table>
 
                         </div>
                         <div class="tab-pane" id="art-no-fact" role="tabpanel" aria-labelledby="art-no-fact-tab">
-                          <table id="tbl_no_facturado" class="display" style="width:100%"></table>
+                        <div class="row flex-between-center mb-3 ">
+                              <div class="col-4 col-sm-auto d-flex align-items-center">
+                                <select class="form-select form-select-sm" aria-label=".form-select-sm example" id="tbl_select_nofacturado">                                          
+                                  <option selected="" value="5">5</option>
+                                  <option value="10">10</option>
+                                  <option value="20">20</option>
+                                  <option value="-1">*</option>
+                                </select>                      
+                              </div>
+                              <div class="col-8 col-sm-auto text-end ">
+                                <div class="row g-3 needs-validation" >                              
+                                  <div class="col-md-auto">
+                                    <div class="input-group" >
+                                      <input class="form-control form-control-sm shadow-none search" type="search" placeholder="Buscar..." aria-label="search" id="tbl_search_nofacturado" />
+                                      <div class="input-group-text bg-transparent">
+                                          <span class="fa fa-search fs--1 text-600"></span>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          <table id="tbl_no_facturado" class="table table-striped overflow-hidden" style="width:100%"></table>
                         </div>
                       </div>
                     </div>
