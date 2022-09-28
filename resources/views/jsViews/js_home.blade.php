@@ -634,7 +634,7 @@
         TBLCL.rows().every( function () {
             rowNode = this.node();
             rowData = this.data();
-            //(rowData.MOROSO === 'S')?  $(rowNode).addClass( 'bg-soft-danger' ) : ''
+            (rowData.MOROSO === 'S')?  $(rowNode).addClass( 'bg-soft-danger' ) : ''
 
         } );
 
