@@ -41,6 +41,22 @@ class HomeController extends Controller {
         
     }
 
+    public function getEstadistiacas()
+    {  
+        $Normal ='';
+        $SAC = '';
+        $Lista_SAC = Usuario::getUsuariosSAC();  
+        
+        if (Session::get('rol') == '1' || Session::get('rol') == '2' || Session::get('rol') == '9') {
+            $SAC = 'active';
+        } else {
+            $Normal = 'active';
+        }
+        
+        return view('Principal.Estadisticas', compact('Lista_SAC','SAC','Normal'));
+        
+    }
+
     public function getArticuloFavorito()
     {  
         return view('Principal.ArticuloFavorito');         

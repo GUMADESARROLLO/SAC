@@ -1,6 +1,6 @@
 @extends('layouts.lyt_gumadesk')
 @section('metodosjs')
-@include('jsViews.js_home');
+@include('jsViews.js_estadisticas');
 @endsection
 @section('content')
 
@@ -20,8 +20,43 @@
                   <div class="d-flex position-relative align-items-center">
                     <div class="flex-1">
                       <div class="d-flex flex-between-center">
-                      <h6 class="mb-0">Mi progreso</h6>
-                    <a class="btn btn-link btn-sm px-0 shadow-none" href="estadisticas">Ver más<span class="fas fa-chevron-right ms-1 fs--2"></span></a>
+                      <h6 class="mb-0">Regresar</h6>
+                    <div class="row flex-between-center">
+                            <div class="col-4 col-sm-auto d-flex align-items-center">
+                                                      
+                            </div>
+                            <div class="col-8 col-sm-auto text-end ">
+                              <div class="row g-3 needs-validation" >
+                              
+                                <div class="col-md-auto">
+                                  <div class="input-group" >
+                                  <form class="row align-items-center g-3">
+                                    <div class="col-auto"><h6 class="text-700 mb-0"> </h6></div>
+                                    <div class="col-md-auto position-relative">                                      
+                                      <input id="id_range_select" class="form-control form-control-sm datetimepicker" type="text" data-options='{"mode":"range","dateFormat":"Y-m-d","disableMobile":true}'/>
+                                    </div>
+                                  </form>  
+                                      <div class="input-group-text bg-transparent">
+                                          <span class="fa fa-calendar fs--1 text-600"></span>
+                                      </div>
+                                      <div class="input-group-text bg-transparent" id="id_btn_new">
+                                          <span class="fas fa-history fs--1 text-600"></span>
+                                      </div>
+                                      
+                                    </div>
+                                  </div>
+                                <div class="col-md-auto">
+                                  <select class="form-select form-select-sm" aria-label=".form-select-sm example" id="id_select_status">
+                                    <option value="-1">Todas...</option>
+                                    <option value="0">F00</option>
+                                    <option value="1">F00</option>
+                                    <option value="2">F00</option>
+                                  </select>
+                                </div>
+                               
+                              </div>
+                            </div>
+                          </div>
                   </div>
                     </div>
                   </div>
@@ -166,200 +201,181 @@
 
           
 
-              <div class="card">
+            <div class="row g-3 mb-3">
+           
+            <div class="col-md-6 col-xxl-8">
+
+            
+
+
+            <div class="card">
                 <div class="card-header d-flex flex-between-center ps-0 py-0 border-bottom">
                   <ul class="nav nav-tabs border-0 flex-nowrap tab-active-caret" id="crm-revenue-chart-tab" role="tablist" data-tab-has-echarts="data-tab-has-echarts">
-                  
-
-                    @if (Session::get('rol') == '1' || Session::get('rol') == '2' || Session::get('rol') == '9' )
-                      <li class="nav-item" role="presentation"><a class="nav-link py-3 mb-0 {{$Normal}}" id="crm-pedido-tab" data-bs-toggle="tab" href="#crm-pedido" role="tab" aria-controls="crm-pedido" aria-selected="false">Pedidos</a></li>  
-                      <li class="nav-item" role="presentation"><a class="nav-link py-3 mb-0" id="crm-revenue-tab" data-bs-toggle="tab" href="#crm-revenue" role="tab" aria-controls="crm-revenue" aria-selected="true">Inventario</a></li>
-                      <li class="nav-item" role="presentation"><a class="nav-link py-3 mb-0" id="crm-profit-tab" data-bs-toggle="tab" href="#crm-profit" role="tab" aria-controls="crm-profit" aria-selected="false">Clientes</a></li>                    
-                      <li class="nav-item" role="presentation"><a class="nav-link py-3 mb-0" id="crm-users-tab" data-bs-toggle="tab" href="#crm-users" role="tab" aria-controls="crm-users" aria-selected="false">Liquidacion 12 Meses</a></li>
-                      <li class="nav-item" role="presentation"><a class="nav-link py-3 mb-0" id="crm-deals-tab" data-bs-toggle="tab" href="#crm-deals" role="tab" aria-controls="crm-deals" aria-selected="false">Liquidacion 6 Meses</a></li> 
-                    @elseif (Session::get('rol') == '10')                    
-                    <li class="nav-item" role="presentation"><a class="nav-link py-3 mb-0 {{$Normal}}" id="crm-revenue-tab" data-bs-toggle="tab" href="#crm-revenue" role="tab" aria-controls="crm-revenue" aria-selected="true">Inventario</a></li>
-                    @endif
+                    <li class="nav-item" role="presentation"><a class="nav-link py-3 mb-0 active" id="crm-revenue-tab" data-bs-toggle="tab" href="#crm-revenue" role="tab" aria-controls="crm-revenue" aria-selected="true">Venta del periodo</a></li>                    
+                    <li class="nav-item" role="presentation"><a class="nav-link py-3 mb-0" id="crm-profit-tab" data-bs-toggle="tab" href="#crm-profit" role="tab" aria-controls="crm-profit" aria-selected="false">Clientes</a></li>
+                    <li class="nav-item" role="presentation"><a class="nav-link py-3 mb-0" id="crm-deals-tab" data-bs-toggle="tab" href="#crm-deals" role="tab" aria-controls="crm-deals" aria-selected="false">Facturas</a></li>
                     
-
-                  </ul>
-                  <div class="dropdown font-sans-serif btn-reveal-trigger">
-                    <div id="id_loading" class="spinner-border" role="status"><span class="visually-hidden">Loading...</span></div>
-                  </div>
+                    <li class="nav-item" role="presentation"><a class="nav-link py-3 mb-0" id="crm-users-tab" data-bs-toggle="tab" href="#crm-users" role="tab" aria-controls="crm-users" aria-selected="false">Articulos</a></li>
+                  </ul>                 
                 </div>
-                
                 <div class="card-body">
-                  <div class="row g-1">                   
-                    <div class="col-xxl-12">
+                  <div class="row g-1">
+                  <div class="col-xxl-3">
+                      <div class="row g-0 my-2">
+                        <div class="col-md-6 col-xxl-12">
+                          <div class="border-xxl-bottom border-xxl-200 mb-2">
+                            <h2 class="text-primary">$37,950</h2>
+                            <p class="fs--2 text-500 fw-semi-bold mb-0"><span class="fas fa-circle text-primary me-2"></span>Monto de Cierre</p>
+                            <p class="fs--2 text-500 fw-semi-bold"><span class="fas fa-circle text-warning me-2"></span>Meta</p>
+                          </div>
+                          <div class="form-check form-check-inline me-2">
+                            <input class="form-check-input" id="crmInbound" type="radio" name="bound" value="inbound" Checked="Checked" />
+                            <label class="form-check-label" for="crmInbound">Inbound</label>
+                          </div>
+                          <div class="form-check form-check-inline">
+                            <input class="form-check-input" id="outbound" type="radio" name="bound" value="outbound" />
+                            <label class="form-check-label" for="outbound">Outbound</label>
+                          </div>
+                        </div>
+                        <div class="col-md-6 col-xxl-12 py-2">
+                          <div class="row mx-0">
+                            <div class="col-6 border-end border-bottom py-3">
+                              <h5 class="fw-normal text-600">150</h5>
+                              <h6 class="text-500 mb-0">Facturas</h6>
+                            </div>
+                            <div class="col-6 border-bottom py-3">
+                              <h5 class="fw-normal text-600">250</h5>
+                              <h6 class="text-500 mb-0">Clientes</h6>
+                            </div>
+                            <div class="col-6 border-end py-3">
+                              <h5 class="fw-normal text-600">150</h5>
+                              <h6 class="text-500 mb-0">Articulos</h6>
+                            </div>
+                            <div class="col-6 py-3">
+                              <h5 class="fw-normal text-600"> 0.00</h5>
+                              <h6 class="text-500 mb-0">Other</h6>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-xxl-9">
                       <div class="tab-content">
-                        
-                        <div class="tab-pane {{$Normal}}" id="crm-revenue" role="tabpanel" aria-labelledby="crm-revenue-tab">
-                          <div class="row flex-between-center mb-3 ">
-                            <div class="col-4 col-sm-auto d-flex align-items-center">
-                              <select class="form-select form-select-sm" aria-label=".form-select-sm example" id="tbl_select_inventario">                                          
-                                <option selected="" value="5">5</option>
-                                <option value="10">10</option>
-                                <option value="20">20</option>
-                                <option value="-1">*</option>
-                              </select>                      
-                            </div>
-                            <div class="col-8 col-sm-auto text-end ">
-                              <div class="row g-3 needs-validation" >                              
-                                <div class="col-md-auto">
-                                  <div class="input-group" >
-                                    <input class="form-control form-control-sm shadow-none search" type="search" placeholder="Buscar..." aria-label="search" id="tbl_buscar_inventario" />
-                                    <div class="input-group-text bg-transparent">
-                                        <span class="fa fa-search fs--1 text-600"></span>
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                          <table id="tbl_inventario" class="table table-striped overflow-hidden" style="width:100%"></table>
+                        <div class="tab-pane active" id="crm-revenue" role="tabpanel" aria-labelledby="crm-revenue-tab">
+                          <div class="echart-crm-revenue" data-echart-responsive="true" data-echart-tab="data-echart-tab" style="height:320px;"></div>
                         </div>
-
-                        <div class="tab-pane" id="crm-profit" role="tabpanel" aria-labelledby="crm-profit-tab">
-                          <div class="row flex-between-center mb-3 ">
-                            <div class="col-4 col-sm-auto d-flex align-items-center">
-                              <select class="form-select form-select-sm" aria-label=".form-select-sm example" id="tbl_select_cliente">                                          
-                                <option selected="" value="5">5</option>
-                                <option value="10">10</option>
-                                <option value="20">20</option>
-                                <option value="-1">*</option>
-                              </select>                      
-                            </div>
-                            <div class="col-8 col-sm-auto text-end ">
-                              <div class="row g-3 needs-validation" >                              
-                                <div class="col-md-auto">
-                                  <div class="input-group" >
-                                    <input class="form-control form-control-sm shadow-none search" type="search" placeholder="Buscar..." aria-label="search" id="tbl_buscar_cliente" />
-                                    <div class="input-group-text bg-transparent">
-                                        <span class="fa fa-search fs--1 text-600"></span>
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                          <table id="tbl_mst_clientes" class="table table-striped overflow-hidden" style="width:100%"></table>
-                        </div>
-
-                        <div class="tab-pane {{$SAC}}" id="crm-pedido" role="tabpanel" aria-labelledby="crm-pedido-tab">
-                          <div class="row flex-between-center">
-                            <div class="col-4 col-sm-auto d-flex align-items-center">
-                            <form class="row align-items-center g-3">
-                              <div class="col-auto"><h6 class="text-700 mb-0"> </h6></div>
-                              <div class="col-md-auto position-relative">
-                                <span class="fas fa-calendar-alt text-primary position-absolute translate-middle-y ms-2 mt-3"> </span>
-                                <input id="id_range_select" class="form-control form-control-sm datetimepicker ps-4" type="text" data-options='{"mode":"range","dateFormat":"Y-m-d","disableMobile":true}'/>
-                              </div>
-                            </form>                            
-                            </div>
-                            <div class="col-8 col-sm-auto text-end ">
-                              <div class="row g-3 needs-validation" >
-                              
-                                <div class="col-md-auto">
-                                  <div class="input-group" >
-                                      <input class="form-control form-control-sm shadow-none search" type="search" placeholder="Buscar..." aria-label="search" id="id_txt_buscar" />
-                                      <div class="input-group-text bg-transparent">
-                                          <span class="fa fa-search fs--1 text-600"></span>
-                                      </div>
-                                      <div class="input-group-text bg-transparent" id="id_btn_new">
-                                          <span class="fas fa-history fs--1 text-600"></span>
-                                      </div>
-                                    </div>
-                                  </div>
-                                  @if( Session::get('rol') == '1' || Session::get('rol') == '2')
-                                <div class="col-md-auto">
-                                  <select class="form-select form-select-sm" aria-label=".form-select-sm example" id="id_select_sac">
-                                      <option value="0" >Todas</option>                                      
-                                      @foreach ($Lista_SAC as $vnd)
-                                        <option value="{{$vnd->username}}">{{$vnd->nombre}}</option>
-                                      @endforeach
-                                  </select>
-                                </div> 
-                                @endif
-                                <div class="col-md-auto">
-                                  <select class="form-select form-select-sm" aria-label=".form-select-sm example" id="id_select_status">
-                                    <option value="-1">Todos</option>
-                                    <option value="0">Pendientes</option>
-                                    <option value="1">Procesado</option>
-                                    <option value="2">Cancelado</option>
-                                  </select>
-                                </div>
-                               
-                                <div class="col-md-auto">
-                                  <select class="form-select form-select-sm" aria-label=".form-select-sm example" id="frm_lab_row">                                          
-                                    <option selected="" value="5">5</option>
-                                    <option value="10">10</option>
-                                    <option value="20">20</option>
-                                    <option value="-1">*</option>
-                                  </select>
-                                </div> 
-                              </div>
-                            </div>
-                          </div>
-                          <table id="tbl_mst_pedido" class="table table-striped overflow-hidden" style="width:100%"></table>
-                        </div>
-                        
                         <div class="tab-pane" id="crm-users" role="tabpanel" aria-labelledby="crm-users-tab">
-                            <div class="row flex-between-center mb-3 ">
-                              <div class="col-4 col-sm-auto d-flex align-items-center">
-                                <select class="form-select form-select-sm" aria-label=".form-select-sm example" id="tbl_select_liq12">                                          
-                                  <option selected="" value="5">5</option>
-                                  <option value="10">10</option>
-                                  <option value="20">20</option>
-                                  <option value="-1">*</option>
-                                </select>                      
-                              </div>
-                              <div class="col-8 col-sm-auto text-end ">
-                                <div class="row g-3 needs-validation" >                              
-                                  <div class="col-md-auto">
-                                    <div class="input-group" >
-                                      <input class="form-control form-control-sm shadow-none search" type="search" placeholder="Buscar..." aria-label="search" id="tbl_buscar_liq12" />
-                                      <div class="input-group-text bg-transparent">
-                                          <span class="fa fa-search fs--1 text-600"></span>
-                                      </div>
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>                          
-                            <table id="tbl_inventario_liq_12" class="table table-striped overflow-hidden" style="width:100%"></table>
+                          <div class="echart-crm-users" data-echart-responsive="true" data-echart-tab="data-echart-tab" style="height:320px;"></div>
                         </div>
-                        
                         <div class="tab-pane" id="crm-deals" role="tabpanel" aria-labelledby="crm-deals-tab">
-                          <div class="row flex-between-center mb-3 ">
-                            <div class="col-4 col-sm-auto d-flex align-items-center">
-                              <select class="form-select form-select-sm" aria-label=".form-select-sm example" id="tbl_select_liq6">                                          
-                                <option selected="" value="5">5</option>
-                                <option value="10">10</option>
-                                <option value="20">20</option>
-                                <option value="-1">*</option>
-                              </select>                      
-                            </div>
-                            <div class="col-8 col-sm-auto text-end ">
-                              <div class="row g-3 needs-validation" >                              
-                                <div class="col-md-auto">
-                                  <div class="input-group" >
-                                    <input class="form-control form-control-sm shadow-none search" type="search" placeholder="Buscar..." aria-label="search" id="tbl_buscar_liq6" />
-                                    <div class="input-group-text bg-transparent">
-                                        <span class="fa fa-search fs--1 text-600"></span>
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                          <table id="tbl_inventario_liq_6" class="table table-striped overflow-hidden" style="width:100%"></table>
+                          <div class="echart-crm-deals" data-echart-responsive="true" data-echart-tab="data-echart-tab" style="height:320px;"></div>
                         </div>
-                        
+                        <div class="tab-pane" id="crm-profit" role="tabpanel" aria-labelledby="crm-profit-tab">
+                          <div class="echart-crm-profit" data-echart-responsive="true" data-echart-tab="data-echart-tab" style="height:320px;"></div>
+                        </div>
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
+            </div>
+
+            <div class="col-md-6 col-xxl-4">
+              <div class="card echart-session-by-browser-card h-100">
+                <div class="card-header d-flex flex-between-center bg-light py-2">
+                  <h6 class="mb-0">Ranking de vendedores</h6>                  
+                </div>
+                <div class="card-body d-flex flex-column justify-content-between py-0">
+                  <div class="position-relative mb-3">
+                    <div class="echart-session-by-browser h-100" data-echart-responsive="true"></div>
+                    <div class="position-absolute top-50 start-50 translate-middle text-center">
+                      <p class="fs--1 mb-0 text-400 font-sans-serif fw-medium">Total</p>
+                      <p class="fs-3 mb-0 font-sans-serif fw-medium mt-n2">15.6k</p>
+                    </div>
+                  </div>
+                  <div class="border-top">
+                    <table class="table table-sm mb-0">
+                      <tbody>
+                        <tr>
+                          <td class="py-3">
+                            <div class="d-flex align-items-center position-relative">
+                              <div class="avatar avatar-2xl status-online">
+                                <img class="rounded-circle" src="{{ asset('images/user/avatar-4.jpg') }}" alt="" />
+                              </div>
+                              <div class="flex-1 ms-3">
+                                <h6 class="mb-0 fw-semi-bold"><a class="stretched-link text-900" href="../pages/user/profile.html">1. Nombre del Vendedor</a></h6>
+                                <p class="text-500 fs--2 mb-0">F00</p>
+                              </div>
+                            </div>
+                          </td>
+                          <td class="py-3">
+                            <div class="d-flex align-items-center"><span class="fas fa-circle fs--2 me-2 text-primary"></span>
+                              <h6 class="fw-normal text-700 mb-0">50.3%</h6>
+                            </div>
+                          </td>
+                          <td class="py-3">
+                            <div class="d-flex align-items-center justify-content-end"><span class="fas fa-caret-down text-danger"></span>
+                              <h6 class="fs--2 mb-0 ms-2 text-700">2.9%</h6>
+                            </div>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td class="py-3">
+                          <div class="d-flex align-items-center position-relative">
+                              <div class="avatar avatar-2xl status-online">
+                                <img class="rounded-circle" src="{{ asset('images/user/avatar-4.jpg') }}" alt="" />
+                              </div>
+                              <div class="flex-1 ms-3">
+                                <h6 class="mb-0 fw-semi-bold"><a class="stretched-link text-900" href="../pages/user/profile.html">2. Nombre del Vendedor</a></h6>
+                                <p class="text-500 fs--2 mb-0">F00</p>
+                              </div>
+                            </div>
+                          </td>
+                          <td class="py-3">
+                            <div class="d-flex align-items-center"><span class="fas fa-circle fs--2 me-2 text-success"></span>
+                              <h6 class="fw-normal text-700 mb-0">30.1%</h6>
+                            </div>
+                          </td>
+                          <td class="py-3">
+                            <div class="d-flex align-items-center justify-content-end"><span class="fas fa-caret-up text-success"></span>
+                              <h6 class="fs--2 mb-0 ms-2 text-700">29.4%</h6>
+                            </div>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td class="py-3">
+                          <div class="d-flex align-items-center position-relative">
+                              <div class="avatar avatar-2xl status-online">
+                                <img class="rounded-circle" src="{{ asset('images/user/avatar-4.jpg') }}" alt="" />
+                              </div>
+                              <div class="flex-1 ms-3">
+                                <h6 class="mb-0 fw-semi-bold"><a class="stretched-link text-900" href="../pages/user/profile.html">3. Nombre del Vendedor</a></h6>
+                                <p class="text-500 fs--2 mb-0">F00</p>
+                              </div>
+                            </div>
+                          </td>
+                          <td class="py-3">
+                            <div class="d-flex align-items-center"><span class="fas fa-circle fs--2 me-2 text-info"></span>
+                              <h6 class="fw-normal text-700 mb-0">20.6%</h6>
+                            </div>
+                          </td>
+                          <td class="py-3">
+                            <div class="d-flex align-items-center justify-content-end"><span class="fas fa-caret-up text-success"></span>
+                              <h6 class="fs--2 mb-0 ms-2 text-700">220.7%</h6>
+                            </div>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+           
+           
+          </div>
+    
+          </div>
         <!--OPEN MODALS -->
     
        

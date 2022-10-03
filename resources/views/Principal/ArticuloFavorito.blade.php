@@ -27,10 +27,10 @@
                     <div class="col-xxl-12">
                       <div class="tab-content">
                         <div class="tab-pane active" id="crm-revenue" role="tabpanel" aria-labelledby="crm-revenue-tab">
-                          <table id="tbl_inventario_fav" class="display" style="width:100%"></table>
+                          <table id="tbl_inventario_fav" class="table table-striped overflow-hidden" style="width:100%"></table>
                         </div>
                         <div class="tab-pane" id="crm-profit" role="tabpanel" aria-labelledby="crm-profit-tab">
-                          <table id="tbl_inventario" class="display" style="width:100%"></table>
+                          <table id="tbl_inventario" class="table table-striped overflow-hidden" style="width:100%"></table>
                         </div>
                       </div>
                     </div>
