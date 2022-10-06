@@ -17,6 +17,15 @@ Route::get('/logout', 'Auth\LoginController@logout');
 
 Route::get('ArticuloFavorito', 'HomeController@getArticuloFavorito')->name('ArticuloFavorito');
 Route::get('getData', 'HomeController@getData')->name('getData');
+
+Route::get('dtaEstadisticas', 'HomeController@dtaEstadisticas')->name('dtaEstadisticas');
+
+
+
+
+
+
+
 Route::get('getMiProgreso/{d1}/{d2}', 'HomeController@getMiProgreso')->name('getMiProgreso/{d1}/{d2}');
 Route::get('getArticulosFavoritos', 'HomeController@getArticulosFavoritos')->name('getArticulosFavoritos');
 Route::get('getDataArticulo/{ID}', 'HomeController@getDataArticulo')->name('getDataArticulo');

@@ -24,7 +24,7 @@
     const endOfMonth   = moment().subtract(0, "days").format("YYYY-MM-DD");
 
     var dta_aportes_mercados;
-      var dta_ventas_mercados ;
+    var dta_ventas_mercados ;
     
     RangeStat(startOfMonth,endOfMonth);
     
@@ -108,7 +108,7 @@
             if(d.VENDEDOR !== undefined){
 
                 $Rutas += `
-                    <div class="mb-4 col-md-6 col-lg-4">
+                    <div class="mb-4 col-md-6 col-lg-3">
                       <div class="card mb-3">
                         <div class="card-header bg-light">
                           <div class="row justify-content-between">
@@ -133,12 +133,12 @@
                                     <div class="col-auto"> 
                                       <div class="d-flex align-items-center mb-3">
                                         <h6 class="text-primary mb-0">Ventas </h6>
-                                        <span class="badge rounded-pill ms-3 badge-soft-primary"><span class="fas fa-caret-up"></span> `+ d.RUTA_CUMPLI + `</span>
+                                        <span class="badge rounded-pill ms-3 badge-soft-primary"> `+ d.RUTA_CUMPLI + `</span>
                                       </div>
                                       <div class="row g-sm-4">                                
                                         <div class="col-12 col-sm-auto">
                                           <div class="d-flex align-items-center pe-4 border-sm-end border-200">
-                                            <div class="icon-item icon-item-sm border rounded-3 shadow-none me-2"><span class="fas fa-chess-rook text-primary"></span></div>
+                                            <div class="icon-item icon-item-sm border rounded-3 shadow-none me-2"><span class="fas fa-dollar-sign text-success"></span></div>
                                               <div class="flex-1">
                                                 <h6 class="text-800 mb-0"id="" >`+ d.META_RUTA + `</h6>
                                                 <p class="mb-0 fs--2 text-500">Meta</p>
@@ -148,7 +148,7 @@
 
                                         <div class="col-12 col-sm-auto">
                                           <div class="d-flex align-items-center pe-0">
-                                            <div class="icon-item icon-item-sm border rounded-3 shadow-none me-2"><span class="fas fa-chess-rook text-primary"></span></div>
+                                            <div class="icon-item icon-item-sm border rounded-3 shadow-none me-2"><span class="fas fa-dollar-sign text-success"></span></div>
                                               <div class="flex-1">
                                                 <h6 class="text-800 mb-0"id="" >`+ d.MesActual + `</h6>
                                                 <p class="mb-0 fs--2 text-500">Real</p>
@@ -170,7 +170,7 @@
                                       <div class="row g-sm-4">                                
                                         <div class="col-12 col-sm-auto">
                                           <div class="d-flex align-items-center pe-4 border-sm-end border-200">
-                                            <div class="icon-item icon-item-sm border rounded-3 shadow-none me-2"><span class="fas fa-chess-rook text-primary"></span></div>
+                                            <div class="icon-item icon-item-sm border rounded-3 shadow-none me-2"><span class="fas fa-user-friends text-primary"></span></div>
                                               <div class="flex-1">
                                                 <h6 class="text-800 mb-0"id="" >`+ d.CLIENTE + ` Clientes</h6>
                                                 <p class="mb-0 fs--2 text-500">Cubiertos</p>
@@ -180,7 +180,7 @@
 
                                         <div class="col-12 col-sm-auto">
                                           <div class="d-flex align-items-center pe-0">
-                                            <div class="icon-item icon-item-sm border rounded-3 shadow-none me-2"><span class="fas fa-chess-rook text-primary"></span></div>
+                                            <div class="icon-item icon-item-sm border rounded-3 shadow-none me-2"><span class="fas fa-user-friends text-primary"></span></div>
                                               <div class="flex-1">
                                                 <h6 class="text-800 mb-0"id="" >`+ d.META_CLIENTE + ` Clientes</h6>
                                                 <p class="mb-0 fs--2 text-500">de meta</p>
@@ -199,7 +199,7 @@
                                       <div class="row g-sm-4">                                
                                         <div class="col-12 col-sm-auto">
                                           <div class="d-flex align-items-center pe-4 border-sm-end border-200">
-                                            <div class="icon-item icon-item-sm border rounded-3 shadow-none me-2"><span class="fas fa-chess-rook text-primary"></span></div>
+                                            <div class="icon-item icon-item-sm border rounded-3 shadow-none me-2"><span class="fas fa-dollar-sign text-success"></span></div>
                                               <div class="flex-1">
                                                 <h6 class="text-800 mb-0"id="" >`+ d.DiaActual + `</h6>
                                                 <p class="mb-0 fs--2 text-500">Dia Actual </p>
@@ -209,7 +209,7 @@
 
                                         <div class="col-12 col-sm-auto">
                                           <div class="d-flex align-items-center pe-0">
-                                            <div class="icon-item icon-item-sm border rounded-3 shadow-none me-2"><span class="fas fa-chess-rook text-primary"></span></div>
+                                            <div class="icon-item icon-item-sm border rounded-3 shadow-none me-2"><span class="fas fa-dollar-sign text-success"></span></div>
                                               <div class="flex-1">
                                                 <h6 class="text-800 mb-0"id="" >`+ d.SaleWeek + `</h6>
                                                 <p class="mb-0 fs--2 text-500">Esta semana</p>

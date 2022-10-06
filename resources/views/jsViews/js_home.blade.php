@@ -610,40 +610,62 @@
             allowOutsideClick: () => !Swal.isLoading()
         });
     }
-    $.get( "getData", function( data ) {
-        var Users = ''
-        initTable('#tbl_inventario',data[0].Inventario,tbl_header_inventarios,[[0, "asc"]],[]);
-        initTable('#tbl_inventario_liq_12',data[0].Liq12Meses,tbl_header_inventarios_liq,[[0, "asc"]],[]);
-        initTable('#tbl_inventario_liq_6',data[0].Liq6Meses,tbl_header_inventarios_liq,[[0, "asc"]],[]);
-        initTable('#tbl_mst_clientes',data[0].Clientes,tbl_header_clientes,[[0, "asc"]],[]);
-        Estadisticas(data[0].Estadistica)
+
+    $.ajax({
+        url: "dtaEstadisticas",       
+        type: 'get',
+        async: true,
+        success: function(data) {
+            Estadisticas(data[0].Estadistica)
+        },
+        error: function(response) {
+            //swal("Oops", "No se ha podido guardar!", "error");
+        }
+    }).done(function(data) {
+        //mostrarRequisado(num_orden, id_articulo, 2);
+    });
+
+    $.ajax({
+        url: "getData",       
+        type: 'get',
+        async: true,
+        success: function(data) {
+            var Users = ''
+            initTable('#tbl_inventario',data[0].Inventario,tbl_header_inventarios,[[0, "asc"]],[]);
+            initTable('#tbl_inventario_liq_12',data[0].Liq12Meses,tbl_header_inventarios_liq,[[0, "asc"]],[]);
+            initTable('#tbl_inventario_liq_6',data[0].Liq6Meses,tbl_header_inventarios_liq,[[0, "asc"]],[]);
+            initTable('#tbl_mst_clientes',data[0].Clientes,tbl_header_clientes,[[0, "asc"]],[]);
         
+            $("#tbl_mst_clientes_length").hide();
+            $("#tbl_mst_clientes_filter").hide();
 
-        
+            $("#tbl_inventario_length").hide();
+            $("#tbl_inventario_filter").hide();
 
-        $("#tbl_mst_clientes_length").hide();
-        $("#tbl_mst_clientes_filter").hide();
+            $("#tbl_inventario_liq_6_length").hide();
+            $("#tbl_inventario_liq_6_filter").hide();
 
-        $("#tbl_inventario_length").hide();
-        $("#tbl_inventario_filter").hide();
+            $("#tbl_inventario_liq_12_length").hide();
+            $("#tbl_inventario_liq_12_filter").hide();
 
-        $("#tbl_inventario_liq_6_length").hide();
-        $("#tbl_inventario_liq_6_filter").hide();
+            TBLCL = $("#tbl_mst_clientes").DataTable();
 
-        $("#tbl_inventario_liq_12_length").hide();
-        $("#tbl_inventario_liq_12_filter").hide();
+            TBLCL.rows().every( function () {
+                rowNode = this.node();
+                rowData = this.data();
+                (rowData.MOROSO === 'S')?  $(rowNode).addClass( 'bg-soft-danger' ) : ''
 
-        TBLCL = $("#tbl_mst_clientes").DataTable();
+            } );
 
-        TBLCL.rows().every( function () {
-            rowNode = this.node();
-            rowData = this.data();
-            (rowData.MOROSO === 'S')?  $(rowNode).addClass( 'bg-soft-danger' ) : ''
+            $("#id_loading").hide();
+        },
+        error: function(response) {
+            //swal("Oops", "No se ha podido guardar!", "error");
+        }
+    }).done(function(data) {
+        //mostrarRequisado(num_orden, id_articulo, 2);
+    });
 
-        } );
-
-        $("#id_loading").hide();
-    })
 
     function Estadisticas(Data){
         
@@ -662,17 +684,6 @@
         $("#id_Cliente_Meta").text(Data['Cliente_Meta'])
         $("#id_Cliente_Real").text(Data['Cliente_Real'])
         $("#id_Cliente_Porc").text('% ' + Data['Cliente_Porc'])
-
-        
-        
-
-        $.each(Data, function (i, d) {
-
-            //console.log(d)
-
-
-
-        });
 
     }
 

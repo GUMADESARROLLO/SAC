@@ -21,7 +21,7 @@
                     <div class="flex-1">
                       <div class="d-flex flex-between-center">
                       <h6 class="mb-0">Mi progreso</h6>
-                    <a class="btn btn-link btn-sm px-0 shadow-none" href="estadisticas">Ver más<span class="fas fa-chevron-right ms-1 fs--2"></span></a>
+                      <a class="btn btn-link btn-sm px-0 shadow-none" href="estadisticas">Ver más<span class="fas fa-arrow-right ms-1 fs--2"></span></a>
                   </div>
                     </div>
                   </div>
@@ -40,7 +40,7 @@
                                 
                                 <div class="col-12 col-sm-auto">
                                   <div class="d-flex align-items-center pe-4 border-sm-end border-200">
-                                    <div class="icon-item icon-item-sm border rounded-3 shadow-none me-2"><span class="fas fa-chess-rook text-primary"></span></div>
+                                    <div class="icon-item icon-item-sm border rounded-3 shadow-none me-2"><span class="fab fa-font-awesome-flag text-primary"></span></div>
                                       <div class="flex-1">
                                         <h6 class="text-800 mb-0"id="id_Venta_Meta" >...</h6>
                                         <p class="mb-0 fs--2 text-500">Meta del mes.</p>
@@ -50,7 +50,7 @@
 
                                 <div class="col-12 col-sm-auto">
                                   <div class="d-flex align-items-center pe-4 border-sm-end border-200">
-                                    <div class="icon-item icon-item-sm border rounded-3 shadow-none me-2"><span class="fas fa-chess-rook text-primary"></span></div>
+                                    <div class="icon-item icon-item-sm border rounded-3 shadow-none me-2"><span class="fas fa-dollar-sign text-success"></span></div>
                                       <div class="flex-1">
                                         <h6 class="text-800 mb-0"id="id_Venta_Real" >...</h6>
                                         <p class="mb-0 fs--2 text-500">Venta del mes.</p>
@@ -60,7 +60,7 @@
 
                                 <div class="col-12 col-sm-auto">
                                   <div class="d-flex align-items-center pe-0">
-                                    <div class="icon-item icon-item-sm border rounded-3 shadow-none me-2"><span class="fas fa-chess-rook text-primary"></span></div>
+                                    <div class="icon-item icon-item-sm border rounded-3 shadow-none me-2"><span class="fas fa-chart-bar text-info"></span></div>
                                       <div class="flex-1">
                                         <h6 class="text-800 mb-0"id="id_Venta_Porc" >...</h6>
                                         <p class="mb-0 fs--2 text-500">% CUMPL.</p>
@@ -81,7 +81,7 @@
 
                                 <div class="col-12 col-sm-auto">
                                   <div class="d-flex align-items-center pe-4 border-sm-end border-200">
-                                    <div class="icon-item icon-item-sm border rounded-3 shadow-none me-2"><span class="fas fa-chess-rook text-primary"></span></div>
+                                    <div class="icon-item icon-item-sm border rounded-3 shadow-none me-2"><span class="fas fa-dollar-sign text-primary"></span></div>
                                       <div class="flex-1">
                                         <h6 class="text-800 mb-0"id="id_Venta_Actu" >...</h6>
                                         <p class="mb-0 fs--2 text-500">Ventas del Dia.</p>
@@ -91,7 +91,7 @@
 
                                 <div class="col-12 col-sm-auto">
                                   <div class="d-flex align-items-center pe-4 border-sm-end border-200">
-                                    <div class="icon-item icon-item-sm border rounded-3 shadow-none me-2"><span class="fas fa-chess-rook text-primary"></span></div>
+                                    <div class="icon-item icon-item-sm border rounded-3 shadow-none me-2"><span class="fas fa-dollar-sign text-success"></span></div>
                                       <div class="flex-1">
                                         <h6 class="text-800 mb-0" id="id_Venta_Week">...</h6>
                                         <p class="mb-0 fs--2 text-500" id="id_Venta_Week_Label">Ventas del 0 al 0 de --- </p>
@@ -101,7 +101,7 @@
 
                                 <div class="col-12 col-sm-auto">
                                   <div class="d-flex align-items-center pe-0">
-                                    <div class="icon-item icon-item-sm border rounded-3 shadow-none me-2"><span class="fas fa-chess-rook text-primary"></span></div>
+                                    <div class="icon-item icon-item-sm border rounded-3 shadow-none me-2"><span class="fas fa-chart-bar text-info"></span></div>
                                       <div class="flex-1">
                                         <h6 class="text-800 mb-0" id="id_Dias_porcent">...</h6>
                                         <p class="mb-0 fs--2 text-500" id="id_Venta_Week_Label"><span id="id_Dias_Facturados">0</span> de <span id="id_Dias_Habiles"> 0 </span> Dias Hábiles.</p>
@@ -121,7 +121,7 @@
                               
                                 <div class="col-12 col-sm-auto">
                                   <div class="d-flex align-items-center pe-4 border-sm-end border-200">
-                                    <div class="icon-item icon-item-sm border rounded-3 shadow-none me-2"><span class="fas fa-chess-rook text-primary"></span></div>
+                                    <div class="icon-item icon-item-sm border rounded-3 shadow-none me-2"><span class="fas fa-user-friends text-primary"></span></div>
                                       <div class="flex-1">
                                         <h6 class="text-800 mb-0"id="id_Cliente_Meta" >...</h6>
                                         <p class="mb-0 fs--2 text-500">Meta de Clientes.</p>
@@ -131,7 +131,7 @@
 
                                 <div class="col-12 col-sm-auto">
                                   <div class="d-flex align-items-center pe-4 border-sm-end border-200">
-                                    <div class="icon-item icon-item-sm border rounded-3 shadow-none me-2"><span class="fas fa-chess-rook text-primary"></span></div>
+                                    <div class="icon-item icon-item-sm border rounded-3 shadow-none me-2"><span class="fas fa-user-friends text-success"></span></div>
                                       <div class="flex-1">
                                         <h6 class="text-800 mb-0"id="id_Cliente_Real" >...</h6>
                                         <p class="mb-0 fs--2 text-500">Clientes Fact.</p>
@@ -141,7 +141,7 @@
 
                                 <div class="col-12 col-sm-auto">
                                   <div class="d-flex align-items-center pe-0">
-                                    <div class="icon-item icon-item-sm border rounded-3 shadow-none me-2"><span class="fas fa-chess-rook text-primary"></span></div>
+                                    <div class="icon-item icon-item-sm border rounded-3 shadow-none me-2"><span class="fas fa-chart-bar text-info"></span></div>
                                       <div class="flex-1">
                                         <h6 class="text-800 mb-0"id="id_Cliente_Porc" >...</h6>
                                         <p class="mb-0 fs--2 text-500">% Cumpl.</p>

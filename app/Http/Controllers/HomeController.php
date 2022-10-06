@@ -85,8 +85,6 @@ class HomeController extends Controller {
 
     public function getMiProgreso($d1,$d2)
     {
-      
-
         $dtaHome[] = array(
             'Estadistica'       => Estadisticas::getData($d1,$d2),
             'dtaVentasMes'      => Estadisticas::dtaVentasMes($d1,$d2),
@@ -95,14 +93,20 @@ class HomeController extends Controller {
         
         return response()->json($dtaHome);
     }
-
-    public function getData()
+    public function dtaEstadisticas()
     {
         $d1 = date('Y-m-01', strtotime(now()));
         $d2 = date('Y-m-d', strtotime(now()));
 
         $dtaHome[] = array(
-            'Estadistica'   => Estadisticas::getData($d1,$d2),
+            'Estadistica'   => Estadisticas::getData($d1,$d2),            
+        );
+        return response()->json($dtaHome);
+    }
+
+    public function getData()
+    {
+        $dtaHome[] = array(
             'Inventario'    => Inventario::getArticulosFavoritos(),
             'Liq6Meses'     => Liquidacion_a_6meses::getArticulos(),
             'Liq12Meses'    => Liquidacion_a_12meses::getArticulos(),
