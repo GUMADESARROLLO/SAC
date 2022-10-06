@@ -616,6 +616,8 @@
         initTable('#tbl_inventario_liq_12',data[0].Liq12Meses,tbl_header_inventarios_liq,[[0, "asc"]],[]);
         initTable('#tbl_inventario_liq_6',data[0].Liq6Meses,tbl_header_inventarios_liq,[[0, "asc"]],[]);
         initTable('#tbl_mst_clientes',data[0].Clientes,tbl_header_clientes,[[0, "asc"]],[]);
+        Estadisticas(data[0].Estadistica)
+        
 
         
 
@@ -642,6 +644,37 @@
 
         $("#id_loading").hide();
     })
+
+    function Estadisticas(Data){
+        
+        $("#id_Venta_Meta").text('C$ ' + numeral(Data['Venta_Meta']).format('0,00.00'))
+        $("#id_Venta_Real").text('C$ ' + numeral(Data['Venta_Real']).format('0,00.00'))
+        $("#id_Venta_Actu").text('C$ ' + numeral(Data['Venta_Actu']).format('0,00.00'))
+        $("#id_Venta_Week").text('C$ ' + numeral(Data['Venta_Week']).format('0,00.00'))
+        $("#id_Venta_Week_Label").text(Data['Venta_Week_Label'])
+
+        $("#id_Venta_Porc").text('% ' + numeral(Data['Venta_Porc']).format('0,00'))
+
+        $("#id_Dias_Habiles").text(numeral(Data['Dias_Habiles']).format('0,00'))
+        $("#id_Dias_Facturados").text(numeral(Data['Dias_Facturados']).format('0,00'))
+        $("#id_Dias_porcent").text(Data['Dias_porcent'])
+
+        $("#id_Cliente_Meta").text(Data['Cliente_Meta'])
+        $("#id_Cliente_Real").text(Data['Cliente_Real'])
+        $("#id_Cliente_Porc").text('% ' + Data['Cliente_Porc'])
+
+        
+        
+
+        $.each(Data, function (i, d) {
+
+            //console.log(d)
+
+
+
+        });
+
+    }
 
 
     function initTable(id,datos,Header,Order,Show){

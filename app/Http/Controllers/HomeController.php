@@ -17,14 +17,16 @@ use App\Models\Pedido;
 use App\Models\PedidoComentario;
 use App\Models\Usuario;
 use App\Models\Factura;
+use App\Models\Estadisticas;
+use App\Models\MasterData;
 use Session;
 
 class HomeController extends Controller {
     public function __construct()
     {
         $this->middleware('auth');
-    }    
-
+    }   
+    
     public function getHome()
     {  
         $Normal ='';
@@ -39,6 +41,17 @@ class HomeController extends Controller {
         
         return view('Principal.Home', compact('Lista_SAC','SAC','Normal'));
         
+    }
+
+    public function get8020()
+    {  
+        $Ruta = 'F10';
+        $d1   = '2022-09-01';
+        $d2   = '2022-09-30';
+
+        $obj = MasterData::getData($Ruta,$d1,$d2);
+        
+        return response()->json($obj);
     }
 
     public function getEstadistiacas()
@@ -57,14 +70,39 @@ class HomeController extends Controller {
         
     }
 
+    public function getStats($d1,$d2)
+    { 
+        $obj = Estadisticas::getData($d1,$d2);
+        return response()->json($obj);
+        //return view('Principal.Estadisticas', compact('Lista_SAC','SAC','Normal'));
+        
+    }
+
     public function getArticuloFavorito()
     {  
         return view('Principal.ArticuloFavorito');         
     }
 
+    public function getMiProgreso($d1,$d2)
+    {
+      
+
+        $dtaHome[] = array(
+            'Estadistica'       => Estadisticas::getData($d1,$d2),
+            'dtaVentasMes'      => Estadisticas::dtaVentasMes($d1,$d2),
+            'dtaVentasRutas'    => Estadisticas::dtaVentasRutas($d1,$d2),
+        );
+        
+        return response()->json($dtaHome);
+    }
+
     public function getData()
     {
+        $d1 = date('Y-m-01', strtotime(now()));
+        $d2 = date('Y-m-d', strtotime(now()));
+
         $dtaHome[] = array(
+            'Estadistica'   => Estadisticas::getData($d1,$d2),
             'Inventario'    => Inventario::getArticulosFavoritos(),
             'Liq6Meses'     => Liquidacion_a_6meses::getArticulos(),
             'Liq12Meses'    => Liquidacion_a_12meses::getArticulos(),
