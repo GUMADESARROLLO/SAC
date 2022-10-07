@@ -108,7 +108,7 @@
             if(d.VENDEDOR !== undefined){
 
                 $Rutas += `
-                    <div class="mb-4 col-md-6 col-lg-3">
+                    <div class="mb-4 col-md-6 col-lg-4">
                       <div class="card mb-3">
                         <div class="card-header bg-light">
                           <div class="row justify-content-between">
