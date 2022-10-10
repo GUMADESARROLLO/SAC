@@ -99,7 +99,7 @@ class HomeController extends Controller {
         $d2 = date('Y-m-d', strtotime(now()));
 
         $dtaHome[] = array(
-            'Estadistica'   => Estadisticas::getData($d1,$d2),            
+            'Estadistica'   => Estadisticas::getData($d1,$d2),           
         );
         return response()->json($dtaHome);
     }

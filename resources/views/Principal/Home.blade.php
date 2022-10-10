@@ -104,7 +104,7 @@
                                     <div class="icon-item icon-item-sm border rounded-3 shadow-none me-2"><span class="fas fa-chart-bar text-info"></span></div>
                                       <div class="flex-1">
                                         <h6 class="text-800 mb-0" id="id_Dias_porcent">...</h6>
-                                        <p class="mb-0 fs--2 text-500" id="id_Venta_Week_Label"><span id="id_Dias_Facturados">0</span> de <span id="id_Dias_Habiles"> 0 </span> Dias Hábiles.</p>
+                                        <p class="mb-0 fs--2 text-500" id="id_Venta_Week_Label"><span id="id_Dias_Habiles">0</span> de <span id="id_Dias_Facturados"> 0 </span> Dias Hábiles.</p>
                                     </div>
                                   </div>
                                 </div>
