@@ -120,7 +120,7 @@
                                 </div>
                                 <div class="flex-1 align-self-center ms-2">
                                   <p class="mb-1 lh-1">`+ d.VENDEDOR + ' | ' + d.NOMBRE+`</p>
-                                  <p class="mb-0 fs--1">`+ d.SKU + ` SKUs &bull; Tendencia: `+ d.TENDENCIA + ` &bull; </p>
+                                  <p class="mb-0 fs--1">`+ d.SKU + ` SKUs &bull; Tendencia: `+ d.TENDENCIA + ` &bull; Optimo. `+ Data['Dias_porcent'] + ` </p>
                                 </div>
                               </div>
                             </div>
@@ -165,7 +165,7 @@
                                     <div class="col-auto"> 
                                       <div class="d-flex align-items-center mb-3">
                                         <h6 class="text-primary mb-0">Cobertura de Clientes </h6>
-                                        <span class="badge rounded-pill ms-3 badge-soft-primary"><span class="fas fa-caret-up"></span> `+ d.CLIENTE_COBERTURA + ` %</span>
+                                        <span class="badge rounded-pill ms-3 badge-soft-primary"><span class="fas fa-caret-up"></span> `+ d.CLIENTE_COBERTURA + ` </span>
                                       </div>
                                       <div class="row g-sm-4">                                
                                         <div class="col-12 col-sm-auto">
