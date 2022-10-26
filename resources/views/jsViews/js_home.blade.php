@@ -212,9 +212,7 @@
                 {"title": "ARTICULO","data": "ARTICULO", "render": function(data, type, row, meta) {
                 var regla='';
 
-                console.log(row['005'])
-
-                var total = parseFloat(row.total) + parseFloat(row['005'])
+                var total = parseFloat( numeral(row['total']).format('00.00')) + parseFloat( numeral(row['005']).format('00.00')) 
 
                 if(row.REGLAS!='0'){
                     regla = '';
