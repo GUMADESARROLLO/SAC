@@ -12,8 +12,9 @@
         <div class="content">            
 
             @include('layouts.nav_importacion')
-
+            @if (Session::get('rol') != '10')  
             <div class="col-md-12 col-xxl-12 mb-3">
+              
               <div class="card h-100">
                 
                 <div class="card-header">
@@ -27,7 +28,8 @@
                   </div>
                  
                   
-                </div>                
+                </div> 
+                     
                 <div class="card-body p-0">
                   <div class="scrollbar-overlay pt-0 px-card ask-analytics">
                     <div class="row g-3 mb-3">
@@ -156,10 +158,11 @@
                     </div>
                   </div>
                 </div>
+               
               </div>
-            </div>
-            
-
+             
+            </div>            
+            @endif
           
 
               <div class="card">
