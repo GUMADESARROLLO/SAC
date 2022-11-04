@@ -19,6 +19,7 @@ use App\Models\Usuario;
 use App\Models\Factura;
 use App\Models\Estadisticas;
 use App\Models\MasterData;
+use App\Models\PlanCrecimiento;
 use Session;
 
 class HomeController extends Controller {
@@ -143,6 +144,7 @@ class HomeController extends Controller {
 
         $dtaCliente[] = array(
             'InfoCliente'                   => Clientes::where('CLIENTE', $idCliente)->get(),
+            'PlanCrecimieto'                => Clientes::getPlanCrecimiento($idCliente),
             'Historico3M'                   => ClientesHistorico3M::where('CLIENTE', $idCliente)->get(),
             'ClienteMora'                   => ClientesMora::where('CLIENTE', $idCliente)->get(),
             'ClientesHistoricoFactura'      => ClientesHistoricoFactura::where('COD_CLIENTE', $idCliente)->orderBy('Dia', 'DESC')->get(),            
@@ -187,6 +189,11 @@ class HomeController extends Controller {
     public function AddCommentPedido(Request $request)
     {
         $response = PedidoComentario::AddCommentPedido($request);
+        return response()->json($response);
+    }
+    public function AddPlanCrecimiento(Request $request)
+    {
+        $response = PlanCrecimiento::AddPlanCrecimiento($request);
         return response()->json($response);
     }
     public function DeleteCommentPedido(Request $request)
