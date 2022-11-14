@@ -171,7 +171,8 @@
                   
 
                     @if (Session::get('rol') == '1' || Session::get('rol') == '2' || Session::get('rol') == '9' )
-                      <li class="nav-item" role="presentation"><a class="nav-link py-3 mb-0 {{$Normal}}" id="crm-pedido-tab" data-bs-toggle="tab" href="#crm-pedido" role="tab" aria-controls="crm-pedido" aria-selected="false">Pedidos</a></li>  
+                      <li class="nav-item" role="presentation"><a class="nav-link py-3 mb-0 {{$Normal}}" id="crm-promocion-tab" data-bs-toggle="tab" href="#crm-promocion" role="tab" aria-controls="crm-promocion" aria-selected="false">Promoción</a></li>  
+                      <li class="nav-item" role="presentation"><a class="nav-link py-3 mb-0" id="crm-pedido-tab" data-bs-toggle="tab" href="#crm-pedido" role="tab" aria-controls="crm-pedido" aria-selected="false">Pedidos</a></li>  
                       <li class="nav-item" role="presentation"><a class="nav-link py-3 mb-0" id="crm-revenue-tab" data-bs-toggle="tab" href="#crm-revenue" role="tab" aria-controls="crm-revenue" aria-selected="true">Inventario</a></li>
                       <li class="nav-item" role="presentation"><a class="nav-link py-3 mb-0" id="crm-profit-tab" data-bs-toggle="tab" href="#crm-profit" role="tab" aria-controls="crm-profit" aria-selected="false">Clientes</a></li>                    
                       <li class="nav-item" role="presentation"><a class="nav-link py-3 mb-0" id="crm-users-tab" data-bs-toggle="tab" href="#crm-users" role="tab" aria-controls="crm-users" aria-selected="false">Liquidacion 12 Meses</a></li>
@@ -244,7 +245,58 @@
                           <table id="tbl_mst_clientes" class="table table-striped overflow-hidden" style="width:100%"></table>
                         </div>
 
-                        <div class="tab-pane {{$SAC}}" id="crm-pedido" role="tabpanel" aria-labelledby="crm-pedido-tab">
+                        <div class="tab-pane {{$SAC}}" id="crm-promocion" role="tabpanel" aria-labelledby="crm-promocion-tab">
+                          <div class="row flex-between-center mb-3 ">
+                          <div class="container" styel="display: flex; align-items: center; justify-content: center; min-height: 100vh;">
+
+
+                          <div class="card col-6 offset-3 mb-5" style="width: 35rem;">
+                            <div class=" mx-auto">
+                            <img class="card-img-top" src="{{ asset('images/promocion/002.jpg') }}" alt="" />
+                            </div>
+                            <div class="card-body overflow-hidden">
+                              <div class="row justify-content-between align-items-center">
+                                <div class="col">
+                                  <div class="d-flex">
+                                    <div class="calendar me-2"><span class="calendar-month">Dic</span><span class="calendar-day">31 </span></div>
+                                    <div class="flex-1 fs--1">
+                                      <h5 class="fs-0"><a href="#!">FREE New Year's Eve Midnight Harbor Fireworks</a></h5>
+                                      <p class="mb-0">by <a href="#!">Boston Harbor Now</a></p><span class="fs-0 text-warning fw-semi-bold">$49.99 – $89.99</span>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                           
+                          </div>
+                            
+
+                          <div class="card col-6 offset-3 mb-5" style="width: 35rem;">
+                            <div class=" mx-auto">
+                            <img class="card-img-top" src="{{ asset('images/promocion/captura.png') }}" alt="" />
+                            </div>
+                            <div class="card-body overflow-hidden">
+                              <div class="row justify-content-between align-items-center">
+                                <div class="col">
+                                  <div class="d-flex">
+                                    <div class="calendar me-2"><span class="calendar-month">Dic</span><span class="calendar-day">31 </span></div>
+                                    <div class="flex-1 fs--1">
+                                      <h5 class="fs-0"><a href="#!">FREE New Year's Eve Midnight Harbor Fireworks</a></h5>
+                                      <p class="mb-0">by <a href="#!">Boston Harbor Now</a></p><span class="fs-0 text-warning fw-semi-bold">$49.99 – $89.99</span>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                           
+                          </div>
+
+                          </div>
+                          </div>
+                        </div>
+
+
+                        <div class="tab-pane " id="crm-pedido" role="tabpanel" aria-labelledby="crm-pedido-tab">
                           <div class="row flex-between-center">
                             <div class="col-4 col-sm-auto d-flex align-items-center">
                             <form class="row align-items-center g-3">

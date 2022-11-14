@@ -73,6 +73,7 @@
       <div class="bg-white dark__bg-1000 rounded-2 py-2"> 
         @if( Session::get('rol') == '1' || Session::get('rol') == '2')
           <a class="dropdown-item fw-bold text-warning" href="{{ route('ArticuloFavorito') }}"><span class="fas fa-crown me-1"></span><span>Art. Favs.</span></a>
+          <a class="dropdown-item" href="{{ route('CalendarPromocion') }}"><span class="fas fa-calendar"></span><span> Promociones</span></a>
           <a class="dropdown-item" href="{{ route('Usuarios') }}"> <span class="fas fa-user-tie me-1"></span>Usuario </a>
           <div class="dropdown-divider"></div>
         @endif

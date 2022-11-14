@@ -208,5 +208,11 @@ class HomeController extends Controller {
         return response()->json($response);
     }
 
+    public function getCalendarPromocion()
+    {  
+        $articulos      = Inventario::getArticulos();
+        return view('Principal.CalendarPromocion', compact('articulos'));         
+    }
+
     
 }
