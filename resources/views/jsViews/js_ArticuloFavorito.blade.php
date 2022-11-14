@@ -103,10 +103,37 @@
         $.get( "getArticulosFavoritos", function( data ) {
             initTable('#tbl_inventario_fav',data[0].ArticulosFav,tbl_header_inventarios_Fav);
             initTable('#tbl_inventario',data[0].Inventario,tbl_header_inventarios);
+            
+
+            $("#tbl_inventario_fav_length").hide();
+            $("#tbl_inventario_fav_filter").hide();
+
+            $("#tbl_inventario_length").hide();
+            $("#tbl_inventario_filter").hide();
+
             $("#id_loading").hide();
         })
     }
 
+    $( "#tbl_select_inventario_fav").change(function() {
+        var table = $('#tbl_inventario_fav').DataTable();
+        table.page.len(this.value).draw();
+    });
+
+    $('#tbl_buscar_inventario_fav').on('keyup', function() {        
+        var vTableFavorito = $('#tbl_inventario_fav').DataTable();
+        vTableFavorito.search(this.value).draw();
+    });
+
+    $( "#tbl_select_inventario").change(function() {
+        var table = $('#tbl_inventario').DataTable();
+        table.page.len(this.value).draw();
+    });
+
+    $('#tbl_buscar_inventario').on('keyup', function() {        
+        var vTableFavorito = $('#tbl_inventario').DataTable();
+        vTableFavorito.search(this.value).draw();
+    });
 
     function save_fav(Articulo){
 
@@ -132,6 +159,7 @@
         });
     }
 
+    
 
 
     function initTable(id,datos,Header){
