@@ -20,6 +20,8 @@ use App\Models\Factura;
 use App\Models\Estadisticas;
 use App\Models\MasterData;
 use App\Models\PlanCrecimiento;
+use App\Models\Promocion;
+use Illuminate\Support\Facades\DB;
 use Session;
 
 class HomeController extends Controller {
@@ -40,7 +42,8 @@ class HomeController extends Controller {
             $Normal = 'active';
         }
         
-        return view('Principal.Home', compact('Lista_SAC','SAC','Normal'));
+        $promocion = DB::table('promocion.tbl_promocion')->get();;
+        return view('Principal.Home', compact('Lista_SAC','SAC','Normal', 'promocion'));
         
     }
 
@@ -209,10 +212,39 @@ class HomeController extends Controller {
     }
 
     public function getCalendarPromocion()
-    {  
+    {       
         $articulos      = Inventario::getArticulos();
         return view('Principal.CalendarPromocion', compact('articulos'));         
     }
 
+    public function getDataPromocion($mes, $anio){
+        $promocion = DB::table('promocion.view_calendarpromocion')->where('nMonth', $mes)->where('nYear', $anio)->get();
+        
+        return response()->json($promocion);
+    }
+
+    public function insert_promocion(Request $request){
+        $titulo = $request->Titulo;
+        $descripcion = $request->Descripcion;
+        $articulo = $request->Articulo;
+        $articulotxt = $request->Articulo_Txt;
+        $fechaIni = $request->fecha;
+        $fechaFin = $request->dtaFechaFin;
+
+        
+        $promocion = new Promocion();
+
+        $promocion->titulo = $titulo;
+        $promocion->descripcion = $descripcion;
+        $promocion->articulo = $articulo;
+        $promocion->articulotxt = $articulotxt;
+        $promocion->image = 'ico.PNG';
+        $promocion->created_at = $fechaIni;
+        $promocion->end_at = $fechaFin;
+
+        $promocion->save();
+        
+        return response()->json($promocion);
+    }
     
 }

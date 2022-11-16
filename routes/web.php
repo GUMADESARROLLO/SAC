@@ -18,8 +18,12 @@ Route::get('/logout', 'Auth\LoginController@logout');
 Route::get('ArticuloFavorito', 'HomeController@getArticuloFavorito')->name('ArticuloFavorito');
 Route::get('getData', 'HomeController@getData')->name('getData');
 Route::get('CalendarPromocion', 'HomeController@getCalendarPromocion')->name('CalendarPromocion');
+Route::get('getDataPromocion/{mes}/{annio}', 'HomeController@getDataPromocion')->name('getDataPromocion');
+Route::get('insert_promocion', 'HomeController@insert_promocion')->name('insert_promocion');
+
 
 Route::get('dtaEstadisticas', 'HomeController@dtaEstadisticas')->name('dtaEstadisticas');
+
 
 
 

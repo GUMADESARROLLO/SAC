@@ -32,9 +32,9 @@
                 </div>
                 <div class="col d-flex justify-content-end order-md-2">
                   <div class="dropdown font-sans-serif me-md-2">
-                    <button class="btn btn-falcon-default text-600 btn-sm dropdown-toggle dropdown-caret-none" type="button" id="email-filter" data-bs-toggle="dropdown" data-boundary="viewport" aria-haspopup="true" aria-expanded="false"><span data-view-title="data-view-title">Mes</span><span class="fas fa-sort ms-2 fs--1"></span></button>
+                    <!--<button class="btn btn-falcon-default text-600 btn-sm dropdown-toggle dropdown-caret-none" type="button" id="email-filter" data-bs-toggle="dropdown" data-boundary="viewport" aria-haspopup="true" aria-expanded="false"><span data-view-title="data-view-title">Mes</span><span class="fas fa-sort ms-2 fs--1"></span></button>
                     <div class="dropdown-menu dropdown-menu-end border py-2" aria-labelledby="email-filter"><a class="active dropdown-item d-flex justify-content-between" href="#!" data-fc-view="dayGridMonth">Mes<span class="icon-check"><span class="fas fa-check" data-fa-transform="down-4 shrink-4"></span></span></a><a class="dropdown-item d-flex justify-content-between" href="#!" data-fc-view="timeGridWeek">Semana<span class="icon-check"><span class="fas fa-check" data-fa-transform="down-4 shrink-4"></span></span></a><a class="dropdown-item d-flex justify-content-between" href="#!" data-fc-view="timeGridDay">Día<span class="icon-check"><span class="fas fa-check" data-fa-transform="down-4 shrink-4"></span></span></a><a class="dropdown-item d-flex justify-content-between" href="#!" data-fc-view="listWeek">Lista<span class="icon-check"><span class="fas fa-check" data-fa-transform="down-4 shrink-4"></span></span></a><a class="dropdown-item d-flex justify-content-between" href="#!" data-fc-view="listYear">Año<span class="icon-check"><span class="fas fa-check" data-fa-transform="down-4 shrink-4"></span></span></a>
-                    </div>
+                    </div>-->
                   </div>
                 </div>
               </div>
@@ -44,6 +44,12 @@
             </div>
           </div>
         </div>
+        <div class="modal fade" id="eventDetailsModal" tabindex="-1">
+          <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border"></div>
+          </div>
+        </div>
+       
 
         <div class="modal fade" id="addEventModal" tabindex="-1">
           <div class="modal-dialog">
@@ -64,7 +70,7 @@
                   </div>
                   <div class="mb-3">
                     <label class="fs-0" for="eventEndDate">Fecha de Finalización</label>
-                    <input class="form-control datetimepicker" id="pEndDate" type="text" name="endDate" placeholder="yyyy/mm/dd hh:mm" data-options='{"static":"true","enableTime":"true","dateFormat":"Y-m-d H:i"}' />
+                    <input class="form-control datetimepicker" id="pEndDate" type="text"  required="required" name="endDate" placeholder="yyyy/mm/dd hh:mm" data-options='{"static":"true","enableTime":"true","dateFormat":"Y-m-d H:i"}' />
                   </div>
                   <div class="mb-3">
                     <label class="fs-0" for="eventDescription">Descripción</label>
@@ -73,9 +79,9 @@
                   <div class="mb-3">
                     <label class="fs-0" for="pArticulos">Articulo</label>
                     <select class="form-select" id="pArticulo" name="label">
-                      <option value="" selected="selected">Seleccione</option>
+                      <option value="0" selected="selected">Seleccione</option>
                       @foreach ($articulos as $art)
-                        <option value="{{$art->ARTICULO}}">{{strtoupper($art->DESCRIPCION)}}</option>
+                        <option value="{{$art->ARTICULO}}" valor="{{strtoupper($art->DESCRIPCION)}}">{{strtoupper($art->DESCRIPCION)}}</option>
                       @endforeach
                       
                     </select>

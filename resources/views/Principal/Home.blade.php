@@ -249,47 +249,54 @@
                           <div class="row flex-between-center mb-3 ">
                           <div class="container" styel="display: flex; align-items: center; justify-content: center; min-height: 100vh;">
 
+                          <?php
 
-                          <div class="card col-6 offset-3 mb-5" style="width: 35rem;">
-                            <div class=" mx-auto">
-                            <img class="card-img-top" src="{{ asset('images/promocion/002.jpg') }}" alt="" />
-                            </div>
-                            <div class="card-body overflow-hidden">
-                              <div class="row justify-content-between align-items-center">
-                                <div class="col">
-                                  <div class="d-flex">
-                                    <div class="calendar me-2"><span class="calendar-month">Dic</span><span class="calendar-day">31 </span></div>
-                                    <div class="flex-1 fs--1">
-                                      <h5 class="fs-0"><a href="#!">FREE New Year's Eve Midnight Harbor Fireworks</a></h5>
-                                      <p class="mb-0">by <a href="#!">Boston Harbor Now</a></p><span class="fs-0 text-warning fw-semi-bold">$49.99 – $89.99</span>
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                           
-                          </div>
-                            
+                            if(count($promocion) >= 1){
 
-                          <div class="card col-6 offset-3 mb-5" style="width: 35rem;">
-                            <div class=" mx-auto">
-                            <img class="card-img-top" src="{{ asset('images/promocion/captura.png') }}" alt="" />
-                            </div>
-                            <div class="card-body overflow-hidden">
-                              <div class="row justify-content-between align-items-center">
-                                <div class="col">
-                                  <div class="d-flex">
-                                    <div class="calendar me-2"><span class="calendar-month">Dic</span><span class="calendar-day">31 </span></div>
-                                    <div class="flex-1 fs--1">
-                                      <h5 class="fs-0"><a href="#!">FREE New Year's Eve Midnight Harbor Fireworks</a></h5>
-                                      <p class="mb-0">by <a href="#!">Boston Harbor Now</a></p><span class="fs-0 text-warning fw-semi-bold">$49.99 – $89.99</span>
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                           
-                          </div>
+                              $i = 0;
+                              foreach($promocion as $promo){
+                                if($promo->end_at >= date('Y-m-d H:i:s')){
+                                  echo '<div class="card col-6 offset-3 mb-5" style="width: 35rem;">
+                                    <div class=" mx-auto">';
+                                      if($promo->image != "" || $promo->image != null){
+                                        echo '<img class="card-img-top"'; echo 'src="../images/promocion/'; echo $promo->image; echo '"'; echo 'alt="" />';
+                                      }else{
+                                        echo '<img class="card-img-top" src="../images/promocion/item.png" alt="" />';
+                                      }
+                                    echo '</div>';
+                                    echo '<div class="card-body overflow-hidden">
+                                      <div class="row justify-content-between align-items-center">
+                                        <div class="col">
+                                          <div class="d-flex">
+                                            <div class="calendar me-2"><span class="calendar-month">'; echo date("M"); echo'</span><span class="calendar-day">'; echo date("d"); echo '</span></div>';
+                                          echo '<div class="flex-1 fs--1">
+                                              <h5 class="fs-0 text-primary">'; echo $promo->articulotxt; echo '</h5>
+                                              <p class="mb-0">'; echo $promo->descripcion; echo '</p>
+                                              <span class="fs-0 text-warning fw-semi-bold">'; echo date_format(date_create($promo->created_at), 'd/m/Y'); echo ' – '; echo date_format(date_create($promo->end_at), 'd/m/Y'); echo '</span>
+                                            </div>';
+                                        echo '</div>
+                                        </div>
+                                      </div>
+                                    </div>';
+                                  
+                                  echo '</div>';
+                                  $i++;
+                                }
+                              }
+
+                              if($i == 0){
+                                echo '<div class="card col-6 offset-3 mb-5" style="width: 35rem;">
+                                  <h5 class="fs-0 text-danger">No hay promociones vigentes</h5></div>';
+                              }
+                            }else{
+                              foreach($promocion as $promo){
+
+                                
+                                  echo '<div class="card col-6 offset-3 mb-5" style="width: 35rem;">
+                                  <h5 class="fs-0 text-danger">No hay promociones vigentes</h5></div>';
+                              }
+                            }
+                          ?>
 
                           </div>
                           </div>
