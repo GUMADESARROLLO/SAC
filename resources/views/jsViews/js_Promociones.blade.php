@@ -12,24 +12,11 @@
         }
     );
     
-
-    var intVal = function ( i ) {
-        return typeof i === 'string' ?
-        i.replace(/[^0-9.]/g, '')*1 :
-        typeof i === 'number' ?
-        i : 0;
-    };
-
-    getDataCalendar()
+   getDataCalendar()
 
     
     appCalendarInit(dta_calendar)
     
-    
-    //CargarDatos(nMes,annio);
-    //table_render_excel(dta_table_excel)
-    
-
     function soloNumeros(caracter, e, numeroVal) {
         var numero = numeroVal;
         if (String.fromCharCode(caracter) === "." && numero.length === 0) {
@@ -49,13 +36,6 @@
         }
     }
   
-    var Selectors = {
-        ADD_NUEVA_SOLCITUD: '#addNuevaSolicitud',        
-        ADD_MULTI_ROW: '#addMultiRow',
-        MODAL_COMMENT: '#IdmdlComment',
-    };
-
-    
     /*-----------------------------------------------
     |   Calendar
     -----------------------------------------------*/
@@ -68,6 +48,7 @@
         
     };
     function getTemplate(event) {
+        edit_promo(event);
         return `
         <div class="modal-header bg-light ps-card pe-5 border-bottom-0">
         <div>
@@ -81,7 +62,7 @@
                 <div class="flex-1">
                 <h6>Articulo</h6>
                 <p class="mb-0">
-                ${event.extendedProps.articulotxt.split(' ').slice(0, 30).join(' ')}
+                ${event.extendedProps.nombre.split(' ').slice(0, 30).join(' ')}
                 </p>
                 </div>
             </div>
@@ -99,7 +80,7 @@
                 <div class="flex-1">
                     <h6>Fecha Inicio</h6>
                     <p class="mb-1">
-                    ${ moment(event.start).locale('es').format("dddd, MMMM D, YYYY, h:mm A") } 
+                    ${ moment(event.start).locale('es').format("dddd, MMMM D, YYYY") } 
                     </p>
                 </div>
             </div>
@@ -108,17 +89,19 @@
                 <div class="flex-1">
                     <h6>Fecha Finalización</h6>
                     <p class="mb-1">
-                    ${ moment(event.end).locale('es').format("dddd, MMMM D, YYYY, h:mm A") } 
+                    ${ moment(event.end).locale('es').format("dddd, MMMM D, YYYY") } 
                     </p>
                 </div>
             </div>
         </div>
         </div>
         <div class="modal-footer d-flex justify-content-end bg-light px-card border-top-0">
-        
+        <button class="btn btn-success btn-sm activo" id="activar" type="button" onclick=" desactivarPromo(${event.extendedProps.Id_evnt},'${event.extendedProps.activo}')"> Activar </button>
+        <button class="btn btn-primary btn-sm" type="submit" data-bs-toggle="modal" data-bs-target="#editEventModal"> <span class="fas fa-pencil-alt me-2"></span>Editar</button>
         </div>
         `;
     };
+
     function appCalendarInit(events) {
         var Selectors = {
             ACTIVE: '.active',
@@ -132,6 +115,7 @@
             EVENT_DETAILS_MODAL: '#eventDetailsModal',
             EVENT_DETAILS_MODAL_CONTENT: '#eventDetailsModal .modal-content',
             EVENT_START_DATE: '#addEventModal [name="startDate"]',
+            EVENT_END_DATE: '#addEventModal [name="endDate"]',
             INPUT_TITLE: '[name="title"]'
         };
 
@@ -202,23 +186,29 @@
             eventClick: function eventClick(info) {
                 var template = getTemplate(info.event);
                 document.querySelector(Selectors.EVENT_DETAILS_MODAL_CONTENT).innerHTML = template;
+                if(info.event.extendedProps.activo == "S"){
+                    $(".activo").removeClass('btn-success');
+                    $(".activo").addClass('btn-danger');
+                    $(".activo").text('Desactivar');
+                }
                 var modal = new window.bootstrap.Modal(eventDetailsModal);
                 modal.show();
 
             },
             dateClick: function dateClick(info) {
                 var month_ = moment().month(calendar.currentData.viewTitle).format("M");
-                var year_ = moment().month(calendar.currentData.viewTitle).format("YYYY")
-
-                getData(month_,year_)
-
-                
+                var day_ = new Date(info.dateStr);
+               
                 var modal = new window.bootstrap.Modal(addEventModal);
                 modal.show();
 
                 var flatpickr = document.querySelector(Selectors.EVENT_START_DATE)._flatpickr;
+                var flatpickr2 = document.querySelector(Selectors.EVENT_END_DATE)._flatpickr;
 
                 flatpickr.setDate([info.dateStr]);
+                flatpickr2.setDate([day_.getFullYear()+'-'+month_+'-'+(day_.getDate() + 1)+' 23:00']);
+                $(".previsualizar").attr("src", "{{ asset('images/promocion/item.jpg') }}");
+
             }
             });
 
@@ -259,11 +249,12 @@
                 startDate = _e$target.pStartDate,
                 description = _e$target.pDescription;
                 endDate = _e$target.pEndDate,
-                articulo = _e$target.pArticulo,
+                articulo = _e$target.pArticulo
+
+                arti = explode("!", articulo.value)
                 /*label = _e$target.label,
                 
                 allDay = _e$target.allDay;*/
-                console.log(articulo.value)
                 
                 if(articulo.value != 0){
                     calendar.addEvent({
@@ -272,7 +263,7 @@
                         end: endDate.value,
                         className: 'bg-soft-success',
                         description: description.value,
-                        articulotxt: articulo.value
+                        nombre: arti[1]
                     });
                     e.target.reset();
                     window.bootstrap.Modal.getInstance(addEventModal).hide();
@@ -286,58 +277,13 @@
             var currentTarget = _ref13.currentTarget;
             currentTarget.querySelector(Selectors.INPUT_TITLE).focus();
         });
-    };
-    
-    $("#id_send_info").click(function(){
-
-        var dtaId       = $("#id_row").text()
-        var dtaFecha    = $("#eventStartDate").val()
-        var txtCantidad = $("#id_txt_proyeccion_mensual").val()
-
-
-
-        if(dtaFecha===''){
-            Swal.fire(
-                'Fecha',
-                'No tiene Fecha seleccionada',
-                'error'
-            )
-        }else if (txtCantidad===''){
-            Swal.fire(
-                'Proyeccion Mensual',
-                'Ingrese el dato',
-                'error'
-            )
-        }else{
-            $.ajax({
-                url: "guardar_solicitud",
-                data: {
-                    rowID       : dtaId,
-                    fecha       : dtaFecha,
-                    cantidad    : txtCantidad,
-                    _token: "{{ csrf_token() }}" 
-                },
-                type: 'post',
-                async: true,
-                success: function(response) {
-                    Swal.fire("Exito!", "Guardado exitosamente", "success");
-                },
-                error: function(response) {
-                    Swal.fire("Oops", "No se ha podido guardar!", "error");
-                }
-            }).done(function(data) {
-                CargarDatos(nMes,annio);
-            });
-        }
-
-
-    });
-     
+    }
+         
     function getData(month_,year_){
         
         $.ajax({
             type: "GET",
-            url: 'getDataPromocion/'+ month_ + "/" + year_, 
+            url: 'getDataPromocion/'+ year_, 
             async: false,
             dataType: "json",
             success: function(data){
@@ -352,6 +298,7 @@
             }
         });
     }
+
     function getDataCalendar(){
 
         //var mes   = $("#IdSelectMes option:selected").val();           
@@ -366,35 +313,35 @@
 
         $.ajax({
             type: "GET",
-            url: 'getDataPromocion/' + mes + "/"+annio, 
+            url: 'getDataPromocion/' + annio, 
             async: false,
             dataType: "json",
             success: function(data){
                 $.each(data,function(key, registro) {
                     
-                    /*$color = "";
-                    $d = Date.now;
-                    if(registro.end_at < $d){
-                        $color = 'bg-soft-danger'
+                    var color = "";
+                    if(registro.activo ==  "N"){
+                        color = 'bg-soft-danger';
                     }else{
-                        $color = 'bg-soft-success'
-                    }*/
+                        color = 'bg-soft-success';
+                    }
 
                     dta_calendar.push(
                         {
                             'Id_evnt'       : registro.id,
                             'title'         : registro.titulo,
-                            'start'         : registro.created_at,
-                            'end'           : registro.end_at,
+                            'start'         : registro.fechaInicio,
+                            'end'           : registro.fechaFinal,
                             'description'   : registro.descripcion,
-                            'articulotxt'    : registro.articulotxt,
-                            'className'     : 'bg-soft-success'
+                            'nombre'        : registro.nombre,
+                            'articulo'      : registro.articulo,
+                            'image'         : registro.image,
+                            'activo'        : registro.activo,
+                            'className'     : color
                         }
                     )
-                    //SumCantidad += parseFloat(registro.Cantidad)
                 }); 	 
                 
-                //$("#id_sum_mes").html(numeral(SumCantidad).format('0,00.00'))
             },
             error: function(data) {
                 //alert('error');
@@ -404,48 +351,106 @@
         
     }
 
-    $("#save_promocion").click(function(){
-        
-        
-        var var_articulo   = $("#pArticulo option:selected").val();     
-        var var_articulo_txt   = $("#pArticulo option:selected").text();     
-        var txtTitulo = $("#pTitulo").val()
-        var dtaFechaIni    = $("#pStartDate").val()
-        var dtaFechaFin    = $("#pEndDate").val()
-        var pDescripcion       = $("#pDescription").val()
-        var nameImg = $('#pImage').text()
+    function edit_promo(data){
 
+        $('#ePTitulo').val(data.title);
+        $('#idPromocion').val(data.extendedProps.Id_evnt);
+        
+        var flatpickr = document.querySelector('#editEventModal [name="eStartDate"]')._flatpickr;
+        var flatpickr2 = document.querySelector('#editEventModal [name="eEndDate"]')._flatpickr;
 
-        if (txtTitulo==='' || var_articulo==='0'){
-            Swal.fire(
-                'Valor de Ingreso',
-                'Rellene todos los campos',
-                'error'
-            )
+        flatpickr.setDate([moment(data.start).format("Y-M-D H:i")]);
+        flatpickr2.setDate([moment(data.end).format("Y-M-D H:i")]);
+
+        $('#ePDescription').val(data.extendedProps.description.split(' ').slice(0, 30).join(' '));
+        $("#ePArticulo option:contains("+data.extendedProps.nombre.split(' ').slice(0, 30).join(' ')+")").attr("selected",'');
+        $('#fotoActual').val(data.extendedProps.image);
+
+        if(data.extendedProps.image != "item.jpg"){
+            $ruta ="{{ asset('images/promocion/') }}/"+data.extendedProps.image;
+            $(".previsualizar").attr("src", $ruta);
         }else{
+            $(".previsualizar").attr("src", "{{ asset('images/promocion/item.jpg') }}");
+        }
+    }
+
+    $(".nuevaFoto").change(function(){
+
+        var imagen = this.files[0];
+
+        var datosImagen = new FileReader;
+        datosImagen.readAsDataURL(imagen);
+
+        $(datosImagen).on("load", function(event){
+
+            var rutaImagen = event.target.result;
+
+            $(".previsualizar").attr("src", rutaImagen);
+
+        })
+
+    })
+
+    function desactivarPromo(id, activo){
+        Swal.fire({
+        title: '¡El estado de la promoción sera cambiado!',
+        text: "¿Desea continuar con esta acción?",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Si!',
+        showLoaderOnConfirm: true,
+        preConfirm: () => {
             $.ajax({
-                url: "insert_promocion",
-                type: 'get',
-                data: {
-                    Articulo       : var_articulo,                    
-                    Articulo_Txt       : var_articulo_txt,
-                    Titulo    : txtTitulo,
-                    fecha       : dtaFechaIni,
-                    dtaFechaFin : dtaFechaFin,
-                    Descripcion    : pDescripcion
-                },
+                url: "editPromocion/"+id+"/"+activo,
+                type: 'GET',
                 async: true,
                 success: function(response) {
-                    Swal.fire("Exito!", "Guardado exitosamente", "success");
+                    if('ok' == 'ok'){
+                    Swal.fire({
+                    title: 'Estado Modificado',
+                    icon: 'success',
+                    showCancelButton: false,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'OK'
+                    }).then((result) => {
+                    if (result.isConfirmed) {
+                        location.reload();
+                        }
+                    })
+                }
                 },
                 error: function(response) {
-                    Swal.fire("Oops", "No se ha podido guardar!", "error");
                 }
             }).done(function(data) {
-                //location.reload();
+                
             });
+        },
+            allowOutsideClick: () => !Swal.isLoading()
+        });
+    }
+
+  /*  $("#save_promocion").click(function(){
+        
+        
+        var var_articulo   = $("#pArticulo option:selected").attr('valor');     
+        var var_articulo_txt   = $("#pArticulo option:selected").text();     
+        var txtTitulo = $("#pTitulo").val();
+        var dtaFechaIni    = $("#pStartDate").val();
+        var dtaFechaFin    = $("#pEndDate").val();
+        var pDescripcion       = $("#pDescription").val();
+        var nameImg = $('#pImage').val();
+
+        if(dtaFechaFin < dtaFechaIni){
+            Swal.fire(
+                'Valor de Ingreso',
+                'La fecha final no puede ser inferior a la fecha de inicio',
+                'error'
+            )
         }
-    })
+    })*/
 
 
 </script>

@@ -1,6 +1,6 @@
 @extends('layouts.lyt_gumadesk')
 @section('metodosjs')
-@include('jsViews.js_home');
+@include('jsViews.js_home')
 @endsection
 @section('content')
 
@@ -246,62 +246,36 @@
                         </div>
 
                         <div class="tab-pane {{$SAC}}" id="crm-promocion" role="tabpanel" aria-labelledby="crm-promocion-tab">
-                          <div class="row flex-between-center mb-3 ">
-                          <div class="container" styel="display: flex; align-items: center; justify-content: center; min-height: 100vh;">
+                          <div class="container-fluid" >
+                          <div class="row">
 
-                          <?php
-
-                            if(count($promocion) >= 1){
-
-                              $i = 0;
-                              foreach($promocion as $promo){
-                                if($promo->end_at >= date('Y-m-d H:i:s')){
-                                  echo '<div class="card col-6 offset-3 mb-5" style="width: 35rem;">
-                                    <div class=" mx-auto">';
-                                      if($promo->image != "" || $promo->image != null){
-                                        echo '<img class="card-img-top"'; echo 'src="../images/promocion/'; echo $promo->image; echo '"'; echo 'alt="" />';
-                                      }else{
-                                        echo '<img class="card-img-top" src="../images/promocion/item.png" alt="" />';
-                                      }
-                                    echo '</div>';
-                                    echo '<div class="card-body overflow-hidden">
-                                      <div class="row justify-content-between align-items-center">
+                              @foreach($promocion as $promo)
+                                @if($promo->activo == "S")
+                                  <div class="col-sm-4 col-xs-4"><div class="card text-white bg-dark mb-5" style="width: 25rem;">
+                                    <div class="">
+                                      <img class="card-img-top" src="{{ asset('images/promocion/') }}/{{$promo->image}}" alt="" />
+                                    </div>
+                                    <div class="card-body overflow-hidden">
                                         <div class="col">
                                           <div class="d-flex">
-                                            <div class="calendar me-2"><span class="calendar-month">'; echo date("M"); echo'</span><span class="calendar-day">'; echo date("d"); echo '</span></div>';
-                                          echo '<div class="flex-1 fs--1">
-                                              <h5 class="fs-0 text-primary">'; echo $promo->articulotxt; echo '</h5>
-                                              <p class="mb-0">'; echo $promo->descripcion; echo '</p>
-                                              <span class="fs-0 text-warning fw-semi-bold">'; echo date_format(date_create($promo->created_at), 'd/m/Y'); echo ' – '; echo date_format(date_create($promo->end_at), 'd/m/Y'); echo '</span>
-                                            </div>';
-                                        echo '</div>
+                                            <div class="calendar me-2"><span class="calendar-month">{{ \Carbon\Carbon::parse($promo->fechaInicio)->format('M') }}</span><span class="calendar-day">{{ \Carbon\Carbon::parse($promo->fechaInicio)->format('d') }}</span></div>
+                                              <div class="flex-1 fs--1">
+                                                <h5 class="fs-0 text-primary">{{$promo->nombre}}</h5>
+                                                <p class="mb-0">{{$promo->descripcion}}</p>
+                                                <span class="fs-0 text-warning fw-semi-bold">{{ \Carbon\Carbon::parse($promo->fechaInicio)->format('d/m/Y') }} – {{ \Carbon\Carbon::parse($promo->fechaFinal)->format('d/m/Y') }}</span>
+                                            </div>
+                                          </div>
                                         </div>
-                                      </div>
-                                    </div>';
+                                      
+                                    </div>
+                                  </div>
                                   
-                                  echo '</div>';
-                                  $i++;
-                                }
-                              }
-
-                              if($i == 0){
-                                echo '<div class="card col-6 offset-3 mb-5" style="width: 35rem;">
-                                  <h5 class="fs-0 text-danger">No hay promociones vigentes</h5></div>';
-                              }
-                            }else{
-                              foreach($promocion as $promo){
-
-                                
-                                  echo '<div class="card col-6 offset-3 mb-5" style="width: 35rem;">
-                                  <h5 class="fs-0 text-danger">No hay promociones vigentes</h5></div>';
-                              }
-                            }
-                          ?>
-
+                                  </div>
+                                @endif
+                              @endforeach
                           </div>
                           </div>
                         </div>
-
 
                         <div class="tab-pane " id="crm-pedido" role="tabpanel" aria-labelledby="crm-pedido-tab">
                           <div class="row flex-between-center">

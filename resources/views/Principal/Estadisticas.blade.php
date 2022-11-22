@@ -1,6 +1,6 @@
 @extends('layouts.lyt_gumadesk')
 @section('metodosjs')
-@include('jsViews.js_estadisticas');
+@include('jsViews.js_estadisticas')
 @endsection
 @section('content')
 

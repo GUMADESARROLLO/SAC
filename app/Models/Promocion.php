@@ -6,6 +6,5 @@ use Illuminate\Database\Eloquent\Model;
 
 class Promocion extends Model
 {
-    protected $connection = 'mysql'; 
-    protected $table = 'promocion.tbl_promocion';
+    protected $table = 'tbl_promocion';
 }

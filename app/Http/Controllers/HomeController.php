@@ -21,7 +21,12 @@ use App\Models\Estadisticas;
 use App\Models\MasterData;
 use App\Models\PlanCrecimiento;
 use App\Models\Promocion;
+use Illuminate\Support\Str;
+Use Alert;
+use Exception;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
+use Psy\Readline\Hoa\Console;
 use Session;
 
 class HomeController extends Controller {
@@ -42,7 +47,7 @@ class HomeController extends Controller {
             $Normal = 'active';
         }
         
-        $promocion = DB::table('promocion.tbl_promocion')->get();;
+        $promocion = DB::table('tbl_promocion')->orderBy('fechaInicio')->get();
         return view('Principal.Home', compact('Lista_SAC','SAC','Normal', 'promocion'));
         
     }
@@ -217,33 +222,90 @@ class HomeController extends Controller {
         return view('Principal.CalendarPromocion', compact('articulos'));         
     }
 
-    public function getDataPromocion($mes, $anio){
-        $promocion = DB::table('promocion.view_calendarpromocion')->where('nMonth', $mes)->where('nYear', $anio)->get();
+    public function getDataPromocion($anio){
+        $promocion = DB::table('view_calendarpromocion')->where('nYear', $anio)->get();
         
         return response()->json($promocion);
     }
 
     public function insert_promocion(Request $request){
-        $titulo = $request->Titulo;
-        $descripcion = $request->Descripcion;
-        $articulo = $request->Articulo;
-        $articulotxt = $request->Articulo_Txt;
-        $fechaIni = $request->fecha;
-        $fechaFin = $request->dtaFechaFin;
+              
+        try{
 
-        
-        $promocion = new Promocion();
+            $titulo = $request->title;
+            $descripcion = $request->description;
+            $articulo = explode("!",$request->label);
+            $fechaIni = $request->startDate;
+            $fechaFin = $request->endDate;
+            $name = "item.jpg";
+            $activo = $fechaFin >= date('Y-m-d') ? 'S' : 'N';
 
-        $promocion->titulo = $titulo;
-        $promocion->descripcion = $descripcion;
-        $promocion->articulo = $articulo;
-        $promocion->articulotxt = $articulotxt;
-        $promocion->image = 'ico.PNG';
-        $promocion->created_at = $fechaIni;
-        $promocion->end_at = $fechaFin;
+            if($fechaFin >= $fechaIni){
+                $promocion = new Promocion();
 
-        $promocion->save();
-        
+                if($request->hasFile('nuevaImagen')){
+                    $file = $request->file('nuevaImagen');
+                    $destino = "../public/images/promocion/";
+                    $name = time() . '-' . $file->getClientOriginalName();
+                    copy($file->getRealPath(), $destino.$name);
+                }
+                
+                $promocion->titulo = $titulo;
+                $promocion->descripcion = $descripcion;
+                $promocion->articulo = $articulo[0];
+                $promocion->nombre = $articulo[1];
+                $promocion->image = $name;
+                $promocion->fechaInicio = $fechaIni;
+                $promocion->fechaFinal = $fechaFin;
+                $promocion->activo = $activo;
+                $promocion->save();
+
+                return redirect()->back();
+            }else{
+                return redirect()->back();
+            }
+        }catch (Exception $e) {
+            $mensaje =  'Excepción capturada: ' . $e->getMessage() . "\n";
+            return response()->json($mensaje);
+        }   
+    }
+
+    public function update_promocion(Request $request){
+        try{
+            $id = $request->eIdPromocion;
+            $titulo = $request->eTitle;
+            $descripcion = $request->eDescription;
+            $articulo = explode("!",$request->eLabel);
+            $fechaIni = $request->eStartDate;
+            $fechaFin = $request->eEndDate;
+            $name = $request->fotoActual;
+            $at = $fechaFin >= date('Y-m-d') ? 'S' : 'N';
+
+            if($fechaFin >= $fechaIni){
+                $promocion = new Promocion();
+
+                if($request->hasFile('eNuevaImagen')){
+                    $file = $request->file('eNuevaImagen');
+                    $destino = "../public/images/promocion/";
+                    $name = time() . '-' . $file->getClientOriginalName();
+                    copy($file->getRealPath(), $destino.$name);
+                }
+
+                $promocion = DB::table('tbl_promocion')->where('id', $id)->update(['titulo'=>$titulo,'descripcion'=>$descripcion,'articulo'=>$articulo[0],'nombre'=>$articulo[1],'image'=>$name,'fechaInicio'=>$fechaIni,'fechaFinal'=>$fechaFin,'activo'=>$at]);
+                return redirect()->back();
+            }else{
+                return redirect()->back();
+            }
+        }catch (Exception $e) {
+            $mensaje =  'Excepción capturada: ' . $e->getMessage() . "\n";
+            return response()->json($mensaje);
+        } 
+
+    }
+
+    public function editPromocion($id, $activo){
+        $at = $activo == 'S' ? 'N' : 'S';
+        $promocion = DB::table('tbl_promocion')->where('id', $id)->update(['activo'=>$at]);
         return response()->json($promocion);
     }
     

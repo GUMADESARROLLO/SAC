@@ -1,6 +1,6 @@
 @extends('layouts.lyt_gumadesk')
 @section('metodosjs')
-@include('jsViews.js_Promociones');
+@include('jsViews.js_Promociones')
 
 @endsection
 @section('content')
@@ -8,7 +8,7 @@
     <!--    Main Content-->
     <!-- ===============================================-->
     <main class="main" id="top">
-      <div class="container" data-layout="container">
+      <div class="container-fluid" data-layout="container">
         <div class="content">
         @include('layouts.nav_importacion')
           <div class="card mb-3 overflow-hidden">
@@ -54,11 +54,12 @@
         <div class="modal fade" id="addEventModal" tabindex="-1">
           <div class="modal-dialog">
             <div class="modal-content border">
-              <form id="addEventForm" autocomplete="off">
                 <div class="modal-header px-card bg-light border-bottom-0">
                   <h5 class="modal-title">Crear Promoción</h5>
                   <button class="btn-close me-n1" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
+                <form action="{{ route('insert_promocion') }}" method="POST" enctype="multipart/form-data">
+                @csrf
                 <div class="modal-body p-card">
                   <div class="mb-3">
                     <label class="fs-0" for="eventTitle">Titulo</label>
@@ -74,14 +75,14 @@
                   </div>
                   <div class="mb-3">
                     <label class="fs-0" for="eventDescription">Descripción</label>
-                    <textarea class="form-control" rows="3" name="description" id="pDescription"></textarea>
+                    <textarea class="form-control" rows="3" name="description" id="pDescription" required="required"></textarea>
                   </div>
                   <div class="mb-3">
                     <label class="fs-0" for="pArticulos">Articulo</label>
-                    <select class="form-select" id="pArticulo" name="label">
-                      <option value="0" selected="selected">Seleccione</option>
+                    <select class="form-select" id="pArticulo" name="label" required="required">
+                      <option value="" valor="0" selected="selected">Seleccione</option>
                       @foreach ($articulos as $art)
-                        <option value="{{$art->ARTICULO}}" valor="{{strtoupper($art->DESCRIPCION)}}">{{strtoupper($art->DESCRIPCION)}}</option>
+                        <option value="{{$art->ARTICULO}}!{{strtoupper($art->DESCRIPCION)}}" valor="{{$art->ARTICULO}}">{{strtoupper($art->DESCRIPCION)}}</option>
                       @endforeach
                       
                     </select>
@@ -90,16 +91,78 @@
               
                     <div class="panel">SUBIR IMAGEN</div>
 
-                    <input type="file" class="nuevaImagen" id="pImage" name="nuevaImagen">
+                    <input type="file" class="nuevaFoto" id="nuevaImagen" name="nuevaImagen">
 
                     <p class="help-block">Peso máximo de la imagen 2MB</p>
 
-                    <!--<img src="vistas/img/productos/default/anonymous.png" class="img-thumbnail previsualizar" width="100px">-->
+                    <img src="{{ asset('images/promocion/item.jpg') }}" class="img-thumbnail previsualizar" width="150px">
 
                   </div>
                 </div>
                 <div class="card-footer d-flex justify-content-end align-items-center bg-light">
-                  <button class="btn btn-primary px-4" type="submit" id="save_promocion">Guardar</button>
+                  <button class="btn btn-outline-primary" type="submit" id="save_promocion" >Guardar</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+
+        <!-- ===============================================-->
+        <!--    EDITAR PROMOCION-->
+        <!-- ===============================================-->
+        <div class="modal fade" id="editEventModal" tabindex="-1">
+          <div class="modal-dialog">
+            <div class="modal-content border">
+                <div class="modal-header px-card bg-light border-bottom-0">
+                  <h5 class="modal-title">Modificar Promoción</h5>
+                  <button class="btn-close me-n1" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form action="{{ route('update_promocion') }}" method="POST" enctype="multipart/form-data">
+                @csrf
+                <div class="modal-body p-card">
+                  <div class="mb-3">
+                    <input type="hidden" name="eIdPromocion" id="idPromocion">
+                    <label class="fs-0" for="eventTitle">Titulo</label>
+                    <input class="form-control" id="ePTitulo" type="text" name="eTitle" required="required" />
+                  </div>
+                  <div class="mb-3">
+                    <label class="fs-0" for="eventStartDate">Fecha de Inicio</label>
+                    <input class="form-control datetimepicker" id="ePStartDate" type="text" required="required" name="eStartDate" placeholder="yyyy/mm/dd hh:mm" data-options='{"static":"true","enableTime":"true","dateFormat":"Y-m-d H:i"}' />
+                  </div>
+                  <div class="mb-3">
+                    <label class="fs-0" for="eventEndDate">Fecha de Finalización</label>
+                    <input class="form-control datetimepicker" id="ePEndDate" type="text"  required="required" name="eEndDate" placeholder="yyyy/mm/dd hh:mm" data-options='{"static":"true","enableTime":"true","dateFormat":"Y-m-d H:i"}' />
+                  </div>
+                  <div class="mb-3">
+                    <label class="fs-0" for="eventDescription">Descripción</label>
+                    <textarea class="form-control" rows="3" name="eDescription" id="ePDescription" required="required"></textarea>
+                  </div>
+                  <div class="mb-3">
+                    <label class="fs-0" for="ePArticulos">Articulo</label>
+                    <select class="form-select" id="ePArticulo" name="eLabel" required="required">
+                      <option value="" valor="0" selected="selected">Seleccione</option>
+                      @foreach ($articulos as $art)
+                        <option value="{{$art->ARTICULO}}!{{strtoupper($art->DESCRIPCION)}}" valor="{{$art->ARTICULO}}">{{strtoupper($art->DESCRIPCION)}}</option>
+                      @endforeach
+                      
+                    </select>
+                  </div>
+                  <div class="form-group mb-3">
+              
+                    <div class="panel">SUBIR IMAGEN</div>
+
+                    <input type="file" class="nuevaFoto" id="eNuevaImagen" name="eNuevaImagen">
+
+                    <p class="help-block">Peso máximo de la imagen 2MB</p>
+
+                    <img src="{{ asset('images/promocion/item.jpg') }}" class="img-thumbnail previsualizar" width="150px">
+
+                    <input type="hidden" name="fotoActual" id="fotoActual">
+
+                  </div>
+                </div>
+                <div class="card-footer d-flex justify-content-end align-items-center bg-light">
+                  <button class="btn btn-outline-primary" type="submit" id="edit_promocion">Modificar</button>
                 </div>
               </form>
             </div>
