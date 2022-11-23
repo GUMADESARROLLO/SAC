@@ -1,6 +1,6 @@
 @extends('layouts.lyt_gumadesk')
 @section('metodosjs')
-@include('jsViews.js_ArticuloFavorito');
+@include('jsViews.js_ArticuloFavorito')
 @endsection
 @section('content')
 

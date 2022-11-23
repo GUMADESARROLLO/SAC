@@ -64,6 +64,12 @@ return [
             'url' => env('AWS_URL'),
             'endpoint' => env('AWS_ENDPOINT'),
         ],
+        'dpromo' => [
+            'driver' => 'local',
+            'root' => storage_path('app/promocion'),
+            'url' => env('APP_URL').'/fpromocion',
+            'visibility' => 'public',
+        ],
 
     ],
 

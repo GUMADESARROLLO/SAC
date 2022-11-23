@@ -1,6 +1,6 @@
 @extends('layouts.lyt_gumadesk')
 @section('metodosjs')
-@include('jsViews.js_home');
+@include('jsViews.js_home')
 @endsection
 @section('content')
 
@@ -171,7 +171,8 @@
                   
 
                     @if (Session::get('rol') == '1' || Session::get('rol') == '2' || Session::get('rol') == '9' )
-                      <li class="nav-item" role="presentation"><a class="nav-link py-3 mb-0 {{$Normal}}" id="crm-pedido-tab" data-bs-toggle="tab" href="#crm-pedido" role="tab" aria-controls="crm-pedido" aria-selected="false">Pedidos</a></li>  
+                      <li class="nav-item" role="presentation"><a class="nav-link py-3 mb-0 {{$Normal}}" id="crm-promocion-tab" data-bs-toggle="tab" href="#crm-promocion" role="tab" aria-controls="crm-promocion" aria-selected="false">Promoción</a></li>  
+                      <li class="nav-item" role="presentation"><a class="nav-link py-3 mb-0" id="crm-pedido-tab" data-bs-toggle="tab" href="#crm-pedido" role="tab" aria-controls="crm-pedido" aria-selected="false">Pedidos</a></li>  
                       <li class="nav-item" role="presentation"><a class="nav-link py-3 mb-0" id="crm-revenue-tab" data-bs-toggle="tab" href="#crm-revenue" role="tab" aria-controls="crm-revenue" aria-selected="true">Inventario</a></li>
                       <li class="nav-item" role="presentation"><a class="nav-link py-3 mb-0" id="crm-profit-tab" data-bs-toggle="tab" href="#crm-profit" role="tab" aria-controls="crm-profit" aria-selected="false">Clientes</a></li>                    
                       <li class="nav-item" role="presentation"><a class="nav-link py-3 mb-0" id="crm-users-tab" data-bs-toggle="tab" href="#crm-users" role="tab" aria-controls="crm-users" aria-selected="false">Liquidacion 12 Meses</a></li>
@@ -244,7 +245,39 @@
                           <table id="tbl_mst_clientes" class="table table-striped overflow-hidden" style="width:100%"></table>
                         </div>
 
-                        <div class="tab-pane {{$SAC}}" id="crm-pedido" role="tabpanel" aria-labelledby="crm-pedido-tab">
+                        <div class="tab-pane {{$SAC}}" id="crm-promocion" role="tabpanel" aria-labelledby="crm-promocion-tab">
+                          <div class="container-fluid" >
+                          <div class="row">
+
+                              @foreach($promocion as $promo)
+                                @if($promo->activo == "S")
+                                  <div class="col-sm-4 col-xs-4"><div class="card text-white bg-dark mb-5" style="width: 25rem;">
+                                    <div class="">
+                                      <img class="card-img-top" src="{{ asset('images/promocion/') }}/{{$promo->image}}" alt="" height="220px" />
+                                    </div>
+                                    <div class="card-body overflow-hidden">
+                                        <div class="col">
+                                          <div class="d-flex">
+                                            <div class="calendar me-2"><span class="calendar-month">{{ \Carbon\Carbon::parse($promo->fechaInicio)->format('M') }}</span><span class="calendar-day">{{ \Carbon\Carbon::parse($promo->fechaInicio)->format('d') }}</span></div>
+                                              <div class="flex-1 fs--1">
+                                                <h5 class="fs-0 text-primary">{{$promo->nombre}}</h5>
+                                                <p class="mb-0">{{$promo->descripcion}}</p>
+                                                <span class="fs-0 text-warning fw-semi-bold">{{ \Carbon\Carbon::parse($promo->fechaInicio)->format('d/m/Y') }} – {{ \Carbon\Carbon::parse($promo->fechaFinal)->format('d/m/Y') }}</span>
+                                            </div>
+                                          </div>
+                                        </div>
+                                      
+                                    </div>
+                                  </div>
+                                  
+                                  </div>
+                                @endif
+                              @endforeach
+                          </div>
+                          </div>
+                        </div>
+
+                        <div class="tab-pane " id="crm-pedido" role="tabpanel" aria-labelledby="crm-pedido-tab">
                           <div class="row flex-between-center">
                             <div class="col-4 col-sm-auto d-flex align-items-center">
                             <form class="row align-items-center g-3">
