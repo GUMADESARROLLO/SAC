@@ -253,7 +253,7 @@
                                 @if($promo->activo == "S")
                                   <div class="col-sm-4 col-xs-4"><div class="card text-white bg-dark mb-5" style="width: 25rem;">
                                     <div class="">
-                                      <img class="card-img-top" src="{{ asset('images/promocion/') }}/{{$promo->image}}" alt="" />
+                                      <img class="card-img-top" src="{{ asset('images/promocion/') }}/{{$promo->image}}" alt="" height="220px" />
                                     </div>
                                     <div class="card-body overflow-hidden">
                                         <div class="col">

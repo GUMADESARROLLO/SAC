@@ -22,7 +22,7 @@ use App\Models\MasterData;
 use App\Models\PlanCrecimiento;
 use App\Models\Promocion;
 use Illuminate\Support\Str;
-Use Alert;
+Use UxWeb\SweetAlert\SweetAlert;
 use Exception;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
@@ -222,8 +222,8 @@ class HomeController extends Controller {
         return view('Principal.CalendarPromocion', compact('articulos'));         
     }
 
-    public function getDataPromocion($anio){
-        $promocion = DB::table('view_calendarpromocion')->where('nYear', $anio)->get();
+    public function getDataPromocion($annio){
+        $promocion = DB::table('tbl_promocion')->get();
         
         return response()->json($promocion);
     }
@@ -260,14 +260,17 @@ class HomeController extends Controller {
                 $promocion->activo = $activo;
                 $promocion->save();
 
+                alert()->success('Se ha registrado la promocion', 'Success');
                 return redirect()->back();
             }else{
+                alert()->error('La fecha final no puede ser inferior a la fecha de inicio', 'ERROR')->persistent('Close');
                 return redirect()->back();
             }
         }catch (Exception $e) {
             $mensaje =  'Excepción capturada: ' . $e->getMessage() . "\n";
-            return response()->json($mensaje);
-        }   
+            alert()->error($mensaje, 'ERROR')->persistent('Close');
+            return redirect()->back();
+    }   
     }
 
     public function update_promocion(Request $request){
@@ -292,14 +295,17 @@ class HomeController extends Controller {
                 }
 
                 $promocion = DB::table('tbl_promocion')->where('id', $id)->update(['titulo'=>$titulo,'descripcion'=>$descripcion,'articulo'=>$articulo[0],'nombre'=>$articulo[1],'image'=>$name,'fechaInicio'=>$fechaIni,'fechaFinal'=>$fechaFin,'activo'=>$at]);
+                alert()->success('Se ha modificado la promocion', 'Success');
                 return redirect()->back();
             }else{
+                alert()->error('La fecha final no puede ser inferior a la fecha de inicio', 'ERROR')->persistent('Close');
                 return redirect()->back();
             }
         }catch (Exception $e) {
             $mensaje =  'Excepción capturada: ' . $e->getMessage() . "\n";
-            return response()->json($mensaje);
-        } 
+            alert()->error($mensaje, 'ERROR')->persistent('Close');
+            return redirect()->back();
+        }
 
     }
 

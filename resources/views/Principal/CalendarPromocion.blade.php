@@ -4,6 +4,7 @@
 
 @endsection
 @section('content')
+
 <!-- ===============================================-->
     <!--    Main Content-->
     <!-- ===============================================-->
@@ -80,7 +81,7 @@
                   <div class="mb-3">
                     <label class="fs-0" for="pArticulos">Articulo</label>
                     <select class="form-select" id="pArticulo" name="label" required="required">
-                      <option value="" valor="0" selected="selected">Seleccione</option>
+                      <option value="" valor="0" selected="selected">SELECCIONE</option>
                       @foreach ($articulos as $art)
                         <option value="{{$art->ARTICULO}}!{{strtoupper($art->DESCRIPCION)}}" valor="{{$art->ARTICULO}}">{{strtoupper($art->DESCRIPCION)}}</option>
                       @endforeach
@@ -140,7 +141,7 @@
                   <div class="mb-3">
                     <label class="fs-0" for="ePArticulos">Articulo</label>
                     <select class="form-select" id="ePArticulo" name="eLabel" required="required">
-                      <option value="" valor="0" selected="selected">Seleccione</option>
+                      <option value="" valor="0" selected="selected">SELECCIONE</option>
                       @foreach ($articulos as $art)
                         <option value="{{$art->ARTICULO}}!{{strtoupper($art->DESCRIPCION)}}" valor="{{$art->ARTICULO}}">{{strtoupper($art->DESCRIPCION)}}</option>
                       @endforeach

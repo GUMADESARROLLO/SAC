@@ -96,7 +96,7 @@
         </div>
         </div>
         <div class="modal-footer d-flex justify-content-end bg-light px-card border-top-0">
-        <button class="btn btn-success btn-sm activo" id="activar" type="button" onclick=" desactivarPromo(${event.extendedProps.Id_evnt},'${event.extendedProps.activo}')"> Activar </button>
+        <h5 class="mb-1 fw-semi-bold text-nowrap"><a href="#!" onclick=" desactivarPromo(${event.extendedProps.Id_evnt},'${event.extendedProps.activo}')"> <strong class="activo">Reactivar</strong> </a></h5>
         <button class="btn btn-primary btn-sm" type="submit" data-bs-toggle="modal" data-bs-target="#editEventModal"> <span class="fas fa-pencil-alt me-2"></span>Editar</button>
         </div>
         `;
@@ -187,8 +187,6 @@
                 var template = getTemplate(info.event);
                 document.querySelector(Selectors.EVENT_DETAILS_MODAL_CONTENT).innerHTML = template;
                 if(info.event.extendedProps.activo == "S"){
-                    $(".activo").removeClass('btn-success');
-                    $(".activo").addClass('btn-danger');
                     $(".activo").text('Desactivar');
                 }
                 var modal = new window.bootstrap.Modal(eventDetailsModal);
@@ -196,7 +194,6 @@
 
             },
             dateClick: function dateClick(info) {
-                var month_ = moment().month(calendar.currentData.viewTitle).format("M");
                 var day_ = new Date(info.dateStr);
                
                 var modal = new window.bootstrap.Modal(addEventModal);
@@ -206,7 +203,7 @@
                 var flatpickr2 = document.querySelector(Selectors.EVENT_END_DATE)._flatpickr;
 
                 flatpickr.setDate([info.dateStr]);
-                flatpickr2.setDate([day_.getFullYear()+'-'+month_+'-'+(day_.getDate() + 1)+' 23:00']);
+                flatpickr2.setDate([day_.getFullYear()+'-'+(day_.getMonth()+1)+'-'+(day_.getDate()+1)+' 23:00']);
                 $(".previsualizar").attr("src", "{{ asset('images/promocion/item.jpg') }}");
 
             }
@@ -300,20 +297,12 @@
     }
 
     function getDataCalendar(){
-
-        //var mes   = $("#IdSelectMes option:selected").val();           
-        //var annio  = $("#IdSelectAnnio option:selected").val()
-
-        var mes = moment().format('M');
-        var annio = moment().format('YYYY');
-
+        var annio = moment().format('M');
         dta_calendar = []
-
-        //var SumCantidad = 0;
 
         $.ajax({
             type: "GET",
-            url: 'getDataPromocion/' + annio, 
+            url: 'getDataPromocion/'+ annio, 
             async: false,
             dataType: "json",
             success: function(data){
@@ -432,25 +421,11 @@
         });
     }
 
-  /*  $("#save_promocion").click(function(){
-        
-        
-        var var_articulo   = $("#pArticulo option:selected").attr('valor');     
-        var var_articulo_txt   = $("#pArticulo option:selected").text();     
-        var txtTitulo = $("#pTitulo").val();
-        var dtaFechaIni    = $("#pStartDate").val();
-        var dtaFechaFin    = $("#pEndDate").val();
-        var pDescripcion       = $("#pDescription").val();
-        var nameImg = $('#pImage').val();
-
-        if(dtaFechaFin < dtaFechaIni){
-            Swal.fire(
-                'Valor de Ingreso',
-                'La fecha final no puede ser inferior a la fecha de inicio',
-                'error'
-            )
-        }
+    /*$('#addEventModal').on('hidden.bs.modal', function(e){
+        $('#addEventModal input').val("");
+        $('#addEventModal textarea').val("");
+        $('#addEventModal select').val("");
     })*/
 
-
+  
 </script>
