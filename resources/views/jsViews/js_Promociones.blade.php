@@ -62,7 +62,7 @@
                 <div class="flex-1">
                 <h6>Articulo</h6>
                 <p class="mb-0">
-                ${event.extendedProps.nombre.split(' ').slice(0, 30).join(' ')}
+                ${event.extendedProps.nombre.split(' ').slice(0, 150).join(' ')}
                 </p>
                 </div>
             </div>
@@ -71,7 +71,7 @@
                 <div class="flex-1">
                 <h6>Descripción</h6>
                 <p class="mb-0">
-                ${event.extendedProps.description.split(' ').slice(0, 30).join(' ')}
+                ${event.extendedProps.description.split(' ').slice(0, 1000).join(' ')}
                 </p>
                 </div>
             </div>
@@ -96,8 +96,8 @@
         </div>
         </div>
         <div class="modal-footer d-flex justify-content-end bg-light px-card border-top-0">
-        <h5 class="mb-1 fw-semi-bold text-nowrap"><a href="#!" onclick=" desactivarPromo(${event.extendedProps.Id_evnt},'${event.extendedProps.activo}')"> <strong class="activo">Reactivar</strong> </a></h5>
-        <button class="btn btn-primary btn-sm" type="submit" data-bs-toggle="modal" data-bs-target="#editEventModal"> <span class="fas fa-pencil-alt me-2"></span>Editar</button>
+        <button class="btn btn-success btn-sm activo" type="button" onclick=" desactivarPromo(${event.extendedProps.Id_evnt},'${event.extendedProps.activo}')"> Reactivar</button>
+        <button class="btn btn-primary btn-sm" type="submit" data-bs-toggle="modal" data-bs-target="#editEventModal">Editar</button>
         </div>
         `;
     };
@@ -187,6 +187,8 @@
                 var template = getTemplate(info.event);
                 document.querySelector(Selectors.EVENT_DETAILS_MODAL_CONTENT).innerHTML = template;
                 if(info.event.extendedProps.activo == "S"){
+                    $(".activo").removeClass('btn-success');
+                    $(".activo").addClass('btn-danger');
                     $(".activo").text('Desactivar');
                 }
                 var modal = new window.bootstrap.Modal(eventDetailsModal);
@@ -344,17 +346,20 @@
 
         $('#ePTitulo').val(data.title);
         $('#idPromocion').val(data.extendedProps.Id_evnt);
-        
         var flatpickr = document.querySelector('#editEventModal [name="eStartDate"]')._flatpickr;
         var flatpickr2 = document.querySelector('#editEventModal [name="eEndDate"]')._flatpickr;
 
         flatpickr.setDate([moment(data.start).format("Y-M-D H:i")]);
         flatpickr2.setDate([moment(data.end).format("Y-M-D H:i")]);
+        $('#ePDescription').val(data.extendedProps.description.split(' ').slice(0, 1000).join(' '));
+        $("#ePArticulo option:contains(SELECCIONE)").attr("selected",'');
 
-        $('#ePDescription').val(data.extendedProps.description.split(' ').slice(0, 30).join(' '));
-        $("#ePArticulo option:contains("+data.extendedProps.nombre.split(' ').slice(0, 30).join(' ')+")").attr("selected",'');
+        if(data.extendedProps.articulo != 0 ){
+         
+            $("#ePArticulo option:contains("+data.extendedProps.nombre.split(' ').slice(0, 150).join(' ')+")").attr("selected",'');
+        }
+
         $('#fotoActual').val(data.extendedProps.image);
-
         if(data.extendedProps.image != "item.jpg"){
             $ruta ="{{ asset('images/promocion/') }}/"+data.extendedProps.image;
             $(".previsualizar").attr("src", $ruta);
@@ -421,10 +426,10 @@
         });
     }
 
-    /*$('#addEventModal').on('hidden.bs.modal', function(e){
+    /*$('#editEventModal').on('hidden.bs.modal', function(e){
         $('#addEventModal input').val("");
         $('#addEventModal textarea').val("");
-        $('#addEventModal select').val("");
+        $('#editEventModal select').val("");
     })*/
 
   

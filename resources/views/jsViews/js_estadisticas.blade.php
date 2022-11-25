@@ -75,7 +75,7 @@
       $.each(Data, function (i, d) {
         dta_ventas_mercados.dataset['VentasMesRutas'][0].push(numeral(d.MONTO).format('00.00'))
         dta_ventas_mercados.dataset['VentasMesRutas'][1].push(0)
-        dta_ventas_mercados.dataset['VentasMesRutas'][2].push(d.VENDEDOR)
+        dta_ventas_mercados.dataset['VentasMesRutas'][2].push(d.VENDEDOR+' | '+d.NOMBRE +' | '+ d.ZONA )
 
       });
 
@@ -121,6 +121,7 @@
                                 <div class="flex-1 align-self-center ms-2">
                                   <p class="mb-1 lh-1">`+ d.VENDEDOR + ' | ' + d.NOMBRE+`</p>
                                   <p class="mb-0 fs--1">`+ d.SKU + ` SKUs &bull; Tendencia: `+ d.TENDENCIA + ` &bull; Optimo. `+ Data['Dias_porcent'] + ` </p>
+                                  <P class="mb-0 fs--1">`+d.ZONA+` </p>
                                 </div>
                               </div>
                             </div>
@@ -270,11 +271,11 @@
       var tooltipFormatter = function tooltipFormatter(params) {
           return `<div class="card">
                     <div class="card-header bg-light py-2">
-                      <h6 class="text-600 mb-0">`+params[0].axisValue+ `</h6>
+                      <h6 class="text-600 mb-0">`+params[0].axisValue+ ` </h6>
                     </div>
                     <div class="card-body py-2">
                       <h6 class="text-600 mb-0 fw-normal">
-                        <span class="fas fa-circle text-primary me-2"></span>C$ 
+                        <span class="fas fa-circle text-success me-2"></span>C$ 
                         <span class="fw-medium">`+ numeral(params[0].data).format('0,00.00')+` </span>
                       </h6>
                       </div>
