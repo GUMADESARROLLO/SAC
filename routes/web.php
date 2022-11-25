@@ -62,3 +62,5 @@ Route::post('DeleteCommentPedido', 'HomeController@DeleteCommentPedido')->name('
 Route::post('getPedidosRangeDates', 'HomeController@getPedidosRangeDates')->name('getPedidosRangeDates');
 
 Route::post('AddPlanCrecimiento', 'HomeController@AddPlanCrecimiento')->name('AddPlanCrecimiento');
+Route::get('getPlanCrecimientoIco', 'HomeController@getPlanCrecimientoIco')->name('getPlanCrecimientoIco');
+

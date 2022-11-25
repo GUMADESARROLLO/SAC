@@ -143,11 +143,17 @@ class HomeController extends Controller {
     {
 
         $articulos_favoritos = array();
+        $lista_negra = array();
 
         $Lista_articulos_Favoritos = ArticuloFavoritos::all();
-        
+        $getListaNegra = DB::connection('sqlsrv')->select('SELECT * FROM PRODUCCION.dbo.tbl_articulos_lista_negra');
+
         foreach ($Lista_articulos_Favoritos as $rec){
             $articulos_favoritos[] = $rec->Articulo;
+        }
+
+        foreach($getListaNegra as $lista){
+            $lista_negra[] = $lista->articulo;
         }
 
         $dtaCliente[] = array(
@@ -158,7 +164,7 @@ class HomeController extends Controller {
             'ClientesHistoricoFactura'      => ClientesHistoricoFactura::where('COD_CLIENTE', $idCliente)->orderBy('Dia', 'DESC')->get(),            
             'ArticulosNoFacturado'          => Inventario::whereNotIn('ARTICULO', function($q)  use ($idCliente){
                                                     $q->select('ARTICULO')->from('PRODUCCION.dbo.GMV3_hstCompra_3M')->where("CLIENTE", $idCliente);
-                                                })->whereIn('ARTICULO',$articulos_favoritos)->get(),            
+                                                })->whereIn('ARTICULO',$articulos_favoritos)->whereNotIn('ARTICULO', $lista_negra)->get(),            
         );
 
         return response()->json($dtaCliente);
@@ -315,4 +321,9 @@ class HomeController extends Controller {
         return response()->json($promocion);
     }
     
+    public function getPlanCrecimientoIco(){
+        $ico = PlanCrecimiento::get();
+        return $ico;
+
+    }
 }

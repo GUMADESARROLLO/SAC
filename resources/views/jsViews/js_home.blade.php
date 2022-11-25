@@ -305,7 +305,7 @@
                             </div>
 
                             <div class="flex-1 ms-3">
-                                <h6 class="mb-1 fw-semi-bold">`+row.CLIENTE +` :  <a href="#!" onclick=" Modal_Cliente(`+"'" + row.CLIENTE+"'" +`)"> `+row.NOMBRE + lblMoroso +` </h6></a> 
+                                <h6 class="mb-1 fw-semi-bold">`+row.CLIENTE +` :  <a href="#!" onclick=" Modal_Cliente(`+"'" + row.CLIENTE+"'" +`)"> `+row.NOMBRE + lblMoroso +` `+mostrarIcono(row.CLIENTE)+`  </h6></a> 
                                 <p class="fw-semi-bold mb-0 text-500 ">
                                     <p class="mb-0 fs--1" >`+row.DIRECCION +`</p>
                                     <p class="mb-0 fs--1" >Ultim Factura. ` + moment(row.fecha).format("D MMM, YYYY") + `</p>
@@ -660,6 +660,23 @@
             },
             allowOutsideClick: () => !Swal.isLoading()
         });
+    }
+
+    var cod_client = [];
+
+    $.get( "getPlanCrecimientoIco", function( data ) {
+        $('.activo').removeClass('text-warning');
+                cod_client = data
+    })
+
+    function mostrarIcono(id){
+        
+        for(var i = 0; i < cod_client.length; i++){
+            if(cod_client[i]['CODIGO_CLIENTE'] == id){
+                return '<span class="text-warning fas fa-crown me-1"></span>';                
+            }            
+        }
+        return "";        
     }
 
     $.ajax({

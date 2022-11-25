@@ -255,13 +255,16 @@
                                     <div class="">
                                       <img class="card-img-top" src="{{ asset('images/promocion/') }}/{{$promo->image}}" alt="" height="220px" />
                                     </div>
-                                    <div class="card-body overflow-hidden">
+                                    <div class="card-body">
                                         <div class="col">
                                           <div class="d-flex">
-                                            <div class="calendar me-2"><span class="calendar-month">{{ \Carbon\Carbon::parse($promo->fechaInicio)->format('M') }}</span><span class="calendar-day">{{ \Carbon\Carbon::parse($promo->fechaInicio)->format('d') }}</span></div>
-                                              <div class="flex-1 fs--1">
-                                                <h5 class="fs-0 text-primary">{{$promo->nombre}}</h5>
-                                                <p class="mb-0">{{$promo->descripcion}}</p>
+                                            <div class="calendar me-2"><span class="calendar-month">{{ \Carbon\Carbon::parse($promo->fechaFinal)->format('M') }}</span><span class="calendar-day">{{ \Carbon\Carbon::parse($promo->fechaFinal)->format('d') }}</span></div>
+                                              <div class="flex-1 ">
+                                                <h5 class="text-primary"><strong>{{$promo->titulo}}</strong></h5>
+                                                <h6 class="text-secondary "><strong>{{$promo->nombre}}</strong></h6><p></p>
+                                                @for($i = 0; $i< @count(explode("\n",$promo->descripcion)); $i++)
+                                                  <p>{{@explode("\n",$promo->descripcion)[$i]}}</p>
+                                                @endfor
                                                 <span class="fs-0 text-warning fw-semi-bold">{{ \Carbon\Carbon::parse($promo->fechaInicio)->format('d/m/Y') }} – {{ \Carbon\Carbon::parse($promo->fechaFinal)->format('d/m/Y') }}</span>
                                             </div>
                                           </div>

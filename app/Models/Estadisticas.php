@@ -44,6 +44,7 @@ class Estadisticas extends Model
 
         return "Del ". $week_start ." al ".$week_end." de ".$week_month.": ";
     }
+
     public static function getData($d1,$d2){
 
         $data = array();
@@ -64,7 +65,27 @@ class Estadisticas extends Model
         $w = date("W", strtotime($d2));
         $y = date("Y", strtotime($d2));
 
-
+        $SAC_into_vendedor = array(
+            ["RUTA" => "F03","SAC" => "AURA","ZONA" => "MGA ABAJO NORTE"],
+            ["RUTA" => "F05","SAC" => "AURA","ZONA" => "MGA ARRIBA"],
+            ["RUTA" => "F21","SAC" => "AURA","ZONA" => "N/D"],
+            ["RUTA" => "F19","SAC" => "NADIESKA","ZONA" => "OCCIDENTE"],
+            ["RUTA" => "F06","SAC" => "NADIESKA","ZONA" => "LEON"],
+            ["RUTA" => "F14","SAC" => "NADIESKA","ZONA" => "CHINANDEGA"],
+            ["RUTA" => "F13","SAC" => "NADIESKA","ZONA" => "MGA ABAJO SUR"],
+            ["RUTA" => "F07","SAC" => "YESSICA","ZONA" => "MYA-GDA"],
+            ["RUTA" => "F23","SAC" => "YESSICA","ZONA" => "SUR ORIENTE"],
+            ["RUTA" => "F09","SAC" => "REYNA","ZONA" => "EST-NS-MAD"],
+            ["RUTA" => "F10","SAC" => "REYNA","ZONA" => "MAT-JIN"],
+            ["RUTA" => "F22","SAC" => "REYNA","ZONA" => "N/D"],
+            ["RUTA" => "F08","SAC" => "REYNA","ZONA" => "CAR-RIV"],
+            ["RUTA" => "F11","SAC" => "YORLENI","ZONA" => "CHON-RSJ-RAAS"],
+            ["RUTA" => "F20","SAC" => "YORLENI","ZONA" => "BOACO- RAAN"],
+            ["RUTA" => "F02","SAC" => "ALEJANDRA","ZONA" => "INSTIT"],
+            ["RUTA" => "F04","SAC" => "ALEJANDRA","ZONA" => "MCDO/MAYORISTAS"],
+            ["RUTA" => "F15","SAC" => "","ZONA" => "VENTAS GERENCIA"],
+            ["RUTA" => "F18","SAC" => "","ZONA" => ""],
+        );
 
         $sql_exec = "SELECT
         T0.VENDEDOR,
@@ -165,6 +186,12 @@ class Estadisticas extends Model
                 $data[$i]['NOMBRE']             = $rVendedor[$index_key]->NOMBRE;               
                 $data[$i]['META_RUTA']          = 'C$ ' . number_format($key->META_RUTA,0);
                 $data[$i]['MesActual']          = 'C$ ' . number_format($key->MesActual, 0);
+
+                foreach($SAC_into_vendedor as $zona){
+                    if($zona["RUTA"] ==$key->VENDEDOR){
+                        $data[$i]['ZONA'] = $zona["ZONA"];
+                    }
+                }
 
                 $CUMPL_EJECT = ($key->META_RUTA=='0.00') ? number_format($key->META_RUTA,0) :  number_format(($key->MesActual / $key->META_RUTA) * 100,0) ;
 
@@ -272,6 +299,27 @@ class Estadisticas extends Model
         $w = date("W", strtotime($d2));
         $y = date("Y", strtotime($d2));
 
+        $SAC_into_vendedor = array(
+            ["RUTA" => "F03","SAC" => "AURA","ZONA" => "MGA ABAJO NORTE"],
+            ["RUTA" => "F05","SAC" => "AURA","ZONA" => "MGA ARRIBA"],
+            ["RUTA" => "F21","SAC" => "AURA","ZONA" => "N/D"],
+            ["RUTA" => "F19","SAC" => "NADIESKA","ZONA" => "OCCIDENTE"],
+            ["RUTA" => "F06","SAC" => "NADIESKA","ZONA" => "LEON"],
+            ["RUTA" => "F14","SAC" => "NADIESKA","ZONA" => "CHINANDEGA"],
+            ["RUTA" => "F13","SAC" => "NADIESKA","ZONA" => "MGA ABAJO SUR"],
+            ["RUTA" => "F07","SAC" => "YESSICA","ZONA" => "MYA-GDA"],
+            ["RUTA" => "F23","SAC" => "YESSICA","ZONA" => "SUR ORIENTE"],
+            ["RUTA" => "F09","SAC" => "REYNA","ZONA" => "EST-NS-MAD"],
+            ["RUTA" => "F10","SAC" => "REYNA","ZONA" => "MAT-JIN"],
+            ["RUTA" => "F22","SAC" => "REYNA","ZONA" => "N/D"],
+            ["RUTA" => "F08","SAC" => "REYNA","ZONA" => "CAR-RIV"],
+            ["RUTA" => "F11","SAC" => "YORLENI","ZONA" => "CHON-RSJ-RAAS"],
+            ["RUTA" => "F20","SAC" => "YORLENI","ZONA" => "BOACO- RAAN"],
+            ["RUTA" => "F02","SAC" => "ALEJANDRA","ZONA" => "INSTIT"],
+            ["RUTA" => "F04","SAC" => "ALEJANDRA","ZONA" => "MCDO/MAYORISTAS"],
+            ["RUTA" => "F15","SAC" => "","ZONA" => "VENTAS GERENCIA"],
+            ["RUTA" => "F18","SAC" => "","ZONA" => ""],
+        );
 
 
         $sql_exec = "SELECT T0.VENDEDOR ,SUM(TOTAL_LINEA) TOTAL_DAY FROM PRODUCCION.dbo.view_master_pedidos_umk_v2 T0 	            
@@ -279,11 +327,20 @@ class Estadisticas extends Model
 
         $query = DB::connection('sqlsrv')->Select($sql_exec);
 
+        $sql_vendedor = "SELECT VENDEDOR, NOMBRE FROM Softland.umk.VENDEDOR WHERE ACTIVO='S' AND VENDEDOR != 'LPCM'";
+        $rVendedor = DB::connection('sqlsrv')->Select($sql_vendedor);
 
         if(count($query)>0 ) {
             foreach ($query as $key) {
                 $data[$i]['VENDEDOR']   = $key->VENDEDOR;
-                $data[$i]['MONTO']      = $key->TOTAL_DAY;;               
+                $data[$i]['MONTO']      = $key->TOTAL_DAY;
+                $index_key = array_search($key->VENDEDOR, array_column($rVendedor, 'VENDEDOR'));
+                $data[$i]['NOMBRE']     = $rVendedor[$index_key]->NOMBRE;  
+                foreach($SAC_into_vendedor as $zona){
+                    if($zona["RUTA"] ==$key->VENDEDOR){
+                        $data[$i]['ZONA'] = $zona["ZONA"];
+                    }
+                }
                 $i++;
             }            
         }
