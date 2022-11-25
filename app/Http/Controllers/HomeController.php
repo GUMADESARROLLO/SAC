@@ -251,7 +251,7 @@ class HomeController extends Controller {
 
                 if($request->hasFile('nuevaImagen')){
                     $file = $request->file('nuevaImagen');
-                    $destino = "../public/images/promocion/";
+                    $destino = "./public/images/promocion/";
                     $name = time() . '-' . $file->getClientOriginalName();
                     copy($file->getRealPath(), $destino.$name);
                 }
@@ -295,7 +295,7 @@ class HomeController extends Controller {
 
                 if($request->hasFile('eNuevaImagen')){
                     $file = $request->file('eNuevaImagen');
-                    $destino = "../public/images/promocion/";
+                    $destino = "./public/images/promocion/";
                     $name = time() . '-' . $file->getClientOriginalName();
                     copy($file->getRealPath(), $destino.$name);
                 }
