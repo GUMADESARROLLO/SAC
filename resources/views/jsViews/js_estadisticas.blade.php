@@ -20,6 +20,13 @@
 
         return number;
     }
+
+    function labelFormat(label){
+      label = label +"|l";
+      var spl = label.split("|");
+
+      return spl[0];
+    }
     const startOfMonth = moment().startOf('month').format('YYYY-MM-DD');;
     const endOfMonth   = moment().subtract(0, "days").format("YYYY-MM-DD");
 
@@ -50,10 +57,13 @@
         }
       };
 
+      var detalleRuta = [];
+
       $.get( "getMiProgreso/"+D1 + "/"+D2, function( data ) {
         Estadisticas(data[0].Estadistica)
         setBarVentasMes(data[0].dtaVentasMes)
         setBarVentasRutas(data[0].dtaVentasRutas)
+        detalleRuta = data[0].dtaVentasRutas
       })
 
     }    
@@ -75,7 +85,7 @@
       $.each(Data, function (i, d) {
         dta_ventas_mercados.dataset['VentasMesRutas'][0].push(numeral(d.MONTO).format('00.00'))
         dta_ventas_mercados.dataset['VentasMesRutas'][1].push(0)
-        dta_ventas_mercados.dataset['VentasMesRutas'][2].push(d.VENDEDOR+' | '+d.NOMBRE +' | '+ d.ZONA )
+        dta_ventas_mercados.dataset['VentasMesRutas'][2].push(d.VENDEDOR+' | '+d.NOMBRE+' | ' + d.ZONA)
 
       });
 
@@ -271,11 +281,11 @@
       var tooltipFormatter = function tooltipFormatter(params) {
           return `<div class="card">
                     <div class="card-header bg-light py-2">
-                      <h6 class="text-600 mb-0">`+params[0].axisValue+ ` </h6>
+                      <h6 class="text-600 mb-0">`+params[0].axisValue+ `  </h6>
                     </div>
                     <div class="card-body py-2">
                       <h6 class="text-600 mb-0 fw-normal">
-                        <span class="fas fa-circle text-success me-2"></span>C$ 
+                        <span class="fas fa-circle text-primary me-2"></span>C$ 
                         <span class="fw-medium">`+ numeral(params[0].data).format('0,00.00')+` </span>
                       </h6>
                       </div>
@@ -309,6 +319,9 @@
                       data: data3,
                       axisLabel: {
                           color: utils.getGrays()['600'],
+                          formatter: function(d){
+                            return labelFormat(d);
+                          }                         
                       },
                   axisLine: {
                       lineStyle: {

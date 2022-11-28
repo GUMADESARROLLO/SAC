@@ -253,7 +253,8 @@ class HomeController extends Controller {
                     $file = $request->file('nuevaImagen');
                     $destino = "../public/images/promocion/";
                     $name = time() . '-' . $file->getClientOriginalName();
-                    copy($file->getRealPath(), $destino.$name);
+                    move_uploaded_file($file->getRealPath(),$destino.$name);
+                    //copy($file->getRealPath(), $destino.$name);
                 }
                 
                 $promocion->titulo = $titulo;
@@ -297,7 +298,8 @@ class HomeController extends Controller {
                     $file = $request->file('eNuevaImagen');
                     $destino = "../public/images/promocion/";
                     $name = time() . '-' . $file->getClientOriginalName();
-                    copy($file->getRealPath(), $destino.$name);
+                    move_uploaded_file($file->getRealPath(),$destino.$name);
+                    //copy($file->getRealPath(), $destino.$name);
                 }
 
                 $promocion = DB::table('tbl_promocion')->where('id', $id)->update(['titulo'=>$titulo,'descripcion'=>$descripcion,'articulo'=>$articulo[0],'nombre'=>$articulo[1],'image'=>$name,'fechaInicio'=>$fechaIni,'fechaFinal'=>$fechaFin,'activo'=>$at]);
