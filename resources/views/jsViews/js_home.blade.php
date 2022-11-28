@@ -858,9 +858,9 @@
                 for (var key in data) {
                     thead += '<th class="text-nowrap">LOTE</th>';
                     thead += '<th class="text-nowrap text-end">CANT. DISPONIBLE</th>';
-                    thead += '<th class="text-nowrap text-end">CANT. INGRESADA POR COMPRA</th>';
-                    thead += '<th class="text-nowrap text-end">FECHA ULTM. INGRESO COMPRA</th>';
-                    thead += '<th class="text-nowrap text-end">FECHA DE CREACION</th>';
+                   // thead += '<th class="text-nowrap text-end">CANT. INGRESADA POR COMPRA</th>';
+                   // thead += '<th class="text-nowrap text-end">FECHA ULTM. INGRESO COMPRA</th>';
+                   // thead += '<th class="text-nowrap text-end">FECHA DE CREACION</th>';
                     thead += '<th class="text-nowrap text-end">FECHA VENCIMIENTO</th>';
                 }
 
@@ -879,9 +879,9 @@
                         tbody += '<tr class="center">' +
                             '<td class="text-truncate">' + d[x]["LOTE"] + '</td>'+
                             '<td class="text-truncate text-end">' + d[x]["CANT_DISPONIBLE"] + '</td>'+
-                            '<td class="text-truncate text-end">' + d[x]["CANTIDAD_INGRESADA"] + '</td>'+
-                            '<td class="text-truncate text-center">' + d[x]["FECHA_INGRESO"] + '</td>'+
-                            '<td class="text-truncate text-center">' + d[x]["FECHA_ENTRADA"] + '</td>'+
+                          //  '<td class="text-truncate text-end">' + d[x]["CANTIDAD_INGRESADA"] + '</td>'+
+                          //  '<td class="text-truncate text-center">' + d[x]["FECHA_INGRESO"] + '</td>'+
+                          //  '<td class="text-truncate text-center">' + d[x]["FECHA_ENTRADA"] + '</td>'+
                             '<td class="text-truncate text-center">' + d[x]["FECHA_VENCIMIENTO"] + '</td>'+
                             '</tr>';
                     }
