@@ -1263,4 +1263,39 @@ var tooltipFormatter = function tooltipFormatter(params) {
         var modal = new window.bootstrap.Modal(id_mdl_info_cliente);
         modal.show();
     }
+
+    function getStackIcon(icon, transform) {
+        return `<span class="fa-stack ms-n1 me-3">
+                    <i class="fas fa-circle fa-stack-2x text-200"></i>
+                    <i class="${icon} fa-stack-1x text-primary" data-fa-transform=${transform}></i>
+                </span>
+                `;
+        
+    };
+
+    function promocionLeerMas(id){
+        $.ajax({
+            type: "GET",
+            url: 'getDataPromocion/'+ 2022, 
+            async: false,
+            dataType: "json",
+            success: function(data){
+                $.each(data,function(key, registro) {
+                   if(id == registro.id){
+                    Swal.fire({
+                        title: registro.titulo,
+                        html: '<div style="text-align: justify">'+registro.descripcion.replace(/\n/g, '</br>')+'</div>'
+                        
+                   })
+                   }
+                }); 	 
+                
+            },
+            error: function(data) {
+                //alert('error');
+            }
+        });    
+
+    }
+    
 </script>

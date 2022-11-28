@@ -251,26 +251,36 @@
 
                               @foreach($promocion as $promo)
                                 @if($promo->activo == "S")
-                                  <div class="col-sm-4 col-xs-4"><div class="card text-white bg-dark mb-5" style="width: 25rem;">
+                                  <div class="col-sm-4 col-xs-4" style=""><div class="card text-white bg-dark mb-5" style="width: 100%;">
                                     <div class="">
                                       <img class="card-img-top" src="{{ asset('images/promocion/') }}/{{$promo->image}}" alt="" height="220px" />
                                     </div>
-                                    <div class="card-body">
+                                    <div class="card-body" style="height:150px">
                                         <div class="col">
                                           <div class="d-flex">
                                             <div class="calendar me-2"><span class="calendar-month">{{ \Carbon\Carbon::parse($promo->fechaFinal)->format('M') }}</span><span class="calendar-day">{{ \Carbon\Carbon::parse($promo->fechaFinal)->format('d') }}</span></div>
                                               <div class="flex-1 ">
                                                 <h5 class="text-primary"><strong>{{$promo->titulo}}</strong></h5>
                                                 <h6 class="text-secondary "><strong>{{$promo->nombre}}</strong></h6><p></p>
-                                                @for($i = 0; $i< @count(explode("\n",$promo->descripcion)); $i++)
-                                                  <p>{{@explode("\n",$promo->descripcion)[$i]}}</p>
-                                                @endfor
-                                                <span class="fs-0 text-warning fw-semi-bold">{{ \Carbon\Carbon::parse($promo->fechaInicio)->format('d/m/Y') }} – {{ \Carbon\Carbon::parse($promo->fechaFinal)->format('d/m/Y') }}</span>
+                                                @if(@strlen($promo->descripcion) > 70)
+                                                  <p>{{@substr($promo->descripcion,0,70)}} <a href="#!" onclick="promocionLeerMas('{{$promo->id}}')">... Leer Más</a></p>
+                                                @else
+                                                <p>{{$promo->descripcion}}</p>
+                                                @endif
                                             </div>
                                           </div>
                                         </div>
                                       
                                     </div>
+                                    <div class="card-footer">
+                                    <div class="col">
+                                          <div class="d-flex">
+                                            <div class="calendar me-2"></div>
+                                            <span class="fs-0 text-warning fw-semi-bold">{{ \Carbon\Carbon::parse($promo->fechaInicio)->format('d/m/Y') }} – {{ \Carbon\Carbon::parse($promo->fechaFinal)->format('d/m/Y') }}</span>
+                                          </div> 
+                                          </div>
+                                    </div>
+
                                   </div>
                                   
                                   </div>
