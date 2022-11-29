@@ -273,7 +273,7 @@
                                       
                                     </div>
                                     <div class="card-footer">
-                                    <div class="col">
+                                    <div class="col mt-2">
                                           <div class="d-flex">
                                             <div class="calendar me-2"></div>
                                             <span class="fs-0 text-warning fw-semi-bold">{{ \Carbon\Carbon::parse($promo->fechaInicio)->format('d/m/Y') }} – {{ \Carbon\Carbon::parse($promo->fechaFinal)->format('d/m/Y') }}</span>
