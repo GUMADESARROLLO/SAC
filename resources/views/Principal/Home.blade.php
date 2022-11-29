@@ -250,10 +250,9 @@
                           <div class="row">
 
                               @foreach($promocion as $promo)
-                                @if($promo->activo == "S")
                                   <div class="col-sm-4 col-xs-4" style=""><div class="card text-white bg-dark mb-5" style="width: 100%;">
                                     <div class="">
-                                      <img class="card-img-top" src="{{ asset('images/promocion/') }}/{{$promo->image}}" alt="" height="220px" />
+                                      <img class="card-img-top" src="{{$promo->image_url}}" alt="" height="220px" />
                                     </div>
                                     <div class="card-body" style="height:150px">
                                         <div class="col">
@@ -284,7 +283,6 @@
                                   </div>
                                   
                                   </div>
-                                @endif
                               @endforeach
                           </div>
                           </div>
