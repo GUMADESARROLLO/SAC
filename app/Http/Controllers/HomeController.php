@@ -256,10 +256,11 @@ class HomeController extends Controller {
                     //$destino = $_SERVER["DOCUMENT_ROOT"]."/images/promocion/";
 
                     //PATH DOCKER
-                    $destino = $_SERVER["DOCUMENT_ROOT"]."/SAC/public/images/promocion/";
+                    //$destino = $_SERVER["DOCUMENT_ROOT"]."/SAC/public/images/promocion/";
 
                     $name = time() . '-' . $file->getClientOriginalName();
-                    move_uploaded_file($file->getRealPath(),$destino.$name);
+                    Storage::disk('s3')->put('Promociones/'.$name, file_get_contents($file));
+                    //move_uploaded_file($file->getRealPath(),$destino.$name);
                     //copy($file->getRealPath(), $destino.$name);
                 }
                 
@@ -306,10 +307,11 @@ class HomeController extends Controller {
                     //$destino = $_SERVER["DOCUMENT_ROOT"]."/images/promocion/";
 
                     //PATH DOCKER
-                    $destino = $_SERVER["DOCUMENT_ROOT"]."/SAC/public/images/promocion/";
+                    //$destino = $_SERVER["DOCUMENT_ROOT"]."/SAC/public/images/promocion/";
                     
                     $name = time() . '-' . $file->getClientOriginalName();
-                    move_uploaded_file($file->getRealPath(),$destino.$name);
+                    //move_uploaded_file($file->getRealPath(),$destino.$name);
+                    Storage::disk('s3')->put('Promociones/'.$name, file_get_contents($file));
                     //copy($file->getRealPath(), $destino.$name);
                 }
 
