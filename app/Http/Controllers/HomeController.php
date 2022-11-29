@@ -251,7 +251,13 @@ class HomeController extends Controller {
 
                 if($request->hasFile('nuevaImagen')){
                     $file = $request->file('nuevaImagen');
-                    $destino = $_SERVER["DOCUMENT_ROOT"]."/images/promocion/";
+                    
+                    //Path Kubernetes
+                    //$destino = $_SERVER["DOCUMENT_ROOT"]."/images/promocion/";
+
+                    //PATH DOCKER
+                    $destino = $_SERVER["DOCUMENT_ROOT"]."/SAC/public/images/promocion/";
+
                     $name = time() . '-' . $file->getClientOriginalName();
                     move_uploaded_file($file->getRealPath(),$destino.$name);
                     //copy($file->getRealPath(), $destino.$name);
@@ -296,7 +302,12 @@ class HomeController extends Controller {
 
                 if($request->hasFile('eNuevaImagen')){
                     $file = $request->file('eNuevaImagen');
-                    $destino = $_SERVER["DOCUMENT_ROOT"]."/images/promocion/";
+                    //Path Kubernetes
+                    //$destino = $_SERVER["DOCUMENT_ROOT"]."/images/promocion/";
+
+                    //PATH DOCKER
+                    $destino = $_SERVER["DOCUMENT_ROOT"]."/SAC/public/images/promocion/";
+                    
                     $name = time() . '-' . $file->getClientOriginalName();
                     move_uploaded_file($file->getRealPath(),$destino.$name);
                     //copy($file->getRealPath(), $destino.$name);
