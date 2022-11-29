@@ -1276,7 +1276,7 @@ var tooltipFormatter = function tooltipFormatter(params) {
     function promocionLeerMas(id){
         $.ajax({
             type: "GET",
-            url: 'getDataPromocion/'+ 2022, 
+            url: 'getDataPromocion', 
             async: false,
             dataType: "json",
             success: function(data){

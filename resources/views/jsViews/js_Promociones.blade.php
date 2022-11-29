@@ -282,7 +282,7 @@
         
         $.ajax({
             type: "GET",
-            url: 'getDataPromocion/'+ year_, 
+            url: 'getDataPromocion', 
             async: false,
             dataType: "json",
             success: function(data){
@@ -304,7 +304,7 @@
 
         $.ajax({
             type: "GET",
-            url: 'getDataPromocion/'+ annio, 
+            url: 'getDataPromocion', 
             async: false,
             dataType: "json",
             success: function(data){
@@ -328,6 +328,7 @@
                             'articulo'      : registro.articulo,
                             'image'         : registro.image,
                             'activo'        : registro.activo,
+                            'image_url'           : registro.image_url,
                             'className'     : color
                         }
                     )
@@ -360,9 +361,9 @@
         }
 
         $('#fotoActual').val(data.extendedProps.image);
-        if(data.extendedProps.image != "item.jpg"){
-            $ruta ="{{ asset('images/promocion/') }}/"+data.extendedProps.image;
-            $(".previsualizar").attr("src", $ruta);
+        if(data.extendedProps.image_url != "item.jpg"){
+            //$ruta ="{{ asset('images/promocion/') }}/"+data.extendedProps.image_url;
+            $(".previsualizar").attr("src", data.extendedProps.image_url);
         }else{
             $(".previsualizar").attr("src", "{{ asset('images/promocion/item.jpg') }}");
         }

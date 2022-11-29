@@ -20,7 +20,7 @@ Route::get('getData', 'HomeController@getData')->name('getData');
 
 //Rutas para promociones
 Route::get('CalendarPromocion', 'HomeController@getCalendarPromocion')->name('CalendarPromocion');
-Route::get('getDataPromocion/{annio}', 'HomeController@getDataPromocion')->name('getDataPromocion');
+Route::get('getDataPromocion', 'HomeController@getDataPromocion')->name('getDataPromocion');
 Route::post('/insert_promocion', 'HomeController@insert_promocion')->name('insert_promocion');
 Route::get('editPromocion/{id}/{activo}', 'HomeController@editPromocion')->name('editPromocion/{id}/{activo}');
 Route::post('/update_promocion', 'HomeController@update_promocion')->name('update_promocion');

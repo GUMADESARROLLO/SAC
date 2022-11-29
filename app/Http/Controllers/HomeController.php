@@ -228,9 +228,8 @@ class HomeController extends Controller {
         return view('Principal.CalendarPromocion', compact('articulos'));         
     }
 
-    public function getDataPromocion($annio){
-        $promocion = DB::table('tbl_promocion')->get();
-        
+    public function getDataPromocion(){
+        $promocion = Promocion::getDataCalendar();
         return response()->json($promocion);
     }
 
