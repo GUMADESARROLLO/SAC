@@ -47,7 +47,7 @@ class HomeController extends Controller {
             $Normal = 'active';
         }
         
-        $promocion = DB::table('tbl_promocion')->orderBy('fechaInicio')->get();
+        $promocion = Promocion::orderBy('fechaInicio')->where('Activo','S')->get();
         return view('Principal.Home', compact('Lista_SAC','SAC','Normal', 'promocion'));
         
     }
