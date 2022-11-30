@@ -31,11 +31,12 @@ spec:
               subPath: storageApp
           ports:
             - containerPort: 80
+          envFrom:
+            - configMapRef:
+              name: laravel-config
           env:
-            - name: DB_HOST
-              value: mysql-svc
-            - name: DB_USERNAME
-              value: root
+            - name: APP_KEY
+              value: base64:tYaI3cGTEA3iFoXnqyzBh3yx2eTDKKGvPjWd7f20NQA=
           resources:
             requests:
               memory: "64Mi"
