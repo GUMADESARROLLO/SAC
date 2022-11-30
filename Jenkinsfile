@@ -6,7 +6,7 @@ pipeline {
     stages {
         stage('Docker Build') {
             steps {
-                sh "docker build -t gumadesarrollo/sac:${env.BUILD_NUMBER} ."
+                sh "docker build -t gumadesarrollo/sac:v1.2.${env.BUILD_NUMBER} ."
             }
         }
         stage('Docker Push') {
