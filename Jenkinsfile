@@ -4,10 +4,10 @@ pipeline {
 		DOCKERHUB_CREDENTIALS=credentials('DockerHub')
 	}
     stages {
-        stage('Apply Kubernetes Files'){
+        
+        stage('Kubectl test') {
             steps {
-                sh 'kubectl get nodes'
-                }
+                sh "kubectl get nodes"
             }
         }
         stage('Docker Build') {
