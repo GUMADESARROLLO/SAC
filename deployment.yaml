@@ -36,11 +36,6 @@ spec:
               value: mysql-svc
             - name: DB_USERNAME
               value: root
-          env:
-            - name: DB_HOST
-              value: mysql-svc
-            - name: DB_USERNAME
-              value: root
           resources:
             requests:
               memory: "64Mi"
