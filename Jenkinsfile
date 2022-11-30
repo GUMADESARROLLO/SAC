@@ -22,10 +22,8 @@ pipeline {
         }
         stage('Apply Kubernetes Files'){
             steps {
-                withKubeConfig(caCertificate: '', clusterName: 'microk8s-cluster', contextName: '', credentialsId: 'Microk8sServer', namespace: 'kube-system', serverUrl: ' https://192.168.1.40:16443') {
-                    sh 'cat deployment.yaml | sed "s/{{BUILD_NUMBER}}/$BUILD_NUMBER/g" | kubectl apply -f -'
-                    sh 'kubectl apply -f service.yaml'
-                }
+                sh 'cat deployment.yaml | sed "s/{{BUILD_NUMBER}}/$BUILD_NUMBER/g" | kubectl apply -f -'
+                sh 'kubectl apply -f service.yaml'
                 
             }
         }
