@@ -176,4 +176,46 @@ class GmvApiController extends Controller{
 
         return response()->json($obj);
     }
+
+    public function post_report(Request $request){
+        $obj = GmvApi::post_report($request);
+
+        return response()->json($obj);
+    }
+
+    public function push_pin(Request $request){
+        $obj = GmvApi::push_pin($request);
+
+        return response()->json($obj);
+    }
+
+    public function stac_recup(Request $request){
+        $obj = GmvApi::stac_recup($request);
+
+        return response()->json($obj);
+    }
+
+    public function get_history_lotes(Request $request){
+        $obj = GmvApi::get_history_lotes($request);
+
+        return response()->json($obj);
+    }
+
+    public function plan_crecimiento(Request $request){
+        $obj = GmvApi::plan_crecimiento($request);
+
+        return response()->json($obj);
+    }
+
+    public function post_historico_factura(Request $request){
+        $obj = GmvApi::post_historico_factura($request);
+
+        return response()->json($obj);
+    }
+
+    public function recibo_anular(Request $request){
+        $obj = GmvApi::recibo_anular($request);
+
+        return response()->json($obj);
+    }
 }

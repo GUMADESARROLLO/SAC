@@ -62,3 +62,15 @@ Route::get('articulos_sin_facturar', 'GmvApiController@articulos_sin_facturar')-
 Route::get('post_usuario', 'GmvApiController@post_usuario')->name('post_usuario');
 Route::get('get_nc', 'GmvApiController@get_nc')->name('get_nc');
 Route::get('get_stat_ruta', 'GmvApiController@get_stat_ruta')->name('get_stat_ruta');
+
+Route::post('post_report', 'GmvApiController@post_report')->name('post_report');
+Route::post('push_pin', 'GmvApiController@push_pin')->name('push_pin');
+Route::get('stac_recup', 'GmvApiController@stac_recup')->name('stac_recup');
+Route::get('get_history_lotes', 'GmvApiController@get_history_lotes')->name('get_history_lotes');
+Route::get('plan_crecimiento', 'GmvApiController@plan_crecimiento')->name('plan_crecimiento');
+Route::post('post_historico_factura', 'GmvApiController@post_historico_factura')->name('post_historico_factura');
+Route::post('recibo_anular', 'GmvApiController@recibo_anular')->name('recibo_anular');
+
+
+
+

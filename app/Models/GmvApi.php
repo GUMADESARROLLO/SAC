@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Models\GmvPedidos;
 use App\Models\GvmVineta;
 use App\Models\GvmRecibo;
+use App\Models\GmvComentario;
 use Carbon\Carbon;
 use DateTime;
 use Exception;
@@ -738,25 +739,29 @@ class GmvApi extends Model
     }
 
     public static function post_rpt_rutas(Request $request){
-        $ruta        = $request->input('ruta');
-        $desde       = date('Y-m-d H:i:s',strtotime(str_replace('/', '-', $request->input('desde'))));
-        $hasta       = date('Y-m-d H:i:s',strtotime(str_replace('/', '-', $request->input('hasta'))));
+        try{
+            $ruta        = $request->input('ruta');
+            $desde       = date('Y-m-d H:i:s',strtotime(str_replace('/', '-', $request->input('desde'))));
+            $hasta       = date('Y-m-d H:i:s',strtotime(str_replace('/', '-', $request->input('hasta'))));
 
-        $i = 0;
-        $json = array();
-        $sql = "SELECT T0.FACTURA,T0.Dia,T0.[Nombre del cliente] AS Cliente,sum(T0.Venta) as Venta FROM Softland.dbo.VtasTotal_UMK T0  WHERE T0.Ruta='".$ruta."' AND  T0.Dia BETWEEN '".$desde."' and '".$hasta."' GROUP BY  T0.FACTURA,T0.Dia,T0.[Nombre del cliente]";
+            $i = 0;
+            $json = array();
+            $sql = "SELECT T0.FACTURA,T0.Dia,T0.[Nombre del cliente] AS Cliente,sum(T0.Venta) as Venta FROM Softland.dbo.VtasTotal_UMK T0  WHERE T0.Ruta='".$ruta."' AND  T0.Dia BETWEEN '".$desde."' and '".$hasta."' GROUP BY  T0.FACTURA,T0.Dia,T0.[Nombre del cliente]";
 
-        $response = DB::connection('sqlsrv')->select($sql);
-        foreach ($response as $row) {
-            $json[$i]['FACTURA']    = $row->FACTURA;
-            $json[$i]['FECHA']      = date('d/m/Y', strtotime($row->Dia));
-            $json[$i]['CLIENTE']    = $row->Cliente;
-            $json[$i]['MONTO']      = str_replace(",", "",number_format($row->Venta,2));
-            $i++;
+            $response = DB::connection('sqlsrv')->select($sql);
+            foreach ($response as $row) {
+                $json[$i]['FACTURA']    = $row->FACTURA;
+                $json[$i]['FECHA']      = date('d/m/Y', strtotime($row->Dia));
+                $json[$i]['CLIENTE']    = $row->Cliente;
+                $json[$i]['MONTO']      = str_replace(",", "",number_format($row->Venta,2));
+                $i++;
+            }
+
+            return $json;
+        }catch (Exception $e) {
+            $mensaje =  'Excepción capturada: ' . $e->getMessage() . "\n";
+            return response()->json($mensaje);
         }
-
-        return $json;
-
     }
 
     public static function articulos_sin_facturar(Request $request){
@@ -800,50 +805,55 @@ class GmvApi extends Model
     }
 
     public static function post_usuario(Request $request){
-        $myString = $request->input('post_usuario');
+        try{
+            $myString = $request->input('post_usuario');
 
-        $myString = substr ($myString, 0, strlen($myString) - 1);
+            $myString = substr ($myString, 0, strlen($myString) - 1);
 
-        $myString = $str = substr($myString, 1);
+            $myString = $str = substr($myString, 1);
 
-        $porciones = explode("@", $myString);
+            $porciones = explode("@", $myString);
 
-        $json = array();
+            $json = array();
 
-        // change username to lowercase
-        $username = strtolower($porciones[0]);
+            // change username to lowercase
+            $username = strtolower($porciones[0]);
 
-        $KeysSecret = "A7M";
+            $KeysSecret = "A7M";
 
-        //encript password to sha256
-        $password = hash('sha256',$KeysSecret.$porciones[1]);
+            //encript password to sha256
+            $password = hash('sha256',$KeysSecret.$porciones[1]);
 
-        // get data from user table
+            // get data from user table
 
-        $response = DB::select("SELECT username,Activo,Name,Telefono,email FROM ecommerce_android_app.tbl_admin WHERE username = ? AND password = ?", array($username, $password));
+            $response = DB::select("SELECT username,Activo,Name,Telefono,email FROM ecommerce_android_app.tbl_admin WHERE username = ? AND password = ?", array($username, $password));
 
-        if(count($response) >= 1){
-            foreach($response as $row){
-                if($row->Activo=="S"){
-                    $json['result'][] = array(
-                        'name' => strtoupper($row->username),
-                        'FullName' => strtoupper($row->Name),
-                        'Tele' => strtoupper($row->Telefono),
-                        'Correo' => strtoupper($row->email),
-                        'success' => '1');
-                }else{
-                    $json['result'][] = array('msg' => 'Account disabled', 'success' => '2');
+            if(count($response) >= 1){
+                foreach($response as $row){
+                    if($row->Activo=="S"){
+                        $json['result'][] = array(
+                            'name' => strtoupper($row->username),
+                            'FullName' => strtoupper($row->Name),
+                            'Tele' => strtoupper($row->Telefono),
+                            'Correo' => strtoupper($row->email),
+                            'success' => '1');
+                    }else{
+                        $json['result'][] = array('msg' => 'Account disabled', 'success' => '2');
+                    }
                 }
+            }else{
+                $json['result'][] = array('msg' => 'Login failed', 'success' => '0');
             }
-        }else{
-            $json['result'][] = array('msg' => 'Login failed', 'success' => '0');
-        }
 
-        return $json;
+            return $json;
+        }catch (Exception $e) {
+            $mensaje =  'Excepción capturada: ' . $e->getMessage() . "\n";
+            return response()->json($mensaje);
+        }
     }
 
-    public static function get_nc(Request $request){
-       /* $cliente = $request->input('cliente');
+    public static function get_nc(Reques $request){
+        /*$cliente = $request->input('cliente');
 
         $json = array();
         $i = 0;
@@ -858,7 +868,7 @@ class GmvApi extends Model
             $json[$i]['VENDEDOR']       = $row->VENDEDOR;
             $i++;
         }
-
+        
         return $json;*/
     }
 
@@ -895,5 +905,264 @@ class GmvApi extends Model
 
 
         return $json;
+    }
+
+    public static function post_report(Request $request){
+        try{
+            $Fecha          = $request->input('sndFecha');
+            $Nombre         = $request->input('sndTitulo');
+            $CodRuta        = $request->input('sndCodigo');
+            $NamRuta        = $request->input('sndNombre');
+            $Comentario     = $request->input('snd_comentario');
+            $imagektp       = $request->input('snd_image');
+            $Empresa        = '1';
+            $Read           = '0';
+            $Updated_at     = date('Y-m-d H:i:s');
+            $nama_imagen    = "";
+
+            if($imagektp !=""){
+                $nama_imagen = time() . '-' . rand(0, 99999) . ".jpg";
+                $pathktp = "../upload/news/" . $nama_imagen;
+                file_put_contents($pathktp, base64_decode($imagektp));    
+            }
+
+            $query = "INSERT INTO gumanet.tbl_comentarios (Titulo,Contenido, Autor, Nombre,Fecha,Imagen,empresa,`Read`,updated_at) VALUES ('$Nombre','$Comentario', '$CodRuta', '$NamRuta','$Fecha','$nama_imagen','$Empresa','$Read','$Updated_at')";
+
+            $response = DB::insert($query);
+
+            if($response){
+                return array('Success'=>'Data Inserted Successfully');
+            }else {
+                return array('Error'=>'Try Again');
+            }
+
+        }catch (Exception $e) {
+            $mensaje =  'Excepción capturada: ' . $e->getMessage() . "\n";
+            return response()->json($mensaje);
+        }
+    }
+
+    public function post_update_datos(Request $request){
+        $KeysSecret 	= "A7M";
+        $table_name 	= 'tbl_admin';
+        $where_clause	= "WHERE username = '".$_POST['Ruta']."'";
+        $whereSQL 		= '';
+    }
+
+    public static function push_pin(Request $request){
+        try{
+            $cliente     = $request->input('cliente');
+            $date        = date('Y-m-d h:i:s');
+
+            $query = "SELECT * FROM ecommerce_android_app.tlb_pins WHERE Cliente = '".$cliente."'";
+            $total_records = DB::select($query);
+
+            if(count($total_records) >= 1){
+                $qDelete = "DELETE FROM ecommerce_android_app.tlb_pins WHERE Cliente = '".$cliente."'";
+                if (DB::delete($qDelete)) {
+                    return array('Success'=>'Defijado');
+                }else {
+                    return array('Error'=>'Try Again');
+                }
+        
+            }else{
+                $query2 = "INSERT INTO ecommerce_android_app.tlb_pins (Cliente,created_at) VALUES ('$cliente','$date')";
+                if (DB::insert($query2)) {
+                    return array('Success'=>'Fijado');
+                }else {
+                    return array('Error'=>'Try Again');
+                }
+            }
+        }catch (Exception $e) {
+            $mensaje =  'Excepción capturada: ' . $e->getMessage() . "\n";
+            return response()->json($mensaje);
+        }
+    }
+
+    public static function stac_recup(Request $request){
+
+        $dta = array(); $i = 0;
+
+        $anio = $request->input('sAnno');
+        $mes  = $request->input('sMes');
+        $Ruta = $request->input('ruta');
+        $fecha       = date('Y-m-d',strtotime(str_replace('/', '-',($anio.'-'.$mes.'-01'))));
+
+        $Meta_Recuperacion  =   0.00;
+        $Recup_Credito      =   0.00;
+        $Recup_Contado      =   0.00;
+        $Recup_Total        =   0.00;
+        $Recup_cumple       =   0.00;
+
+        $qRecuperacion= "SELECT * FROM gumanet.umk_recuperacion WHERE fecha_recup = '".$fecha."' and ruta='".$Ruta."' and idCompanny = 1";
+        
+        $response = DB::Select($qRecuperacion);
+
+        if(count($response) >= 1) {
+            $link_recuperacion = $response;
+            $Recup_Credito = number_format($response[0]->recuperado_credito,2,".","");
+            $Recup_Contado = number_format($link_recuperacion[0]->recuperado_contado,2,".","");
+        }
+
+        $qMeta= "SELECT * FROM gumanet.meta_recuperacion_exl WHERE fechaMeta = '".$fecha."' and ruta='".$Ruta."' and idCompanny = 1";
+        $rMeta = DB::select($qMeta);
+        if(count($rMeta) >= 1) {
+            $link_meta = $rMeta;
+            $Meta_Recuperacion = number_format($link_meta[0]->meta,2,".","");
+        }
+
+        $Recup_Total = $Recup_Credito + $Recup_Contado;
+
+        $dta[$i]['Meta_Recuperacion']           = $Meta_Recuperacion;
+        $dta[$i]['Recup_Credito']               = $Recup_Credito;
+        $dta[$i]['Recup_Contado']               = $Recup_Contado;
+        $dta[$i]['Recup_Total']                 = number_format($Recup_Total,2,".","");
+        $dta[$i]['Recup_cumple']                = ($Meta_Recuperacion==0) ? "100.00" : number_format(((floatval($Recup_Total)/floatval($Meta_Recuperacion))*100),2);
+
+        return $dta;
+    
+    }
+
+    public static function get_history_lotes(Request $request){
+        $lote = $request->input('lote');
+        $cliente = $request->input('cliente');
+
+        $query = "SELECT * FROM PRODUCCION.dbo.GMV_Search_Lotes T0 WHERE  T0.LOTE ='".$lote."' AND T0.CCL='".$cliente."'  GROUP BY T0.CCL,T0.NCL,T0.LOTE,T0.FACTURA,T0.Dia,t0.ARTICULO,T0.DESCRIPCION";
+        $i = 0;
+        $json = array();
+
+        $response = DB::connection('sqlsrv')->select($query);
+    
+        foreach ($response as $fila) {
+            $json[$i]['mLote']          = $fila->LOTE;
+            $json[$i]['mFactura']       = $fila->FACTURA;
+            $json[$i]['mDia']           = $fila->Dia;
+            $json[$i]['mArticulo']      = $fila->CCL;
+            $json[$i]['mDescripcion']   = $fila->NCL;
+            $i++;
+        }
+
+        return $json;
+    }
+
+    public static function plan_crecimiento(Request $request){
+        $ruta        = $request->cliente;
+
+        $Q01="SELECT * FROM PRODUCCION.dbo.view_plan_crecimiento WHERE CLIENTE_CODIGO='".$ruta ."'";
+        
+        $Q02="SELECT month(T0.Fecha_de_Factura) number_month,SUBSTRING(t0.MES,0,4) name_month,t0.[AÑO] annio,sum(T0.VentaNetaLocal) ttMonth 
+            FROM Softland.dbo.ANA_VentasTotales_MOD_Contabilidad_UMK T0 WHERE t0.[AÑO] = YEAR(GETDATE())  AND  T0.Fecha_de_Factura >= '2022-07-01 00:00:00.000' 
+            AND T0.CLIENTE_CODIGO= '".$ruta ."' and T0.VentaNetaLocal  > 0
+            GROUP BY month(T0.Fecha_de_Factura),t0.MES,t0.[AÑO] ORDER BY month(T0.Fecha_de_Factura)";
+
+        $dta        = array(); 
+        $dta_month  = array(); 
+
+        $i=0;
+
+        $query_result01 = DB::connection('sqlsrv')->select($Q01);
+        foreach ($query_result01 as $key) {
+            $dta['EVALUADO']      = ceil($key->EVALUADO);
+            $dta['CRECIMIENTO']      = ceil($key->CRECIMIENTO);
+            $dta['COMPRA_MIN']      = ceil($key->COMPRA_MIN);
+            $dta['PROM_CUMP']      = ceil(number_format($key->PROM_CUMP,0));
+        }
+        $query_result02 = DB::connection('sqlsrv')->select($Q02);
+        foreach ($query_result02 as $key) {        
+            $dta_month[$i]['number_month']    = $key->number_month;      
+            $dta_month[$i]['name_month']    = $key->name_month;      
+            $dta_month[$i]['annio']    = $key->annio;      
+            $dta_month[$i]['ttMonth']      = ceil($key->ttMonth);
+            $i++;
+        }
+
+        $dtaBodega[] = array(
+            'InfoCliente' => $dta,
+            'SalesMonths' => $dta_month
+        );
+        
+        return $dtaBodega;
+    }
+
+    public static function post_historico_factura(Request $request){
+        $ruta = $request->cliente;
+
+        $Q="SELECT
+            T0.FACTURA,
+            T0.Dia,
+            T0.[Nombre del cliente] AS Cliente,
+            SUM ( T0.Venta ) AS Venta,
+            ( SELECT COUNT ( * ) FROM Softland.dbo.APK_CxC_DocVenxCL AS T1 WHERE T1.DOCUMENTO= T0.FACTURA ) AS ACTIVA,
+            ( SELECT ISNULL(SUM(T4.SALDO_LOCAL) , 0) FROM Softland.dbo.APK_CxC_DocVenxCL AS T4 WHERE T4.DOCUMENTO = T0.FACTURA ) AS SALDO,
+            ISNULL(convert(nvarchar(11),( SELECT T2.FECHA_VENCE FROM Softland.dbo.APK_CxC_DocVenxCL AS T2 WHERE T2.DOCUMENTO= T0.FACTURA ),103), '-/-/-') AS FECHA_VENCE,
+            (SELECT T3.DVencidos FROM Softland.dbo.APK_CxC_DocVenxCL AS T3 WHERE T3.DOCUMENTO= T0.FACTURA ) AS DVencidos,
+            T0.Plazo
+            FROM
+                Softland.dbo.VtasTotal_UMK T0 
+            WHERE
+                T0.[Cod. Cliente] ='".$ruta."' 
+            GROUP BY
+                T0.FACTURA,
+                T0.Dia,
+                T0.[Nombre del cliente],
+                T0.Plazo
+            ORDER BY
+                T0.Dia DESC";
+
+        $dta = array(); $i=0;
+        $query = DB::connection('sqlsrv')->select($Q);
+        foreach ($query as $key) {
+            $dta[$i]['FACTURA']    = $key->FACTURA;
+            $dta[$i]['FECHA']      = date('d/m/Y', strtotime($key->Dia));
+            $dta[$i]['CLIENTE']    = $key->Cliente;
+            $dta[$i]['MONTO']      = str_replace(",", "",number_format($key->Venta,2));
+            $dta[$i]['ACTIVA']     = $key->ACTIVA;
+            $dta[$i]['PLAZO']      = $key->Plazo;
+            $dta[$i]['VENCE']      = $key->FECHA_VENCE;
+            $dta[$i]['DVENCIDOS']  = $key->DVencidos;
+            $dta[$i]['SALDO']      = str_replace(",", "",number_format($key->SALDO,2));
+            $i++;
+        }
+
+        return $dta;
+    }
+
+    public static function recibo_anular(Request $request){
+        $recibo         = $request->recibo_anular;
+        $fecha_recibo   = $request->Fecha_Recibo;
+        $Ruta           = $request->Ruta;
+        
+        $qIsExist = "SELECT * FROM gumanet.tbl_order_recibo T0 WHERE T0.recibo = '".$recibo."' AND  T0.ruta  = '".$Ruta."' AND T0.status in (0,1,4) ";    
+        $response = DB::select($qIsExist);
+        
+        if(count($response) != 1){
+
+            $ruta           = $Ruta;
+            $cod_cliente    = "00000";
+    
+            $recibo         = $recibo;
+            $fecha_recibo   = $fecha_recibo;
+            
+            $name_cliente   = "N/D";    
+            $order_list     = "[00000000;0.00;0.00;0;0.00;0.00;0.00;00000;ANULADO],";
+            $order_total    = "C$ 0.00";
+            $comment        = "ESTE RECIBO FUE ANULADO POR EL VENDEDOR";
+            $comment_anul   = "";
+            $player_id      = $request->Player_Id;
+            $date           = date('Y-m-d H:i:s');
+    
+            $query = "INSERT INTO gumanet.tbl_order_recibo (ruta, cod_cliente,recibo,fecha_recibo, name_cliente,created_at, order_list, order_total, comment,comment_anul, player_id,status) 
+                VALUES ('$ruta', '$cod_cliente', '$recibo', '$fecha_recibo', '$name_cliente','$date', '$order_list', '$order_total', '$comment', '$comment_anul', '$player_id',4)";
+
+            $result = DB::select($query);
+            if ($result) {
+                return array('Error'=>'Error');
+            } else {
+                return array('Success'=>'Nuevo');
+            }
+                        
+        }else{
+            return array('Success'=>'Existe');
+        }
     }
 }
