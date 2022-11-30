@@ -4,12 +4,6 @@ pipeline {
 		DOCKERHUB_CREDENTIALS=credentials('DockerHub')
 	}
     stages {
-        
-        stage('Kubectl test') {
-            steps {
-                sh "kubectl get nodes"
-            }
-        }
         stage('Docker Build') {
             steps {
                 sh "docker build -t gumadesarrollo/sac:${env.BUILD_NUMBER} ."
