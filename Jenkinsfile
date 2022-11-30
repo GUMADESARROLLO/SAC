@@ -1,4 +1,4 @@
-pipeline{
+pipeline {
     agent any
     environment {
 		DOCKERHUB_CREDENTIALS=credentials('DockerHub')
@@ -13,7 +13,6 @@ pipeline{
             steps {
                 sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
                 sh "docker push gumadesarrollo/sac:${env.BUILD_NUMBER}"
-            
             }
         }
         stage('Docker Remove Image') {
@@ -22,13 +21,12 @@ pipeline{
             }
         }
     }
+post {
+    success {
+        slackSend(message: "Pipeline is successfully completed.")
     }
-    post {
-        success {
-            slackSend(message: "Pipeline is successfully completed.")
-        }
-        failure {
-            slackSend(message: "Pipeline failed. Please check the logs.")
-        }
+    failure {
+        slackSend(message: "Pipeline failed. Please check the logs.")
+    }
     }
 }
