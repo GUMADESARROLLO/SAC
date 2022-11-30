@@ -7,7 +7,10 @@ pipeline {
         
         stage('Kubectl test') {
             steps {
-                sh "kubectl get nodes"
+                withKubeConfig([credentialsId: 'Microk8sServer', serverUrl: 'https://192.168.1.40:16443']) {
+                    sh "kubectl get nodes"
+                }
+                
             }
         }
         stage('Docker Build') {
