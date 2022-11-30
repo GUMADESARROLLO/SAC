@@ -23,7 +23,7 @@ spec:
         - name: regcred
       containers:
         - name: cn-sac-app
-          image: marangelogit/sac:{{BUILD_NUMBER}}
+          image: gumadesarrollo/sac:{{BUILD_NUMBER}}
           imagePullPolicy: Always
           volumeMounts:
             - name: storage
