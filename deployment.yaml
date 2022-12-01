@@ -37,6 +37,8 @@ spec:
           env:
             - name: APP_KEY
               value: base64:tYaI3cGTEA3iFoXnqyzBh3yx2eTDKKGvPjWd7f20NQA=
+            - name: DB_DATABASE
+              value: sac_app
           resources:
             requests:
               memory: "64Mi"
