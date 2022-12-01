@@ -12,8 +12,9 @@
         <div class="content">            
 
             @include('layouts.nav_importacion')
-
+            @if (Session::get('rol') != '10')  
             <div class="col-md-12 col-xxl-12 mb-3">
+              
               <div class="card h-100">
                 
                 <div class="card-header">
@@ -27,7 +28,8 @@
                   </div>
                  
                   
-                </div>                
+                </div> 
+                     
                 <div class="card-body p-0">
                   <div class="scrollbar-overlay pt-0 px-card ask-analytics">
                     <div class="row g-3 mb-3">
@@ -104,7 +106,7 @@
                                     <div class="icon-item icon-item-sm border rounded-3 shadow-none me-2"><span class="fas fa-chart-bar text-info"></span></div>
                                       <div class="flex-1">
                                         <h6 class="text-800 mb-0" id="id_Dias_porcent">...</h6>
-                                        <p class="mb-0 fs--2 text-500" id="id_Venta_Week_Label"><span id="id_Dias_Facturados">0</span> de <span id="id_Dias_Habiles"> 0 </span> Dias Hábiles.</p>
+                                        <p class="mb-0 fs--2 text-500" id="id_Venta_Week_Label"><span id="id_Dias_Habiles">0</span> de <span id="id_Dias_Facturados"> 0 </span> Dias Hábiles.</p>
                                     </div>
                                   </div>
                                 </div>
@@ -156,10 +158,11 @@
                     </div>
                   </div>
                 </div>
+               
               </div>
-            </div>
-            
-
+             
+            </div>            
+            @endif
           
 
               <div class="card">
@@ -515,7 +518,10 @@
                   <ul class="nav nav-tabs border-0 flex-nowrap tab-active-caret" id="crm-revenue-chart-tab" role="tablist" data-tab-has-echarts="data-tab-has-echarts">
                     <li class="nav-item" role="presentation"><a class="nav-link py-3 mb-0 active" id="historico-factura-tab" data-bs-toggle="tab" href="#historico-factura" role="tab" aria-controls="historico-factura" aria-selected="true">Historico de Factura</a></li>
                     <li class="nav-item" role="presentation"><a class="nav-link py-3 mb-0" id="Ultm-3meses-tab" data-bs-toggle="tab" href="#Ultm-3meses" role="tab" aria-controls="Ultm-3meses" aria-selected="false">Ultm. 3 Meses</a></li>
-                    <li class="nav-item" role="presentation"><a class="nav-link py-3 mb-0" id="art-no-fact-tab" data-bs-toggle="tab" href="#art-no-fact" role="tab" aria-controls="art-no-fact" aria-selected="false">Art. No Facturados</a></li>                    
+                    <li class="nav-item" role="presentation"><a class="nav-link py-3 mb-0" id="art-no-fact-tab" data-bs-toggle="tab" href="#art-no-fact" role="tab" aria-controls="art-no-fact" aria-selected="false">Art. No Facturados</a></li>
+                    @if (Session::get('rol') == '1'  )
+                      <li class="nav-item" role="presentation"><a class="nav-link py-3 mb-0" id="plan-creci-tab" data-bs-toggle="tab" href="#plan-creci" role="tab" aria-controls="plan-creci" aria-selected="false">Plan de Crecimiento</a></li>       
+                    @endif
                   </ul>
                  
                 </div>
@@ -599,6 +605,78 @@
                             </div>
                           <table id="tbl_no_facturado" class="table table-striped overflow-hidden" style="width:100%"></table>
                         </div>
+                        
+                        <div class="tab-pane" id="plan-creci" role="tabpanel" aria-labelledby="art-no-fact-tab">
+                          
+                        <div class="row g-3 mb-3">
+                            <div class="col-md-12 col-xxl-12">
+                            <div class="d-flex flex-between-center ">
+                              <div class="mb-0"><div class="form-check form-switch">
+                                <input class="form-check-input" id="flexSwitchCheckDefault" type="checkbox"  oninput="AddPlan()" />
+                                <label class="form-check-label" for="flexSwitchCheckDefault">Plan de Crecimiento</label>
+                              </div></div>
+                              <h4 class="py-1 fs--1 text-800 mb-0" id="id_ttmes">C$ 21,349.29 </h4>
+                            </div>
+                              
+
+                              
+                              
+                              <div class="border border-1 border-300 rounded-2 p-3 ask-analytics-item position-relative">
+
+                                  <div class="col-auto">
+                                    <div class="row g-sm-4">
+                                      
+                                      <div class="col-12 col-sm-auto">
+                                        <div class="d-flex align-items-center pe-4 border-sm-end border-200">
+                                          <div class="icon-item icon-item-sm border rounded-3 shadow-none me-2"><span class="fas fa-dollar-sign text-primary"></span></div>
+                                            <div class="flex-1">
+                                              <h6 class="text-800 mb-0"id="id_monto_base" >C$ 0.00</h6>
+                                              <p class="mb-0 fs--2 text-500">Monto Base</p>
+                                          </div>
+                                        </div>
+                                      </div>
+
+                                      <div class="col-12 col-sm-auto">
+                                        <div class="d-flex align-items-center pe-4 border-sm-end border-200">
+                                          <div class="icon-item icon-item-sm border rounded-3 shadow-none me-2"><span class="fas fa-dollar-sign text-success"></span></div>
+                                            <div class="flex-1">
+                                              <h6 class="text-800 mb-0"id="id_crecimiento_esperado" >C$ 0.00</h6>
+                                              <p class="mb-0 fs--2 text-500">Crecimiento (% 25)</p>
+                                          </div>
+                                        </div>
+                                      </div>
+
+                                      <div class="col-12 col-sm-auto">
+                                        <div class="d-flex align-items-center pe-4 border-sm-end border-200">
+                                          <div class="icon-item icon-item-sm border rounded-3 shadow-none me-2"><span class="fas fa-dollar-sign text-success"></span></div>
+                                            <div class="flex-1">
+                                              <h6 class="text-800 mb-0"id="id_crecimiento_minimo" >C$ 0.00</h6>
+                                              <p class="mb-0 fs--2 text-500">Compra Minima Mes.</p>
+                                          </div>
+                                        </div>
+                                      </div>
+
+                                      <div class="col-12 col-sm-auto">
+                                        <div class="d-flex align-items-center pe-0">
+                                          <div class="icon-item icon-item-sm border rounded-3 shadow-none me-2"><span class="fas fa-chart-bar text-info"></span></div>
+                                            <div class="flex-1">
+                                              <h6 class="text-800 mb-0"id="id_porcent_crecimientio" > -20 %</h6>
+                                              <p class="mb-0 fs--2 text-500">% Crecimiento.</p>
+                                            </div>
+                                        </div>
+                                      </div>
+                              
+                                    </div>
+                                  </div>
+                              </div>
+
+                              <div class="echart-sale-VentasDelMes" data-echart-responsive="true" data-echart-tab="data-echart-tab" style="height:320px;"></div>
+                            </div>                          
+                          </div>
+                        </div>
+
+                        
+                        
                       </div>
                     </div>
                   </div>

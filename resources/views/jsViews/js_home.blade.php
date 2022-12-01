@@ -7,6 +7,55 @@
     const startOfMonth = moment().subtract(1,'days').format('YYYY-MM-DD');
     const endOfMonth   = moment().subtract(0, "days").format("YYYY-MM-DD");
     var labelRange = startOfMonth + " to " + endOfMonth;
+    var dta_ventas_mercados ;
+    
+    dta_ventas_mercados = {
+        dataset: {
+        VentasDelMes:   [[],[],[]],
+        }
+    };
+
+   
+
+
+    function AddPlan() {
+        var Codigo = $("#lbl_codigo").text();
+
+
+        Swal.fire({
+            title: '¿Estas Seguro ?',
+            text: "¡Esta acción no podrá ser revertida!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Si!',
+            target:"",
+            showLoaderOnConfirm: true,
+            preConfirm: () => {
+                $.ajax({
+                    url: "AddPlanCrecimiento",
+                    type: 'post',
+                    data: {
+                        id      : Codigo,
+                        _token  : "{{ csrf_token() }}" 
+                    },
+                    async: true,
+                    success: function(response) {
+                        //Swal.fire("Exito!", "Guardado exitosamente", "success");
+                    },
+                    error: function(response) {
+                        //Swal.fire("Oops", "No se ha podido guardar!", "error");
+                    }
+                }).done(function(data) {
+                   // getComment(id_pedido)
+                   location.reload();
+                });
+            },
+            allowOutsideClick: () => !Swal.isLoading()
+        });
+    }
+
     $('#id_range_select').val(labelRange);
 
     $("#id_select_status").val(0).change();
@@ -212,6 +261,8 @@
                 {"title": "ARTICULO","data": "ARTICULO", "render": function(data, type, row, meta) {
                 var regla='';
 
+                var total = parseFloat( numeral(row['total']).format('00.00')) + parseFloat( numeral(row['005']).format('00.00')) 
+
                 if(row.REGLAS!='0'){
                     regla = '';
                     myArray = row.REGLAS.split(",");
@@ -231,7 +282,7 @@
                         <p class="fw-semi-bold mb-0 text-500"></p>   
                         
                         <div class="row g-0 fw-semi-bold text-center py-2"> 
-                            <div class="col-auto"><a class="rounded-2 d-flex align-items-center me-3 text-700" href="#!"><span class="ms-1 fas fa-boxes text-primary" ></span><span class="ms-1"> `+ numeral(row.total).format('0,00.00')  +` `+ row.UNIDAD_ALMACEN +`</span></a></div>
+                            <div class="col-auto"><a class="rounded-2 d-flex align-items-center me-3 text-700" href="#!"><span class="ms-1 fas fa-boxes text-primary" ></span><span class="ms-1"> `+ numeral(total).format('0,00.00')  +` `+ row.UNIDAD_ALMACEN +`</span></a></div>
                             <div class="col-auto d-flex align-items-center"><span class="badge rounded-pill ms-3 badge-soft-primary"><span class="fas fa-check"></span> C$. `+ numeral(row.PRECIO_FARMACIA).format('0,00.00')  +`</span></div>
                                 
                         </div>
@@ -790,9 +841,9 @@
                 for (var key in data) {
                     thead += '<th class="text-nowrap">LOTE</th>';
                     thead += '<th class="text-nowrap text-end">CANT. DISPONIBLE</th>';
-                    thead += '<th class="text-nowrap text-end">CANT. INGRESADA POR COMPRA</th>';
-                    thead += '<th class="text-nowrap text-end">FECHA ULTM. INGRESO COMPRA</th>';
-                    thead += '<th class="text-nowrap text-end">FECHA DE CREACION</th>';
+                   // thead += '<th class="text-nowrap text-end">CANT. INGRESADA POR COMPRA</th>';
+                   // thead += '<th class="text-nowrap text-end">FECHA ULTM. INGRESO COMPRA</th>';
+                   // thead += '<th class="text-nowrap text-end">FECHA DE CREACION</th>';
                     thead += '<th class="text-nowrap text-end">FECHA VENCIMIENTO</th>';
                 }
 
@@ -811,9 +862,9 @@
                         tbody += '<tr class="center">' +
                             '<td class="text-truncate">' + d[x]["LOTE"] + '</td>'+
                             '<td class="text-truncate text-end">' + d[x]["CANT_DISPONIBLE"] + '</td>'+
-                            '<td class="text-truncate text-end">' + d[x]["CANTIDAD_INGRESADA"] + '</td>'+
-                            '<td class="text-truncate text-center">' + d[x]["FECHA_INGRESO"] + '</td>'+
-                            '<td class="text-truncate text-center">' + d[x]["FECHA_ENTRADA"] + '</td>'+
+                          //  '<td class="text-truncate text-end">' + d[x]["CANTIDAD_INGRESADA"] + '</td>'+
+                          //  '<td class="text-truncate text-center">' + d[x]["FECHA_INGRESO"] + '</td>'+
+                          //  '<td class="text-truncate text-center">' + d[x]["FECHA_ENTRADA"] + '</td>'+
                             '<td class="text-truncate text-center">' + d[x]["FECHA_VENCIMIENTO"] + '</td>'+
                             '</tr>';
                     }
@@ -970,9 +1021,22 @@
             
             $("#lbl_last_sale").html(moment(data[0].InfoCliente[0].fecha).format("D MMM, YYYY"))
 
-            $("#lbl_limite").html(numeral(data[0].InfoCliente[0].LIMITE_CREDITO).format('0,00.00'))
-            $("#lbl_saldo").html(numeral(data[0].InfoCliente[0].SALDO).format('0,00.00'))
-            $("#lbl_disponible").html(numeral(data[0].InfoCliente[0].CREDITODISP).format('0,00.00'))
+            $("#lbl_limite").html('C$ ' + numeral(data[0].InfoCliente[0].LIMITE_CREDITO).format('0,00.00'))
+            $("#lbl_saldo").html('C$ ' + numeral(data[0].InfoCliente[0].SALDO).format('0,00.00'))
+            $("#lbl_disponible").html('C$ ' + numeral(data[0].InfoCliente[0].CREDITODISP).format('0,00.00'))
+
+            $("#id_monto_base").html('C$ ' + numeral(data[0].PlanCrecimieto[0].InfoCliente.EVALUADO).format('0,00.00'))
+            $("#id_crecimiento_esperado").html('C$ ' + numeral(data[0].PlanCrecimieto[0].InfoCliente.CRECIMIENTO).format('0,00.00'))
+            $("#id_crecimiento_minimo").html('C$ ' + numeral(data[0].PlanCrecimieto[0].InfoCliente.COMPRA_MIN).format('0,00.00'))
+            $("#id_porcent_crecimientio").html(numeral(data[0].PlanCrecimieto[0].InfoCliente.PROM_CUMP).format('0,00') + ' %')
+            
+            setBarVentasMes(data[0].PlanCrecimieto[0].SalesMonths)
+
+            $("#flexSwitchCheckDefault").attr('checked',data[0].PlanCrecimieto[0].isPlan);
+            $("#id_ttmes").html('TOTAL: C$ ' +numeral(data[0].PlanCrecimieto[0].ttactual).format('0,00'))
+
+    
+
 
             var isMora  = isValue(data[0].ClienteMora[0],'N/D',true)
 
@@ -1000,7 +1064,184 @@
             
         })
 
+        function setBarVentasMes(Data){
 
+            dta_ventas_mercados = {
+                dataset: {
+                VentasDelMes:   [[],[],[]],
+                }
+            };
+
+            $.each(Data, function (i, d) {
+                dta_ventas_mercados.dataset['VentasDelMes'][0].push(numeral(d.ttMonth).format('00.00'))
+                dta_ventas_mercados.dataset['VentasDelMes'][1].push(0)
+                dta_ventas_mercados.dataset['VentasDelMes'][2].push(d.name_month + '/' + d.annio)
+            });
+            
+            Build_Echart_bar(dta_ventas_mercados)
+            
+        }
+
+        function abbrNum(number, decPlaces) {    
+            decPlaces = Math.pow(10,decPlaces);
+            var abbrev = [ " K", " M", " B", " T" ];
+            for (var i=abbrev.length-1; i>=0; i--) {
+                var size = Math.pow(10,(i+1)*3);
+                if(size <= number) {
+                    number = Math.round(number*decPlaces/size)/decPlaces;
+                    if((number == 1000) && (i < abbrev.length - 1)) {
+                        number = 1;
+                        i++;
+                    }
+                    number += abbrev[i];
+                    break;
+                }
+            }
+
+            return number;
+        }
+
+        function Build_Echart_bar(data) {
+
+      
+
+var tooltipFormatter = function tooltipFormatter(params) {
+    return `<div class="card">
+              <div class="card-header bg-light py-2">
+                <h6 class="text-600 mb-0">`+params[0].axisValue+ `</h6>
+              </div>
+              <div class="card-body py-2">
+                <h6 class="text-600 mb-0 fw-normal">
+                  <span class="fas fa-circle text-primary me-2"></span>C$ 
+                  <span class="fw-medium">`+ numeral(params[0].data).format('0,00.00')+` </span>
+                </h6>
+                </div>
+            </div>`;
+};
+
+
+
+
+            var getOptionSales = function getOptionSales(data1, data2, data3) {
+                return function () {
+                    return {
+                        color: utils.getGrays().white,
+                        tooltip: {
+                        trigger: 'axis',
+                        padding: 0,
+                        backgroundColor: 'transparent',
+                        borderWidth: 0,
+                        transitionDuration: 0,
+                        position: function position(pos, params, dom, rect, size) {
+                            return getPosition(pos, params, dom, rect, size);
+                        },
+                        
+                        axisPointer: {
+                            type: 'none'
+                        },
+                        formatter: tooltipFormatter
+                        },
+                        xAxis: {
+                            type: 'category',
+                            data: data3,
+                            axisLabel: {
+                                color: utils.getGrays()['600'],
+                            },
+                        axisLine: {
+                            lineStyle: {
+                            color: utils.getGrays()['300'],
+                            type: 'dashed'
+                            }
+                        },
+                        axisTick:false,
+                        boundaryGap: true
+                        },
+                        yAxis: {
+                        position: 'right',
+                        axisPointer: {
+                            type: 'none'
+                        },
+                        axisTick: 'none',
+                        splitLine: {
+                            show: false
+                        },
+                        axisLine: {
+                            show: false
+                        },
+                        axisLabel: {
+                            show: false
+                        }
+                        },
+                        
+                        series: [{
+                            type: 'bar',
+                            name: 'Revenue',
+                            data: data1,
+                            lineStyle: {
+                                color: utils.getColor('primary')
+                            },
+                            label: {
+                                show: true,
+                                position: 'top',
+                                formatter: function(d) {
+                                return "C$ " + abbrNum(d.data,2);
+                                }
+                            },
+                            
+                            itemStyle: {
+                                barBorderRadius: [4, 4, 0, 0],
+                                color: utils.getColor('primary'),
+                                borderColor: utils.getGrays()['300'],
+                                borderWidth: 1
+                            },
+                            emphasis: {
+                                itemStyle: {
+                                color: utils.getColor('primary')
+                                }
+                            }
+                        }, {
+                        type: 'line',
+                        name: 'Optimo',
+                        data: data2,
+                        symbol: 'circle',
+                        symbolSize: 6,
+                        animation: false,
+                        itemStyle: {
+                            color: utils.getColor('warning')
+                        },
+                        
+                        lineStyle: {
+                            type: 'dashed',
+                            width: 2,
+                            color: utils.getColor('warning')
+                        }
+                        }],
+                        grid: {
+                        right: 5,
+                        left: 5,
+                        bottom: '8%',
+                        top: '5%'
+                        }
+                    };
+                };
+            };
+
+            var initChart = function initChart(el, options) {
+                var userOptions = utils.getData(el, 'options');
+                var chart = window.echarts.init(el);
+                echartSetOption(chart, userOptions, options);
+            };
+
+            var chartKeys = ['VentasDelMes'];
+            chartKeys.forEach(function (key) {
+                var el = document.querySelector(".echart-sale-".concat(key));
+                el && initChart(el, getOptionSales(
+                data.dataset[key][0], 
+                data.dataset[key][1], 
+                data.dataset[key][2]
+                ));
+            });
+            };
         var id_mdl_info_cliente = document.querySelector(Selectors.id_mdl_info_cliente);
         var modal = new window.bootstrap.Modal(id_mdl_info_cliente);
         modal.show();

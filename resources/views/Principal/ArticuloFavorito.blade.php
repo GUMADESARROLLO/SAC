@@ -27,10 +27,55 @@
                     <div class="col-xxl-12">
                       <div class="tab-content">
                         <div class="tab-pane active" id="crm-revenue" role="tabpanel" aria-labelledby="crm-revenue-tab">
-                          <table id="tbl_inventario_fav" class="table table-striped overflow-hidden" style="width:100%"></table>
+
+                          <div class="tab-pane" id="crm-users" role="tabpanel" aria-labelledby="crm-users-tab">
+                            <div class="row flex-between-center mb-3 ">
+                              <div class="col-4 col-sm-auto d-flex align-items-center">
+                                <select class="form-select form-select-sm" aria-label=".form-select-sm example" id="tbl_select_inventario_fav">                                          
+                                  <option selected="" value="5">5</option>
+                                  <option value="-1">Todo</option>
+                                </select>                      
+                              </div>
+                              <div class="col-8 col-sm-auto text-end ">
+                                <div class="row g-3 needs-validation" >                              
+                                  <div class="col-md-auto">
+                                    <div class="input-group" >
+                                      <input class="form-control form-control-sm shadow-none search" type="search" placeholder="Buscar..." aria-label="search" id="tbl_buscar_inventario_fav" />
+                                      <div class="input-group-text bg-transparent">
+                                          <span class="fa fa-search fs--1 text-600"></span>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>                          
+                            <table id="tbl_inventario_fav" class="table table-striped overflow-hidden" style="width:100%"></table>
+                        </div>
                         </div>
                         <div class="tab-pane" id="crm-profit" role="tabpanel" aria-labelledby="crm-profit-tab">
-                          <table id="tbl_inventario" class="table table-striped overflow-hidden" style="width:100%"></table>
+                          <div class="tab-pane" id="crm-users" role="tabpanel" aria-labelledby="crm-users-tab">
+                            <div class="row flex-between-center mb-3 ">
+                              <div class="col-4 col-sm-auto d-flex align-items-center">
+                                <select class="form-select form-select-sm" aria-label=".form-select-sm example" id="tbl_select_inventario">                                          
+                                  <option selected="" value="5">5</option>
+                                  <option value="-1">Todo</option>
+                                </select>                      
+                              </div>
+                              <div class="col-8 col-sm-auto text-end ">
+                                <div class="row g-3 needs-validation" >                              
+                                  <div class="col-md-auto">
+                                    <div class="input-group" >
+                                      <input class="form-control form-control-sm shadow-none search" type="search" placeholder="Buscar..." aria-label="search" id="tbl_buscar_inventario" />
+                                      <div class="input-group-text bg-transparent">
+                                          <span class="fa fa-search fs--1 text-600"></span>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>                          
+                            <table id="tbl_inventario" class="table table-striped overflow-hidden" style="width:100%"></table>
+                        </div>
                         </div>
                       </div>
                     </div>
