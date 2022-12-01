@@ -34,6 +34,7 @@ Route::post('post_order_recibo', 'GmvApiController@post_order_recibo')->name('po
 Route::get('get_recibos_colector', 'GmvApiController@get_recibos_colector')->name('get_recibos_colector');
 Route::get('del_recibo_colector', 'GmvApiController@del_recibo_colector')->name('del_recibo_colector');
 Route::get('get_recibos_adjuntos', 'GmvApiController@get_recibos_adjuntos')->name('get_recibos_adjuntos');
+Route::post('post_adjunto', 'GmvApiController@post_adjunto')->name('post_adjunto');
 
 //Rutas varias
 Route::get('get_help', 'GmvApiController@get_help')->name('get_help');
@@ -60,6 +61,8 @@ Route::get('post_rpt_rutas', 'GmvApiController@post_rpt_rutas')->name('post_rpt_
 
 Route::get('articulos_sin_facturar', 'GmvApiController@articulos_sin_facturar')->name('articulos_sin_facturar');
 Route::get('post_usuario', 'GmvApiController@post_usuario')->name('post_usuario');
+Route::post('post_update_datos', 'GmvApiController@post_update_datos')->name('post_update_datos');
+Route::post('post_verificacion', 'GmvApiController@post_verificacion')->name('post_verificacion');
 Route::get('get_nc', 'GmvApiController@get_nc')->name('get_nc');
 Route::get('get_stat_ruta', 'GmvApiController@get_stat_ruta')->name('get_stat_ruta');
 

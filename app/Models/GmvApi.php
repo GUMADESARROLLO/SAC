@@ -384,28 +384,29 @@ class GmvApi extends Model
     }
 
     public static function post_adjunto(Request $request){
-        $imagen     = $request->input('imagen');    
-        $Id_Recibo  = $request->input('Id_Recibo');    
+        $imagen     = $request->imagen;    
+        $Id_Recibo  = $request->Id_Recibo;   
     
         $id_img = time() . '-' . rand(0, 99999);
     
-        $nameImagen = $Id_Recibo. " - ". $id_img .  ".png";
-        Storage::disk('s3')->put('Adjuntos-Recibos/'.$nameImagen, file_get_contents($imagen));
-        
+        if($request->hasFile('imagen')){
+            $nameImagen = $Id_Recibo. " - ". $id_img .".". $imagen->getClientOriginalExtension();
+            Storage::disk('s3')->put('Adjuntos-Recibos/'.$nameImagen, file_get_contents($imagen));
+        }
         //$actualpath = "../upload/recibos/". $nameImagen;    
         //file_put_contents($actualpath, base64_decode($imagen));
     
     
-        $query = "INSERT INTO tbl_order_recibo_adjuntos (id_recibo,Nombre_imagen) VALUES ('$Id_Recibo','$nameImagen')";
+        $query = "INSERT INTO gumanet.tbl_order_recibo_adjuntos (id_recibo,Nombre_imagen) VALUES ('$Id_Recibo','$nameImagen')";
     
-        if (DB::select($query)) {
+        if (DB::insert($query)) {
             return array('Success'=>'Adjunto Guardado');
         } else {
             return array('Error'=>'Try Again');
         }
     }
 
-    public static function get_recibos_adjuntos(Request $request){
+    public static function get_recibos_adjuntos(Request $request){ 
         $id = $request->input('id');
 
         $i=0;
@@ -418,6 +419,7 @@ class GmvApi extends Model
                 $array[$i]['mId']               = $row->id;
                 $array[$i]['mRecibo']           = $row->id_recibo;
                 $array[$i]['mNombreImagen']     = $row->Nombre_imagen;
+                $array[$i]['imagen_url']        = Storage::Disk('s3')->url('Adjuntos-Recibos/'.$row->Nombre_imagen);
                 $i++;
             }
         }
@@ -961,16 +963,46 @@ class GmvApi extends Model
         }
     }
 
-    public function post_update_datos(Request $request){
+    public static function post_update_datos(Request $request){
         $KeysSecret 	= "A7M";
-        $table_name 	= 'tbl_admin';
-        $where_clause	= "WHERE username = '".$_POST['Ruta']."'";
+        $table_name 	= 'ecommerce_android_app.tbl_admin';
+        $where_clause	= "WHERE username = '".$request->Ruta."'";
         $whereSQL 		= '';
+
+        $form_data = array(
+            'email'  		  	=> $request->Email,
+            'Telefono'  		=> $request->Telefono,
+            'password'  		=> hash('sha256',$KeysSecret.$request->Contrasenna)
+        );
+
+        if(!empty($where_clause)) {
+            if(substr(strtoupper(trim($where_clause)), 0, 5) != 'WHERE') {
+                $whereSQL = " WHERE ".$where_clause;
+            } else {
+                $whereSQL = " ".trim($where_clause);
+            }
+        }
+
+        $sql = "UPDATE ".$table_name." SET ";
+        $sets = array();
+        foreach($form_data as $column => $value) {
+             $sets[] = "`".$column."` = '".$value."'";
+        }
+        $sql .= implode(', ', $sets);
+        $sql .= $whereSQL;
+
+        $hasil = DB::update($sql);
+
+        if ($hasil > 0) {
+            return array("Success"=>"Data Inserted Successfully");
+        } else {
+            return array('Error'=>'Try Again');
+        }
     }
 
     public static function push_pin(Request $request){
         try{
-            $cliente     = $request->input('cliente');
+            $cliente     = $request->cliente;
             $date        = date('Y-m-d h:i:s');
 
             $query = "SELECT * FROM ecommerce_android_app.tlb_pins WHERE Cliente = '".$cliente."'";
@@ -1002,9 +1034,9 @@ class GmvApi extends Model
 
         $dta = array(); $i = 0;
 
-        $anio = $request->input('sAnno');
-        $mes  = $request->input('sMes');
-        $Ruta = $request->input('ruta');
+        $anio = $request->sAnno;
+        $mes  = $request->sMes;
+        $Ruta = $request->ruta;
         $fecha       = date('Y-m-d',strtotime(str_replace('/', '-',($anio.'-'.$mes.'-01'))));
 
         $Meta_Recuperacion  =   0.00;
@@ -1043,8 +1075,8 @@ class GmvApi extends Model
     }
 
     public static function get_history_lotes(Request $request){
-        $lote = $request->input('lote');
-        $cliente = $request->input('cliente');
+        $lote = $request->lote;
+        $cliente = $request->cliente;
 
         $query = "SELECT * FROM PRODUCCION.dbo.GMV_Search_Lotes T0 WHERE  T0.LOTE ='".$lote."' AND T0.CCL='".$cliente."'  GROUP BY T0.CCL,T0.NCL,T0.LOTE,T0.FACTURA,T0.Dia,t0.ARTICULO,T0.DESCRIPCION";
         $i = 0;
@@ -1173,11 +1205,11 @@ class GmvApi extends Model
             $query = "INSERT INTO gumanet.tbl_order_recibo (ruta, cod_cliente,recibo,fecha_recibo, name_cliente,created_at, order_list, order_total, comment,comment_anul, player_id,status) 
                 VALUES ('$ruta', '$cod_cliente', '$recibo', '$fecha_recibo', '$name_cliente','$date', '$order_list', '$order_total', '$comment', '$comment_anul', '$player_id',4)";
 
-            $result = DB::select($query);
+            $result = DB::insert($query);
             if ($result) {
-                return array('Error'=>'Error');
-            } else {
                 return array('Success'=>'Nuevo');
+            } else {
+                return array('Error'=>'Error');
             }
                         
         }else{
@@ -1185,7 +1217,60 @@ class GmvApi extends Model
         }
     }
 
-    public static function post_verifation(){
-
+    public static function post_verificacion(Request $request){
+        $Lati        = $request->Lati;
+        $Logi        = $request->Logi;
+        $cliente     = $request->cliente;
+        $date        = $request->date;
+    
+    
+        $query = "SELECT * FROM ecommerce_android_app.tlb_verificacion WHERE Cliente = '".$cliente."'";
+        $result = DB::select($query);
+    
+        if(count($result) >= 1){
+    
+            $table_name 	= 'ecommerce_android_app.tlb_verificacion';
+            $where_clause	= "WHERE Cliente = '".$cliente."'";
+            $whereSQL 		= '';
+    
+            $form_data = array(
+                'Lati'  		=> $Lati,
+                'Longi'  		=> $Logi,
+                'updated_at'  		=> $date
+            );
+            if(!empty($where_clause)) {
+                if(substr(strtoupper(trim($where_clause)), 0, 5) != 'WHERE') {
+                    $whereSQL = " WHERE ".$where_clause;
+                } else {
+                    $whereSQL = " ".trim($where_clause);
+                }
+            }
+            $sql = "UPDATE ".$table_name." SET ";
+            $sets = array();
+            foreach($form_data as $column => $value) {
+                $sets[] = "`".$column."` = '".$value."'";
+            }
+            $sql .= implode(', ', $sets);
+            $sql .= $whereSQL;
+    
+    
+            $hasil = DB::update($sql);
+    
+            if ($hasil > 0) {
+                return array("Success"=>"Data Inserted Successfully");
+            } else {
+                return array('Error'=>'Try Again');
+            }
+    
+    
+    
+        }else{
+            $query = "INSERT INTO ecommerce_android_app.tlb_verificacion (Cliente,Lati,Longi,created_at) VALUES ('$cliente','$Lati', '$Logi', '$date')";
+            if (DB::insert($query)) {
+                return array("Success"=>"Data Inserted Successfully");
+            } else {
+                return array('Error'=>'Try Again');
+            }
+        }
     }
 }

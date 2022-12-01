@@ -218,4 +218,22 @@ class GmvApiController extends Controller{
 
         return response()->json($obj);
     }
+
+    public function post_adjunto(Request $request){
+        $obj = GmvApi::post_adjunto($request);
+
+        return response()->json($obj);
+    }
+    
+    public function post_update_datos(Request $request){
+        $obj = GmvApi::post_update_datos($request);
+
+        return response()->json($obj);
+    }
+
+    public function post_verificacion(Request $request){
+        $obj = GmvApi::post_verificacion($request);
+
+        return response()->json($obj);
+    }
 }
