@@ -14,6 +14,7 @@ use DateTime;
 use Exception;
 
 use Illuminate\Support\Facades\Date;
+use Illuminate\Support\Facades\Storage;
 
 class GmvApi extends Model
 {  
@@ -383,22 +384,22 @@ class GmvApi extends Model
     }
 
     public static function post_adjunto(Request $request){
-        $nomImagen  = $request->input('nom');
-        $imagen     = $request->input('imagenes');    
+        $imagen     = $request->input('imagen');    
         $Id_Recibo  = $request->input('Id_Recibo');    
     
         $id_img = time() . '-' . rand(0, 99999);
     
         $nameImagen = $Id_Recibo. " - ". $id_img .  ".png";
+        Storage::disk('s3')->put('Adjuntos-Recibos/'.$nameImagen, file_get_contents($imagen));
         
-        $actualpath = "../upload/recibos/". $nameImagen;    
-        file_put_contents($actualpath, base64_decode($imagen));
+        //$actualpath = "../upload/recibos/". $nameImagen;    
+        //file_put_contents($actualpath, base64_decode($imagen));
     
     
         $query = "INSERT INTO tbl_order_recibo_adjuntos (id_recibo,Nombre_imagen) VALUES ('$Id_Recibo','$nameImagen')";
     
         if (DB::select($query)) {
-            return array('Success'=>'Recibo Anulado');
+            return array('Success'=>'Adjunto Guardado');
         } else {
             return array('Error'=>'Try Again');
         }
