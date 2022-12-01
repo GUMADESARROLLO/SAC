@@ -18,11 +18,14 @@ use Illuminate\Support\Facades\Storage;
 
 class GmvApi extends Model
 {  
-    public static function Articulos($CODIGO_RUTA){
+    public static function Articulos(Request $request){
+
+        $CODIGO_RUTA = $request->input('Ruta');
+
         $PROYECTO_B = array("F19", "F21", "F22", "F23");
         $Lista = (in_array($CODIGO_RUTA , $PROYECTO_B)) ? '20' : '80' ;
 
-        $EXCENTOS   = array("F02", "F04", "F11", "F20","F18");
+        $EXCENTOS   = array("F02", "F04", "F11", "F20","F18","F19");
         $isExcentos = (in_array($CODIGO_RUTA , $EXCENTOS)) ? true : false;
 
         $json = array();
@@ -128,6 +131,51 @@ class GmvApi extends Model
         return $json;    
         
     }
+
+    public static function clients_id(Request $request){
+        $id = $request->input('vendedor_id');
+
+        $sql ="SELECT T0.*,ISNULL( 0, 0 ) AS SALDO_VINETA  FROM PRODUCCION.dbo.GMV3_MASTER_CLIENTES T0 WHERE T0.VENDEDOR LIKE '%".$id."%' ORDER BY NOMBRE";
+
+        $response = DB::connection('sqlsrv')->select($sql);
+        $json = array();
+        $i = 0;
+        if(count($response) >= 1){
+            foreach($response as $row){
+
+                $query = DB::table('ecommerce_android_app.tlb_verificacion')->where('Cliente', $row->CLIENTE)->get();
+
+                $Verificado = (count($query) == 0) ? "N;0.00;0.00" : "S;".$query[0]->Lati.";".$query[0]->Longi ;
+
+                $queryPins = DB::table('ecommerce_android_app.tlb_pins')->where('Cliente', $row->CLIENTE)->get();
+
+                $isPin = (count($queryPins) == 0) ? "N" : "S";
+                $isPlan =($row->PLAN_CRECI == 0) ? "N" : "S";
+    
+                $retVal = ($row->MOROSO == 'S') ? $row->NOMBRE.'MOROSO' : $row->NOMBRE ;
+
+                $json[$i]['CLIENTE']     = $row->CLIENTE;
+                $json[$i]['NOMBRE']      = str_replace ( "'", '', $retVal);
+                $json[$i]['DIRECCION']   = $row->DIRECCION;
+                $json[$i]['DIPONIBLE']   = number_format($row->LIMITE_CREDITO - $row->SALDO,2);
+                $json[$i]['LIMITE']      = number_format($row->LIMITE_CREDITO,2);
+                $json[$i]['SALDO']       = number_format($row->SALDO,2);
+                $json[$i]['MOROSO']      = $row->MOROSO;
+                $json[$i]['TELE']        = "Tels. ".$row->TELEFONO1.' / '.$row->TELEFONO2;
+                $json[$i]['CONDPA']      = "Cond. Pago: ".$row->CONDICION_PAGO.' Dias';
+                $json[$i]['VERIFICADO']  = $Verificado;
+                $json[$i]['PIN']         = $isPin;
+                $json[$i]['PLAN']         = $isPlan;
+                $json[$i]['vineta']       = number_format($row->SALDO_VINETA,2);
+                $i++;
+
+            }
+        }
+        return $json;
+
+    }
+
+
 
     public static function post_order(Request $request){
 
@@ -562,49 +610,6 @@ class GmvApi extends Model
         }
 
         return $json;
-    }
-
-    public static function clients_id(Request $request){
-        $id = $request->input('vendedor_id');
-
-        $sql ="SELECT T0.*,ISNULL( 0, 0 ) AS SALDO_VINETA  FROM PRODUCCION.dbo.GMV3_MASTER_CLIENTES T0 WHERE T0.VENDEDOR LIKE '%".$id."%' ORDER BY NOMBRE";
-
-        $response = DB::connection('sqlsrv')->select($sql);
-        $json = array();
-        $i = 0;
-        if(count($response) >= 1){
-            foreach($response as $row){
-
-                $query = DB::table('ecommerce_android_app.tlb_verificacion')->where('Cliente', $row->CLIENTE)->get();
-
-                $Verificado = (count($query) == 0) ? "N;0.00;0.00" : "S;".$query[0]->Lati.";".$query[0]->Longi ;
-
-                $queryPins = DB::table('ecommerce_android_app.tlb_pins')->where('Cliente', $row->CLIENTE)->get();
-
-                $isPin = (count($queryPins) == 0) ? "N" : "S";
-                $isPlan =($row->PLAN_CRECI == 0) ? "N" : "S";
-    
-                $retVal = ($row->MOROSO == 'S') ? $row->NOMBRE.'MOROSO' : $row->NOMBRE ;
-
-                $json[$i]['CLIENTE']     = $row->CLIENTE;
-                $json[$i]['NOMBRE']      = str_replace ( "'", '', $retVal);
-                $json[$i]['DIRECCION']   = $row->DIRECCION;
-                $json[$i]['DIPONIBLE']   = number_format($row->LIMITE_CREDITO - $row->SALDO,2);
-                $json[$i]['LIMITE']      = number_format($row->LIMITE_CREDITO,2);
-                $json[$i]['SALDO']       = number_format($row->SALDO,2);
-                $json[$i]['MOROSO']      = $row->MOROSO;
-                $json[$i]['TELE']        = "Tels. ".$row->TELEFONO1.' / '.$row->TELEFONO2;
-                $json[$i]['CONDPA']      = "Cond. Pago: ".$row->CONDICION_PAGO.' Dias';
-                $json[$i]['VERIFICADO']  = $Verificado;
-                $json[$i]['PIN']         = $isPin;
-                $json[$i]['PLAN']         = $isPlan;
-                $json[$i]['vineta']       = number_format($row->SALDO_VINETA,2);
-                $i++;
-
-            }
-        }
-        return $json;
-
     }
 
     public static function get_perfil_user(Request $request){

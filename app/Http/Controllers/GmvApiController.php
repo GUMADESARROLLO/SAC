@@ -7,11 +7,9 @@ use Illuminate\Http\Request;
 
 class GmvApiController extends Controller{
 
-    public function Articulos()
-    {  
-        $Ruta = 'F22';
-        
-        $obj = GmvApi::Articulos($Ruta);
+    public function Articulos(Request $request)
+    {   
+        $obj = GmvApi::Articulos($request);
         
         return response()->json($obj);
     }
