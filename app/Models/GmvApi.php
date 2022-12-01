@@ -383,7 +383,25 @@ class GmvApi extends Model
     }
 
     public static function post_adjunto(Request $request){
-
+        $nomImagen  = $request->input('nom');
+        $imagen     = $request->input('imagenes');    
+        $Id_Recibo  = $request->input('Id_Recibo');    
+    
+        $id_img = time() . '-' . rand(0, 99999);
+    
+        $nameImagen = $Id_Recibo. " - ". $id_img .  ".png";
+        
+        $actualpath = "../upload/recibos/". $nameImagen;    
+        file_put_contents($actualpath, base64_decode($imagen));
+    
+    
+        $query = "INSERT INTO tbl_order_recibo_adjuntos (id_recibo,Nombre_imagen) VALUES ('$Id_Recibo','$nameImagen')";
+    
+        if (DB::select($query)) {
+            return array('Success'=>'Recibo Anulado');
+        } else {
+            return array('Error'=>'Try Again');
+        }
     }
 
     public static function get_recibos_adjuntos(Request $request){
@@ -852,8 +870,8 @@ class GmvApi extends Model
         }
     }
 
-    public static function get_nc(Reques $request){
-        /*$cliente = $request->input('cliente');
+    public static function get_nc(Request $request){
+        $cliente = $request->input('cliente');
 
         $json = array();
         $i = 0;
@@ -869,7 +887,7 @@ class GmvApi extends Model
             $i++;
         }
         
-        return $json;*/
+        return $json;
     }
 
     public static function get_stat_ruta(Request $request){
@@ -1164,5 +1182,9 @@ class GmvApi extends Model
         }else{
             return array('Success'=>'Existe');
         }
+    }
+
+    public static function post_verifation(){
+
     }
 }
