@@ -1,18 +1,18 @@
-FROM kooldev/php:7.4-nginx-sqlsrv-prod 
-
-# working directory
+FROM composer:1.6.5 as build
 WORKDIR /app
-
-# composer install dependencies
-COPY . .
-
-RUN chmod -R 777 storage
-RUN chmod -R 777 public/images/promocion/
-
+COPY . /app
 RUN composer install --ignore-platform-reqs
 
-# expose
-EXPOSE 80
+# FROM kooldev/php:7.4-nginx-sqlsrv-prod 
+# WORKDIR /app
+FROM gumadesarrollo/php:7.4-apache-sqlsrv-prod
 
-# start supervisor
-#CMD ["--nginx-env"]
+WORKDIR /var/www/html
+
+RUN mkdir -p SAC/
+
+COPY --from=build /app /SAC
+
+RUN chmod -R 777 /SAC/storage
+
+EXPOSE 80

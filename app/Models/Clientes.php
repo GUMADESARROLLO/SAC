@@ -32,9 +32,9 @@ class Clientes extends Model
                 $Q01="SELECT * FROM PRODUCCION.dbo.view_plan_crecimiento WHERE CLIENTE_CODIGO='".$Cliente ."'";
         
                 $Q02="SELECT month(T0.Fecha_de_Factura) number_month,SUBSTRING(t0.MES,0,4) name_month,t0.[AÑO] annio,sum(T0.VentaNetaLocal) ttMonth 
-                FROM Softland.dbo.ANA_VentasTotales_MOD_Contabilidad_UMK T0 WHERE t0.[AÑO] = YEAR(GETDATE())  AND  T0.Fecha_de_Factura >= '2022-07-01 00:00:00.000' 
+                FROM Softland.dbo.ANA_VentasTotales_MOD_Contabilidad_UMK T0 WHERE T0.Fecha_de_Factura BETWEEN '2022-07-01 00:00:00.000' and '2023-08-01 00:00:00.000'
                 AND T0.CLIENTE_CODIGO= '".$Cliente ."' and T0.VentaNetaLocal  > 0
-                GROUP BY month(T0.Fecha_de_Factura),t0.MES,t0.[AÑO] ORDER BY month(T0.Fecha_de_Factura)";
+                GROUP BY MONTH ( T0.Fecha_de_Factura ),YEAR  ( T0.Fecha_de_factura),t0.MES,t0.[AÑO] ORDER BY YEAR  ( T0.Fecha_de_factura) ASC,month(T0.Fecha_de_Factura)";
     
                 $rCrecimiento = DB::connection('sqlsrv')->Select($Q01);
                 foreach ($rCrecimiento as $key) {
