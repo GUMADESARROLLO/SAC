@@ -3,9 +3,8 @@ kind: Service
 metadata:
   name: sac-svc
   namespace: grupoguma
-spec:  
+spec:
   ports:
-  - port: 80
-    targetPort: 80
-  selector:
-    role: sac-app
+    - protocol: TCP
+      port: 80
+      targetPort: 80
