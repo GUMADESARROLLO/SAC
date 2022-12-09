@@ -4,6 +4,8 @@ metadata:
   name: sac-svc
   namespace: grupoguma
 spec:
+  selector:    
+    app: sac-app
   ports:
     - protocol: TCP
       port: 80
