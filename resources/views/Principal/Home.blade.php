@@ -209,10 +209,14 @@
                                   <div class="input-group" >
                                     <input class="form-control form-control-sm shadow-none search" type="search" placeholder="Buscar..." aria-label="search" id="tbl_buscar_inventario" />
                                     <div class="input-group-text bg-transparent">
-                                        <span class="fa fa-search fs--1 text-600"></span>
+                                        <span class="fa fa-search fs--1 "></span>
                                     </div>
-                                    <a href="{{ route('generarPDF')}}" class="btn btn-danger btn-sm" style="margin-left: 10px;"><i class="fa fa-file-pdf"></i></a>
-                                    <a href="{{ route('generarExcel')}}" class="btn btn-success btn-sm" style="margin-left: 10px;"><i class="fa fa-file-excel"></i></a>
+                                    <div class="input-group-text bg-transparent">                                    
+                                      <a href="{{ route('generarPDF')}}"><span class="fas fa-file-pdf text-danger fs--1 "></span></a>
+                                    </div>
+                                    <div class="input-group-text bg-transparent">
+                                      <a href="{{ route('generarExcel')}}" ><span class="fas fa-file-excel text-success fs--1 "></span></a>
+                                    </div>
                                   </div>
                                 </div>
                               </div>
