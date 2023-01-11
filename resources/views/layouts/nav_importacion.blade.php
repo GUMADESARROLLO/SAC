@@ -54,7 +54,7 @@
   </li>
   <li class="nav-item dropdown"><a class="nav-link pe-0" id="navbarDropdownUser" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
       
-  <div class="d-flex align-items-center position-relative">
+    <div class="d-flex align-items-center position-relative">
       <div class="flex-1">
         <h6 class="mb-0 fw-semi-bold"><div class="stretched-link text-900">{{Session::get('name_session')}}</div></h6>
         <p class="text-500 fs--2 mb-0">{{ Session::get('Rutas') }}</p>
