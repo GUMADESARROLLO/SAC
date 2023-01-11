@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\GmvApiController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -28,6 +29,7 @@ Route::post('post_order_vineta', 'GmvApiController@post_order_vineta')->name('po
 Route::get('get_liquidacion_vineta', 'GmvApiController@get_liquidacion_vineta')->name('get_liquidacion_vineta');
 Route::put('del_order_vineta', 'GmvApiController@del_order_vineta')->name('del_order_vineta');
 
+Route::get('get_shipping', 'GmvApiController@get_shipping')->name('get_shipping');
 
 //Rutas para Recibos
 Route::post('post_order_recibo', 'GmvApiController@post_order_recibo')->name('post_order_recibo');
@@ -71,7 +73,7 @@ Route::post('push_pin', 'GmvApiController@push_pin')->name('push_pin');
 Route::get('stac_recup', 'GmvApiController@stac_recup')->name('stac_recup');
 Route::get('get_history_lotes', 'GmvApiController@get_history_lotes')->name('get_history_lotes');
 Route::get('plan_crecimiento', 'GmvApiController@plan_crecimiento')->name('plan_crecimiento');
-Route::post('post_historico_factura', 'GmvApiController@post_historico_factura')->name('post_historico_factura');
+Route::get('post_historico_factura', 'GmvApiController@post_historico_factura')->name('post_historico_factura');
 Route::post('recibo_anular', 'GmvApiController@recibo_anular')->name('recibo_anular');
 
 
