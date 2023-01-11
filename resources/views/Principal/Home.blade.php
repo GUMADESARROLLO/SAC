@@ -312,7 +312,7 @@
                                           <span class="fas fa-history fs--1 text-600"></span>
                                       </div>
                                     </div>
-                                  </div>
+                                </div>
                                   @if( Session::get('rol') == '1' || Session::get('rol') == '2')
                                 <div class="col-md-auto">
                                   <select class="form-select form-select-sm" aria-label=".form-select-sm example" id="id_select_sac">
@@ -340,6 +340,7 @@
                                     <option value="-1">*</option>
                                   </select>
                                 </div> 
+
                               </div>
                             </div>
                           </div>

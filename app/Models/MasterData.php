@@ -41,7 +41,12 @@ class MasterData extends Model{
         $recuperacion_de_contado    = array();
         $i=0;
         
-        $query = DB::connection('sqlsrv')->select('EXEC PRODUCCION.dbo.fn_calc_8020 "'.$Mes.'","'.$Anno.'","'.$Ruta.'", "'.'N/D'.'" ');
+        $query = DB::connection('sqlsrv')->select('EXEC PRODUCCION.dbo.fn_comision_calc_8020 "'.$Mes.'","'.$Anno.'","'.$Ruta.'", "'.'N/D'.'" ');
+
+        $qCobertura = DB::connection('sqlsrv')->select('EXEC PRODUCCION.dbo.fn_comision_calc_BonoCobertura "'.$Ruta.'"');
+        
+
+        $qCobertura = (count($qCobertura )>0) ? $qCobertura[0]->CUMPLI : 0 ;
         
         $Array_articulos_cumplen = array_filter($query,function($item){
             if($item->isCumpl=='SI'){
@@ -73,7 +78,7 @@ class MasterData extends Model{
         $factor_comision_venta_lista20      = MasterData::NivelFactorComision($count_articulos_lista20);
     
         $Total_articulos_cumplen            = count($Array_articulos_cumplen); 
-        $sum_venta_articulos_Total          = array_sum(array_column($Array_articulos_cumplen,'VentaVAL'));
+        $sum_venta_articulos_Total          = $sum_venta_articulos_lista80 + $sum_venta_articulos_lista20;
         $factor_comision_venta_Total        = $factor_comision_venta_lista80 + $factor_comision_venta_lista20;
 
         $Comision80 = ($sum_venta_articulos_lista80 * $factor_comision_venta_lista80) / 100;
@@ -86,21 +91,21 @@ class MasterData extends Model{
         $Comision_de_venta = [
             'Lista80' => [
                 $count_articulos_lista80,
-                number_format($sum_venta_articulos_lista80, 0),
+                number_format($sum_venta_articulos_lista80, 2),
                 $factor_comision_venta_lista80,
-                number_format($Comision80,0)
+                number_format($Comision80,2)
             ],
             'Lista20' => [
                 $count_articulos_lista20,
-                number_format($sum_venta_articulos_lista20, 0),
+                number_format($sum_venta_articulos_lista20, 2),
                 $factor_comision_venta_lista20,
-                number_format($Comision20,0)
+                number_format($Comision20,2)
             ],
             'Total' => [
                 $Total_articulos_cumplen,
-                number_format($sum_venta_articulos_Total, 0),
+                number_format($sum_venta_articulos_Total, 2),
                 $factor_comision_venta_Total,
-                number_format($ttComision,0)
+                number_format($ttComision,2)
             ]
         ];
 
@@ -112,7 +117,7 @@ class MasterData extends Model{
         $factor_comision_recuperacion_contado = 3;
         $comision_contado = ($recuperacion_contado * $factor_comision_recuperacion_contado) / 100;
 
-        $Bono_de_cobertura = 3500;
+        $Bono_de_cobertura = MasterData::BonoCobertura($qCobertura);
         $ttComisiones = $ttComision + $comision_credito + $comision_contado ;
         $ComisionesMasBonos = ($Bono_de_cobertura + $ttComisiones);
 
@@ -141,6 +146,15 @@ class MasterData extends Model{
         $RutaArray['Total_Compensacion']         = number_format(($Salariobasico + $ComisionesMasBonos),0);
 
         return $RutaArray;
+    }
+    public static function BonoCobertura($Valor)
+    {
+        $covertura = Covertura::where('min', '<=', $Valor)->where('max', '>=', $Valor)->first();
+
+        if ($covertura) {
+            return $covertura->valor;
+        }
+
     }
 
     public static function NivelFactorComision($Valor)
