@@ -42,3 +42,16 @@ spec:
             limits:
               memory: "128Mi"
               cpu: "144m"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: sac-svc
+  namespace: grupoguma
+spec:
+  selector:    
+    app: sac-app
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
