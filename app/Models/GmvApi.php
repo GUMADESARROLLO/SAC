@@ -110,6 +110,7 @@ class GmvApi extends Model
             $json[$i]['product_price']            = number_format($Precio_Articulo,2,'.','');
             $json[$i]['product_status']           = "Available";
             $json[$i]['product_image']            = $set_img;
+            $json[$i]['img_url']                  = Storage::temporaryUrl('product/'.$set_img, now()->addMinutes(5));
             $json[$i]['product_description']      = $set_des;
             $json[$i]['product_quantity']         = str_replace(',', '', number_format($Existe_Articulo,2));
             $json[$i]['currency_id']              = "105";
@@ -199,9 +200,9 @@ class GmvApi extends Model
             $obj->name          = $name;
             $obj->email         = $email;
             $obj->phone         = $phone;
+            $obj->created_at    = $date;
             $obj->address       = $address;
             $obj->shipping      = $shipping;
-            $obj->created_at    = $date;
             $obj->order_list    = $order_list;
             $obj->order_total   = $order_total;
             $obj->comment       = $comment;
@@ -210,7 +211,7 @@ class GmvApi extends Model
             $response = $obj->save();
 
             if($response){
-                return array('Success'=>'Data Inserted Successfully');
+                return 'Data Inserted Successfully';
             }else {
                 return array('Error'=>'Try Again');
             }        
@@ -218,6 +219,22 @@ class GmvApi extends Model
             $mensaje =  'Excepción capturada: ' . $e->getMessage() . "\n";
             return response()->json($mensaje);
         }
+    }
+
+    public static function get_shipping(){
+        $query = "SELECT * FROM ecommerce_android_app.tbl_shipping ORDER BY shipping_id ASC";
+       
+        $response = DB::select($query);
+    
+        $set = array();
+        if(count($response) >= 1) {
+            foreach($response as $link){
+                $set['result'][] = $link;
+            }
+        }
+
+        return $set;
+
     }
 
     public static function get_vineta(Request $request){
@@ -293,7 +310,7 @@ class GmvApi extends Model
     public static function get_liquidacion_vineta(Request $request){
         
         $ruta = $request->input('ruta');
-        $orderBy = $request->input('orderBy');
+        $orderBy = $request->input('OrderBy');
 
         $json = array();
         $i = 0;
@@ -386,9 +403,9 @@ class GmvApi extends Model
 
     public static function get_recibos_colector(Request $request){
         $Usuario    = $request->input('usuario');
-        $orderBy    = $request->input('orderBy');
-        $Desde      = $request->input('desde');
-        $Hasta      = $request->input('hasta');
+        $orderBy    = $request->input('OrderBy');
+        $Desde      = $request->input('Desde');
+        $Hasta      = $request->input('Hasta');
 
         $i = 0;
         $array = array();
@@ -497,7 +514,8 @@ class GmvApi extends Model
 
         if(count($response) >= 1){
             foreach($response as $row){
-                $json[] = $row;
+                $json = ['tax'=>$row->tax, 'currency_code'=>$row->currency_code];
+                //$json[] = $row;
             }
         }
 
@@ -522,7 +540,7 @@ class GmvApi extends Model
     public static function get_comentarios_im(Request $request){
 
         $autor = $request->input('autor');
-        $orderBy = $request->input('orderBy');
+        $orderBy = strtolower($request->input('OrderBy'));
         $i = 0;
         $json = array();
 
@@ -1016,7 +1034,7 @@ class GmvApi extends Model
             if(count($total_records) >= 1){
                 $qDelete = "DELETE FROM ecommerce_android_app.tlb_pins WHERE Cliente = '".$cliente."'";
                 if (DB::delete($qDelete)) {
-                    return array('Success'=>'Defijado');
+                    return 'Defijado';
                 }else {
                     return array('Error'=>'Try Again');
                 }
@@ -1024,7 +1042,7 @@ class GmvApi extends Model
             }else{
                 $query2 = "INSERT INTO ecommerce_android_app.tlb_pins (Cliente,created_at) VALUES ('$cliente','$date')";
                 if (DB::insert($query2)) {
-                    return array('Success'=>'Fijado');
+                    return 'Fijado';
                 }else {
                     return array('Error'=>'Try Again');
                 }
@@ -1109,7 +1127,7 @@ class GmvApi extends Model
         $Q02="SELECT month(T0.Fecha_de_Factura) number_month,SUBSTRING(t0.MES,0,4) name_month,t0.[AÑO] annio,sum(T0.VentaNetaLocal) ttMonth 
             FROM Softland.dbo.ANA_VentasTotales_MOD_Contabilidad_UMK T0 WHERE T0.Fecha_de_Factura BETWEEN '2022-07-01 00:00:00.000' and '2023-08-01 00:00:00.000'
             AND T0.CLIENTE_CODIGO= '".$ruta ."' and T0.VentaNetaLocal  > 0
-            GROUP BY MONTH ( T0.Fecha_de_Factura ),YEAR  ( T0.Fecha_de_factura),,t0.MES,t0.[AÑO] ORDER BY YEAR  ( T0.Fecha_de_factura) ASC,month(T0.Fecha_de_Factura)";
+            GROUP BY MONTH ( T0.Fecha_de_Factura ),YEAR  ( T0.Fecha_de_factura),t0.MES,t0.[AÑO] ORDER BY YEAR  ( T0.Fecha_de_factura) ASC,month(T0.Fecha_de_Factura)";
 
         $dta        = array(); 
         $dta_month  = array(); 

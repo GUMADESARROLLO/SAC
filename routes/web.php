@@ -52,3 +52,6 @@ Route::post('getPedidosRangeDates', 'HomeController@getPedidosRangeDates')->name
 Route::post('AddPlanCrecimiento', 'HomeController@AddPlanCrecimiento')->name('AddPlanCrecimiento');
 Route::get('getPlanCrecimientoIco', 'HomeController@getPlanCrecimientoIco')->name('getPlanCrecimientoIco');
 
+//Generar pdf y excel
+Route::get('generarPDF', 'HomeController@generarPDF')->name('generarPDF');
+Route::get('generarExcel', 'HomeController@generarExcel')->name('generarExcel');

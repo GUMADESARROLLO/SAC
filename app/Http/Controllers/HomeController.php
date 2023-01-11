@@ -27,6 +27,12 @@ use Exception;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Psy\Readline\Hoa\Console;
+use PDF;
+use PHPExcel;
+use PHPExcel_IOFactory;
+use PHPExcel_Style_Alignment;
+use PHPExcel_Style;
+use PHPExcel_Style_Border;
 use Session;
 
 class HomeController extends Controller {
@@ -340,4 +346,135 @@ class HomeController extends Controller {
         return $ico;
 
     }
+
+    public function generarPDF(){
+        $inventario = Inventario::getArticulosFavoritos();
+
+        view()->share('Principal.invPDF', $inventario);
+
+        $pdf = PDF::loadView('Principal.invPDF', compact('inventario'));
+
+        return $pdf->download('inventario.pdf');
+    }
+
+    public function generarExcel() {
+
+		$obj = Inventario::getArticulosFavoritos();
+
+		$objPHPExcel = new PHPExcel();
+        $tituloReporte = "Inventario Totalizado";
+		
+        $titulosColumnas = array('Codigo', 'Descripción', 'Cant. Disponible 002', 'Precio Farmacia');
+		$objPHPExcel->setActiveSheetIndex(0)
+                        ->mergeCells('A1:D1');
+		$objPHPExcel->setActiveSheetIndex(0)
+                        ->mergeCells('A2:D2');
+
+        $estiloTituloReporte = array(
+            'font' => array(
+            'name'      => 'Calibri',
+            'bold'      => true,
+            'italic'    => false,
+            'strike'    => false,
+            'size'      => 14,
+            'color'     => array(
+                            'rgb' => '212121')
+            ),
+            'alignment' =>  array(
+                            'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+                            'vertical'   => PHPExcel_Style_Alignment::VERTICAL_CENTER,
+                            'rotation'   => 0,
+                            'wrap'       => TRUE,
+                            )
+        );
+
+        $estiloTituloColumnas = array(
+            'font' => array(
+                        'name'  => 'Calibri',
+                        'bold'  => true
+            ),
+            'alignment' =>  array(
+                                'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+                                'vertical'   => PHPExcel_Style_Alignment::VERTICAL_CENTER,
+                                'wrap'          => TRUE
+                            ),
+            'borders' => array(
+                            'top' => array(
+                            'style' => PHPExcel_Style_Border::BORDER_THIN,
+                        ),
+            'allborders' => array(
+                                'style' => PHPExcel_Style_Border::BORDER_THIN,
+                            )
+            )
+        );
+
+        $estiloInformacion = new PHPExcel_Style();
+        $estiloInformacion->applyFromArray(
+            array(
+                'borders' => array(
+                'top' => array(
+                            'style' => PHPExcel_Style_Border::BORDER_THIN,
+                        ),
+                'allborders' => array(
+                                'style' => PHPExcel_Style_Border::BORDER_THIN,
+                                ),
+                )
+            )
+        );
+
+        $right = array(
+            'alignment' =>  array(
+                'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_RIGHT,
+                'vertical' => PHPExcel_Style_Alignment::VERTICAL_CENTER,
+                'wrap' => TRUE
+            )
+        );
+
+        $left = array(
+            'alignment' =>  array(
+                'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_LEFT,
+                'vertical' => PHPExcel_Style_Alignment::VERTICAL_CENTER,
+                'wrap' => TRUE
+            )
+        );
+
+		$objPHPExcel->setActiveSheetIndex(0)
+		->setCellValue('A1',    $tituloReporte)
+		->setCellValue('A3',    $titulosColumnas[0])
+		->setCellValue('B3',    $titulosColumnas[1])
+		->setCellValue('C3',    $titulosColumnas[2])
+		->setCellValue('D3',    $titulosColumnas[3]);
+
+		$i=4;
+		foreach ($obj as $key) {
+			$objPHPExcel->setActiveSheetIndex(0)
+			->setCellValue('A'.$i,  $key['ARTICULO'])
+			->setCellValue('B'.$i,  $key['DESCRIPCION'])
+			->setCellValue('C'.$i,  $key['total'])
+			->setCellValue('D'.$i,  $key['PRECIO_FARMACIA']);
+			
+			$i++;
+		}
+
+		$objPHPExcel->getActiveSheet()->setTitle('INVENTARIO');
+		$objPHPExcel->getActiveSheet()->getStyle('A1:D1')->applyFromArray($estiloTituloReporte);
+		$objPHPExcel->getActiveSheet()->getStyle('A3:D3')->applyFromArray($estiloTituloColumnas);      
+		$objPHPExcel->getActiveSheet()->setSharedStyle($estiloInformacion, "A4:D".($i-1));
+
+		$objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(10);
+		$objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(100);
+		$objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(15);
+		$objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth(15);
+
+		$objPHPExcel->getActiveSheet()->getStyle('C3:D'.($i-1))->getNumberFormat()->setFormatCode('#,##0.00');
+
+		header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+		header('Content-Disposition: attachment;filename="Inventario totalizado hasta '.date('d/m/Y').'.xlsx"');
+		header('Cache-Control: max-age=0');
+
+		$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
+		$objWriter->save('php://output');
+
+
+	}
 }
