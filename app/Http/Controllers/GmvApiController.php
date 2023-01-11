@@ -20,6 +20,12 @@ class GmvApiController extends Controller{
         return response()->json($obj);
     }
 
+    public function get_shipping(){
+        $obj = GmvApi::get_shipping();
+
+        return response()->json($obj);
+    }
+
     public function get_vineta(Request $request){
         $obj = GmvApi::get_vineta($request);
 
@@ -75,7 +81,7 @@ class GmvApiController extends Controller{
 
     public function get_tax_currency(){
         $obj = GmvApi::get_tax_currency();
-        return response()->json($obj);
+        return json_encode($obj);
     }
 
     public function get_comentarios(Request $request){
