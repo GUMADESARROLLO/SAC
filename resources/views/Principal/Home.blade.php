@@ -211,6 +211,8 @@
                                     <div class="input-group-text bg-transparent">
                                         <span class="fa fa-search fs--1 text-600"></span>
                                     </div>
+                                    <a href="{{ route('generarPDF')}}" class="btn btn-danger btn-sm" style="margin-left: 10px;"><i class="fa fa-file-pdf"></i></a>
+                                    <a href="{{ route('generarExcel')}}" class="btn btn-success btn-sm" style="margin-left: 10px;"><i class="fa fa-file-excel"></i></a>
                                   </div>
                                 </div>
                               </div>
