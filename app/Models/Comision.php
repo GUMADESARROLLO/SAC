@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
-class MasterData extends Model{
+class Comision extends Model{
     public static function getData($Ruta,$Mes,$Anno)
     {
         $i=0;
@@ -22,7 +22,7 @@ class MasterData extends Model{
             $RutaArray[$i]['VENDEDOR']                   = $v->VENDEDOR;
             $RutaArray[$i]['NOMBRE']                     = $v->NOMBRE;
             $RutaArray[$i]['BASICO']                     = $Salariobasico;
-            $RutaArray[$i]['DATARESULT']                 = MasterData::CalculoCommision($v->VENDEDOR,$Mes,$Anno,$Salariobasico);
+            $RutaArray[$i]['DATARESULT']                 = Comision::CalculoCommision($v->VENDEDOR,$Mes,$Anno,$Salariobasico);
             
             $i++;
         }
@@ -44,9 +44,14 @@ class MasterData extends Model{
         $query = DB::connection('sqlsrv')->select('EXEC PRODUCCION.dbo.fn_comision_calc_8020 "'.$Mes.'","'.$Anno.'","'.$Ruta.'", "'.'N/D'.'" ');
 
         $qCobertura = DB::connection('sqlsrv')->select('EXEC PRODUCCION.dbo.fn_comision_calc_BonoCobertura "'.$Ruta.'"');
-        
 
-        $qCobertura = (count($qCobertura )>0) ? $qCobertura[0]->CUMPLI : 0 ;
+
+
+        $proncCUMple = (count($qCobertura )>0) ? $qCobertura[0]->CUMPLI : 0 ;
+        $proncCUMple = number_format($proncCUMple,2);
+
+        $qCobertura  = (count($qCobertura )>0) ? $qCobertura[0]->isCumple : 0 ;
+        
         
         $Array_articulos_cumplen = array_filter($query,function($item){
             if($item->isCumpl=='SI'){
@@ -66,16 +71,21 @@ class MasterData extends Model{
                 return $item;
             }
         });
-        
 
+        $Array_countItem80 = array_filter($Array_articulos_cumplen,function($item){
+            if($item->Lista=='80'){
+                return $item;
+            }
+        });
+        
 
         $count_articulos_lista80            = count($Array_articulos_lista80); 
         $sum_venta_articulos_lista80        = array_sum(array_column($Array_articulos_lista80,'VentaVAL'));
-        $factor_comision_venta_lista80      = MasterData::NivelFactorComision($count_articulos_lista80);
+        $factor_comision_venta_lista80      = Comision::NivelFactorComision($count_articulos_lista80);
         
         $count_articulos_lista20            = count($Array_articulos_lista20); 
         $sum_venta_articulos_lista20        = array_sum(array_column($Array_articulos_lista20,'VentaVAL'));
-        $factor_comision_venta_lista20      = MasterData::NivelFactorComision($count_articulos_lista20);
+        $factor_comision_venta_lista20      = Comision::NivelFactorComision($count_articulos_lista20);
     
         $Total_articulos_cumplen            = count($Array_articulos_cumplen); 
         $sum_venta_articulos_Total          = $sum_venta_articulos_lista80 + $sum_venta_articulos_lista20;
@@ -90,7 +100,7 @@ class MasterData extends Model{
         
         $Comision_de_venta = [
             'Lista80' => [
-                $count_articulos_lista80,
+                count($Array_countItem80),
                 number_format($sum_venta_articulos_lista80, 2),
                 $factor_comision_venta_lista80,
                 number_format($Comision80,2)
@@ -117,7 +127,7 @@ class MasterData extends Model{
         $factor_comision_recuperacion_contado = 3;
         $comision_contado = ($recuperacion_contado * $factor_comision_recuperacion_contado) / 100;
 
-        $Bono_de_cobertura = MasterData::BonoCobertura($qCobertura);
+        $Bono_de_cobertura = Comision::BonoCobertura($qCobertura);
         $ttComisiones = $ttComision + $comision_credito + $comision_contado ;
         $ComisionesMasBonos = ($Bono_de_cobertura + $ttComisiones);
 
@@ -136,7 +146,8 @@ class MasterData extends Model{
         $Totales_finales = [
             number_format($Bono_de_cobertura,0),
             number_format($ttComisiones,0),
-            number_format($ComisionesMasBonos,0)
+            number_format($ComisionesMasBonos,0),
+            $proncCUMple
         ];
 
         $RutaArray['Comision_de_venta']          = $Comision_de_venta ;
@@ -145,15 +156,27 @@ class MasterData extends Model{
         $RutaArray['Totales_finales']            = $Totales_finales ;
         $RutaArray['Total_Compensacion']         = number_format(($Salariobasico + $ComisionesMasBonos),0);
 
+        
+        
         return $RutaArray;
     }
-    public static function BonoCobertura($Valor)
+    public static function BonoCobertura($cump)
     {
-        $covertura = Covertura::where('min', '<=', $Valor)->where('max', '>=', $Valor)->first();
+    
 
-        if ($covertura) {
-            return $covertura->valor;
+        $valor_pagar = 0;
+
+        if ($cump >= 100) {
+            $valor_pagar = 3500;
+        } elseif ($cump >= 90 && $cump < 100) {
+            $valor_pagar = 3150;
+        } elseif ($cump >= 80 && $cump < 90) {
+            $valor_pagar = 2800;
+        } elseif ($cump < 80) {
+            $valor_pagar = 0;
         }
+
+        return $valor_pagar;
 
     }
 

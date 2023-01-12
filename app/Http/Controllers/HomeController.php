@@ -18,7 +18,7 @@ use App\Models\PedidoComentario;
 use App\Models\Usuario;
 use App\Models\Factura;
 use App\Models\Estadisticas;
-use App\Models\MasterData;
+use App\Models\Comision;
 use App\Models\PlanCrecimiento;
 use App\Models\Promocion;
 use Illuminate\Support\Str;
@@ -64,7 +64,7 @@ class HomeController extends Controller {
         $Mes   = '1';
         $Anno   = '2023';
 
-        $Comision = MasterData::getData($Ruta,$Mes,$Anno);
+        $Comision = Comision::getData($Ruta,$Mes,$Anno);
         //return response()->json($Comision);
         return view('Principal.Comiciones',compact('Comision'));
     }
@@ -348,18 +348,21 @@ class HomeController extends Controller {
     }
 
     public function generarPDF(){
-        $inventario = Inventario::getArticulosFavoritos();
+        $inventario = Inventario::getArticulos();
 
-        view()->share('Principal.invPDF', $inventario);
+        $pdf = PDF::loadView('Principal.invPDF', compact('inventario'));
+        return $pdf->download('Resumen.pdf');
+
+        /*view()->share('Principal.invPDF', $inventario);
 
         $pdf = PDF::loadView('Principal.invPDF', compact('inventario'));
 
-        return $pdf->download('inventario.pdf');
+        return $pdf->download('inventario.pdf');*/
     }
 
     public function generarExcel() {
 
-		$obj = Inventario::getArticulosFavoritos();
+		$obj = Inventario::getArticulos();
 
 		$objPHPExcel = new PHPExcel();
         $tituloReporte = "Inventario Totalizado";
