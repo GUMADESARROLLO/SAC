@@ -832,6 +832,7 @@ class GmvApi extends Model
             $json[$i]['product_price']            = number_format($row->PRECIO_IVA,2,'.','');
             $json[$i]['product_status']           = "Available";
             $json[$i]['product_image']            = $set_img;
+            $json[$i]['img_url']                  = Storage::temporaryUrl('product/'.$set_img, now()->addMinutes(5));
             $json[$i]['product_description']      = $set_des;
             $json[$i]['product_quantity']         = str_replace(',', '', number_format($row->EXISTENCIA,2));
             $json[$i]['currency_id']              = "105";

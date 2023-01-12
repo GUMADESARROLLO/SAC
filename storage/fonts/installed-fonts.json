@@ -1,18 +1,18 @@
 {
     "open sans": {
-        "300": "E:\\WAMP\\www\\SAC\\storage\\fonts\/open_sans_300_3991bff746d3377656ad3cf53b24fe9e",
-        "normal": "E:\\WAMP\\www\\SAC\\storage\\fonts\/open_sans_normal_0c50822862df0e4bc3da7bec4af72b54",
-        "500": "E:\\WAMP\\www\\SAC\\storage\\fonts\/open_sans_500_57eeba9ef307f9b3d1a698f8ac69091b",
-        "600": "open_sans_600_75341019d0aad9d730980a0320d86ab8",
-        "bold": "E:\\WAMP\\www\\SAC\\storage\\fonts\/open_sans_bold_16020d134f3ca847d8cdba64e3e9ca33"
+        "300": "D:\\wanp\\www\\SAC\\storage\\fonts\/open_sans_300_3991bff746d3377656ad3cf53b24fe9e",
+        "normal": "D:\\wanp\\www\\SAC\\storage\\fonts\/open_sans_normal_0c50822862df0e4bc3da7bec4af72b54",
+        "500": "D:\\wanp\\www\\SAC\\storage\\fonts\/open_sans_500_57eeba9ef307f9b3d1a698f8ac69091b",
+        "600": "D:\\wanp\\www\\SAC\\storage\\fonts\/open_sans_600_75341019d0aad9d730980a0320d86ab8",
+        "bold": "open_sans_bold_16020d134f3ca847d8cdba64e3e9ca33"
     },
     "poppins": {
-        "300": "E:\\WAMP\\www\\SAC\\storage\\fonts\/poppins_300_999a4088f0da952988730996a4bec1d8",
-        "normal": "E:\\WAMP\\www\\SAC\\storage\\fonts\/poppins_normal_ee697d7869cb745ccf3ccccc013145ad",
-        "500": "E:\\WAMP\\www\\SAC\\storage\\fonts\/poppins_500_fce53b208cddccda1573b7620b579598",
-        "600": "E:\\WAMP\\www\\SAC\\storage\\fonts\/poppins_600_9623fbc18c38938c2057a9aae8390a42",
-        "bold": "E:\\WAMP\\www\\SAC\\storage\\fonts\/poppins_bold_8fe618268f56b4b8f1e70e87a9e99fc0",
-        "800": "poppins_800_ef86a7722c08a791e114b6649bbd6ae4",
-        "900": "E:\\WAMP\\www\\SAC\\storage\\fonts\/poppins_900_c60a07be40ef8f258a248a492dd87245"
+        "300": "D:\\wanp\\www\\SAC\\storage\\fonts\/poppins_300_999a4088f0da952988730996a4bec1d8",
+        "normal": "D:\\wanp\\www\\SAC\\storage\\fonts\/poppins_normal_ee697d7869cb745ccf3ccccc013145ad",
+        "500": "D:\\wanp\\www\\SAC\\storage\\fonts\/poppins_500_fce53b208cddccda1573b7620b579598",
+        "600": "D:\\wanp\\www\\SAC\\storage\\fonts\/poppins_600_9623fbc18c38938c2057a9aae8390a42",
+        "bold": "D:\\wanp\\www\\SAC\\storage\\fonts\/poppins_bold_8fe618268f56b4b8f1e70e87a9e99fc0",
+        "800": "D:\\wanp\\www\\SAC\\storage\\fonts\/poppins_800_ef86a7722c08a791e114b6649bbd6ae4",
+        "900": "poppins_900_c60a07be40ef8f258a248a492dd87245"
     }
 }

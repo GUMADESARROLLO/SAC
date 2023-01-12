@@ -348,9 +348,9 @@ class HomeController extends Controller {
     }
 
     public function generarPDF(){
-        $inventario = Inventario::getArticulosFavoritos();
+        $inventario = Inventario::getArticulos();
 
-        view()->share('Principal.invPDF', $inventario);
+        //view()->share('Principal.invPDF', $inventario);
 
         $pdf = PDF::loadView('Principal.invPDF', compact('inventario'));
 
@@ -359,16 +359,16 @@ class HomeController extends Controller {
 
     public function generarExcel() {
 
-		$obj = Inventario::getArticulosFavoritos();
+		$obj = Inventario::getArticulos();
 
 		$objPHPExcel = new PHPExcel();
         $tituloReporte = "Inventario Totalizado";
 		
-        $titulosColumnas = array('Codigo', 'Descripción', 'Cant. Disponible 002', 'Precio Farmacia');
+        $titulosColumnas = array('Codigo', 'Descripción', 'Cant. Disponible 002','Cant. Disponible 005', 'Precio Farmacia');
 		$objPHPExcel->setActiveSheetIndex(0)
-                        ->mergeCells('A1:D1');
+                        ->mergeCells('A1:E1');
 		$objPHPExcel->setActiveSheetIndex(0)
-                        ->mergeCells('A2:D2');
+                        ->mergeCells('A2:E2');
 
         $estiloTituloReporte = array(
             'font' => array(
@@ -443,7 +443,8 @@ class HomeController extends Controller {
 		->setCellValue('A3',    $titulosColumnas[0])
 		->setCellValue('B3',    $titulosColumnas[1])
 		->setCellValue('C3',    $titulosColumnas[2])
-		->setCellValue('D3',    $titulosColumnas[3]);
+		->setCellValue('D3',    $titulosColumnas[3])
+        ->setCellValue('E3',    $titulosColumnas[4]);
 
 		$i=4;
 		foreach ($obj as $key) {
@@ -451,22 +452,24 @@ class HomeController extends Controller {
 			->setCellValue('A'.$i,  $key['ARTICULO'])
 			->setCellValue('B'.$i,  $key['DESCRIPCION'])
 			->setCellValue('C'.$i,  $key['total'])
-			->setCellValue('D'.$i,  $key['PRECIO_FARMACIA']);
+            ->setCellValue('D'.$i,  $key['005'])
+			->setCellValue('E'.$i,  $key['PRECIO_FARMACIA']);
 			
 			$i++;
 		}
 
 		$objPHPExcel->getActiveSheet()->setTitle('INVENTARIO');
-		$objPHPExcel->getActiveSheet()->getStyle('A1:D1')->applyFromArray($estiloTituloReporte);
-		$objPHPExcel->getActiveSheet()->getStyle('A3:D3')->applyFromArray($estiloTituloColumnas);      
-		$objPHPExcel->getActiveSheet()->setSharedStyle($estiloInformacion, "A4:D".($i-1));
+		$objPHPExcel->getActiveSheet()->getStyle('A1:E1')->applyFromArray($estiloTituloReporte);
+		$objPHPExcel->getActiveSheet()->getStyle('A3:E3')->applyFromArray($estiloTituloColumnas);      
+		$objPHPExcel->getActiveSheet()->setSharedStyle($estiloInformacion, "A4:E".($i-1));
 
 		$objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(10);
 		$objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(100);
 		$objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(15);
 		$objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth(15);
+		$objPHPExcel->getActiveSheet()->getColumnDimension('E')->setWidth(15);
 
-		$objPHPExcel->getActiveSheet()->getStyle('C3:D'.($i-1))->getNumberFormat()->setFormatCode('#,##0.00');
+		$objPHPExcel->getActiveSheet()->getStyle('C3:E'.($i-1))->getNumberFormat()->setFormatCode('#,##0.00');
 
 		header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
 		header('Content-Disposition: attachment;filename="Inventario totalizado hasta '.date('d/m/Y').'.xlsx"');
