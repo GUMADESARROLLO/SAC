@@ -211,9 +211,9 @@
                                     <div class="input-group-text bg-transparent">
                                         <span class="fa fa-search fs--1 "></span>
                                     </div>
-                                    <div class="input-group-text bg-transparent">                                    
+                                    <!--<div class="input-group-text bg-transparent">                                    
                                       <a href="{{ route('generarPDF')}}"><span class="fas fa-file-pdf text-danger fs--1 "></span></a>
-                                    </div>
+                                    </div>-->
                                     <div class="input-group-text bg-transparent">
                                       <a href="{{ route('generarExcel')}}" ><span class="fas fa-file-excel text-success fs--1 "></span></a>
                                     </div>

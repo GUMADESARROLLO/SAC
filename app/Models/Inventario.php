@@ -12,7 +12,7 @@ class Inventario extends Model
 
     public static function getArticulos()
     {
-        return Inventario::all();
+        return Inventario::get();
     }
     
     public static function getArticulosSinFav()
