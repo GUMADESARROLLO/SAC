@@ -1,4 +1,5 @@
-@extends('layouts.lyt_gumadesk')
+@extends('layouts.lytresumen')
+@section('content')
     <table width="100%">
         <tr>
             <td valign="top"></td>
@@ -20,22 +21,23 @@
     <table width="100%">
         <thead style="background-color: lightgray;">
             <tr style="text-align: center;">
-                <th style="border: 1px solid black; border-collapse: collapse;">Codigo</th>
-                <th style="border: 1px solid black; border-collapse: collapse;">Descripcion</th>
-                <th style="border: 1px solid black; border-collapse: collapse;">Cant. disponible 002</th>
-                <th style="border: 1px solid black; border-collapse: collapse;">Cant. disponible 005</th>
-                <th style="border: 1px solid black; border-collapse: collapse;">Precio Farmacia</th>
+                <th style="border: 1px solid black;">Codigo</th>
+                <th style="border: 1px solid black;">Descripcion</th>
+                <th style="border: 1px solid black;">Cant. disponible 002</th>
+                <th style="border: 1px solid black;">Cant. disponible 005</th>
+                <th style="border: 1px solid black;">Precio Farmacia</th>
             </tr>
         </thead>
         <tbody>
             @foreach($inventario as $inv)
                 <tr>
-                    <td style="border: 1px solid black; border-collapse: collapse;">{{ $inv['ARTICULO'] }}</td>
-                    <td style="border: 1px solid black; border-collapse: collapse;">{{ $inv['DESCRIPCION'] }}</td>
-                    <td style="border: 1px solid black; border-collapse: collapse;">{{ number_format($inv['total'],2) }}</td>
-                    <td style="border: 1px solid black; border-collapse: collapse;">{{ number_format($inv['005'],2) }}</td>
-                    <td style="border: 1px solid black; border-collapse: collapse;">{{ number_format($inv['PRECIO_FARMACIA'],2) }}</td>
+                    <td style="border: 1px solid black;">{{ $inv['ARTICULO'] }}</td>
+                    <td style="border: 1px solid black;">{{ $inv['DESCRIPCION'] }}</td>
+                    <td style="border: 1px solid black; text-align: right">{{ number_format($inv['total'],2) }}</td>
+                    <td style="border: 1px solid black; text-align: right">{{ number_format($inv['005'],2) }}</td>
+                    <td style="border: 1px solid black; text-align: right">{{ number_format($inv['PRECIO_FARMACIA'],2) }}</td>
                 </tr>
             @endforeach
         </tbody>
     </table>
+@endsection
