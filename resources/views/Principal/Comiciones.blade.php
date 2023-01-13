@@ -31,9 +31,7 @@
                       <div class="col-md-auto">
                           <div class="input-group" >
 
-                              <div class="input-group-text bg-transparent" id="id_btn_new">
-                                  <span class="fas fa-history fs--1 text-600"></span>
-                              </div>
+                              
                               
                               <div class="input-group-text bg-transparent">
                                   <span class="fa fa-search fs--1 text-600"></span>
@@ -55,12 +53,16 @@
                           </select>
                         </div>
                         <div class="col-md-auto">
-                          <select class="form-select form-select-sm" aria-label=".form-select-sm example" id="id_select_sac">
-                              @foreach (range(date('Y'),date('Y')-1) as $year)
-                                <option value="{{ $year }}" {{ $year == date('Y') ? 'selected' : '' }}>{{ $year }}</option>
-                              @endforeach                                
-                            
-                          </select>
+                          <div class="input-group" >
+                            <select class="form-select form-select-sm" aria-label=".form-select-sm example" id="id_select_sac">
+                                @foreach (range(date('Y'),date('Y')-1) as $year)
+                                  <option value="{{ $year }}" {{ $year == date('Y') ? 'selected' : '' }}>{{ $year }}</option>
+                                @endforeach  
+                            </select>
+                            <div class="input-group-text bg-transparent" id="id_btn_new">
+                                  <span class="fas fa-history fs--1 text-600"></span>
+                              </div>
+                          </div>
                         </div> 
                        
 
@@ -86,16 +88,10 @@
                           <tr>
                             <th colspan="2">VENDEDOR</th>
                             <th colspan="2">COMISIÓN DE VENTA</th>
-                            <th colspan="2">RECUPERACIÓN DE CRÉDITO</th>
-                            <th colspan="2">RECUPERACIÓN DE CONTADO</th>
                             <th colspan="3">TOTAL BONOS Y COMISIONES</th>
                             <th>TOTAL</th>
                           </tr>
-                          <tr >
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                            <th></th>                            
+                          <tr>                       
                             <th></th>
                             <th></th>
                             <th></th>
@@ -123,7 +119,7 @@
 
                             <td>
                             <div class="pe-4 border-sm-end border-200">
-                                <h6 class="fs--2 text-600 mb-1">Ventas Val.</h6>
+                                <h6 class="fs--2 text-600 mb-1">Basico</h6>
                                 <div class="d-flex align-items-center">
                                   <h5 class="fs-0 text-900 mb-0 me-2">C$ {{ strtoupper($cms['BASICO']) }} </h5>
                                 </div>
@@ -197,41 +193,7 @@
                                 
                               </div>
                             </td>
-                            <td>
-                              <div class="pe-3 border-sm-end border-200">
-                                <h6 class="fs--2 text-600 mb-1">Valor.</h6>
-                                <div class="d-flex align-items-center">
-                                  <h5 class="fs-0 text-900 mb-0 me-2">C$ {{ strtoupper($cms['DATARESULT']['recuperacion_de_credito'][0]) }} </h5>                                  
-                                </div>
-                              </div>
-                            </td>
-                            <td>
-                              <div class="pe-4 border-sm-end border-200">
-                                <h6 class="fs--2 text-600 mb-1">Comisión</h6>
-                                <div class="d-flex align-items-center">
-                                  <h5 class="fs-0 text-900 mb-0 me-2">C$ {{ strtoupper($cms['DATARESULT']['recuperacion_de_credito'][2]) }} </h5>
-                                  <span class="badge rounded-pill badge-soft-primary">{{ strtoupper($cms['DATARESULT']['recuperacion_de_credito'][1]) }}%</span>
-                                </div>
-                              </div>
-                            </td>
-                            <td>
-                              <div class="pe-4 border-sm-end border-200">
-                                <h6 class="fs--2 text-600 mb-1">Valor</h6>
-                                <div class="d-flex align-items-center">
-                                  <h5 class="fs-0 text-900 mb-0 me-2">C$ {{ strtoupper($cms['DATARESULT']['recuperacion_de_contado'][0]) }} </h5>
-                                  
-                                </div>
-                              </div>
-                            </td>
-                            <td>
-                              <div class="pe-4 border-sm-end border-200">
-                                <h6 class="fs--2 text-600 mb-1">Comisión</h6>
-                                <div class="d-flex align-items-center">
-                                  <h5 class="fs-0 text-900 mb-0 me-2">C$ {{ strtoupper($cms['DATARESULT']['recuperacion_de_contado'][2]) }} </h5>
-                                  <span class="badge rounded-pill badge-soft-primary">{{ strtoupper($cms['DATARESULT']['recuperacion_de_contado'][1]) }}%</span>
-                                </div>
-                              </div>
-                            </td>
+                           
                             <td>
                               <div class="pe-4 border-sm-end border-200">
                                 <h6 class="fs--2 text-600 mb-1">Bono.Cobertura</h6>

@@ -33,4 +33,16 @@
     //OCULTA DE LA PANTALLA EL FILTRO DE PAGINADO Y FORM DE BUSQUEDA
     $("#table_comisiones_length").hide();
     $("#table_comisiones_filter").hide();
+
+    //NUMERO DE REGISTROS MOSTRADOS EN PANTALLA
+    $( "#frm_lab_row").change(function() {
+        var table = $('#table_comisiones').DataTable();
+        table.page.len(this.value).draw();
+    });
+
+    //HABILITA LA BUSQUEDA DENTRO DE LA TABLA
+    $('#id_txt_buscar').on('keyup', function() {        
+        var vTablePedido = $('#table_comisiones').DataTable();
+        vTablePedido.search(this.value).draw();
+    });
 </script>
