@@ -88,10 +88,14 @@
                           <tr>
                             <th colspan="2">VENDEDOR</th>
                             <th colspan="2">COMISIÓN DE VENTA</th>
-                            <th colspan="3">TOTAL BONOS Y COMISIONES</th>
+                            <th colspan="4">TOTAL BONOS Y COMISIONES</th>
+                            <th>TOTAL BONOS Y COMISIONES</th>
                             <th>TOTAL</th>
+                            
                           </tr>
                           <tr>                       
+                            <th></th>
+                            <th></th>
                             <th></th>
                             <th></th>
                             <th></th>
@@ -105,6 +109,7 @@
                         <tbody>
                         @foreach ($Comision as $cms)
                           <tr>
+
                             <td>
                               <div class="d-flex align-items-center position-relative mt-2">
                                 <div class="avatar avatar-xl ">
@@ -134,6 +139,7 @@
                                 </div>
                               </div> 
                             </td>
+
                             <td>
                               <div class="pe-4 border-sm-end border-200">
                                 <h6 class="fs--2 text-600 mb-1">Comisión</h6>
@@ -193,7 +199,34 @@
                                 
                               </div>
                             </td>
-                           
+
+                            <td>
+                              <div class="pe-4 border-sm-end border-200">
+                                <h6 class="fs--2 text-600 mb-1">Prom.</h6>
+                                <div class="d-flex align-items-center">
+                                  <h5 class="fs-0 text-900 mb-0 me-2">{{ strtoupper($cms['DATARESULT']['Totales_finales'][4]) }}</h5>
+                                </div>
+                              </div>
+                            </td>
+
+                            <td>
+                              <div class="pe-4 border-sm-end border-200">
+                                <h6 class="fs--2 text-600 mb-1">Meta.</h6>
+                                <div class="d-flex align-items-center">
+                                  <h5 class="fs-0 text-900 mb-0 me-2">{{ strtoupper($cms['DATARESULT']['Totales_finales'][5]) }}</h5>
+                                </div>
+                              </div>
+                            </td>
+
+                            <td>
+                              <div class="pe-4 border-sm-end border-200">
+                                <h6 class="fs--2 text-600 mb-1">Fact.</h6>
+                                <div class="d-flex align-items-center">
+                                  <h5 class="fs-0 text-900 mb-0 me-2">{{ strtoupper($cms['DATARESULT']['Totales_finales'][6]) }}</h5>
+                                </div>
+                              </div>
+                            </td>
+
                             <td>
                               <div class="pe-4 border-sm-end border-200">
                                 <h6 class="fs--2 text-600 mb-1">Bono.Cobertura</h6>
@@ -203,22 +236,18 @@
                                 </div>
                               </div>  
                             </td>
+
+                           
+
                             <td>
-                              <div class="pe-4 border-sm-end border-200">
-                                <h6 class="fs--2 text-600 mb-1">Total. Comisiones</h6>
+                              <div class="pe-4 border-sm-end border-200" >
+                                <h6 class="fs--2 text-600 mb-1">Comisión + Bono</h6>
                                 <div class="d-flex align-items-center">
                                   <h5 class="fs-0 text-900 mb-0 me-2">C$ {{ strtoupper($cms['DATARESULT']['Totales_finales'][1]) }}</h5>
                                 </div>
                               </div>
                             </td>
-                            <td>
-                              <div class="pe-4 border-sm-end border-200">
-                                <h6 class="fs--2 text-600 mb-1">Comisión + Bono</h6>
-                                <div class="d-flex align-items-center">
-                                  <h5 class="fs-0 text-900 mb-0 me-2">C$ {{ strtoupper($cms['DATARESULT']['Totales_finales'][2]) }}</h5>
-                                </div>
-                              </div>
-                            </td>
+
                             <td>
                               <div class="">
                                 <h6 class="fs--2 text-600 mb-1">Total Comp.</h6>
@@ -227,6 +256,7 @@
                                 </div>
                               </div>
                             </td>
+
                           </tr>
                         @endforeach
                         </tbody>

@@ -35,21 +35,28 @@ class Comision extends Model{
     {
 
         $data                       = array();
-        $RutaArray  = array();
+        $RutaArray                  = array();
         $Comision_de_venta          = array();
         $recuperacion_de_credito    = array();
         $recuperacion_de_contado    = array();
         $i=0;
+
+        $cliente_prom=0;
+        $cliente_meta=0;
+        $cliente_fact=0;
+        $cliente_CUMp=0;
+        $Cliente_cober=0;
         
         $query      = DB::connection('sqlsrv')->select('EXEC PRODUCCION.dbo.fn_comision_calc_8020 "'.$Mes.'","'.$Anno.'","'.$Ruta.'", "'.'N/D'.'" ');
         $qCobertura = DB::connection('sqlsrv')->select('EXEC PRODUCCION.dbo.fn_comision_calc_BonoCobertura "'.$Ruta.'"');
 
-
-
-        $proncCUMple = (count($qCobertura )>0) ? $qCobertura[0]->CUMPLI : 0 ;
-        $proncCUMple = number_format($proncCUMple,2);
-
-        $qCobertura  = (count($qCobertura )>0) ? $qCobertura[0]->isCumple : 0 ;
+        if (count($qCobertura )>0) {
+            $cliente_prom=number_format($qCobertura[0]->PROMEDIOANUAL,0);
+            $cliente_meta=number_format($qCobertura[0]->METAMES,0);
+            $cliente_fact=number_format($qCobertura[0]->MESFACTURADO,0);
+            $cliente_CUMp=number_format($qCobertura[0]->CUMPLI,2);
+            $Cliente_cober= $qCobertura[0]->isCumple;
+        }
         
         
         $Array_articulos_cumplen = array_filter($query,function($item){
@@ -127,23 +134,27 @@ class Comision extends Model{
             ]
         ];
 
-        $Bono_de_cobertura = Comision::BonoCobertura($qCobertura);
+        $Bono_de_cobertura = Comision::BonoCobertura($Cliente_cober);
         
         $ComisionesMasBonos = ($Bono_de_cobertura);
 
       
         $Totales_finales = [
             number_format($Bono_de_cobertura,0),
-            number_format(0,0),
+            number_format( ($Bono_de_cobertura + $ttComision) ,2),
             number_format($ComisionesMasBonos,0),
-            $proncCUMple
+            $cliente_CUMp,
+            $cliente_prom,
+            $cliente_meta,
+            $cliente_fact
         ];
+
+        
 
         $RutaArray['Comision_de_venta']          = $Comision_de_venta ;
         $RutaArray['Totales_finales']            = $Totales_finales ;
-        $RutaArray['Total_Compensacion']         = number_format(($Salariobasico + $ComisionesMasBonos),0);
+        $RutaArray['Total_Compensacion']         = number_format(($Salariobasico + $Bono_de_cobertura + $ttComision),2);
 
-        
         
         return $RutaArray;
     }
