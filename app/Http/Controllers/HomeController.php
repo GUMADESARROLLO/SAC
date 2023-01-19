@@ -65,6 +65,7 @@ class HomeController extends Controller {
         $Anno   = '2023';
 
         $Comision = Comision::getData($Ruta,$Mes,$Anno);
+
         //return response()->json($Comision);
         return view('Principal.Comiciones',compact('Comision'));
     }

@@ -51,10 +51,10 @@ class Comision extends Model{
         $qCobertura = DB::connection('sqlsrv')->select('EXEC PRODUCCION.dbo.fn_comision_calc_BonoCobertura "'.$Ruta.'"');
 
         if (count($qCobertura )>0) {
-            $cliente_prom=number_format($qCobertura[0]->PROMEDIOANUAL,0);
-            $cliente_meta=number_format($qCobertura[0]->METAMES,0);
-            $cliente_fact=number_format($qCobertura[0]->MESFACTURADO,0);
-            $cliente_CUMp=number_format($qCobertura[0]->CUMPLI,2);
+            $cliente_prom=number_format($qCobertura[0]->PROMEDIOANUAL,0,'.','');
+            $cliente_meta=number_format($qCobertura[0]->METAMES,0,'.','');
+            $cliente_fact=number_format($qCobertura[0]->MESFACTURADO,0,'.','');
+            $cliente_CUMp=number_format($qCobertura[0]->CUMPLI,2,'.','');
             $Cliente_cober= $qCobertura[0]->isCumple;
         }
         
@@ -116,21 +116,21 @@ class Comision extends Model{
         $Comision_de_venta = [
             'Lista80' => [
                 $count_articulos_lista80,
-                number_format($sum_venta_articulos_lista80, 2),
+                number_format($sum_venta_articulos_lista80, 2,'.',''),
                 $factor_comision_venta_lista80,
-                number_format($Comision80,2)
+                number_format($Comision80,2,'.','')
             ],
             'Lista20' => [
                 $count_articulos_lista20,
-                number_format($sum_venta_articulos_lista20, 2),
+                number_format($sum_venta_articulos_lista20, 2,'.',''),
                 $factor_comision_venta_lista20,
-                number_format($Comision20,2)
+                number_format($Comision20,2,'.','')
             ],
             'Total' => [
                 $Total_articulos_cumplen,
-                number_format($sum_venta_articulos_Total, 2),
+                number_format($sum_venta_articulos_Total, 2,'.',''),
                 $factor_comision_venta_Total,
-                number_format($ttComision,2)
+                number_format($ttComision,2,'.','')
             ]
         ];
 
@@ -140,9 +140,9 @@ class Comision extends Model{
 
       
         $Totales_finales = [
-            number_format($Bono_de_cobertura,0),
-            number_format( ($Bono_de_cobertura + $ttComision) ,2),
-            number_format($ComisionesMasBonos,0),
+            number_format($Bono_de_cobertura,0,'.',''),
+            number_format( ($Bono_de_cobertura + $ttComision) ,2,'.',''),
+            number_format($ComisionesMasBonos,0,'.',''),
             $cliente_CUMp,
             $cliente_prom,
             $cliente_meta,
@@ -153,7 +153,7 @@ class Comision extends Model{
 
         $RutaArray['Comision_de_venta']          = $Comision_de_venta ;
         $RutaArray['Totales_finales']            = $Totales_finales ;
-        $RutaArray['Total_Compensacion']         = number_format(($Salariobasico + $Bono_de_cobertura + $ttComision),2);
+        $RutaArray['Total_Compensacion']         = number_format(($Salariobasico + $Bono_de_cobertura + $ttComision),2,'.','');
 
         
         return $RutaArray;

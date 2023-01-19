@@ -78,4 +78,8 @@ Route::post('recibo_anular', 'GmvApiController@recibo_anular')->name('recibo_anu
 
 
 
+Route::get('getcomision/{RUTA}', 'GmvApiController@getcomision')->name('getcomision/{RUTA}');
+
+
+
 
