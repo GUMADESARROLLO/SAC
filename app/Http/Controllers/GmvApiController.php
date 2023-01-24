@@ -1,6 +1,7 @@
 <?php
 namespace App\Http\Controllers;
 use App\Models\GmvApi;
+use App\Models\Comision;
 use GMP;
 use Illuminate\Http\Request;
 
@@ -239,5 +240,16 @@ class GmvApiController extends Controller{
         $obj = GmvApi::post_verificacion($request);
 
         return response()->json($obj);
+    }
+
+    public function getcomision($Ruta)
+    {
+        $Mes            = '1';
+        $Anno           = '2023';
+        $SalarioBasico  = 5000;
+
+        $Comision[0] = Comision::CalculoCommision($Ruta,$Mes,$Anno,$SalarioBasico);
+        return response()->json($Comision);
+        
     }
 }

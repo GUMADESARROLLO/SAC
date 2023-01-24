@@ -33,7 +33,7 @@ Route::get('getDetallesFactura/{ID}', 'HomeController@getDetallesFactura')->name
 
 Route::get('getDataCliente', 'HomeController@getDataCliente')->name('getDataCliente');
 Route::get('getDataCliente/{ID}', 'HomeController@getDataCliente')->name('getDataCliente');
-//Route::get('get8020', 'HomeController@get8020')->name('get8020');
+Route::get('Comiciones', 'HomeController@Comiciones')->name('Comiciones');
 
 Route::get('Usuarios', 'UsuarioController@getUsuarios')->name('Usuarios');
 Route::post('SaveUsuario', 'UsuarioController@SaveUsuario')->name('SaveUsuario');

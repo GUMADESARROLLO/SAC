@@ -18,7 +18,7 @@ use App\Models\PedidoComentario;
 use App\Models\Usuario;
 use App\Models\Factura;
 use App\Models\Estadisticas;
-use App\Models\MasterData;
+use App\Models\Comision;
 use App\Models\PlanCrecimiento;
 use App\Models\Promocion;
 use Illuminate\Support\Str;
@@ -58,15 +58,16 @@ class HomeController extends Controller {
         
     }
 
-    public function get8020()
+    public function Comiciones()
     {  
-        $Ruta = 'F10';
-        $d1   = '2022-09-01';
-        $d2   = '2022-09-30';
+        $Ruta = 'F09';
+        $Mes   = '1';
+        $Anno   = '2023';
 
-        $obj = MasterData::getData($Ruta,$d1,$d2);
-        
-        return response()->json($obj);
+        $Comision = Comision::getData($Ruta,$Mes,$Anno);
+
+        //return response()->json($Comision);
+        return view('Principal.Comiciones',compact('Comision'));
     }
 
     public function getEstadistiacas()
@@ -349,11 +350,7 @@ class HomeController extends Controller {
 
     public function generarPDF(){
         $inventario = Inventario::getArticulos()->toArray();
-
-        //view()->share('Principal.invPDF', $inventario);
-
         $pdf = PDF::loadView('Principal.invPDF', compact('inventario'));
-
         return $pdf->download('inventario.pdf');
     }
 
