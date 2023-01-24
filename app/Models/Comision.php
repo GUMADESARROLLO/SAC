@@ -48,6 +48,7 @@ class Comision extends Model{
         $Cliente_cober=0;
         
         $query      = DB::connection('sqlsrv')->select('EXEC PRODUCCION.dbo.fn_comision_calc_8020 "'.$Mes.'","'.$Anno.'","'.$Ruta.'", "'.'N/D'.'" ');
+        
         $qCobertura = DB::connection('sqlsrv')->select('EXEC PRODUCCION.dbo.fn_comision_calc_BonoCobertura "'.$Ruta.'"');
 
         // CARGA LOS ARTICULOS QUE NUEVOS QUE NO SE ALLAN FACTURADO EN EL PERIODO EVALUADO
