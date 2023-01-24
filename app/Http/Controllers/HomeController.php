@@ -57,19 +57,6 @@ class HomeController extends Controller {
         return view('Principal.Home', compact('Lista_SAC','SAC','Normal', 'promocion'));
         
     }
-
-    public function Comiciones()
-    {  
-        $Ruta = 'F09';
-        $Mes   = '1';
-        $Anno   = '2023';
-
-        $Comision = Comision::getData($Ruta,$Mes,$Anno);
-
-        //return response()->json($Comision);
-        return view('Principal.Comiciones',compact('Comision'));
-    }
-
     public function getEstadistiacas()
     {  
         $Normal ='';
