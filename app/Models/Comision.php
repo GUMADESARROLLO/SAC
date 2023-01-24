@@ -50,6 +50,9 @@ class Comision extends Model{
         $query      = DB::connection('sqlsrv')->select('EXEC PRODUCCION.dbo.fn_comision_calc_8020 "'.$Mes.'","'.$Anno.'","'.$Ruta.'", "'.'N/D'.'" ');
         $qCobertura = DB::connection('sqlsrv')->select('EXEC PRODUCCION.dbo.fn_comision_calc_BonoCobertura "'.$Ruta.'"');
 
+        // CARGA LOS ARTICULOS QUE NUEVOS QUE NO SE ALLAN FACTURADO EN EL PERIODO EVALUADO
+        DB::connection('sqlsrv')->select('EXEC PRODUCCION.dbo.fn_comision_articulo_new "'.$Ruta.'"');
+
         if (count($qCobertura )>0) {
             $cliente_prom=number_format($qCobertura[0]->PROMEDIOANUAL,0,'.','');
             $cliente_meta=number_format($qCobertura[0]->METAMES,0,'.','');

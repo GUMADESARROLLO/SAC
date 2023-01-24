@@ -244,8 +244,8 @@ class GmvApiController extends Controller{
 
     public function getcomision($Ruta)
     {
-        $Mes            = '1';
-        $Anno           = '2023';
+        $Mes            = date('n');
+        $Anno           = date('Y');
         $SalarioBasico  = 5000;
 
         $Comision[0] = Comision::CalculoCommision($Ruta,$Mes,$Anno,$SalarioBasico);
