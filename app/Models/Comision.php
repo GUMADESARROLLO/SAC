@@ -88,7 +88,18 @@ class Comision extends Model{
                 return $item;
             }
         });
+
+
+
+        $MetaVenta  = 0;
+        $Vendido    = 0;
+
+        foreach ($Array_articulos_lista80 as $key => $value) {
+            $MetaVenta  += $value->MetaUND;
+            $Vendido    += $value->VentaUND;
+        }
         
+        $VntPromedio = ($Vendido / $MetaVenta) * 100;
 
         $count_articulos_lista80            = count(array_filter($query,function($item){
                                                     if($item->Lista=='80' && $item->VentaVAL > 0){
@@ -158,6 +169,8 @@ class Comision extends Model{
         $RutaArray['Comision_de_venta']          = $Comision_de_venta ;
         $RutaArray['Totales_finales']            = $Totales_finales ;
         $RutaArray['Total_Compensacion']         = number_format(($Salariobasico + $Bono_de_cobertura + $ttComision),2,'.','');
+        $RutaArray['VntPromedio']                =  number_format($VntPromedio,2,'.','');
+        $RutaArray['Salariobasico']              =  number_format($Salariobasico,0);
 
         
         return $RutaArray;
