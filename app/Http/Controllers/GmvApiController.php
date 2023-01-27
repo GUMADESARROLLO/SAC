@@ -242,13 +242,11 @@ class GmvApiController extends Controller{
         return response()->json($obj);
     }
 
-    public function getcomision($Ruta)
+    public function getcomision($Ruta,$nMonth,$nYear)
     {
-        $Mes            = date('n');
-        $Anno           = date('Y');
         $SalarioBasico  = 5000;
 
-        $Comision[0] = Comision::CalculoCommision($Ruta,$Mes,$Anno,$SalarioBasico);
+        $Comision[0] = Comision::CalculoCommision($Ruta,$nMonth,$nYear,$SalarioBasico);
         return response()->json($Comision);
         
     }
