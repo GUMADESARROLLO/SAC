@@ -99,7 +99,8 @@ class Comision extends Model{
             $Vendido    += $value->VentaUND;
         }
         
-        $VntPromedio = ($Vendido / $MetaVenta) * 100;
+        
+        $VntPromedio = ($MetaVenta > 0)? ($Vendido / $MetaVenta) * 100 : 0;
 
         $count_articulos_lista80            = count(array_filter($query,function($item){
                                                     if($item->Lista=='80' && $item->VentaVAL > 0){
@@ -125,6 +126,12 @@ class Comision extends Model{
         $Comision20 = ($sum_venta_articulos_lista20 * $factor_comision_venta_lista20) / 100;
 
         $ttComision = $Comision80 + $Comision20;
+
+        //RESTA LAS NOTAS DE CREDITO QUE TIENE LA RUTA AL MES APLICADO
+        $sum_venta_articulos_lista80 = Comision::NotasCredito($Mes,$Anno,$Ruta,"80",$sum_venta_articulos_lista80);
+        
+        $sum_venta_articulos_lista20 = Comision::NotasCredito($Mes,$Anno,$Ruta,"20",$sum_venta_articulos_lista20);
+        
 
         
         
@@ -153,7 +160,7 @@ class Comision extends Model{
         
         $ComisionesMasBonos = ($Bono_de_cobertura);
 
-      
+    
         $Totales_finales = [
             number_format($Bono_de_cobertura,0,'.',''),
             number_format( ($Bono_de_cobertura + $ttComision) ,2,'.',''),
@@ -211,6 +218,23 @@ class Comision extends Model{
         $porcentaje = 3;
         }
         return $porcentaje;
+
+    }
+
+    public static function NotasCredito($Mh,$Yr,$Rt,$Ls,$Vl)
+    {
+
+        $ValorNotasCredito = NotasCredito::where('RUTA',$Rt)->where('MES',$Mh)->where('ANNO',$Yr)->where('TIPO',$Ls);
+
+        if($ValorNotasCredito->count() > 0){
+            
+            $rsValor = $ValorNotasCredito->get();
+
+            $Vl = $Vl - $rsValor[0]->VALOR;
+
+        }
+
+        return $Vl;
 
     }
 }
