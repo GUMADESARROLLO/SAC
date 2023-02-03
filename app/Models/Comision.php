@@ -52,7 +52,7 @@ class Comision extends Model{
         $qCobertura = DB::connection('sqlsrv')->select('EXEC PRODUCCION.dbo.fn_comision_calc_BonoCobertura "'.$Mes.'","'.$Anno.'","'.$Ruta.'"');
 
         // CARGA LOS ARTICULOS QUE NUEVOS QUE NO SE ALLAN FACTURADO EN EL PERIODO EVALUADO
-        DB::connection('sqlsrv')->select('EXEC PRODUCCION.dbo.fn_comision_articulo_new "'.$Ruta.'"');
+        DB::connection('sqlsrv')->select('EXEC PRODUCCION.dbo.fn_comision_articulo_new "'.$Mes.'","'.$Anno.'","'.$Ruta.'"');
 
         if (count($qCobertura )>0) {
             $cliente_prom=number_format($qCobertura[0]->PROMEDIOANUAL,0,'.','');
