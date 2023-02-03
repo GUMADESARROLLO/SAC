@@ -116,6 +116,11 @@ class Comision extends Model{
                                                 }
                                             })); 
         $sum_venta_articulos_lista20        = array_sum(array_column($Array_articulos_lista20,'VentaVAL'));
+
+        //RESTA LAS NOTAS DE CREDITO QUE TIENE LA RUTA AL MES APLICADO
+        $sum_venta_articulos_lista80 = Comision::NotasCredito($Mes,$Anno,$Ruta,"80",$sum_venta_articulos_lista80);
+        $sum_venta_articulos_lista20 = Comision::NotasCredito($Mes,$Anno,$Ruta,"20",$sum_venta_articulos_lista20);
+
         $factor_comision_venta_lista20      = Comision::NivelFactorComision($count_articulos_lista20,$sum_venta_articulos_lista20);
     
         $Total_articulos_cumplen            = $count_articulos_lista80  + $count_articulos_lista20; 
@@ -126,13 +131,6 @@ class Comision extends Model{
         $Comision20 = ($sum_venta_articulos_lista20 * $factor_comision_venta_lista20) / 100;
 
         $ttComision = $Comision80 + $Comision20;
-
-        //RESTA LAS NOTAS DE CREDITO QUE TIENE LA RUTA AL MES APLICADO
-        $sum_venta_articulos_lista80 = Comision::NotasCredito($Mes,$Anno,$Ruta,"80",$sum_venta_articulos_lista80);
-        
-        $sum_venta_articulos_lista20 = Comision::NotasCredito($Mes,$Anno,$Ruta,"20",$sum_venta_articulos_lista20);
-        
-
         
         
         $Comision_de_venta = [
