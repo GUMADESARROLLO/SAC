@@ -55,3 +55,5 @@ Route::get('getPlanCrecimientoIco', 'HomeController@getPlanCrecimientoIco')->nam
 //Generar pdf y excel
 Route::get('generarPDF', 'HomeController@generarPDF')->name('generarPDF');
 Route::get('generarExcel', 'HomeController@generarExcel')->name('generarExcel');
+
+Route::get('logs', '\Rap2hpoutre\LaravelLogViewer\LogViewerController@index');

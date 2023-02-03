@@ -246,6 +246,8 @@ class GmvApiController extends Controller{
     {
         $SalarioBasico  = 5000;
 
+        \Log::channel('Comisiones')->info("La Ruta ".$Ruta." ENTRO AL MODULO DE COMISIONES");
+
         $Comision[0] = Comision::CalculoCommision($Ruta,$nMonth,$nYear,$SalarioBasico);
         return response()->json($Comision);
         

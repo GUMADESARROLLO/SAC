@@ -46,6 +46,11 @@ return [
             'path' => storage_path('logs/laravel.log'),
             'level' => 'debug',
         ],
+        'Comisiones' => [
+            'driver' => 'single',
+            'path' => storage_path('logs/Acceso-Comisiones.log'),
+            'level' => 'debug',
+        ],
 
         'daily' => [
             'driver' => 'daily',
