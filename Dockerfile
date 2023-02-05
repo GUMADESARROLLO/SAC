@@ -1,6 +1,7 @@
 FROM gumadesarrollo/php:7.4-nginx-sqlsrv-prod
 
-ARG ARG_APP_NAME=SAC
+ARG ARG_APP_NAME=SAC \
+    timezone="America/Managua"
 
 ENV APP_NAME=${ARG_APP_NAME} \
     PHP_FPM_LISTEN=/run/php-fpm.sock \
@@ -11,7 +12,17 @@ ENV APP_NAME=${ARG_APP_NAME} \
     NGINX_PHP_FPM=unix:/run/php-fpm.sock \
     NGINX_FASTCGI_READ_TIMEOUT=60s \
     NGINX_FASTCGI_BUFFERS='8 8k' \
-    NGINX_FASTCGI_BUFFER_SIZE='16k'
+    NGINX_FASTCGI_BUFFER_SIZE='16k' \
+    # timezone
+    TZ=$timezone 
+    
+RUN apk update && apk add --no-cache \
+    bash \
+    tzdata \
+    && rm -rf /var/cache/apk/*
+
+RUN cp /usr/share/zoneinfo/${TZ} /etc/localtime && echo $TZ > /etc/timezone && date
+
 
 COPY default.tmpl /kool/default.tmpl
 
