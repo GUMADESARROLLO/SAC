@@ -53,7 +53,7 @@ class Comision extends Model{
 
         // CARGA LOS ARTICULOS QUE NUEVOS QUE NO SE ALLAN FACTURADO EN EL PERIODO EVALUADO
         DB::connection('sqlsrv')->select('EXEC PRODUCCION.dbo.fn_comision_articulo_new "'.$Mes.'","'.$Anno.'","'.$Ruta.'"');
-
+        sleep(2);
         if (count($qCobertura )>0) {
             $cliente_prom=number_format($qCobertura[0]->PROMEDIOANUAL,0,'.','');
             $cliente_meta=number_format($qCobertura[0]->METAMES,0,'.','');
@@ -117,9 +117,13 @@ class Comision extends Model{
                                             })); 
         $sum_venta_articulos_lista20        = array_sum(array_column($Array_articulos_lista20,'VentaVAL'));
 
-        //RESTA LAS NOTAS DE CREDITO QUE TIENE LA RUTA AL MES APLICADO
-        $sum_venta_articulos_lista80 = Comision::NotasCredito($Mes,$Anno,$Ruta,"80",$sum_venta_articulos_lista80);
-        $sum_venta_articulos_lista20 = Comision::NotasCredito($Mes,$Anno,$Ruta,"20",$sum_venta_articulos_lista20);
+        $NotaCredito_val80 = abs(Comision::NotasCredito($Mes,$Anno,$Ruta,"80",0));
+        $NotaCredito_val20 = abs(Comision::NotasCredito($Mes,$Anno,$Ruta,"20",0));        
+
+        $sum_venta_articulos_lista80 = $sum_venta_articulos_lista80 - $NotaCredito_val80;
+        $sum_venta_articulos_lista20 = $sum_venta_articulos_lista20 - $NotaCredito_val20;
+
+        $NotaCredito_total = $NotaCredito_val80 + $NotaCredito_val20;
 
         $factor_comision_venta_lista20      = Comision::NivelFactorComision($count_articulos_lista20,$sum_venta_articulos_lista20);
     
@@ -176,6 +180,9 @@ class Comision extends Model{
         $RutaArray['Total_Compensacion']         = number_format(($Salariobasico + $Bono_de_cobertura + $ttComision),2,'.','');
         $RutaArray['VntPromedio']                =  number_format($VntPromedio,2,'.','');
         $RutaArray['Salariobasico']              =  number_format($Salariobasico,0);
+        $RutaArray['NotaCredito_val80']          = $NotaCredito_val80 ;
+        $RutaArray['NotaCredito_val20']          = $NotaCredito_val20 ;
+        $RutaArray['NotaCredito_total']          = $NotaCredito_total ;
 
         
         return $RutaArray;
