@@ -4,6 +4,7 @@ use App\Models\GmvApi;
 use App\Models\Comision;
 use GMP;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 
 class GmvApiController extends Controller{
@@ -206,8 +207,8 @@ class GmvApiController extends Controller{
         return response()->json($obj);
     }
 
-    public function plan_crecimiento(Request $request){
-        $obj = GmvApi::plan_crecimiento($request);
+    public function plan_crecimiento($Cliente,$Ruta){
+        $obj = GmvApi::plan_crecimiento($Cliente,$Ruta);
 
         return response()->json($obj);
     }
@@ -248,6 +249,12 @@ class GmvApiController extends Controller{
 
         // REGISTRA LA VISITA DEL VENDEDOR AL MODULO DE COMISIONES
         \Log::channel('Comisiones')->info("La Ruta ".$Ruta." ENTRO AL MODULO DE COMISIONES");
+
+        $InserteDate = date('Y-m-d');        
+        $rowInsert   = "INSERT INTO tbl_logs (RUTA,FECHA, MODULO) VALUES ('$Ruta','$InserteDate', 'Comisiones')";
+        DB::connection('mysql_pedido')->select($rowInsert);
+
+
 
         $Comision[0] = Comision::CalculoCommision($Ruta,$nMonth,$nYear,$SalarioBasico);
         return response()->json($Comision);

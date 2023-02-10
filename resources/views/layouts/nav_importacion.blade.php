@@ -76,6 +76,8 @@
           <a class="dropdown-item" href="{{ route('CalendarPromocion') }}"><span class="fas fa-calendar"></span><span> Promociones</span></a>
           <a class="dropdown-item" href="{{ route('Usuarios') }}"> <span class="fas fa-user-tie me-1"></span>Usuario </a>
           <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="{{ route('Usuarios') }}"> <span class="fas fa-chalkboard-teacher me-1"></span>Monitoreo</a>
+          <div class="dropdown-divider"></div>
         @endif
         
         

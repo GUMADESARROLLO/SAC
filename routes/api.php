@@ -72,13 +72,13 @@ Route::post('post_report', 'GmvApiController@post_report')->name('post_report');
 Route::post('push_pin', 'GmvApiController@push_pin')->name('push_pin');
 Route::get('stac_recup', 'GmvApiController@stac_recup')->name('stac_recup');
 Route::get('get_history_lotes', 'GmvApiController@get_history_lotes')->name('get_history_lotes');
-Route::get('plan_crecimiento', 'GmvApiController@plan_crecimiento')->name('plan_crecimiento');
 Route::get('post_historico_factura', 'GmvApiController@post_historico_factura')->name('post_historico_factura');
 Route::post('recibo_anular', 'GmvApiController@recibo_anular')->name('recibo_anular');
 
 
 
 Route::get('getcomision/{RUTA}/{MONTH}/{YEAR}', 'GmvApiController@getcomision')->name('getcomision/{RUTA}/{MONTH}/{YEAR}');
+Route::get('plan_crecimiento/{RUTA}/{CLIENTE}', 'GmvApiController@plan_crecimiento')->name('plan_crecimiento/{RUTA}/{CLIENTE}');
 
 
 

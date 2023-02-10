@@ -449,22 +449,18 @@ class GmvApi extends Model
     }
 
     public static function post_adjunto(Request $request){
-        $imagen     = $request->imagen;    
-        $Id_Recibo  = $request->Id_Recibo;   
-    
+        $image_64 = $request->imagenes;  
+        $Id_Recibo  = $request->Id_Recibo;
         $id_img = time() . '-' . rand(0, 99999);
-    
-        if($request->hasFile('imagen')){
-            $nameImagen = $Id_Recibo. " - ". $id_img .".". $imagen->getClientOriginalExtension();
-            Storage::disk('s3')->put('Adjuntos-Recibos/'.$nameImagen, file_get_contents($imagen));
-        }
-        //$actualpath = "../upload/recibos/". $nameImagen;    
-        //file_put_contents($actualpath, base64_decode($imagen));
-    
-    
-        $query = "INSERT INTO gumanet.tbl_order_recibo_adjuntos (id_recibo,Nombre_imagen) VALUES ('$Id_Recibo','$nameImagen')";
-    
-        if (DB::insert($query)) {
+        $imageName = $Id_Recibo. " - ". $id_img .".png";
+        
+        Storage::disk('s3')->put('Adjuntos-Recibos/'.$imageName, base64_decode($image_64));
+
+        $query = "INSERT INTO tbl_order_recibo_adjuntos (id_recibo,Nombre_imagen) VALUES ('$Id_Recibo','$imageName')";
+
+        $Result = DB::connection('mysql_gumanet')->select($query);
+
+        if ($Result) {
             return array('Success'=>'Adjunto Guardado');
         } else {
             return array('Error'=>'Try Again');
@@ -967,13 +963,14 @@ class GmvApi extends Model
 
             if($imagektp !=""){
                 $nama_imagen = time() . '-' . rand(0, 99999) . ".jpg";
-                $pathktp = "../upload/news/" . $nama_imagen;
-                file_put_contents($pathktp, base64_decode($imagektp));    
+                //$pathktp = "../upload/news/" . $nama_imagen;
+                //file_put_contents($pathktp, base64_decode($imagektp));  
+                Storage::disk('s3')->put('news/'.$nama_imagen, base64_decode($imagektp));  
             }
 
-            $query = "INSERT INTO gumanet.tbl_comentarios (Titulo,Contenido, Autor, Nombre,Fecha,Imagen,empresa,`Read`,updated_at) VALUES ('$Nombre','$Comentario', '$CodRuta', '$NamRuta','$Fecha','$nama_imagen','$Empresa','$Read','$Updated_at')";
-
-            $response = DB::insert($query);
+            $query = "INSERT INTO tbl_comentarios (Titulo,Contenido, Autor, Nombre,Fecha,Imagen,empresa,`Read`,updated_at) VALUES ('$Nombre','$Comentario', '$CodRuta', '$NamRuta','$Fecha','$nama_imagen','$Empresa','$Read','$Updated_at')";
+            $response = DB::connection('mysql_gumanet')->select($query);
+            //$response = DB::insert($query);
 
             if($response){
                 return array('Success'=>'Data Inserted Successfully');
@@ -1120,14 +1117,15 @@ class GmvApi extends Model
         return $json;
     }
 
-    public static function plan_crecimiento(Request $request){
-        $ruta        = $request->cliente;
+    public static function plan_crecimiento($Cliente,$Ruta){
 
-        $Q01="SELECT * FROM PRODUCCION.dbo.view_plan_crecimiento WHERE CLIENTE_CODIGO='".$ruta ."'";
-        
+
+
+        $Q01="SELECT * FROM PRODUCCION.dbo.view_plan_crecimiento WHERE CLIENTE_CODIGO='".$Cliente ."'";
+    
         $Q02="SELECT month(T0.Fecha_de_Factura) number_month,SUBSTRING(t0.MES,0,4) name_month,t0.[AÑO] annio,sum(T0.VentaNetaLocal) ttMonth 
             FROM Softland.dbo.ANA_VentasTotales_MOD_Contabilidad_UMK T0 WHERE T0.Fecha_de_Factura BETWEEN '2022-07-01 00:00:00.000' and '2023-08-01 00:00:00.000'
-            AND T0.CLIENTE_CODIGO= '".$ruta ."' and T0.VentaNetaLocal  > 0
+            AND T0.CLIENTE_CODIGO= '".$Cliente ."' and T0.VentaNetaLocal  > 0
             GROUP BY MONTH ( T0.Fecha_de_Factura ),YEAR  ( T0.Fecha_de_factura),t0.MES,t0.[AÑO] ORDER BY YEAR  ( T0.Fecha_de_factura) ASC,month(T0.Fecha_de_Factura)";
 
         $dta        = array(); 

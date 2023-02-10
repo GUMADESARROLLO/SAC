@@ -21,6 +21,7 @@ use App\Models\Estadisticas;
 use App\Models\Comision;
 use App\Models\PlanCrecimiento;
 use App\Models\Promocion;
+use App\Models\Logs;
 use Illuminate\Support\Str;
 Use UxWeb\SweetAlert\SweetAlert;
 use Exception;
@@ -73,6 +74,27 @@ class HomeController extends Controller {
         
     }
 
+    public function monitoring()
+    {  
+        $Normal ='';
+        $SAC = '';
+        $Lista_SAC = Usuario::getUsuariosSAC();  
+        
+        if (Session::get('rol') == '1' || Session::get('rol') == '2' || Session::get('rol') == '9') {
+            $SAC = 'active';
+        } else {
+            $Normal = 'active';
+        }
+        
+        return view('Principal.Monitoring', compact('Lista_SAC','SAC','Normal'));
+        
+    }
+    public function getmonitoring($d1,$d2)
+    {
+        $dtaHome =Logs::dtaReporte($d1,$d2);
+        
+        return response()->json($dtaHome);
+    }
     public function getStats($d1,$d2)
     { 
         $obj = Estadisticas::getData($d1,$d2);
