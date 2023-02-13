@@ -51,6 +51,11 @@ return [
             'path' => storage_path('logs/Acceso-Comisiones.log'),
             'level' => 'debug',
         ],
+        'Schedule' => [
+            'driver' => 'single',
+            'path' => storage_path('logs/Schedule.log'),
+            'level' => 'debug',
+        ],
 
         'daily' => [
             'driver' => 'daily',
