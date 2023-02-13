@@ -467,20 +467,18 @@ class GmvApi extends Model
         }
     }
 
-    public static function get_recibos_adjuntos(Request $request){ 
-        $id = $request->input('id');
-
+    public static function get_recibos_adjuntos($Recibo){ 
         $i=0;
         $array = array();
 
-        $response = DB::table('gumanet.tbl_order_recibo_adjuntos')->where('id_recibo', $id)->get();
+        $response = DB::connection('mysql_gumanet')->table('tbl_order_recibo_adjuntos')->where('id_recibo', $Recibo)->get();
 
         if(count($response) >= 1){
             foreach($response as $row){
                 $array[$i]['mId']               = $row->id;
                 $array[$i]['mRecibo']           = $row->id_recibo;
                 $array[$i]['mNombreImagen']     = $row->Nombre_imagen;
-                $array[$i]['imagen_url']        = Storage::Disk('s3')->url('Adjuntos-Recibos/'.$row->Nombre_imagen);
+                $array[$i]['imagen_url']        = Storage::Disk('s3')->temporaryUrl('Adjuntos-Recibos/'.$row->Nombre_imagen, now()->addMinutes(5));
                 $i++;
             }
         }
@@ -533,14 +531,13 @@ class GmvApi extends Model
         return $json;
     }
 
-    public static function get_comentarios_im(Request $request){
+    public static function get_comentarios_im($Ruta,$OrderBy){
 
-        $autor = $request->input('autor');
-        $orderBy = strtolower($request->input('OrderBy'));
+        $orderBy = strtolower($OrderBy);
         $i = 0;
         $json = array();
 
-        $response = DB::table('gumanet.tbl_comentarios')->where('Autor', $autor)->orderBy('Fecha', $orderBy)->get();
+        $response = DB::connection('mysql_gumanet')->table('tbl_comentarios')->where('Autor', $Ruta)->orderBy('Fecha', $orderBy)->get();
 
         if(count($response) >= 1){
             foreach($response as $row){
@@ -548,7 +545,7 @@ class GmvApi extends Model
                 $json[$i]['Contenido'] = $row->Contenido;
                 $json[$i]['Fecha']     = $row->Fecha;
                 $json[$i]['Autor']     = $row->Autor;
-                $json[$i]['Imagen']    = $row->Imagen;
+                $json[$i]['Imagen']    = Storage::temporaryUrl('news/'.$row->Imagen, now()->addMinutes(5));;
                 $i++;
             }
         }

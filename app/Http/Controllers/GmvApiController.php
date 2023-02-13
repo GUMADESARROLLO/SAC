@@ -70,8 +70,8 @@ class GmvApiController extends Controller{
         return response()->json($obj);
     }
 
-    public function get_recibos_adjuntos(Request $request){
-        $obj = GmvApi::get_recibos_adjuntos($request);
+    public function get_recibos_adjuntos($Recibo){
+        $obj = GmvApi::get_recibos_adjuntos($Recibo);
 
         return response()->json($obj);
     }
@@ -91,8 +91,8 @@ class GmvApiController extends Controller{
         return response()->json($obj);
     }
 
-    public function get_comentarios_im(Request $request){
-        $obj = GmvApi::get_comentarios_im($request);
+    public function get_comentarios_im($Ruta,$OrderBy){
+        $obj = GmvApi::get_comentarios_im($Ruta,$OrderBy);
         return response()->json($obj);
     }
     
