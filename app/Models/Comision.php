@@ -259,4 +259,10 @@ class Comision extends Model{
         return $Vl;
 
     }
+    public static function getHistoryItems($Ruta,$Mes,$Anno)
+    {
+        $query      = DB::connection('sqlsrv')->select('EXEC PRODUCCION.dbo.fn_comision_calc_8020 "'.$Mes.'","'.$Anno.'","'.$Ruta.'", "'.'N/D'.'" ');
+
+        return $query;
+    }
 }
