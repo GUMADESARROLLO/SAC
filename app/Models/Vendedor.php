@@ -20,7 +20,7 @@ class Vendedor extends Model
     }
 
     public static function getZonas($Ruta){
-        $rZonas = DB::connection('mysql')->select("SELECT Zona FROM gumanet.zonas WHERE Ruta= '".$Ruta."' ");
+        $rZonas = DB::connection('mysql_gumanet')->select("SELECT Zona FROM zonas WHERE Ruta= '".$Ruta."' ");
 
         return $rZonas;
     }
