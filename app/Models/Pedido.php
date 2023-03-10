@@ -81,7 +81,7 @@ class Pedido extends Model {
 
             $json[$i]["RUTA"]           = $fila["name"];
             $json[$i]["VENDEDOR"]       = Vendedor::where('VENDEDOR',$fila["name"])->get()->pluck('NOMBRE')[0];            
-            $json[$i]["FECHA"]          = date('M d, Y h:i A', strtotime($fila["date_time"])) ;
+            $json[$i]["FECHA"]          = date('M d, Y h:i A', strtotime($fila["created_at"])) ;
             $json[$i]["ARTICULOS"]      = $fila["order_list"];
             $json[$i]["MONTO"]          = $fila["order_total"];
             $json[$i]["COMMENT"]        = $fila["comment"];
