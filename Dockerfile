@@ -15,6 +15,8 @@ ENV APP_NAME=${ARG_APP_NAME} \
 
 COPY default.tmpl /kool/default.tmpl
 
+RUN ln -s /usr/share/zoneinfo/America/Managua /etc/localtime
+
 WORKDIR /app
 
 RUN mkdir ${ARG_APP_NAME}

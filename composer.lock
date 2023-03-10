@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "1e9df917a449fa353936efd67f58e7f3",
+    "content-hash": "2d2e396bb1ef5befb4b6fbeb4ba9fed1",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -221,7 +221,7 @@
                 "shasum": ""
             },
             "require": {
-                "dompdf/dompdf": "^2",
+                "dompdf/dompdf": "^2.0.2",
                 "illuminate/support": "^6|^7|^8|^9",
                 "php": "^7.2 || ^8.0"
             },
@@ -1349,7 +1349,7 @@
                 "symfony/error-handler": "^5.0",
                 "symfony/finder": "^5.0",
                 "symfony/http-foundation": "^5.0",
-                "symfony/http-kernel": "^5.0",
+                "symfony/http-kernel": "^5.4.20",
                 "symfony/mime": "^5.0",
                 "symfony/polyfill-php73": "^1.17",
                 "symfony/process": "^5.0",
@@ -2998,7 +2998,7 @@
             },
             "require-dev": {
                 "dealerdirect/phpcodesniffer-composer-installer": "dev-master",
-                "dompdf/dompdf": "^1.0 || ^2.0",
+                "dompdf/dompdf": "^1.0 || ^2.0.2",
                 "friendsofphp/php-cs-fixer": "^3.2",
                 "mitoteam/jpgraph": "^10.2.4",
                 "mpdf/mpdf": "^8.1.1",
@@ -3964,6 +3964,69 @@
                 }
             ],
             "time": "2021-09-25T23:10:38+00:00"
+        },
+        {
+            "name": "rap2hpoutre/laravel-log-viewer",
+            "version": "v2.2.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/rap2hpoutre/laravel-log-viewer.git",
+                "reference": "52e7c703a1e83cdae450f406c7d8472332dfb34e"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/rap2hpoutre/laravel-log-viewer/zipball/52e7c703a1e83cdae450f406c7d8472332dfb34e",
+                "reference": "52e7c703a1e83cdae450f406c7d8472332dfb34e",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/support": "4.2.*|5.*|^6.0|^7.0|^8.0|^9.0",
+                "php": ">=5.4.0"
+            },
+            "require-dev": {
+                "orchestra/testbench": "3.7.*|^7.0",
+                "phpunit/phpunit": "^7|^9.5.10"
+            },
+            "type": "laravel-package",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Rap2hpoutre\\LaravelLogViewer\\LaravelLogViewerServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-0": {
+                    "Rap2hpoutre\\LaravelLogViewer\\": "src/"
+                },
+                "classmap": [
+                    "src/controllers"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "rap2hpoutre",
+                    "email": "raphaelht@gmail.com"
+                }
+            ],
+            "description": "A Laravel log reader",
+            "keywords": [
+                "laravel",
+                "log",
+                "log-reader",
+                "log-viewer",
+                "logging",
+                "lumen"
+            ],
+            "support": {
+                "issues": "https://github.com/rap2hpoutre/laravel-log-viewer/issues",
+                "source": "https://github.com/rap2hpoutre/laravel-log-viewer/tree/v2.2.0"
+            },
+            "time": "2022-04-06T15:15:40+00:00"
         },
         {
             "name": "sabberworm/php-css-parser",

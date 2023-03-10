@@ -55,3 +55,10 @@ Route::get('getPlanCrecimientoIco', 'HomeController@getPlanCrecimientoIco')->nam
 //Generar pdf y excel
 Route::get('generarPDF', 'HomeController@generarPDF')->name('generarPDF');
 Route::get('generarExcel', 'HomeController@generarExcel')->name('generarExcel');
+
+Route::get('logs', '\Rap2hpoutre\LaravelLogViewer\LogViewerController@index');
+
+
+// RUTAS DEL LOGS DE VISITAS DEL MODULO
+Route::get('monitoring', 'HomeController@monitoring')->name('monitoring');
+Route::get('getmonitoring/{d1}/{d2}', 'HomeController@getmonitoring')->name('getmonitoring/{d1}/{d2}');

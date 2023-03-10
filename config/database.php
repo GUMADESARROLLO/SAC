@@ -83,6 +83,26 @@ return [
             ]) : [],
         ],
 
+        'mysql_gumanet' => [
+            'driver' => 'mysql',
+            'url' => env('DATABASE_URL_03'),
+            'host' => env('DB_HOST_03', '127.0.0.1'),
+            'port' => env('DB_PORT_03', '3306'),
+            'database' => env('DB_DATABASE_03', 'forge'),
+            'username' => env('DB_USERNAME_03', 'forge'),
+            'password' => env('DB_PASSWORD_03', ''),
+            'unix_socket' => env('DB_SOCKET', ''),
+            'charset' => 'utf8mb4',
+            'collation' => 'utf8mb4_unicode_ci',
+            'prefix' => '',
+            'prefix_indexes' => true,
+            'strict' => true,
+            'engine' => null,
+            'options' => extension_loaded('pdo_mysql') ? array_filter([
+                PDO::MYSQL_ATTR_SSL_CA => env('MYSQL_ATTR_SSL_CA'),
+            ]) : [],
+        ],
+
         'pgsql' => [
             'driver' => 'pgsql',
             'url' => env('DATABASE_URL'),
