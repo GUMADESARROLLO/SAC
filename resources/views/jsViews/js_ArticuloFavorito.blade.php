@@ -6,7 +6,7 @@
     tbl_header_inventarios_Fav =  [                
                 {"title": "ARTICULO","data": "ARTICULO", "render": function(data, type, row, meta) {
                 var regla='';
-                var total = parseFloat( numeral(row['total']).format('00.00')) + parseFloat( numeral(row['005']).format('00.00'))
+                var total = parseFloat( numeral(row['total']).format('00.00')) + parseFloat( numeral(row['005']).format('00.00')) 
                 if(row.REGLAS!='0'){
                     regla = '';
                     myArray = row.REGLAS.split(",");
@@ -53,6 +53,8 @@
     tbl_header_inventarios =  [                
                 {"title": "ARTICULO","data": "ARTICULO", "render": function(data, type, row, meta) {
                 var regla='';
+
+                var total = parseFloat( numeral(row['total']).format('00.00')) + parseFloat( numeral(row['005']).format('00.00')) 
 
                 if(row.REGLAS!='0'){
                     regla = '';
