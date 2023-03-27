@@ -6,7 +6,7 @@
     tbl_header_inventarios_Fav =  [                
                 {"title": "ARTICULO","data": "ARTICULO", "render": function(data, type, row, meta) {
                 var regla='';
-
+                var total = parseFloat( numeral(row['total']).format('00.00')) + parseFloat( numeral(row['005']).format('00.00')) 
                 if(row.REGLAS!='0'){
                     regla = '';
                     myArray = row.REGLAS.split(",");
@@ -30,7 +30,7 @@
                         <div class="row g-0 fw-semi-bold text-center py-2"> 
                             <div class="col-auto">
                                 <a class="rounded-2 d-flex align-items-center me-3 text-700" href="#!">
-                                    <span class="ms-1 fas fa-boxes text-primary" ></span><span class="ms-1"> `+ numeral(row.total).format('0,00.00')  +` `+ row.UNIDAD_ALMACEN +`</span>
+                                    <span class="ms-1 fas fa-boxes text-primary" ></span><span class="ms-1"> `+ numeral(total).format('0,00.00')  +` `+ row.UNIDAD_ALMACEN +`</span>
                                 </a>
                             </div>
                             <div class="col-auto d-flex align-items-center"><span class="badge rounded-pill ms-3 badge-soft-primary">
@@ -53,6 +53,8 @@
     tbl_header_inventarios =  [                
                 {"title": "ARTICULO","data": "ARTICULO", "render": function(data, type, row, meta) {
                 var regla='';
+
+                var total = parseFloat( numeral(row['total']).format('00.00')) + parseFloat( numeral(row['005']).format('00.00')) 
 
                 if(row.REGLAS!='0'){
                     regla = '';
@@ -77,7 +79,7 @@
                         <div class="row g-0 fw-semi-bold text-center py-2"> 
                             <div class="col-auto">
                                 <a class="rounded-2 d-flex align-items-center me-3 text-700" href="#!">
-                                    <span class="ms-1 fas fa-boxes text-primary" ></span><span class="ms-1"> `+ numeral(row.total).format('0,00.00')  +` `+ row.UNIDAD_ALMACEN +`</span>
+                                    <span class="ms-1 fas fa-boxes text-primary" ></span><span class="ms-1"> `+ numeral(total).format('0,00.00')  +` `+ row.UNIDAD_ALMACEN +`</span>
                                 </a>
                             </div>
                             <div class="col-auto d-flex align-items-center"><span class="badge rounded-pill ms-3 badge-soft-primary">
