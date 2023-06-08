@@ -42,6 +42,7 @@
                           </td>
                           <td class="align-middle text-center"><h5 class="text-800 mb-0">`+ d.Comisiones +`</h5>
                           <td class="align-middle text-center"><h5 class="text-800 mb-0">`+ d.PlanCrecimiento +`</h5>
+                          <td class="align-middle text-center"><h5 class="text-800 mb-0">`+ d.Pedido +`</h5>
                           
                           <td class="align-middle text-center">
                               <div class="col-auto"><h5 class="text-800 mb-0">`+ d.tTotal +`</h5></div>
