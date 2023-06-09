@@ -271,21 +271,22 @@
                     });
                 }
 
-                return  ` <td class="align-middle">
-                    <div class="d-flex align-items-center position-relative"><img class="rounded-1 border border-200" src="{{ asset('images/item.png') }}"alt="" width="60">
+                return  ` <td class="align-middle ">
+                    <div class="d-flex align-items-center position-relative">
+                            <img class="rounded-1 border border-200 img-fluid" src="`+row.IMG_URL+`"alt="" width="60">
                         <div class="flex-1 ms-3">
                         
-                        <div class="d-flex align-items-center">
-                            <h6 class="mb-1 fw-semi-bold text-nowrap"><a href="#!" onclick=" OpenModal(`+"'" + row.ARTICULO+"'" +`)"> <strong>`+  row.ARTICULO +`</strong></a> : `+row.DESCRIPCION.toUpperCase() +`</h6>
-                            `+  regla +`
-                        </div>
-                        <p class="fw-semi-bold mb-0 text-500"></p>   
+                            <div class="d-flex align-items-center">
+                                <h6 class="mb-1 fw-semi-bold text-nowrap"><a href="#!" onclick=" OpenModal(`+"'" + row.ARTICULO+"'"+`)"> <strong>`+  row.ARTICULO +`</strong></a> : `+row.DESCRIPCION.toUpperCase() +`</h6>
+                                `+  regla +`
+                            </div>
+                            <p class="fw-semi-bold mb-0 text-500"></p>   
                         
-                        <div class="row g-0 fw-semi-bold text-center py-2"> 
-                            <div class="col-auto"><a class="rounded-2 d-flex align-items-center me-3 text-700" href="#!"><span class="ms-1 fas fa-boxes text-primary" ></span><span class="ms-1"> `+ numeral(total).format('0,00.00')  +` `+ row.UNIDAD_ALMACEN +`</span></a></div>
-                            <div class="col-auto d-flex align-items-center"><span class="badge rounded-pill ms-3 badge-soft-primary"><span class="fas fa-check"></span> C$. `+ numeral(row.PRECIO_FARMACIA).format('0,00.00')  +`</span></div>
-                                
-                        </div>
+                            <div class="row g-0 fw-semi-bold text-center py-2"> 
+                                <div class="col-auto"><a class="rounded-2 d-flex align-items-center me-3 text-700" href="#!"><span class="ms-1 fas fa-boxes text-primary" ></span><span class="ms-1"> `+ numeral(total).format('0,00.00')  +` `+ row.UNIDAD_ALMACEN +`</span></a></div>
+                                <div class="col-auto d-flex align-items-center"><span class="badge rounded-pill ms-3 badge-soft-primary"><span class="fas fa-check"></span> C$. `+ numeral(row.PRECIO_FARMACIA).format('0,00.00')  +`</span></div>
+                                    
+                            </div>
                         </div>
                     </div>
                 </td> `
@@ -330,10 +331,10 @@
                 {"title": "TELEFONO 1","data": "TELEFONO1"},
                 {"title": "TELEFONO 2","data": "TELEFONO2"},
                 ]
-        tbl_header_inventarios_liq =  [                
+    tbl_header_inventarios_liq =  [                
                 {"title": "ARTICULO","data": "ARTICULO", "render": function(data, type, row, meta) {
                 return ` <td class="align-middle">
-                    <div class="d-flex align-items-center position-relative"><img class="rounded-1 border border-200" src="{{ asset('images/item.png') }}"alt="" width="60">
+                    <div class="d-flex align-items-center position-relative"><img class="rounded-1 border border-200 img-fluid" src="`+row.IMG_URL+`"alt="" width="60">
                         <div class="flex-1 ms-3">
                         
                         <div class="d-flex align-items-center">
@@ -937,7 +938,6 @@
                 regla +='<span class="badge rounded-pill fs--2 bg-200 text-primary ms-1"><span class="fas fa-caret-up me-1"></span>'+value+'</span>'
                 
             });
-
             $("#id_reglas").html(regla);
             $("#id_codigo_articulo").html(data[0].InfoArticulo[0].ARTICULO);
             $("#lbl_unidad").html(data[0].InfoArticulo[0].UNIDAD);            
@@ -1297,5 +1297,17 @@ var tooltipFormatter = function tooltipFormatter(params) {
         });    
 
     }
+
+    $(document).on('click', '.img-fluid', function (e) {
+        url_image = $(this).attr('src');
+        Swal.fire({
+            showCloseButton: true,
+            showConfirmButton: false,
+            imageUrl: url_image,
+            imageAlt: 'Custom image',
+        })
+
+        $(".swal2-popup").css('width', '50%');
+    })   
     
 </script>

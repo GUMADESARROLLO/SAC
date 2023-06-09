@@ -17,7 +17,7 @@
                 }
 
                 return  ` <td class="align-middle">
-                    <div class="d-flex align-items-center position-relative"><img class="rounded-1 border border-200" src="{{ asset('images/item.png') }}"alt="" width="60">
+                    <div class="d-flex align-items-center position-relative"><img class="rounded-1 border border-200 img-fluid" src="`+row.IMG_URL+`"alt="" width="60">
                         <div class="flex-1 ms-3">
                         
                         <div class="d-flex align-items-center">
@@ -282,6 +282,18 @@
 
        
     }
+
+    $(document).on('click', '.img-fluid', function (e) {
+        url_image = $(this).attr('src');
+        Swal.fire({
+            showCloseButton: true,
+            showConfirmButton: false,
+            imageUrl: url_image,
+            imageAlt: 'Custom image',
+        })
+
+        $(".swal2-popup").css('width', '50%');
+    })  
 
     
 </script>
