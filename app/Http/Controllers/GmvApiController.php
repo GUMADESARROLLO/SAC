@@ -253,4 +253,10 @@ class GmvApiController extends Controller{
         return response()->json($Comision);
         
     }
+
+    public function setPedidos(Request $request){
+        $obj = GmvApi::setPedidos($request);
+
+        return response()->json($obj);
+    }
 }

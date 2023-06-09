@@ -1297,4 +1297,157 @@ class GmvApi extends Model
             }
         }
     }
+
+    
+    public static function setPedidos(Request $request)
+    {
+
+        $Pedidos = Pedido::WHERE('name', 'F06')->get();
+        $pedidos_a_insertar = array();
+
+        $PedidoCodigo = PedidoUMK::getConsecutivo('PX6');
+        // Iniciar el cronómetro
+        $inicio = microtime(true);
+        foreach ($Pedidos as $key => $value) {
+
+            $ultimoConsecutivo = $PedidoCodigo;
+
+    
+            $ultimoNumero = intval(substr($ultimoConsecutivo, 6));
+            $nuevoNumero = $ultimoNumero + ($key + 1);
+            $nuevoConsecutivo = sprintf('PX8-%06d', $nuevoNumero);
+
+            $Cliente_Pedido = trim($value->email);
+            $Cliente_Pedido = str_replace('-', '', $Cliente_Pedido);
+
+            $Monto_Pedido   = $value->orden_total;
+            $ttUnidades     = '40.00000000';
+
+            
+            $PedidoFecha      = date('Y-m-d 00:00:00.000');
+            $PedidoCliente    = Clientes::WHERE('CLIENTE',$Cliente_Pedido)->get();
+
+            $Cliente        = $PedidoCliente[0]->CLIENTE;
+            $NOMBRE         = $PedidoCliente[0]->NOMBRE;
+            $DiGeo1         = $PedidoCliente[0]->DIVISION_GEOGRAFICA1;
+            $DiGeo2         = $PedidoCliente[0]->DIVISION_GEOGRAFICA2;
+            $DIRECCION      = $PedidoCliente[0]->DIRECCION;
+            $VENDEDOR       = $PedidoCliente[0]->VENDEDOR;
+            $COBRADOR       = $PedidoCliente[0]->COBRADOR;
+            $NIVEL_PRECIO   = $PedidoCliente[0]->NIVEL_PRECIO;
+            $GUID           = PedidoUMK::generateGUID();
+
+            $pedidos_a_insertar[$key]['PEDIDO'] = $nuevoConsecutivo;
+            $pedidos_a_insertar[$key]['ESTADO'] = 'F';
+            $pedidos_a_insertar[$key]['FECHA_PEDIDO'] = $PedidoFecha;
+            $pedidos_a_insertar[$key]['FECHA_PROMETIDA'] = $PedidoFecha;
+            $pedidos_a_insertar[$key]['FECHA_PROX_EMBARQU'] = $PedidoFecha;
+            $pedidos_a_insertar[$key]['FECHA_ULT_EMBARQUE'] = $PedidoFecha;
+            $pedidos_a_insertar[$key]['FECHA_ULT_CANCELAC'] = '1980-01-01 00:00:00.000';
+            $pedidos_a_insertar[$key]['ORDEN_COMPRA'] = null;
+            $pedidos_a_insertar[$key]['FECHA_ORDEN'] = $PedidoFecha;
+            $pedidos_a_insertar[$key]['TARJETA_CREDITO'] = ' ';
+            $pedidos_a_insertar[$key]['EMBARCAR_A'] = $NOMBRE;
+            $pedidos_a_insertar[$key]['DIREC_EMBARQUE'] = 'ND';
+            $pedidos_a_insertar[$key]['DIRECCION_FACTURA'] = $DIRECCION;
+            $pedidos_a_insertar[$key]['RUBRO1'] = null;
+            $pedidos_a_insertar[$key]['RUBRO2'] = null;
+            $pedidos_a_insertar[$key]['RUBRO3'] = null;
+            $pedidos_a_insertar[$key]['RUBRO4'] = null;
+            $pedidos_a_insertar[$key]['RUBRO5'] = null;
+            $pedidos_a_insertar[$key]['OBSERVACIONES'] = '';
+            $pedidos_a_insertar[$key]['COMENTARIO_CXC'] = null;
+            $pedidos_a_insertar[$key]['TOTAL_MERCADERIA'] = $Monto_Pedido;
+            $pedidos_a_insertar[$key]['MONTO_ANTICIPO'] = '.00000000';
+            $pedidos_a_insertar[$key]['MONTO_FLETE'] = '.00000000';
+            $pedidos_a_insertar[$key]['MONTO_SEGURO'] = '.00000000';
+            $pedidos_a_insertar[$key]['MONTO_DOCUMENTACIO'] = '.00000000';
+            $pedidos_a_insertar[$key]['TIPO_DESCUENTO1'] = 'P';
+            $pedidos_a_insertar[$key]['TIPO_DESCUENTO2'] = 'P';
+            $pedidos_a_insertar[$key]['MONTO_DESCUENTO1'] = '.00000000';
+            $pedidos_a_insertar[$key]['MONTO_DESCUENTO2'] = '.00000000';
+            $pedidos_a_insertar[$key]['PORC_DESCUENTO1'] = '.00000000';
+            $pedidos_a_insertar[$key]['PORC_DESCUENTO2'] = '.00000000';
+            $pedidos_a_insertar[$key]['TOTAL_IMPUESTO1'] = '.00000000';
+            $pedidos_a_insertar[$key]['TOTAL_IMPUESTO2'] = '.00000000';
+            $pedidos_a_insertar[$key]['TOTAL_A_FACTURAR'] = $Monto_Pedido;
+            $pedidos_a_insertar[$key]['PORC_COMI_VENDEDOR'] = '.00000000';
+            $pedidos_a_insertar[$key]['PORC_COMI_COBRADOR'] = '.00000000';
+            $pedidos_a_insertar[$key]['TOTAL_CANCELADO'] = '.00000000';
+            $pedidos_a_insertar[$key]['TOTAL_UNIDADES'] = $ttUnidades;
+            $pedidos_a_insertar[$key]['IMPRESO'] = 'N';
+            $pedidos_a_insertar[$key]['FECHA_HORA'] = '2023-06-06 08:59:22.537';
+            $pedidos_a_insertar[$key]['DESCUENTO_VOLUMEN'] = '.00000000';
+            $pedidos_a_insertar[$key]['TIPO_PEDIDO'] = 'N';
+            $pedidos_a_insertar[$key]['MONEDA_PEDIDO'] = 'L';
+            $pedidos_a_insertar[$key]['VERSION_NP'] = '1';
+            $pedidos_a_insertar[$key]['AUTORIZADO'] = 'N';
+            $pedidos_a_insertar[$key]['DOC_A_GENERAR'] = 'F';
+            $pedidos_a_insertar[$key]['CLASE_PEDIDO'] = 'N';
+            $pedidos_a_insertar[$key]['MONEDA'] = 'L';
+            $pedidos_a_insertar[$key]['NIVEL_PRECIO'] = $NIVEL_PRECIO;
+            $pedidos_a_insertar[$key]['COBRADOR'] = $COBRADOR;
+            $pedidos_a_insertar[$key]['RUTA'] = 'ND';
+            $pedidos_a_insertar[$key]['USUARIO'] = 'YURBINA';
+            $pedidos_a_insertar[$key]['CONDICION_PAGO'] = '30';
+            $pedidos_a_insertar[$key]['BODEGA'] = '002';
+            $pedidos_a_insertar[$key]['ZONA'] = 'ND';
+            $pedidos_a_insertar[$key]['VENDEDOR'] = $VENDEDOR;
+            $pedidos_a_insertar[$key]['CLIENTE'] = $Cliente;
+            $pedidos_a_insertar[$key]['CLIENTE_DIRECCION'] = $Cliente;
+            $pedidos_a_insertar[$key]['CLIENTE_CORPORAC'] = $Cliente;
+            $pedidos_a_insertar[$key]['CLIENTE_ORIGEN'] = $Cliente;
+            $pedidos_a_insertar[$key]['PAIS'] = 'NI';
+            $pedidos_a_insertar[$key]['SUBTIPO_DOC_CXC'] = '0';
+            $pedidos_a_insertar[$key]['TIPO_DOC_CXC'] = 'FAC';
+            $pedidos_a_insertar[$key]['BACKORDER'] = 'N';
+            $pedidos_a_insertar[$key]['CONTRATO'] = null;
+            $pedidos_a_insertar[$key]['PORC_INTCTE'] = '.00000000';
+            $pedidos_a_insertar[$key]['DESCUENTO_CASCADA'] = 'S';
+            $pedidos_a_insertar[$key]['TIPO_CAMBIO'] = null;
+            $pedidos_a_insertar[$key]['FIJAR_TIPO_CAMBIO'] = 'N';
+            $pedidos_a_insertar[$key]['ORIGEN_PEDIDO'] = 'F';
+            $pedidos_a_insertar[$key]['DESC_DIREC_EMBARQUE'] = null;
+            $pedidos_a_insertar[$key]['DIVISION_GEOGRAFICA1'] = $DiGeo1;
+            $pedidos_a_insertar[$key]['DIVISION_GEOGRAFICA2'] = $DiGeo2;
+            $pedidos_a_insertar[$key]['BASE_IMPUESTO1'] = null;
+            $pedidos_a_insertar[$key]['BASE_IMPUESTO2'] = null;
+            $pedidos_a_insertar[$key]['NOMBRE_CLIENTE'] = $NOMBRE;
+            $pedidos_a_insertar[$key]['FECHA_PROYECTADA'] = $PedidoFecha;
+            $pedidos_a_insertar[$key]['FECHA_APROBACION'] = null;
+            $pedidos_a_insertar[$key]['NoteExistsFlag'] = '0';
+            $pedidos_a_insertar[$key]['RecordDate'] = '2023-06-06 10:41:17.180';
+            $pedidos_a_insertar[$key]['RowPointer'] =$GUID;
+            $pedidos_a_insertar[$key]['CreatedBy'] = 'FA/YURBINA';
+            $pedidos_a_insertar[$key]['UpdatedBy'] = 'FA/CGUTIERREZ';
+            $pedidos_a_insertar[$key]['CreateDate'] = '2023-06-06 08:59:22.550';
+        }
+        // Detener el cronómetro y calcular el tiempo transcurrido
+        $tiempoTranscurrido = microtime(true) - $inicio;
+
+        // Formatear el tiempo transcurrido utilizando Carbon
+        $tiempoFormateado = Carbon::createFromTimestampUTC($tiempoTranscurrido)->format('H:i:s');
+
+        echo 'Tiempo de ejecución: ' . $tiempoFormateado;
+        dd();
+
+        /*
+        
+        SELECT VENDEDOR,PEDIDO,FECHA_PEDIDO,TOTAL_A_FACTURAR,NIVEL_PRECIO,CLIENTE,NOMBRE_CLIENTE,CreatedBy,RowPointer FROM Softland.umk.PEDIDO WHERE FECHA_PEDIDO BETWEEN '2023-06-01 00:00:00.000' AND '2023-06-09 00:00:00.000' AND PEDIDO = 'PX8-009833'ORDER BY PEDIDO DESC;
+
+        SELECT *FROM Softland.umk.PEDIDO_LINEA WHERE PEDIDO = 'PX8-009833';
+
+        SELECT VENDEDOR,PEDIDO,FACTURA,FECHA_PEDIDO,TOTAL_UNIDADES,CreatedBy,RowPointer FROM Softland.umk.FACTURA WHERE PEDIDO = 'PX8-009833';
+
+        SELECT FACTURA,LINEA,PEDIDO,LOTE,CANTIDAD,PRECIO_UNITARIO FROM Softland.umk.FACTURA_LINEA WHERE PEDIDO = 'PX8-009833';
+
+        //SELECT * FROM Softland.umk.CONSECUTIVO_FA
+
+        */
+        return $dta;
+        
+
+
+
+    }
 }
