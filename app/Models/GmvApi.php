@@ -1302,16 +1302,16 @@ class GmvApi extends Model
     public static function setPedidos(Request $request)
     {
 
-        $Pedidos = Pedido::WHERE('name', 'F06')->get();
+        $Pedidos = Pedido::WHERE('name', 'F06')->limit(10)->get();
         $pedidos_a_insertar = array();
+        $lineass_a_insertar = array();
 
         $PedidoCodigo = PedidoUMK::getConsecutivo('PX6');
-        // Iniciar el cronómetro
-        $inicio = microtime(true);
+
         foreach ($Pedidos as $key => $value) {
+            $OrdenList = '';
 
             $ultimoConsecutivo = $PedidoCodigo;
-
     
             $ultimoNumero = intval(substr($ultimoConsecutivo, 6));
             $nuevoNumero = $ultimoNumero + ($key + 1);
@@ -1320,7 +1320,8 @@ class GmvApi extends Model
             $Cliente_Pedido = trim($value->email);
             $Cliente_Pedido = str_replace('-', '', $Cliente_Pedido);
 
-            $Monto_Pedido   = $value->orden_total;
+            $Monto_Pedido   = $value->order_total;
+            $Monto_Pedido = number_format((float) str_replace(',', '', $Monto_Pedido), 2, '.', '');
             $ttUnidades     = '40.00000000';
 
             
@@ -1417,34 +1418,96 @@ class GmvApi extends Model
             $pedidos_a_insertar[$key]['FECHA_APROBACION'] = null;
             $pedidos_a_insertar[$key]['NoteExistsFlag'] = '0';
             $pedidos_a_insertar[$key]['RecordDate'] = '2023-06-06 10:41:17.180';
-            $pedidos_a_insertar[$key]['RowPointer'] =$GUID;
+            $pedidos_a_insertar[$key]['RowPointer'] = $GUID;
             $pedidos_a_insertar[$key]['CreatedBy'] = 'FA/YURBINA';
             $pedidos_a_insertar[$key]['UpdatedBy'] = 'FA/CGUTIERREZ';
             $pedidos_a_insertar[$key]['CreateDate'] = '2023-06-06 08:59:22.550';
+
+            $OrdenList  = $value->order_list;
+            $Lineas     = explode("],", $OrdenList);
+            $cLineas    = count($Lineas) -1;
+            
+
+            for ($l=0; $l < $cLineas ; $l++){
+                $GUIDLINEA = PedidoLineaUMK::generateGUID();
+
+                $Lineas_detalles     = explode(";", $Lineas[$l]);
+                
+                $Articulo = $Lineas_detalles[1];
+                $Cantidad = $Lineas_detalles[4];
+                $Cantidad = number_format((float) str_replace(',', '', $Cantidad), 2, '.', '');
+
+                $lineass_a_insertar[$key]['PEDIDO'] = $nuevoConsecutivo;
+                $lineass_a_insertar[$key]['PEDIDO_LINEA'] = '0';
+                $lineass_a_insertar[$key]['BODEGA'] = '';
+                $lineass_a_insertar[$key]['LOTE'] = '';
+                $lineass_a_insertar[$key]['LOCALIZACION'] = '';
+                $lineass_a_insertar[$key]['ARTICULO'] = $Articulo;
+                $lineass_a_insertar[$key]['ESTADO'] = '';
+                $lineass_a_insertar[$key]['FECHA_ENTREGA'] = '';
+                $lineass_a_insertar[$key]['LINEA_USUARIO'] = '0';
+                $lineass_a_insertar[$key]['PRECIO_UNITARIO'] = '0.0';
+                $lineass_a_insertar[$key]['CANTIDAD_PEDIDA'] = $Cantidad;;
+                $lineass_a_insertar[$key]['CANTIDAD_A_FACTURA'] = '0.0';
+                $lineass_a_insertar[$key]['CANTIDAD_FACTURADA'] = '0.0';
+                $lineass_a_insertar[$key]['CANTIDAD_RESERVADA'] = '0.0';
+                $lineass_a_insertar[$key]['CANTIDAD_BONIFICAD'] = '0.0';
+                $lineass_a_insertar[$key]['CANTIDAD_CANCELADA'] = '0.0';
+                $lineass_a_insertar[$key]['TIPO_DESCUENTO'] = '';
+                $lineass_a_insertar[$key]['MONTO_DESCUENTO'] = '0.0';
+                $lineass_a_insertar[$key]['PORC_DESCUENTO'] = '0.0';
+                $lineass_a_insertar[$key]['DESCRIPCION'] = '';
+                $lineass_a_insertar[$key]['COMENTARIO'] = '';
+                $lineass_a_insertar[$key]['PEDIDO_LINEA_BONIF'] = '0';
+                $lineass_a_insertar[$key]['UNIDAD_DISTRIBUCIO'] = '';
+                $lineass_a_insertar[$key]['FECHA_PROMETIDA'] = '';
+                $lineass_a_insertar[$key]['LINEA_ORDEN_COMPRA'] = '0';
+                $lineass_a_insertar[$key]['PROYECTO'] = '';
+                $lineass_a_insertar[$key]['FASE'] = '';
+                $lineass_a_insertar[$key]['NoteExistsFlag'] = '0';
+                $lineass_a_insertar[$key]['RecordDate'] = '';
+                $lineass_a_insertar[$key]['RowPointer'] = $GUIDLINEA;
+                $lineass_a_insertar[$key]['CreatedBy'] = '';
+                $lineass_a_insertar[$key]['UpdatedBy'] = '';
+                $lineass_a_insertar[$key]['CreateDate'] = '';
+            }
         }
-        // Detener el cronómetro y calcular el tiempo transcurrido
-        $tiempoTranscurrido = microtime(true) - $inicio;
 
-        // Formatear el tiempo transcurrido utilizando Carbon
-        $tiempoFormateado = Carbon::createFromTimestampUTC($tiempoTranscurrido)->format('H:i:s');
+        try {
 
-        echo 'Tiempo de ejecución: ' . $tiempoFormateado;
-        dd();
+            PedidoUMK::insert($pedidos_a_insertar);
+            PedidoLineaUMK::insert($lineass_a_insertar);
+            
+  
 
+
+        } catch (Exception $e) {
+            $mensaje =  'Excepción capturada: ' . $e->getMessage() . "\n";
+            dd($mensaje);
+            //return response()->json($mensaje);
+        }
+
+        
+        
         /*
         
-        SELECT VENDEDOR,PEDIDO,FECHA_PEDIDO,TOTAL_A_FACTURAR,NIVEL_PRECIO,CLIENTE,NOMBRE_CLIENTE,CreatedBy,RowPointer FROM Softland.umk.PEDIDO WHERE FECHA_PEDIDO BETWEEN '2023-06-01 00:00:00.000' AND '2023-06-09 00:00:00.000' AND PEDIDO = 'PX8-009833'ORDER BY PEDIDO DESC;
+        DECLARE @Pedido varchar(50) = 'PX5-013126'
+        DECLARE @D1 varchar(50) = '2023-06-01 00:00:00.000'
+        DECLARE @D2 varchar(50) = '2023-06-09 00:00:00.000'
 
-        SELECT *FROM Softland.umk.PEDIDO_LINEA WHERE PEDIDO = 'PX8-009833';
+        SELECT VENDEDOR,PEDIDO,FECHA_PEDIDO,TOTAL_A_FACTURAR,NIVEL_PRECIO,CLIENTE,NOMBRE_CLIENTE,CreatedBy,RowPointer FROM Softland.umk.PEDIDO WHERE FECHA_PEDIDO BETWEEN @D1 AND @D2 AND PEDIDO = @Pedido ORDER BY PEDIDO DESC;
 
-        SELECT VENDEDOR,PEDIDO,FACTURA,FECHA_PEDIDO,TOTAL_UNIDADES,CreatedBy,RowPointer FROM Softland.umk.FACTURA WHERE PEDIDO = 'PX8-009833';
+        SELECT PEDIDO,PEDIDO_LINEA,BODEGA,LOTE,ARTICULO,LINEA_USUARIO ,PRECIO_UNITARIO,CANTIDAD_PEDIDA ,CANTIDAD_FACTURADA,PEDIDO_LINEA_BONIF,CreatedBy,RowPointer FROM Softland.umk.PEDIDO_LINEA WHERE PEDIDO = @Pedido;
 
-        SELECT FACTURA,LINEA,PEDIDO,LOTE,CANTIDAD,PRECIO_UNITARIO FROM Softland.umk.FACTURA_LINEA WHERE PEDIDO = 'PX8-009833';
+        SELECT VENDEDOR,PEDIDO,FACTURA,FECHA_PEDIDO,TOTAL_UNIDADES,CreatedBy,RowPointer FROM Softland.umk.FACTURA WHERE PEDIDO = @Pedido;
+
+        SELECT FACTURA,LINEA,PEDIDO,LOTE,CANTIDAD,PRECIO_UNITARIO FROM Softland.umk.FACTURA_LINEA WHERE PEDIDO = @Pedido ;
 
         //SELECT * FROM Softland.umk.CONSECUTIVO_FA
 
         */
-        return $dta;
+        dd();
+        return $pedidos_a_insertar;
         
 
 
