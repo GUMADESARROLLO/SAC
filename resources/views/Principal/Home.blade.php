@@ -222,7 +222,7 @@
                               </div>
                             </div>
                           </div>
-                          <table id="tbl_inventario" class="table table-striped overflow-hidden" style="width:100%"></table>
+                          <table id="tbl_inventario" class="table table-striped overflow-hidden " style="width:100%"></table>
                         </div>
 
                         <div class="tab-pane" id="crm-profit" role="tabpanel" aria-labelledby="crm-profit-tab">
@@ -450,6 +450,9 @@
                           <h6 class="mb-2" id="id_reglas">Cargando ... </h6>
                         </div>
                         <div class="col-auto">
+                        </div>
+                        
+                        <div class="col-auto">
                           <div class="row g-sm-4">
                             <div class="col-12 col-sm-auto">
                               <div class="mb-3 pe-4 border-sm-end border-200">
@@ -487,8 +490,12 @@
                                 </div>
                               </div>
                             </div>
+                            
                           </div>
                         </div>
+                        <div id="artImg">
+                            
+                          </div>
                       </div>
                     </div>
                     <div class="card-header">                    

@@ -6,7 +6,7 @@
     tbl_header_inventarios_Fav =  [                
                 {"title": "ARTICULO","data": "ARTICULO", "render": function(data, type, row, meta) {
                 var regla='';
-
+                var total = parseFloat( numeral(row['total']).format('00.00')) + parseFloat( numeral(row['005']).format('00.00')) 
                 if(row.REGLAS!='0'){
                     regla = '';
                     myArray = row.REGLAS.split(",");
@@ -17,7 +17,7 @@
                 }
 
                 return  ` <td class="align-middle">
-                    <div class="d-flex align-items-center position-relative"><img class="rounded-1 border border-200" src="{{ asset('images/item.png') }}"alt="" width="60">
+                    <div class="d-flex align-items-center position-relative"><img class="rounded-1 border border-200 img-fluid" src="`+row.IMG_URL+`"alt="" width="60">
                         <div class="flex-1 ms-3">
                         
                         <div class="d-flex align-items-center">
@@ -30,7 +30,7 @@
                         <div class="row g-0 fw-semi-bold text-center py-2"> 
                             <div class="col-auto">
                                 <a class="rounded-2 d-flex align-items-center me-3 text-700" href="#!">
-                                    <span class="ms-1 fas fa-boxes text-primary" ></span><span class="ms-1"> `+ numeral(row.total).format('0,00.00')  +` `+ row.UNIDAD_ALMACEN +`</span>
+                                    <span class="ms-1 fas fa-boxes text-primary" ></span><span class="ms-1"> `+ numeral(total).format('0,00.00')  +` `+ row.UNIDAD_ALMACEN +`</span>
                                 </a>
                             </div>
                             <div class="col-auto d-flex align-items-center"><span class="badge rounded-pill ms-3 badge-soft-primary">
@@ -54,6 +54,8 @@
                 {"title": "ARTICULO","data": "ARTICULO", "render": function(data, type, row, meta) {
                 var regla='';
 
+                var total = parseFloat( numeral(row['total']).format('00.00')) + parseFloat( numeral(row['005']).format('00.00')) 
+
                 if(row.REGLAS!='0'){
                     regla = '';
                     myArray = row.REGLAS.split(",");
@@ -62,7 +64,7 @@
                         regla +='<span class="badge rounded-pill ms-3 badge-soft-primary"><span class="fas fa-check"></span> '+value+'</span>'
                     });
                 }
-
+                var total = parseFloat( numeral(row['total']).format('00.00')) + parseFloat( numeral(row['005']).format('00.00'))
                 return  ` <td class="align-middle">
                     <div class="d-flex align-items-center position-relative"><img class="rounded-1 border border-200" src="{{ asset('images/item.png') }}"alt="" width="60">
                         <div class="flex-1 ms-3">
@@ -77,7 +79,7 @@
                         <div class="row g-0 fw-semi-bold text-center py-2"> 
                             <div class="col-auto">
                                 <a class="rounded-2 d-flex align-items-center me-3 text-700" href="#!">
-                                    <span class="ms-1 fas fa-boxes text-primary" ></span><span class="ms-1"> `+ numeral(row.total).format('0,00.00')  +` `+ row.UNIDAD_ALMACEN +`</span>
+                                    <span class="ms-1 fas fa-boxes text-primary" ></span><span class="ms-1"> `+ numeral(total).format('0,00.00')  +` `+ row.UNIDAD_ALMACEN +`</span>
                                 </a>
                             </div>
                             <div class="col-auto d-flex align-items-center"><span class="badge rounded-pill ms-3 badge-soft-primary">
@@ -280,6 +282,18 @@
 
        
     }
+
+    $(document).on('click', '.img-fluid', function (e) {
+        url_image = $(this).attr('src');
+        Swal.fire({
+            showCloseButton: true,
+            showConfirmButton: false,
+            imageUrl: url_image,
+            imageAlt: 'Custom image',
+        })
+
+        $(".swal2-popup").css('width', '50%');
+    })  
 
     
 </script>

@@ -46,14 +46,27 @@ class Comision extends Model{
         $cliente_fact=0;
         $cliente_CUMp=0;
         $Cliente_cober=0;
-        
-        $query      = DB::connection('sqlsrv')->select('EXEC PRODUCCION.dbo.fn_comision_calc_8020 "'.$Mes.'","'.$Anno.'","'.$Ruta.'", "'.'N/D'.'" ');
-        
-        $qCobertura = DB::connection('sqlsrv')->select('EXEC PRODUCCION.dbo.fn_comision_calc_BonoCobertura "'.$Mes.'","'.$Anno.'","'.$Ruta.'"');
 
-        // CARGA LOS ARTICULOS QUE NUEVOS QUE NO SE ALLAN FACTURADO EN EL PERIODO EVALUADO
-        DB::connection('sqlsrv')->select('EXEC PRODUCCION.dbo.fn_comision_articulo_new "'.$Mes.'","'.$Anno.'","'.$Ruta.'"');
-        sleep(2);
+        
+        $Query_Articulos = '';
+        $Query_Clientes  = '';
+
+        
+
+        if(date('n') == $Mes){
+            DB::connection('sqlsrv')->select('EXEC PRODUCCION.dbo.fn_comision_articulo_new "'.$Mes.'","'.$Anno.'","'.$Ruta.'"');
+            $Query_Articulos = 'EXEC PRODUCCION.dbo.fn_comision_calc_8020 "'.$Mes.'","'.$Anno.'","'.$Ruta.'", "'.'N/D'.'" ';
+            $Query_Clientes  = 'EXEC PRODUCCION.dbo.fn_comision_calc_BonoCobertura "'.$Mes.'","'.$Anno.'","'.$Ruta.'"';
+        }else{
+            $Query_Articulos = "SELECT * FROM PRODUCCION.dbo.table_comision_calc_8020 T0 WHERE T0.VENDEDOR = '".$Ruta."' AND T0.nMes = ".$Mes." AND T0.nYear = ".$Anno."";
+            $Query_Clientes  = "SELECT * FROM PRODUCCION.dbo.table_comision_calc_BonoCobertura T0 WHERE T0.VENDEDOR = '".$Ruta."' AND T0.nMes = ".$Mes." AND T0.nYear = ".$Anno."";
+        }
+
+        
+        
+        $query      = DB::connection('sqlsrv')->select($Query_Articulos);
+        $qCobertura = DB::connection('sqlsrv')->select($Query_Clientes);
+
         if (count($qCobertura )>0) {
             $cliente_prom=number_format($qCobertura[0]->PROMEDIOANUAL,0,'.','');
             $cliente_meta=number_format($qCobertura[0]->METAMES,0,'.','');
@@ -107,7 +120,11 @@ class Comision extends Model{
                                                         return $item;
                                                     }
                                                 })); 
-        $sum_venta_articulos_lista80        = array_sum(array_column($Array_articulos_lista80,'VentaVAL'));
+
+        
+        $sum_venta_articulos_lista80        = array_sum(array_column($Array_articulos_lista80,'VentaVAL'));       
+
+        
         $factor_comision_venta_lista80      = 3;
         
         $count_articulos_lista20            = count(array_filter($Array_articulos_cumplen,function($item){
@@ -241,5 +258,11 @@ class Comision extends Model{
 
         return $Vl;
 
+    }
+    public static function getHistoryItems($Ruta,$Mes,$Anno)
+    {
+        $query      = DB::connection('sqlsrv')->select('EXEC PRODUCCION.dbo.fn_comision_calc_8020 "'.$Mes.'","'.$Anno.'","'.$Ruta.'", "'.'N/D'.'" ');
+
+        return $query;
     }
 }
