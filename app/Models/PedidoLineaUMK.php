@@ -16,8 +16,5 @@ class PedidoLineaUMK extends Model
     static public function generateGUID() {
         return strtoupper(Uuid::uuid4()->toString());
     }
-   
-
-
 
 }
