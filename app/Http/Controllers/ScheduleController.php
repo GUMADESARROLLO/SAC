@@ -10,7 +10,8 @@ class ScheduleController extends Controller
 {
     public function handle()
     {
+        DB::connection('sqlsrv')->select('SET NOCOUNT ON; EXEC PRODUCCION.dbo.fn_vinnetas_calc ');
+
         \Log::channel('Schedule')->info("Actualizacion de Vinetas");
-        DB::connection('sqlsrv')->select('EXEC fn_vinnetas_calc ');
     }
 }

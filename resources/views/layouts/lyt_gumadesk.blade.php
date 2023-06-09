@@ -20,6 +20,7 @@
     
     <script src="{{ asset('js/theme_gumadesk/config.js') }}"></script>
     <script src="{{ asset('js/theme_gumadesk/vendors/overlayscrollbars/OverlayScrollbars.min.js') }}"></script>
+    <link rel="stylesheet" href="{{ asset('css/Tooltip.css') }}">
     <link href="{{ asset('js/theme_gumadesk/vendors/flatpickr/flatpickr.min.css') }}" rel="stylesheet" >
     <link href="{{ asset('js/theme_gumadesk/vendors/glightbox/glightbox.min.css') }}" rel="stylesheet" >
     <link href="{{ asset('js/theme_gumadesk/vendors/plyr/plyr.css') }}" rel="stylesheet" >

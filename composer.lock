@@ -221,7 +221,7 @@
                 "shasum": ""
             },
             "require": {
-                "dompdf/dompdf": "^2",
+                "dompdf/dompdf": "^2.0.2",
                 "illuminate/support": "^6|^7|^8|^9",
                 "php": "^7.2 || ^8.0"
             },
@@ -1349,7 +1349,7 @@
                 "symfony/error-handler": "^5.0",
                 "symfony/finder": "^5.0",
                 "symfony/http-foundation": "^5.0",
-                "symfony/http-kernel": "^5.0",
+                "symfony/http-kernel": "^5.4.20",
                 "symfony/mime": "^5.0",
                 "symfony/polyfill-php73": "^1.17",
                 "symfony/process": "^5.0",
@@ -2998,7 +2998,7 @@
             },
             "require-dev": {
                 "dealerdirect/phpcodesniffer-composer-installer": "dev-master",
-                "dompdf/dompdf": "^1.0 || ^2.0",
+                "dompdf/dompdf": "^1.0 || ^2.0.2",
                 "friendsofphp/php-cs-fixer": "^3.2",
                 "mitoteam/jpgraph": "^10.2.4",
                 "mpdf/mpdf": "^8.1.1",
