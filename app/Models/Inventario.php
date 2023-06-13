@@ -49,7 +49,7 @@ class Inventario extends Model
          
         
         $listaArticulos = Inventario::whereIn('ARTICULO',$articulos_favoritos)->get();
-        $Info_Articulo = DB::table('ecommerce_android_app.tbl_product')->whereIn('product_sku', $articulos_favoritos)->get();
+        $Info_Articulo = DB::table('db_preventa_umk.tbl_product')->whereIn('product_sku', $articulos_favoritos)->get();
         foreach($listaArticulos as $item){
             $img = "item.png";
             $json[$i]['ARTICULO'] = $item->ARTICULO;
@@ -71,7 +71,7 @@ class Inventario extends Model
                     break;
                 }
             }
-            $json[$i]['IMG_URL'] = Storage::temporaryUrl('product/'.$img, now()->addMinutes(5));
+            $json[$i]['IMG_URL'] = Storage::Disk('s3')->temporaryUrl('product/'.$img, now()->addMinutes(5));
            $i++;
         }
         //dd($json);

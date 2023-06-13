@@ -260,12 +260,16 @@ class GmvApiController extends Controller{
         return response()->json($Comision);
         
     }
+    public function setPedidos(Request $request){
+        $obj = GmvApi::setPedidos($request);
+
+        return response()->json($obj);
+    }
     public function getHistoryItems($Ruta,$nMonth,$nYear)
     {
         $InserteDate = date('Y-m-d');        
         $rowInsert   = "INSERT INTO tbl_logs (RUTA,FECHA, MODULO) VALUES ('$Ruta','$InserteDate', 'Items8020')";
         $Comision = Comision::getHistoryItems($Ruta,$nMonth,$nYear);
         return response()->json($Comision);
-        
     }
 }

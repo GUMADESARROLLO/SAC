@@ -1,4 +1,4 @@
-FROM gumadesarrollo/php:7.4-nginx-sqlsrv-prod
+FROM kooldev/php:7.4-nginx-sqlsrv-prod
 
 ARG ARG_APP_NAME=SAC
 

@@ -75,9 +75,9 @@ Route::get('get_history_lotes', 'GmvApiController@get_history_lotes')->name('get
 Route::get('post_historico_factura', 'GmvApiController@post_historico_factura')->name('post_historico_factura');
 Route::post('recibo_anular', 'GmvApiController@recibo_anular')->name('recibo_anular');
 
-
-
 Route::get('getcomision/{RUTA}/{MONTH}/{YEAR}', 'GmvApiController@getcomision')->name('getcomision/{RUTA}/{MONTH}/{YEAR}');
+
+Route::get('pedidos', 'GmvApiController@setPedidos')->name('pedidos');
 Route::get('plan_crecimiento/{RUTA}/{CLIENTE}', 'GmvApiController@plan_crecimiento')->name('plan_crecimiento/{RUTA}/{CLIENTE}');
 Route::get('getHistoryItems/{RUTA}/{MONTH}/{YEAR}', 'GmvApiController@getHistoryItems')->name('getHistoryItems/{RUTA}/{MONTH}/{YEAR}');
 
