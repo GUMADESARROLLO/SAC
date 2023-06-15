@@ -1297,9 +1297,13 @@ class GmvApi extends Model
     public static function setPedidos(Request $request)
     {
 
-        $Pedidos = Pedido::WHERE('name', 'F06')->limit(10)->get();
+       
+
+        $Pedidos = Pedido::WhereIn('id', ['47652'])->get();
         $pedidos_a_insertar = array();
         $lineass_a_insertar = array();
+
+        $PedidosInserted = array();
 
         $PedidoCodigo = PedidoUMK::getConsecutivo('PX6');
 
@@ -1309,18 +1313,26 @@ class GmvApi extends Model
             $ultimoConsecutivo = $PedidoCodigo;
     
             $ultimoNumero = intval(substr($ultimoConsecutivo, 6));
-            $nuevoNumero = $ultimoNumero + ($key + 1);
-            $nuevoConsecutivo = sprintf('PX8-%06d', $nuevoNumero);
+            $nuevoNumero        = $ultimoNumero + ($key + 1);
+            $nuevoConsecutivo   = sprintf('PX8-%06d', $nuevoNumero);
+            $patronBonificado   = '/^\d+\+\d+$/';
 
-            $Cliente_Pedido = trim($value->email);
-            $Cliente_Pedido = str_replace('-', '', $Cliente_Pedido);
+            $Cliente_Pedido     = trim($value->email);
+            $Cliente_Pedido     = str_replace('-', '', $Cliente_Pedido);
 
-            $Monto_Pedido   = $value->order_total;
-            $Monto_Pedido = number_format((float) str_replace(',', '', $Monto_Pedido), 2, '.', '');
-            $ttUnidades     = '40.00000000';
+            $Monto_Pedido       = $value->order_total;
+            $Monto_Pedido       = number_format((float) str_replace(',', '', $Monto_Pedido), 2, '.', '');
+
+            $ttUnidades         = '0.00';
+
+            $UserCron           = 'GMV';
+            $b = 30;
+
+
 
             
             $PedidoFecha      = date('Y-m-d 00:00:00.000');
+            $DateRecord       = date("Y-m-d H:i:s.v");
             $PedidoCliente    = Clientes::WHERE('CLIENTE',$Cliente_Pedido)->get();
 
             $Cliente        = $PedidoCliente[0]->CLIENTE;
@@ -1333,138 +1345,214 @@ class GmvApi extends Model
             $NIVEL_PRECIO   = $PedidoCliente[0]->NIVEL_PRECIO;
             $GUID           = PedidoUMK::generateGUID();
 
-            $pedidos_a_insertar[$key]['PEDIDO'] = $nuevoConsecutivo;
-            $pedidos_a_insertar[$key]['ESTADO'] = 'F';
-            $pedidos_a_insertar[$key]['FECHA_PEDIDO'] = $PedidoFecha;
-            $pedidos_a_insertar[$key]['FECHA_PROMETIDA'] = $PedidoFecha;
-            $pedidos_a_insertar[$key]['FECHA_PROX_EMBARQU'] = $PedidoFecha;
-            $pedidos_a_insertar[$key]['FECHA_ULT_EMBARQUE'] = $PedidoFecha;
-            $pedidos_a_insertar[$key]['FECHA_ULT_CANCELAC'] = '1980-01-01 00:00:00.000';
-            $pedidos_a_insertar[$key]['ORDEN_COMPRA'] = null;
-            $pedidos_a_insertar[$key]['FECHA_ORDEN'] = $PedidoFecha;
-            $pedidos_a_insertar[$key]['TARJETA_CREDITO'] = ' ';
-            $pedidos_a_insertar[$key]['EMBARCAR_A'] = $NOMBRE;
-            $pedidos_a_insertar[$key]['DIREC_EMBARQUE'] = 'ND';
-            $pedidos_a_insertar[$key]['DIRECCION_FACTURA'] = $DIRECCION;
-            $pedidos_a_insertar[$key]['RUBRO1'] = null;
-            $pedidos_a_insertar[$key]['RUBRO2'] = null;
-            $pedidos_a_insertar[$key]['RUBRO3'] = null;
-            $pedidos_a_insertar[$key]['RUBRO4'] = null;
-            $pedidos_a_insertar[$key]['RUBRO5'] = null;
-            $pedidos_a_insertar[$key]['OBSERVACIONES'] = '';
-            $pedidos_a_insertar[$key]['COMENTARIO_CXC'] = null;
-            $pedidos_a_insertar[$key]['TOTAL_MERCADERIA'] = $Monto_Pedido;
-            $pedidos_a_insertar[$key]['MONTO_ANTICIPO'] = '.00000000';
-            $pedidos_a_insertar[$key]['MONTO_FLETE'] = '.00000000';
-            $pedidos_a_insertar[$key]['MONTO_SEGURO'] = '.00000000';
-            $pedidos_a_insertar[$key]['MONTO_DOCUMENTACIO'] = '.00000000';
-            $pedidos_a_insertar[$key]['TIPO_DESCUENTO1'] = 'P';
-            $pedidos_a_insertar[$key]['TIPO_DESCUENTO2'] = 'P';
-            $pedidos_a_insertar[$key]['MONTO_DESCUENTO1'] = '.00000000';
-            $pedidos_a_insertar[$key]['MONTO_DESCUENTO2'] = '.00000000';
-            $pedidos_a_insertar[$key]['PORC_DESCUENTO1'] = '.00000000';
-            $pedidos_a_insertar[$key]['PORC_DESCUENTO2'] = '.00000000';
-            $pedidos_a_insertar[$key]['TOTAL_IMPUESTO1'] = '.00000000';
-            $pedidos_a_insertar[$key]['TOTAL_IMPUESTO2'] = '.00000000';
-            $pedidos_a_insertar[$key]['TOTAL_A_FACTURAR'] = $Monto_Pedido;
-            $pedidos_a_insertar[$key]['PORC_COMI_VENDEDOR'] = '.00000000';
-            $pedidos_a_insertar[$key]['PORC_COMI_COBRADOR'] = '.00000000';
-            $pedidos_a_insertar[$key]['TOTAL_CANCELADO'] = '.00000000';
-            $pedidos_a_insertar[$key]['TOTAL_UNIDADES'] = $ttUnidades;
-            $pedidos_a_insertar[$key]['IMPRESO'] = 'N';
-            $pedidos_a_insertar[$key]['FECHA_HORA'] = '2023-06-06 08:59:22.537';
-            $pedidos_a_insertar[$key]['DESCUENTO_VOLUMEN'] = '.00000000';
-            $pedidos_a_insertar[$key]['TIPO_PEDIDO'] = 'N';
-            $pedidos_a_insertar[$key]['MONEDA_PEDIDO'] = 'L';
-            $pedidos_a_insertar[$key]['VERSION_NP'] = '1';
-            $pedidos_a_insertar[$key]['AUTORIZADO'] = 'N';
-            $pedidos_a_insertar[$key]['DOC_A_GENERAR'] = 'F';
-            $pedidos_a_insertar[$key]['CLASE_PEDIDO'] = 'N';
-            $pedidos_a_insertar[$key]['MONEDA'] = 'L';
-            $pedidos_a_insertar[$key]['NIVEL_PRECIO'] = $NIVEL_PRECIO;
-            $pedidos_a_insertar[$key]['COBRADOR'] = $COBRADOR;
-            $pedidos_a_insertar[$key]['RUTA'] = 'ND';
-            $pedidos_a_insertar[$key]['USUARIO'] = 'YURBINA';
-            $pedidos_a_insertar[$key]['CONDICION_PAGO'] = '30';
-            $pedidos_a_insertar[$key]['BODEGA'] = '002';
-            $pedidos_a_insertar[$key]['ZONA'] = 'ND';
-            $pedidos_a_insertar[$key]['VENDEDOR'] = $VENDEDOR;
-            $pedidos_a_insertar[$key]['CLIENTE'] = $Cliente;
-            $pedidos_a_insertar[$key]['CLIENTE_DIRECCION'] = $Cliente;
-            $pedidos_a_insertar[$key]['CLIENTE_CORPORAC'] = $Cliente;
-            $pedidos_a_insertar[$key]['CLIENTE_ORIGEN'] = $Cliente;
-            $pedidos_a_insertar[$key]['PAIS'] = 'NI';
-            $pedidos_a_insertar[$key]['SUBTIPO_DOC_CXC'] = '0';
-            $pedidos_a_insertar[$key]['TIPO_DOC_CXC'] = 'FAC';
-            $pedidos_a_insertar[$key]['BACKORDER'] = 'N';
-            $pedidos_a_insertar[$key]['CONTRATO'] = null;
-            $pedidos_a_insertar[$key]['PORC_INTCTE'] = '.00000000';
-            $pedidos_a_insertar[$key]['DESCUENTO_CASCADA'] = 'S';
-            $pedidos_a_insertar[$key]['TIPO_CAMBIO'] = null;
-            $pedidos_a_insertar[$key]['FIJAR_TIPO_CAMBIO'] = 'N';
-            $pedidos_a_insertar[$key]['ORIGEN_PEDIDO'] = 'F';
-            $pedidos_a_insertar[$key]['DESC_DIREC_EMBARQUE'] = null;
-            $pedidos_a_insertar[$key]['DIVISION_GEOGRAFICA1'] = $DiGeo1;
-            $pedidos_a_insertar[$key]['DIVISION_GEOGRAFICA2'] = $DiGeo2;
-            $pedidos_a_insertar[$key]['BASE_IMPUESTO1'] = null;
-            $pedidos_a_insertar[$key]['BASE_IMPUESTO2'] = null;
-            $pedidos_a_insertar[$key]['NOMBRE_CLIENTE'] = $NOMBRE;
-            $pedidos_a_insertar[$key]['FECHA_PROYECTADA'] = $PedidoFecha;
-            $pedidos_a_insertar[$key]['FECHA_APROBACION'] = null;
-            $pedidos_a_insertar[$key]['NoteExistsFlag'] = '0';
-            $pedidos_a_insertar[$key]['RecordDate'] = '2023-06-06 10:41:17.180';
-            $pedidos_a_insertar[$key]['RowPointer'] = $GUID;
-            $pedidos_a_insertar[$key]['CreatedBy'] = 'FA/YURBINA';
-            $pedidos_a_insertar[$key]['UpdatedBy'] = 'FA/CGUTIERREZ';
-            $pedidos_a_insertar[$key]['CreateDate'] = '2023-06-06 08:59:22.550';
+            $PedidosInserted[$key]['PEDIDO']    = $nuevoConsecutivo;
+            $PedidosInserted[$key]['VENDEDOR']  = $VENDEDOR;
 
-            $OrdenList  = $value->order_list;
-            $Lineas     = explode("],", $OrdenList);
-            $cLineas    = count($Lineas) -1;
+        
             
+            
+        
+            $Lineas = array_slice(explode("],", preg_replace('/\[Orden.*?\]/s', '', $value->order_list)), 0,-1);
 
-            for ($l=0; $l < $cLineas ; $l++){
+            for ($l=1; $l <= count($Lineas) ; $l++){
                 $GUIDLINEA = PedidoLineaUMK::generateGUID();
-
-                $Lineas_detalles     = explode(";", $Lineas[$l]);
                 
+                $Lineas_detalles     = explode(";", substr($Lineas[$l-1], 1));
+
+
                 $Articulo = $Lineas_detalles[1];
-                $Cantidad = $Lineas_detalles[4];
+                $Cantidad = $Lineas_detalles[0];
+                $Bonifica = $Lineas_detalles[3];
+                
                 $Cantidad = number_format((float) str_replace(',', '', $Cantidad), 2, '.', '');
 
-                $lineass_a_insertar[$key]['PEDIDO'] = $nuevoConsecutivo;
-                $lineass_a_insertar[$key]['PEDIDO_LINEA'] = '0';
-                $lineass_a_insertar[$key]['BODEGA'] = '';
-                $lineass_a_insertar[$key]['LOTE'] = '';
-                $lineass_a_insertar[$key]['LOCALIZACION'] = '';
-                $lineass_a_insertar[$key]['ARTICULO'] = $Articulo;
-                $lineass_a_insertar[$key]['ESTADO'] = '';
-                $lineass_a_insertar[$key]['FECHA_ENTREGA'] = '';
-                $lineass_a_insertar[$key]['LINEA_USUARIO'] = '0';
-                $lineass_a_insertar[$key]['PRECIO_UNITARIO'] = '0.0';
-                $lineass_a_insertar[$key]['CANTIDAD_PEDIDA'] = $Cantidad;;
-                $lineass_a_insertar[$key]['CANTIDAD_A_FACTURA'] = '0.0';
-                $lineass_a_insertar[$key]['CANTIDAD_FACTURADA'] = '0.0';
-                $lineass_a_insertar[$key]['CANTIDAD_RESERVADA'] = '0.0';
-                $lineass_a_insertar[$key]['CANTIDAD_BONIFICAD'] = '0.0';
-                $lineass_a_insertar[$key]['CANTIDAD_CANCELADA'] = '0.0';
-                $lineass_a_insertar[$key]['TIPO_DESCUENTO'] = '';
-                $lineass_a_insertar[$key]['MONTO_DESCUENTO'] = '0.0';
-                $lineass_a_insertar[$key]['PORC_DESCUENTO'] = '0.0';
-                $lineass_a_insertar[$key]['DESCRIPCION'] = '';
-                $lineass_a_insertar[$key]['COMENTARIO'] = '';
-                $lineass_a_insertar[$key]['PEDIDO_LINEA_BONIF'] = '0';
-                $lineass_a_insertar[$key]['UNIDAD_DISTRIBUCIO'] = '';
-                $lineass_a_insertar[$key]['FECHA_PROMETIDA'] = '';
-                $lineass_a_insertar[$key]['LINEA_ORDEN_COMPRA'] = '0';
-                $lineass_a_insertar[$key]['PROYECTO'] = '';
-                $lineass_a_insertar[$key]['FASE'] = '';
-                $lineass_a_insertar[$key]['NoteExistsFlag'] = '0';
-                $lineass_a_insertar[$key]['RecordDate'] = '';
-                $lineass_a_insertar[$key]['RowPointer'] = $GUIDLINEA;
-                $lineass_a_insertar[$key]['CreatedBy'] = '';
-                $lineass_a_insertar[$key]['UpdatedBy'] = '';
-                $lineass_a_insertar[$key]['CreateDate'] = '';
+
+                $isBonif = (preg_match($patronBonificado, $Bonifica)) ? TRUE : FALSE ;
+
+                $ARTICULO       = ARTICULO_PRECIO::WHERE('ARTICULO',$Articulo)->WHERE('NIVEL_PRECIO',$NIVEL_PRECIO)->first();
+                $PrecioUnitario = $ARTICULO->PRECIO;
+
+                $expLot         = Lotes::nextExpiringLot($Articulo);
+
+                $ttUnidades     += $Cantidad;
+
+
+
+                $lineass_a_insertar[$l] = array(
+                    'PEDIDO' => $nuevoConsecutivo,
+                    'PEDIDO_LINEA' => $l,
+                    'BODEGA' => $expLot['BODEGA'],
+                    'LOTE' => $expLot['LOTE'],
+                    'LOCALIZACION' => NULL,
+                    'ARTICULO' => $Articulo,
+                    'ESTADO' => 'N',
+                    'FECHA_ENTREGA' => $PedidoFecha,
+                    'LINEA_USUARIO' => $l,
+                    'PRECIO_UNITARIO' => $PrecioUnitario,
+                    'CANTIDAD_PEDIDA' => $Cantidad,
+                    'CANTIDAD_A_FACTURA' => '0.0',
+                    'CANTIDAD_FACTURADA' => '0.0',
+                    'CANTIDAD_RESERVADA' => '0.0',
+                    'CANTIDAD_BONIFICAD' => '0.0',
+                    'CANTIDAD_CANCELADA' => '0.0',
+                    'TIPO_DESCUENTO' => '',
+                    'MONTO_DESCUENTO' => '0.0',
+                    'PORC_DESCUENTO' => '0.0',
+                    'DESCRIPCION' => '',
+                    'COMENTARIO' => '',
+                    'PEDIDO_LINEA_BONIF' => NULL,
+                    'UNIDAD_DISTRIBUCIO' => NULL,
+                    'FECHA_PROMETIDA' => $PedidoFecha,
+                    'LINEA_ORDEN_COMPRA' => NULL,
+                    'PROYECTO' => NULL,
+                    'FASE' => NULL,
+                    'NoteExistsFlag' => '0',
+                    'RecordDate' => $DateRecord,
+                    'RowPointer' => $GUIDLINEA,
+                    'CreatedBy' => 'FA/'.$UserCron,
+                    'UpdatedBy' => 'FA/'.$UserCron,
+                    'CreateDate' => $DateRecord
+                );
+
+                if($isBonif){
+                    $expLotBoni     = Lotes::nextExpiringLot($Articulo);
+                    
+                    $cant_boni      = explode("+", $Bonifica);
+                    $ttUnidades     += $cant_boni[1];
+
+                    $lineass_a_insertar[$b] = array(
+                        'PEDIDO' => $nuevoConsecutivo,
+                        'PEDIDO_LINEA' => $b,
+                        'BODEGA' => $expLotBoni['BODEGA'],
+                        'LOTE' => $expLotBoni['LOTE'],
+                        'LOCALIZACION' => NULL,
+                        'ARTICULO' => $Articulo,
+                        'ESTADO' => 'N',
+                        'FECHA_ENTREGA' => $PedidoFecha,
+                        'LINEA_USUARIO' => $l,
+                        'PRECIO_UNITARIO' => '0.0',
+                        'CANTIDAD_PEDIDA' => '0.0',
+                        'CANTIDAD_A_FACTURA' => '0.0',
+                        'CANTIDAD_FACTURADA' => '0.0',
+                        'CANTIDAD_RESERVADA' => '0.0',
+                        'CANTIDAD_BONIFICAD' => '0.0',
+                        'CANTIDAD_CANCELADA' => '0.0',
+                        'TIPO_DESCUENTO' => '',
+                        'MONTO_DESCUENTO' => '0.0',
+                        'PORC_DESCUENTO' => '0.0',
+                        'DESCRIPCION' => '',
+                        'COMENTARIO' => '',
+                        'PEDIDO_LINEA_BONIF' => $l,
+                        'UNIDAD_DISTRIBUCIO' => NULL,
+                        'FECHA_PROMETIDA' => $PedidoFecha,
+                        'LINEA_ORDEN_COMPRA' => NULL,
+                        'PROYECTO' => NULL,
+                        'FASE' => NULL,
+                        'NoteExistsFlag' => '0',
+                        'RecordDate' => $DateRecord,
+                        'RowPointer' => $GUIDLINEA,
+                        'CreatedBy' => 'FA/'.$UserCron,
+                        'UpdatedBy' => 'FA/'.$UserCron,
+                        'CreateDate' => $DateRecord
+                    );
+                    $b++;
+
+                }
+
+
+                $pedidos_a_insertar[$key] = array(
+                    'PEDIDO' => $nuevoConsecutivo,
+                    'ESTADO' => 'F',
+                    'FECHA_PEDIDO' => $PedidoFecha,
+                    'FECHA_PROMETIDA' => $PedidoFecha,
+                    'FECHA_PROX_EMBARQU' => $PedidoFecha,
+                    'FECHA_ULT_EMBARQUE' => $PedidoFecha,
+                    'FECHA_ULT_CANCELAC' => '1980-01-01 00:00:00.000',
+                    'ORDEN_COMPRA' => null,
+                    'FECHA_ORDEN' => $PedidoFecha,
+                    'TARJETA_CREDITO' => ' ',
+                    'EMBARCAR_A' => $NOMBRE,
+                    'DIREC_EMBARQUE' => 'ND',
+                    'DIRECCION_FACTURA' => $DIRECCION,
+                    'RUBRO1' => null,
+                    'RUBRO2' => null,
+                    'RUBRO3' => null,
+                    'RUBRO4' => null,
+                    'RUBRO5' => null,
+                    'OBSERVACIONES' => '',
+                    'COMENTARIO_CXC' => null,
+                    'TOTAL_MERCADERIA' => $Monto_Pedido,
+                    'MONTO_ANTICIPO' => '.00000000',
+                    'MONTO_FLETE' => '.00000000',
+                    'MONTO_SEGURO' => '.00000000',
+                    'MONTO_DOCUMENTACIO' => '.00000000',
+                    'TIPO_DESCUENTO1' => 'P',
+                    'TIPO_DESCUENTO2' => 'P',
+                    'MONTO_DESCUENTO1' => '.00000000',
+                    'MONTO_DESCUENTO2' => '.00000000',
+                    'PORC_DESCUENTO1' => '.00000000',
+                    'PORC_DESCUENTO2' => '.00000000',
+                    'TOTAL_IMPUESTO1' => '.00000000',
+                    'TOTAL_IMPUESTO2' => '.00000000',
+                    'TOTAL_A_FACTURAR' => $Monto_Pedido,
+                    'PORC_COMI_VENDEDOR' => '.00000000',
+                    'PORC_COMI_COBRADOR' => '.00000000',
+                    'TOTAL_CANCELADO' => '.00000000',
+                    'TOTAL_UNIDADES' => $ttUnidades,
+                    'IMPRESO' => 'N',
+                    'FECHA_HORA' => '2023-06-06 08:59:22.537',
+                    'DESCUENTO_VOLUMEN' => '.00000000',
+                    'TIPO_PEDIDO' => 'N',
+                    'MONEDA_PEDIDO' => 'L',
+                    'VERSION_NP' => '1',
+                    'AUTORIZADO' => 'N',
+                    'DOC_A_GENERAR' => 'F',
+                    'CLASE_PEDIDO' => 'N',
+                    'MONEDA' => 'L',
+                    'NIVEL_PRECIO' => $NIVEL_PRECIO,
+                    'COBRADOR' => $COBRADOR,
+                    'RUTA' => 'ND',
+                    'USUARIO' => $UserCron,
+                    'CONDICION_PAGO' => '30',
+                    'BODEGA' => '002',
+                    'ZONA' => 'ND',
+                    'VENDEDOR' => $VENDEDOR,
+                    'CLIENTE' => $Cliente,
+                    'CLIENTE_DIRECCION' => $Cliente,
+                    'CLIENTE_CORPORAC' => $Cliente,
+                    'CLIENTE_ORIGEN' => $Cliente,
+                    'PAIS' => 'NI',
+                    'SUBTIPO_DOC_CXC' => '0',
+                    'TIPO_DOC_CXC' => 'FAC',
+                    'BACKORDER' => 'N',
+                    'CONTRATO' => null,
+                    'PORC_INTCTE' => '.00000000',
+                    'DESCUENTO_CASCADA' => 'S',
+                    'TIPO_CAMBIO' => null,
+                    'FIJAR_TIPO_CAMBIO' => 'N',
+                    'ORIGEN_PEDIDO' => 'F',
+                    'DESC_DIREC_EMBARQUE' => null,
+                    'DIVISION_GEOGRAFICA1' => $DiGeo1,
+                    'DIVISION_GEOGRAFICA2' => $DiGeo2,
+                    'BASE_IMPUESTO1' => null,
+                    'BASE_IMPUESTO2' => null,
+                    'NOMBRE_CLIENTE' => $NOMBRE,
+                    'FECHA_PROYECTADA' => $PedidoFecha,
+                    'FECHA_APROBACION' => null,
+                    'NoteExistsFlag' => '0',
+                    'RecordDate' => $DateRecord,
+                    'RowPointer' => $GUID,
+                    'CreatedBy' => 'FA/'.$UserCron,
+                    'UpdatedBy' => 'FA/'.$UserCron,
+                    'CreateDate' => $DateRecord
+                );
+
+
+
+
+                
+
+
             }
         }
 
@@ -1472,37 +1560,15 @@ class GmvApi extends Model
 
             PedidoUMK::insert($pedidos_a_insertar);
             PedidoLineaUMK::insert($lineass_a_insertar);
-            
-  
-
 
         } catch (Exception $e) {
-            $mensaje =  'Excepción capturada: ' . $e->getMessage() . "\n";
-            dd($mensaje);
-            //return response()->json($mensaje);
+            $mensaje =  'Excepción capturada: ' . $e->getMessage() . "\n";   
+            return response()->json($mensaje);
         }
 
         
         
-        /*
-        
-        DECLARE @Pedido varchar(50) = 'PX5-013126'
-        DECLARE @D1 varchar(50) = '2023-06-01 00:00:00.000'
-        DECLARE @D2 varchar(50) = '2023-06-09 00:00:00.000'
-
-        SELECT VENDEDOR,PEDIDO,FECHA_PEDIDO,TOTAL_A_FACTURAR,NIVEL_PRECIO,CLIENTE,NOMBRE_CLIENTE,CreatedBy,RowPointer FROM Softland.umk.PEDIDO WHERE FECHA_PEDIDO BETWEEN @D1 AND @D2 AND PEDIDO = @Pedido ORDER BY PEDIDO DESC;
-
-        SELECT PEDIDO,PEDIDO_LINEA,BODEGA,LOTE,ARTICULO,LINEA_USUARIO ,PRECIO_UNITARIO,CANTIDAD_PEDIDA ,CANTIDAD_FACTURADA,PEDIDO_LINEA_BONIF,CreatedBy,RowPointer FROM Softland.umk.PEDIDO_LINEA WHERE PEDIDO = @Pedido;
-
-        SELECT VENDEDOR,PEDIDO,FACTURA,FECHA_PEDIDO,TOTAL_UNIDADES,CreatedBy,RowPointer FROM Softland.umk.FACTURA WHERE PEDIDO = @Pedido;
-
-        SELECT FACTURA,LINEA,PEDIDO,LOTE,CANTIDAD,PRECIO_UNITARIO FROM Softland.umk.FACTURA_LINEA WHERE PEDIDO = @Pedido ;
-
-        //SELECT * FROM Softland.umk.CONSECUTIVO_FA
-
-        */
-        dd();
-        return $pedidos_a_insertar;
+        return $PedidosInserted ;
         
 
 
