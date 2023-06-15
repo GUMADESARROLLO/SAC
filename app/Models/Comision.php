@@ -289,7 +289,7 @@ class Comision extends Model{
         $json       = array();
         foreach ($query as $key => $value) {
 
-            $json['dt'][$key] = array(
+            $json[$key] = array(
                 'ROW_ID' => $value->ROW_ID,
                 'VENDEDOR' => $value->VENDEDOR,
                 'ARTICULO' => $value->ARTICULO,
