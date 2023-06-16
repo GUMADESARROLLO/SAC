@@ -14,7 +14,7 @@
             @include('layouts.nav_importacion')
             @if (Session::get('rol') != '10')  
             <div class="col-md-12 col-xxl-12 mb-3">
-              
+              <input type="hidden" id="userId" value="{{ Session::get('rol') }}">
               <div class="card h-100">
                 
                 <div class="card-header">

@@ -62,3 +62,7 @@ Route::get('logs', '\Rap2hpoutre\LaravelLogViewer\LogViewerController@index');
 // RUTAS DEL LOGS DE VISITAS DEL MODULO
 Route::get('monitoring', 'HomeController@monitoring')->name('monitoring');
 Route::get('getmonitoring/{d1}/{d2}', 'HomeController@getmonitoring')->name('getmonitoring/{d1}/{d2}');
+
+// ACTUALIZAR IMAGEN DEL ARTICULO
+Route::post('imgArticulo', 'HomeController@imgArticulo')->name('imgArticulo');
+

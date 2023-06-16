@@ -489,4 +489,9 @@ class HomeController extends Controller {
 
 
 	}
+
+    public function imgArticulo(Request $request){
+        $result = Inventario::imgArticulo($request);
+        return $result;
+    }
 }
