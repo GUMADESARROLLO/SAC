@@ -273,7 +273,7 @@
 
                 return  ` <td class="align-middle ">
                     <div class="d-flex align-items-center position-relative">
-                            <img class="rounded-1 border border-200 img-fluid" src="`+row.IMG_URL+`"alt="" width="60">
+                            <img class="rounded-1 border border-200 img-fluid" src="`+row.IMG_URL+`" arti="`+row.ARTICULO+`" descr="`+row.DESCRIPCION+`" nombreImg="`+row.IMG_NOMBRE+`" alt="" width="60">
                         <div class="flex-1 ms-3">
                         
                             <div class="d-flex align-items-center">
@@ -1299,15 +1299,83 @@ var tooltipFormatter = function tooltipFormatter(params) {
     }
 
     $(document).on('click', '.img-fluid', function (e) {
-        url_image = $(this).attr('src');
-        Swal.fire({
-            showCloseButton: true,
-            showConfirmButton: false,
-            imageUrl: url_image,
-            imageAlt: 'Custom image',
+        articulo = $(this).attr('arti');
+        descripcion = $(this).attr('descr');
+        nombreImg = $(this).attr('nombreImg');
+        user = $('#userId').val();
+        
+        if(nombreImg == "item.png" && user == 1){
+            Swal.fire({
+            title: '¡Desea ingresar una imagen para este articulo!',
+            text: "¿Desea continuar con esta acción?",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Si!',
+            showLoaderOnConfirm: true,
+            preConfirm: () => {
+                Swal.fire({
+                    title: 'Ingrese una Imagen',
+                    html: '<form role="form" action="imgArticulo" method="post" enctype="multipart/form-data">'+
+                            '@csrf'+
+                            '<input type="hidden" value="'+articulo+'" name="sku">'+
+                            '<input type="hidden" value="'+descripcion+'" name="nombre">'+
+                            '<div class="form-group">'+
+                            '<div class="panel">SUBIR IMAGEN</div>'+
+                            '<input type="file" class="nuevaImagen" name="nuevaImagen" required>'+
+                            '</div>'+
+                            '<div class="modal-footer">'+
+                            '<div class="col-md-12 text-center">'+
+                            '<button type="submit" class="btn btn-primary">Subir</button>'+
+                            '</div>'+
+                            '</div>'+
+                        '</form>',
+                    showCancelButton: false,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Ok!',
+                    showConfirmButton: false,
+                    showLoaderOnConfirm: true,
+                    preConfirm: (result) => {
+                                              
+                    },
+                    allowOutsideClick: () => !Swal.isLoading()
+                })
+                
+            },
+                allowOutsideClick: () => !Swal.isLoading()
+            });
+        }else{
+    
+            url_image = $(this).attr('src');
+            Swal.fire({
+                showCloseButton: true,
+                closeButtonColor: '#d33',
+                showConfirmButton: false,
+                imageUrl: url_image,
+                imageAlt: 'Custom image',
+            })
+
+            $(".swal2-popup").css('width', '50%');
+        }
+    })   
+
+    $(".nuevaImagen").change(function(){
+
+        var imagen = this.files[0];
+
+        var datosImagen = new FileReader;
+        datosImagen.readAsDataURL(imagen);
+
+        $(datosImagen).on("load", function(event){
+
+            var rutaImagen = event.target.result;
+
+            $(".previsualizar").attr("src", rutaImagen);
+
         })
 
-        $(".swal2-popup").css('width', '50%');
-    })   
+    })
     
 </script>

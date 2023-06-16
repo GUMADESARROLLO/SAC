@@ -2,7 +2,10 @@
 
 namespace App\Models;
 
+use DateTime;
+use Exception;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
@@ -49,7 +52,7 @@ class Inventario extends Model
          
         
         $listaArticulos = Inventario::whereIn('ARTICULO',$articulos_favoritos)->get();
-        $Info_Articulo = DB::table('db_preventa_umk.tbl_product')->whereIn('product_sku', $articulos_favoritos)->get();
+        $Info_Articulo = Productos::whereIn('product_sku', $articulos_favoritos)->get();
         foreach($listaArticulos as $item){
             $img = "item.png";
             $json[$i]['ARTICULO'] = $item->ARTICULO;
@@ -71,10 +74,53 @@ class Inventario extends Model
                     break;
                 }
             }
+            $json[$i]['IMG_NOMBRE'] = $img;
             $json[$i]['IMG_URL'] = Storage::Disk('s3')->temporaryUrl('product/'.$img, now()->addMinutes(5));
            $i++;
         }
         //dd($json);
         return $json;
+    }
+
+    public static function imgArticulo(Request $request){
+        try{
+            $product_name           = $request->input('nombre');
+            $product_sku            = $request->input('sku');
+            $product_price          = '100';
+            $product_status         = 'Available';
+            $product_description    = '<p>Pendiente</p>';
+            $product_quantity       = '100';
+            $category_id            = '20';
+            $imagen                 = $request->file('nuevaImagen');
+            $product_image          = $imagen->getClientOriginalName();
+            
+            
+            
+            $obj = new Productos();
+            
+            $obj->product_name          = $product_name;
+            $obj->product_sku           = $product_sku;
+            $obj->product_price         = $product_price;
+            $obj->product_status        = $product_status;
+            $obj->product_image         = $product_image;
+            $obj->product_description   = $product_description;
+            $obj->product_quantity      = $product_quantity;
+            $obj->category_id           = $category_id;
+
+            $response = $obj->save();
+
+            if($response){
+                Storage::put('product/'.$product_image, file_get_contents($imagen));
+                alert()->success('Se ha guardado la imagen', 'Success');
+                return redirect()->back();
+            }else {
+                alert()->error('hubo en problema al guardar la imagen', 'ERROR')->persistent('Close');
+                return redirect()->back();
+            }        
+        }catch (Exception $e) {
+            $mensaje =  'Excepción capturada: ' . $e->getMessage() . "\n";
+            alert()->error($mensaje, 'ERROR')->persistent('Close');
+            return redirect()->back();
+        }
     }
 }

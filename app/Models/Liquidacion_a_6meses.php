@@ -27,7 +27,7 @@ class Liquidacion_a_6meses extends Model
 
         $listaArticulos = Liquidacion_a_6meses::all();
 
-        $Info_Articulo = DB::table('db_preventa_umk.tbl_product')->whereIn('product_sku', $articulos_favoritos)->get();
+        $Info_Articulo =Productos::whereIn('product_sku', $articulos_favoritos)->get();
         foreach($listaArticulos as $item){
             $img = "item.png";
             $json[$i]['ARTICULO'] = $item->ARTICULO;
