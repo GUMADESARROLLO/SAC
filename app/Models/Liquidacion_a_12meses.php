@@ -27,7 +27,7 @@ class Liquidacion_a_12meses extends Model
 
         $listaArticulos = Liquidacion_a_12meses::all();
 
-        $Info_Articulo = DB::table('ecommerce_android_app.tbl_product')->whereIn('product_sku', $articulos_favoritos)->get();
+        $Info_Articulo = Productos::whereIn('product_sku', $articulos_favoritos)->get();
         foreach($listaArticulos as $item){
             $img = "item.png";
             $json[$i]['ARTICULO'] = $item->ARTICULO;
@@ -51,7 +51,7 @@ class Liquidacion_a_12meses extends Model
                     break;
                 }
             }
-            $json[$i]['IMG_URL'] = Storage::temporaryUrl('product/'.$img, now()->addMinutes(5));
+            $json[$i]['IMG_URL'] = Storage::Disk('s3')->temporaryUrl('product/'.$img, now()->addMinutes(5));
            $i++;
         }
         return $json;
