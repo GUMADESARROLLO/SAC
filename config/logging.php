@@ -53,7 +53,7 @@ return [
         ],
         'Schedule_pedidos' => [
             'driver' => 'single',
-            'path' => storage_path('logs/Acceso-Comisiones.log'),
+            'path' => storage_path('logs/Schedule_pedidos.log'),
             'level' => 'debug',
         ],
         'Schedule' => [
