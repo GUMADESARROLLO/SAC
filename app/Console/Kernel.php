@@ -25,14 +25,15 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        // $schedule->command('inspire')->hourly();
-        //$controller = new ScheduleController();
-        //$controller->CalcVinneta();
-
         $schedule->call(function () {
-            $scheduleController = new ScheduleController();
+            $scheduleController = new \App\Http\Controllers\ScheduleController();
+            $scheduleController->CalcVinneta();
+        })->daily();
+    
+        $schedule->call(function () {
+            $scheduleController = new \App\Http\Controllers\ScheduleController();
             $scheduleController->RunPedidos();
-        })->everyFiveMinutes();
+        })->everyThirtyMinutes();
     }
 
     /**
