@@ -260,8 +260,8 @@ class GmvApiController extends Controller{
         return response()->json($Comision);
         
     }
-    public function setPedidos(Request $request){
-        $obj = GmvApi::setPedidos($request);
+    public function runInsertPedidos(Request $request){
+        $obj = GmvApi::runInsertPedidos($request);
 
         return response()->json($obj);
     }
@@ -272,4 +272,6 @@ class GmvApiController extends Controller{
         $Comision = Comision::getHistoryItems($Ruta,$nMonth,$nYear);
         return response()->json($Comision);
     }
+
+   
 }

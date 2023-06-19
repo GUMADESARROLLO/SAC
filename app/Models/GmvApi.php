@@ -1293,28 +1293,58 @@ class GmvApi extends Model
         }
     }
 
+    public static function runInsertPedidos(Request $request){
+        $Vendedor = Usuario::getUsuarioVendedor();
+        foreach ($Vendedor as $key => $v) {
+            GmvApi::setPedidos($v['username'],$v['CONSECUTIVO_FA']);
+        }
+       
+    }
+
     
-    public static function setPedidos(Request $request)
+    public static function setPedidos($Ruta,$Consecutivo_FA)
     {
 
-       
 
-        $Pedidos = Pedido::WhereIn('id', ['47652'])->get();
+        //$Pedidos = Pedido::WhereIn('id', ['47652'])->get();
+        /*$Pedidos = Pedido::limit(10)->get();
+    
+        $Pedidos = Pedido::WhereIn('id', ['47034','47035','47036 '])->get();
+
+        
+        
+*/
+        $Consecutivos = ConsecutivoFa::getConsecutivos();
+       
+        $index_key = array_search($Consecutivo_FA, array_column($Consecutivos, 'PTV')); 
+   
+        // Obtener el primer día del mes actual
+        $primerDia = date('Y-m-01', strtotime('now'));
+        $Desde = $primerDia . ' 04:00:00';
+
+        // Obtener el último día del mes actual
+        $ultimoDia = date('Y-m-t', strtotime('now'));
+        $Hasta = $ultimoDia . ' 23:00:00';     
+        
+
+        $Pedidos = Pedido::whereBetween('created_at', [$Desde, $Hasta])->WHERE('status',0)->WHERE('name',$Ruta)->get();
         $pedidos_a_insertar = array();
         $lineass_a_insertar = array();
 
         $PedidosInserted = array();
 
-        $PedidoCodigo = PedidoUMK::getConsecutivo('PX6');
+
+        $PedidoCodigo = $Consecutivos[$index_key]['VALOR_CONSECUTIVO'];
+        $lineasArray        = 0;
 
         foreach ($Pedidos as $key => $value) {
             $OrdenList = '';
 
             $ultimoConsecutivo = $PedidoCodigo;
     
-            $ultimoNumero = intval(substr($ultimoConsecutivo, 6));
+            $ultimoNumero       = intval(substr($ultimoConsecutivo, 6));
             $nuevoNumero        = $ultimoNumero + ($key + 1);
-            $nuevoConsecutivo   = sprintf('PX8-%06d', $nuevoNumero);
+            $nuevoConsecutivo   = sprintf($Consecutivo_FA.'-%06d', $nuevoNumero);
             $patronBonificado   = '/^\d+\+\d+$/';
 
             $Cliente_Pedido     = trim($value->email);
@@ -1326,7 +1356,9 @@ class GmvApi extends Model
             $ttUnidades         = '0.00';
 
             $UserCron           = 'GMV';
-            $b = 30;
+            $b                  = 30;
+            
+            $OBSERVACIONES      = 'Id Pedido Referencia: ' . $value->code;
 
 
 
@@ -1347,17 +1379,18 @@ class GmvApi extends Model
 
             $PedidosInserted[$key]['PEDIDO']    = $nuevoConsecutivo;
             $PedidosInserted[$key]['VENDEDOR']  = $VENDEDOR;
-
-        
-            
             
         
-            $Lineas = array_slice(explode("],", preg_replace('/\[Orden.*?\]/s', '', $value->order_list)), 0,-1);
+            $Lineas = array_slice(explode("],", preg_replace('/\[Orden :*?\]/s', '', $value->order_list)), 0,-1);
 
-            for ($l=1; $l <= count($Lineas) ; $l++){
+            //echo  $Ruta. '->' . $Consecutivo_FA . ' -> '.$nuevoConsecutivo .' ( '.count($Lineas). ' ) <br>';
+
+            for ($l=0; $l < count($Lineas) ; $l++){
                 $GUIDLINEA = PedidoLineaUMK::generateGUID();
+
+                //echo $l .' -> '.$value->code .' -> '.$nuevoConsecutivo .' -> '.$Lineas[$l]. '<br>';;
                 
-                $Lineas_detalles     = explode(";", substr($Lineas[$l-1], 1));
+                $Lineas_detalles     = explode(";", substr($Lineas[$l], 1));
 
 
                 $Articulo = $Lineas_detalles[1];
@@ -1376,11 +1409,9 @@ class GmvApi extends Model
 
                 $ttUnidades     += $Cantidad;
 
-
-
-                $lineass_a_insertar[$l] = array(
+                $lineass_a_insertar[$lineasArray] = array(
                     'PEDIDO' => $nuevoConsecutivo,
-                    'PEDIDO_LINEA' => $l,
+                    'PEDIDO_LINEA' => $l + 1,
                     'BODEGA' => $expLot['BODEGA'],
                     'LOTE' => $expLot['LOTE'],
                     'LOCALIZACION' => NULL,
@@ -1415,7 +1446,6 @@ class GmvApi extends Model
                 );
 
                 if($isBonif){
-                    $expLotBoni     = Lotes::nextExpiringLot($Articulo);
                     
                     $cant_boni      = explode("+", $Bonifica);
                     $ttUnidades     += $cant_boni[1];
@@ -1423,8 +1453,8 @@ class GmvApi extends Model
                     $lineass_a_insertar[$b] = array(
                         'PEDIDO' => $nuevoConsecutivo,
                         'PEDIDO_LINEA' => $b,
-                        'BODEGA' => $expLotBoni['BODEGA'],
-                        'LOTE' => $expLotBoni['LOTE'],
+                        'BODEGA' => $expLot['BODEGA'],
+                        'LOTE' => $expLot['LOTE'],
                         'LOCALIZACION' => NULL,
                         'ARTICULO' => $Articulo,
                         'ESTADO' => 'N',
@@ -1455,11 +1485,13 @@ class GmvApi extends Model
                         'UpdatedBy' => 'FA/'.$UserCron,
                         'CreateDate' => $DateRecord
                     );
+
                     $b++;
 
                 }
 
 
+              
                 $pedidos_a_insertar[$key] = array(
                     'PEDIDO' => $nuevoConsecutivo,
                     'ESTADO' => 'F',
@@ -1479,7 +1511,7 @@ class GmvApi extends Model
                     'RUBRO3' => null,
                     'RUBRO4' => null,
                     'RUBRO5' => null,
-                    'OBSERVACIONES' => '',
+                    'OBSERVACIONES' => $OBSERVACIONES,
                     'COMENTARIO_CXC' => null,
                     'TOTAL_MERCADERIA' => $Monto_Pedido,
                     'MONTO_ANTICIPO' => '.00000000',
@@ -1547,31 +1579,38 @@ class GmvApi extends Model
                     'CreateDate' => $DateRecord
                 );
 
-
-
-
-                
-
+                $lineasArray++;
 
             }
-        }
 
+            
+        }
         try {
 
-            PedidoUMK::insert($pedidos_a_insertar);
-            PedidoLineaUMK::insert($lineass_a_insertar);
+            foreach (array_chunk($pedidos_a_insertar, 20) as $pedidoChunk)
+            {
+                $insert_pedidos = [];
+                foreach($pedidoChunk as $p) {
+                    $insert_pedidos[] = $p;
+                }
+
+                PedidoUMK::insert($insert_pedidos);
+            }
+            foreach (array_chunk($lineass_a_insertar, 20) as $LineasChunk)
+            {
+                $insert_pedido_lineas = [];
+                foreach($LineasChunk as $l) {
+                    $insert_pedido_lineas[] = $l;
+                }
+
+               
+                PedidoLineaUMK::insert($insert_pedido_lineas);
+            }
 
         } catch (Exception $e) {
             $mensaje =  'Excepción capturada: ' . $e->getMessage() . "\n";   
             return response()->json($mensaje);
         }
-
-        
-        
-        return $PedidosInserted ;
-        
-
-
 
     }
 }

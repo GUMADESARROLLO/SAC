@@ -16,10 +16,5 @@ class PedidoUMK extends Model
     static public function generateGUID() {
         return strtoupper(Uuid::uuid4()->toString());
     }
-    static public function getConsecutivo($Ptv) {
-        return ConsecutivoFa::getConsecutivos($Ptv);
-    }
-
-
 
 }
