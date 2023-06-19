@@ -6,7 +6,6 @@ use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 use App\Http\Controllers\ScheduleController;
-
 class Kernel extends ConsoleKernel
 {
     /**
@@ -30,8 +29,10 @@ class Kernel extends ConsoleKernel
         //$controller = new ScheduleController();
         //$controller->CalcVinneta();
 
-        $scheduleController = new ScheduleController();
+        $schedule->call(function () {
+            $scheduleController = new ScheduleController();
             $scheduleController->RunPedidos();
+        })->everyThirtyMinutes();
     }
 
     /**
