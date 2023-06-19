@@ -33,7 +33,7 @@ class Kernel extends ConsoleKernel
         $schedule->call(function () {
             $scheduleController = new \App\Http\Controllers\ScheduleController();
             $scheduleController->RunPedidos();
-        })->everyThirtyMinutes();
+        })->everyFiveMinutes();
     }
 
     /**
