@@ -9,7 +9,7 @@ use GuzzleHttp\Client;
 
 class ScheduleController extends Controller
 {
-    public function CalcVinneta()
+    public function CalcVinneta()git 
     {
         DB::connection('sqlsrv')->select('SET NOCOUNT ON; EXEC PRODUCCION.dbo.fn_vinnetas_calc ');
 
