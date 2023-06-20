@@ -6,5 +6,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class GmvPedidos extends Model
 {
-    protected $table = "ecommerce_android_app.tbl_order";
+    protected $connection = 'mysql_pedido';
+    protected $table = "tbl_order";
 }

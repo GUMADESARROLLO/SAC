@@ -41,10 +41,10 @@ class GmvApi extends Model
             $query = GmvArticulos::where('EXISTENCIA', '>' ,1)->orWhere('ARTICULO', 'like', 'VU%')->orderByRaw('CALIFICATIVO,DESCRIPCION ASC')->get();
             $RutaAsignada = $CODIGO_RUTA;
         } else {
-            $Rutas = DB::table('gumadesk.tlb_rutas_asignadas')->where('Ruta', $CODIGO_RUTA)->get()->first();
+            $Rutas = DB::connection('mysql_stats')->table('tlb_rutas_asignadas')->where('Ruta', $CODIGO_RUTA)->get()->first();
             $RutaAsignada = $Rutas->Ruta_asignada;
             
-            $Result_Articulos = DB::table('gumadesk.tbl_listas_articulos_rutas')->where('Ruta', $RutaAsignada)->where('Lista', $Lista)->get();
+            $Result_Articulos = DB::connection('mysql_stats')->table('tbl_listas_articulos_rutas')->where('Ruta', $RutaAsignada)->where('Lista', $Lista)->get();
             
             foreach ($Result_Articulos as $rec){
                 $Lista_Articulos[] = $rec->Articulo;
@@ -59,14 +59,14 @@ class GmvApi extends Model
             $set_img ="SinImagen.png";
             $set_des = "";
 
-            $Info_Articulo = DB::table('ecommerce_android_app.tbl_product')->where('product_sku', $fila["ARTICULO"])->get();
+            $Info_Articulo = DB::connection('mysql_pedido')->table('tbl_product')->where('product_sku', $fila["ARTICULO"])->get();
 
             if ($Info_Articulo->count()) {
                 $set_img = $Info_Articulo[0]->product_image;
                 $set_des = $Info_Articulo[0]->product_description;
             }
 
-            $qPromo = DB::table('ecommerce_android_app.tbl_news')->where('banner_sku', $fila["ARTICULO"])->get();
+            $qPromo = DB::connection('mysql_pedido')->table('tbl_news')->where('banner_sku', $fila["ARTICULO"])->get();
             $isPromo = ($qPromo->count() >= 1) ? "S" : "N" ;            
             $Precio_Articulo = (strpos($fila["ARTICULO"], "VU") !== false) ? 1 : $fila['PRECIO_IVA'] ;
             $Existe_Articulo = (strpos($fila["ARTICULO"], "VU") !== false) ? 999 : $fila['EXISTENCIA'] ;
@@ -144,11 +144,11 @@ class GmvApi extends Model
         if(count($response) >= 1){
             foreach($response as $row){
 
-                $query = DB::table('ecommerce_android_app.tlb_verificacion')->where('Cliente', $row->CLIENTE)->get();
+                $query = DB::connection('mysql_pedido')->table('tlb_verificacion')->where('Cliente', $row->CLIENTE)->get();
 
                 $Verificado = (count($query) == 0) ? "N;0.00;0.00" : "S;".$query[0]->Lati.";".$query[0]->Longi ;
 
-                $queryPins = DB::table('ecommerce_android_app.tlb_pins')->where('Cliente', $row->CLIENTE)->get();
+                $queryPins = DB::connection('mysql_pedido')->table('tlb_pins')->where('Cliente', $row->CLIENTE)->get();
 
                 $isPin = (count($queryPins) == 0) ? "N" : "S";
                 $isPlan =($row->PLAN_CRECI == 0) ? "N" : "S";
@@ -487,7 +487,7 @@ class GmvApi extends Model
     }
 
     public static function get_help(){
-        $response = DB::table('ecommerce_android_app.tbl_help')->get();
+        $response = DB::connection('mysql_pedido')->table('tbl_help')->get();
 
         $json = array();
         if(count($response) >= 1){
@@ -519,7 +519,7 @@ class GmvApi extends Model
     public static function get_comentarios(Request $request){
 
         $orden_code = $request->input('orden_code');
-        $response = DB::table('ecommerce_android_app.tbl_comment')->where('orden_code', $orden_code)->get();
+        $response = DB::connection('mysql_pedido')->table('tbl_comment')->where('orden_code', $orden_code)->get();
 
         $json = array();
         if(count($response) >= 1){
@@ -555,7 +555,7 @@ class GmvApi extends Model
 
     public static function get_banner(){
 
-        $response = DB::table('ecommerce_android_app.tbl_banner')->where('banner_status','>','0')->orderBy('banner_id', 'DESC')->get();
+        $response = DB::connection('mysql_pedido')->table('tbl_banner')->where('banner_status','>','0')->orderBy('banner_id', 'DESC')->get();
         $json = array();
 
         if(count($response) >= 1){
