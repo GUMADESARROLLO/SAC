@@ -1294,10 +1294,20 @@ class GmvApi extends Model
     }
 
     public static function runInsertPedidos(Request $request){
-        $Vendedor = Usuario::getUsuarioVendedor();
+        //$Vendedor       = Usuario::getUsuarioVendedor();
+        $Desde = '2023-06-01 04:00:00';
+        $Vendedor = Pedido::select('name')->where('created_at', '>=', $Desde)->WHERE('status',0)->groupBy('name')->get();
+        $IDs_Pedidos    = array();
         foreach ($Vendedor as $key => $v) {
-            GmvApi::setPedidos($v['username'],$v['CONSECUTIVO_FA']);
+            $nPedidos = GmvApi::setPedidos($v->getUsuario->username,$v->getUsuario->CONSECUTIVO_FA);
+            if($nPedidos > 0){
+                $IDs_Pedidos[] = array(
+                    'Ruta'      => $v->getUsuario->username,
+                    'Pedidos'   => $nPedidos
+                );
+            }
         }
+        return $IDs_Pedidos;
        
     }
 
@@ -1306,32 +1316,24 @@ class GmvApi extends Model
     {
 
 
-        //$Pedidos = Pedido::WhereIn('id', ['47652'])->get();
-        /*$Pedidos = Pedido::limit(10)->get();
-    
-        $Pedidos = Pedido::WhereIn('id', ['47034','47035','47036 '])->get();
-
-        
-        
-*/
         $Consecutivos = ConsecutivoFa::getConsecutivos();
        
         $index_key = array_search($Consecutivo_FA, array_column($Consecutivos, 'PTV')); 
    
         // Obtener el primer día del mes actual
-        $primerDia = date('Y-m-01', strtotime('now'));
-        $Desde = $primerDia . ' 04:00:00';
+        //$primerDia = date('Y-m-01', strtotime('now'));
+        $Desde = '2023-06-01 04:00:00';
 
         // Obtener el último día del mes actual
-        $ultimoDia = date('Y-m-t', strtotime('now'));
-        $Hasta = $ultimoDia . ' 23:00:00';     
+        //$ultimoDia = date('Y-m-t', strtotime('now'));
+        //$Hasta = $ultimoDia . ' 23:00:00';     
         
 
-        $Pedidos = Pedido::whereBetween('created_at', [$Desde, $Hasta])->WHERE('status',0)->WHERE('name',$Ruta)->get();
+        $Pedidos = Pedido::where('created_at', '>=', $Desde)->WHERE('status',0)->WHERE('name',$Ruta)->get();
         $pedidos_a_insertar = array();
         $lineass_a_insertar = array();
-
-        $PedidosInserted = array();
+        $IDs_Pedidos        = array();
+        $PedidosInserted    = array();
 
 
         $PedidoCodigo = $Consecutivos[$index_key]['VALOR_CONSECUTIVO'];
@@ -1339,6 +1341,7 @@ class GmvApi extends Model
 
         foreach ($Pedidos as $key => $value) {
             $OrdenList = '';
+            $IDs_Pedidos[] = $value->id;
 
             $ultimoConsecutivo = $PedidoCodigo;
     
@@ -1388,7 +1391,7 @@ class GmvApi extends Model
             for ($l=0; $l < count($Lineas) ; $l++){
                 $GUIDLINEA = PedidoLineaUMK::generateGUID();
 
-                //echo $l .' -> '.$value->code .' -> '.$nuevoConsecutivo .' -> '.$Lineas[$l]. '<br>';;
+                //echo $l .' -> '.$value->code .' -> '.$nuevoConsecutivo .' -> '.$Lineas[$l]. '<br>';
                 
                 $Lineas_detalles     = explode(";", substr($Lineas[$l], 1));
 
@@ -1587,6 +1590,8 @@ class GmvApi extends Model
         }
         try {
 
+
+
             foreach (array_chunk($pedidos_a_insertar, 20) as $pedidoChunk)
             {
                 $insert_pedidos = [];
@@ -1607,10 +1612,16 @@ class GmvApi extends Model
                 PedidoLineaUMK::insert($insert_pedido_lineas);
             }
 
+            /*Pedido::whereIn("id", $IDs_Pedidos)->update([
+                    'status' => '1'
+                ]);*/
+
         } catch (Exception $e) {
             $mensaje =  'Excepción capturada: ' . $e->getMessage() . "\n";   
             return response()->json($mensaje);
         }
+
+        return count($IDs_Pedidos);
 
     }
 }
