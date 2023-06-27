@@ -18,9 +18,7 @@ use Illuminate\Support\Facades\Storage;
 
 class GmvApi extends Model
 {  
-    public static function Articulos(Request $request){
-
-        $CODIGO_RUTA = $request->input('Ruta');
+    public static function Articulos($CODIGO_RUTA){
 
         $PROYECTO_B = array("F19", "F21", "F22", "F23");
         $Lista = (in_array($CODIGO_RUTA , $PROYECTO_B)) ? '20' : '80' ;
@@ -42,6 +40,7 @@ class GmvApi extends Model
             $RutaAsignada = $CODIGO_RUTA;
         } else {
             $Rutas = DB::connection('mysql_stats')->table('tlb_rutas_asignadas')->where('Ruta', $CODIGO_RUTA)->get()->first();
+        
             $RutaAsignada = $Rutas->Ruta_asignada;
             
             $Result_Articulos = DB::connection('mysql_stats')->table('tbl_listas_articulos_rutas')->where('Ruta', $RutaAsignada)->where('Lista', $Lista)->get();
@@ -60,7 +59,6 @@ class GmvApi extends Model
             $set_des = "";
 
             $Info_Articulo = DB::connection('mysql_pedido')->table('tbl_product')->where('product_sku', $fila["ARTICULO"])->get();
-
             if ($Info_Articulo->count()) {
                 $set_img = $Info_Articulo[0]->product_image;
                 $set_des = $Info_Articulo[0]->product_description;
@@ -109,8 +107,8 @@ class GmvApi extends Model
             $json[$i]['category_name']            = "Medicina";
             $json[$i]['product_price']            = number_format($Precio_Articulo,2,'.','');
             $json[$i]['product_status']           = "Available";
-            $json[$i]['product_image']            = $set_img;
-            $json[$i]['img_url']                  = Storage::temporaryUrl('product/'.$set_img, now()->addMinutes(5));
+            $json[$i]['product_image']            = Storage::Disk('s3')->temporaryUrl('product/'.$set_img, now()->addMinutes(5));
+            //$json[$i]['img_url']                  = Storage::temporaryUrl('product/'.$set_img, now()->addMinutes(5));
             $json[$i]['product_description']      = $set_des;
             $json[$i]['product_quantity']         = str_replace(',', '', number_format($Existe_Articulo,2));
             $json[$i]['currency_id']              = "105";
@@ -1338,7 +1336,7 @@ class GmvApi extends Model
 
         $PedidoCodigo = $Consecutivos[$index_key]['VALOR_CONSECUTIVO'];
         $lineasArray        = 0;
-
+        
         foreach ($Pedidos as $key => $value) {
             $OrdenList = '';
             $IDs_Pedidos[] = $value->id;
@@ -1353,8 +1351,10 @@ class GmvApi extends Model
             $Cliente_Pedido     = trim($value->email);
             $Cliente_Pedido     = str_replace('-', '', $Cliente_Pedido);
 
-            $Monto_Pedido       = $value->order_total;
-            $Monto_Pedido       = number_format((float) str_replace(',', '', $Monto_Pedido), 2, '.', '');
+            #$Monto_Pedido       = $value->order_total;
+            #$Monto_Pedido       = number_format((float) str_replace(',', '', $Monto_Pedido), 2, '.', '');
+            $Monto_Pedido       = 0;
+
 
             $ttUnidades         = '0.00';
 
@@ -1409,6 +1409,8 @@ class GmvApi extends Model
                 $PrecioUnitario = $ARTICULO->PRECIO;
 
                 $expLot         = Lotes::nextExpiringLot($Articulo);
+
+                $Monto_Pedido   += $Cantidad * $PrecioUnitario;
 
                 $ttUnidades     += $Cantidad;
 
@@ -1475,7 +1477,7 @@ class GmvApi extends Model
                         'PORC_DESCUENTO' => '0.0',
                         'DESCRIPCION' => '',
                         'COMENTARIO' => '',
-                        'PEDIDO_LINEA_BONIF' => $l,
+                        'PEDIDO_LINEA_BONIF' => $l +1,
                         'UNIDAD_DISTRIBUCIO' => NULL,
                         'FECHA_PROMETIDA' => $PedidoFecha,
                         'LINEA_ORDEN_COMPRA' => NULL,
@@ -1612,9 +1614,9 @@ class GmvApi extends Model
                 PedidoLineaUMK::insert($insert_pedido_lineas);
             }
 
-            /*Pedido::whereIn("id", $IDs_Pedidos)->update([
+            Pedido::whereIn("id", $IDs_Pedidos)->update([
                     'status' => '1'
-                ]);*/
+                ]);
 
         } catch (Exception $e) {
             $mensaje =  'Excepción capturada: ' . $e->getMessage() . "\n";   

@@ -57,7 +57,7 @@ Route::get('get_perfil_user', 'GmvApiController@get_perfil_user')->name('get_per
 
 //Rutas productos
 Route::get('product_id', 'GmvApiController@product_id')->name('product_id');
-Route::get('Articulos', 'GmvApiController@Articulos')->name('Articulos');
+Route::get('Articulos/{RUTA}', 'GmvApiController@Articulos')->name('Articulos/{RUTA}');
 Route::get('get_stat_articulo', 'GmvApiController@get_stat_articulo')->name('get_stat_articulo');
 Route::get('post_rpt_rutas', 'GmvApiController@post_rpt_rutas')->name('post_rpt_rutas');
 

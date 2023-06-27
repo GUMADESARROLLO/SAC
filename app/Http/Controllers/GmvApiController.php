@@ -9,9 +9,9 @@ use Illuminate\Support\Facades\DB;
 
 class GmvApiController extends Controller{
 
-    public function Articulos(Request $request)
+    public function Articulos($Ruta)
     {   
-        $obj = GmvApi::Articulos($request);
+        $obj = GmvApi::Articulos($Ruta);
         
         return response()->json($obj);
     }
