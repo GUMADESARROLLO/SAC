@@ -1349,7 +1349,7 @@ class GmvApi extends Model
             $patronBonificado   = '/^\d+\+\d+$/';
 
             $Cliente_Pedido     = trim($value->email);
-            $Cliente_Pedido     = str_replace('-', '', $Cliente_Pedido);
+            $Cliente_Pedido     = trim(str_replace('-', '', $Cliente_Pedido));
 
             #$Monto_Pedido       = $value->order_total;
             #$Monto_Pedido       = number_format((float) str_replace(',', '', $Monto_Pedido), 2, '.', '');
@@ -1364,11 +1364,10 @@ class GmvApi extends Model
             $OBSERVACIONES      = 'Id Pedido Referencia: ' . $value->code;
 
 
-
             
             $PedidoFecha      = date('Y-m-d 00:00:00.000');
             $DateRecord       = date("Y-m-d H:i:s.v");
-            $PedidoCliente    = Clientes::WHERE('CLIENTE',$Cliente_Pedido)->get();
+            $PedidoCliente    = ClientesInfo::WHERE('CLIENTE',$Cliente_Pedido)->get();
 
             $Cliente        = $PedidoCliente[0]->CLIENTE;
             $NOMBRE         = $PedidoCliente[0]->NOMBRE;
