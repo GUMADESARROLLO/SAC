@@ -1309,7 +1309,7 @@ class GmvApi extends Model
             }
         }
         return $IDs_Pedidos;
-       
+
     }
 
     
@@ -1318,9 +1318,9 @@ class GmvApi extends Model
 
 
         $Consecutivos = ConsecutivoFa::getConsecutivos();
-       
+
         $index_key = array_search($Consecutivo_FA, array_column($Consecutivos, 'PTV')); 
-   
+
         // Obtener el primer día del mes actual
         //$primerDia = date('Y-m-01', strtotime('now'));
         $Desde = '2023-06-01 04:00:00';
@@ -1498,8 +1498,6 @@ class GmvApi extends Model
 
                 }
 
-
-              
                 $pedidos_a_insertar[$key] = array(
                     'PEDIDO' => $nuevoConsecutivo,
                     'ESTADO' => 'N',
