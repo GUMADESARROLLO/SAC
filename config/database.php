@@ -151,6 +151,20 @@ return [
             'encrypt' => 'yes', // alternatively, defer to an env variable
             'trust_server_certificate' => 'true', // alternatively, defer to an env variable
         ],
+        'sqlsrv_dev' => [
+            'driver' => env('DB_CONNECTION_sqlsrv_dev'),
+            'url' => env('DATABASE_URL_2'),
+            'host' => env('DB_HOST_sqlsrv_dev', '192.168.1.116'),
+            'port' => env('DB_PORT_sqlsrv_dev', '1433'),
+            'database' => env('DB_DATABASE_sqlsrv_dev', 'forge'),
+            'username' => env('DB_USERNAME_sqlsrv_dev', 'forge'),
+            'password' => env('DB_PASSWORD_sqlsrv_dev', ''),
+            'charset' => 'utf8',
+            'prefix' => '',
+            'prefix_indexes' => true,
+            'encrypt' => 'yes', // alternatively, defer to an env variable
+            'trust_server_certificate' => 'true', // alternatively, defer to an env variable
+        ],
 
     ],
 

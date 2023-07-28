@@ -1297,7 +1297,10 @@ class GmvApi extends Model
         $Vendedor = Pedido::select('name')->where('created_at', '>=', $Desde)->WHERE('status',0)->groupBy('name')->get();
         $IDs_Pedidos    = array();
         foreach ($Vendedor as $key => $v) {
-            $nPedidos = GmvApi::setPedidos($v->getUsuario->username,$v->getUsuario->CONSECUTIVO_FA);
+            $nPedidos = GmvApi::setPedidos(
+                $v->getUsuario->username,
+                $v->getUsuario->CONSECUTIVO_FA
+            );
             if($nPedidos > 0){
                 $IDs_Pedidos[] = array(
                     'Ruta'      => $v->getUsuario->username,
@@ -1335,7 +1338,8 @@ class GmvApi extends Model
 
 
         $PedidoCodigo = $Consecutivos[$index_key]['VALOR_CONSECUTIVO'];
-        $lineasArray        = 0;
+        $Prefi_Pedido = $Consecutivos[$index_key]['CODIGO_CONSECUTIVO'];
+        $lineasArray  = 0;
         
         foreach ($Pedidos as $key => $value) {
             $OrdenList = '';
@@ -1498,7 +1502,7 @@ class GmvApi extends Model
               
                 $pedidos_a_insertar[$key] = array(
                     'PEDIDO' => $nuevoConsecutivo,
-                    'ESTADO' => 'F',
+                    'ESTADO' => 'N',
                     'FECHA_PEDIDO' => $PedidoFecha,
                     'FECHA_PROMETIDA' => $PedidoFecha,
                     'FECHA_PROX_EMBARQU' => $PedidoFecha,
@@ -1616,6 +1620,9 @@ class GmvApi extends Model
             Pedido::whereIn("id", $IDs_Pedidos)->update([
                     'status' => '1'
                 ]);
+            CONSECUTIVO_FA::where("CODIGO_CONSECUTIVO", $Prefi_Pedido)->update([
+                'VALOR_CONSECUTIVO' => $nuevoConsecutivo
+            ]);
 
         } catch (Exception $e) {
             $mensaje =  'Excepción capturada: ' . $e->getMessage() . "\n";   

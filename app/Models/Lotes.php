@@ -7,7 +7,7 @@ use Carbon\Carbon;
 
 class Lotes extends Model
 {
-    protected $connection = 'sqlsrv';
+    protected $connection = 'sqlsrv_dev';
     public $timestamps = false;
     protected $table = "PRODUCCION.dbo.iweb_lotes";
 
@@ -34,9 +34,7 @@ class Lotes extends Model
     {  
         $json = array();
 
-        $qLote = Lotes::where('ARTICULO', $ARTICULO)->where('BODEGA', '002')
-        ->orderBy('fecha_vencimiento', 'DESC')
-        ->first();
+        $qLote = Lotes::where('ARTICULO', $ARTICULO)->where('BODEGA', '002')->orderBy('fecha_vencimiento', 'DESC')->first();
 
 
         $json = array(
