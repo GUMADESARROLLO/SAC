@@ -21,6 +21,10 @@ class Usuario extends Model {
     {
         return Usuario::where('activo','S')->get();
     }
+    public static function getUsuarioVendedor()
+    {
+        return UsuarioVendedor::where('activo','S')->where('username', 'LIKE','F%')->get();
+    }
 
     public static function getUsuariosSAC()
     {

@@ -13,6 +13,9 @@ class Pedido extends Model {
     public function CountsComments(){
         return $this->hasMany('App\Models\PedidoComentario','orden_code','code')->count();    
     }
+    public function getUsuario(){
+        return $this->hasOne(UsuarioVendedor::class,'username','name');
+    }
     public function show(Order $order){
         \DB::connection()->enableQueryLog();
         $data = $order->all();

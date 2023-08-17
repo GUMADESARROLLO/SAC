@@ -6,5 +6,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class GmvVineta extends Model
 {
-    protected $table = "gumanet.tbl_order_vineta";
+    protected $connection = 'mysql_gumanet';
+    protected $table = "tbl_order_vineta";
 }

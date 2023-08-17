@@ -6,6 +6,8 @@ use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 use App\Http\Controllers\ScheduleController;
+use App\Console\Commands\RunPedidosCommand;
+
 class Kernel extends ConsoleKernel
 {
     /**
@@ -14,8 +16,8 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
-        //
-    ];
+        \App\Console\Commands\RunPedidosCommand::class,
+    ];    
 
     /**
      * Define the application's command schedule.
@@ -27,7 +29,7 @@ class Kernel extends ConsoleKernel
     {
         // $schedule->command('inspire')->hourly();
         $controller = new ScheduleController();
-        $controller->handle();
+        $controller->CalcVinneta();
     }
 
     /**

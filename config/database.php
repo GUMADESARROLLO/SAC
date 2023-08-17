@@ -102,6 +102,25 @@ return [
                 PDO::MYSQL_ATTR_SSL_CA => env('MYSQL_ATTR_SSL_CA'),
             ]) : [],
         ],
+        'mysql_stats' => [
+            'driver' => 'mysql',
+            'url' => env('DATABASE_URL_04'),
+            'host' => env('DB_HOST_04', '127.0.0.1'),
+            'port' => env('DB_PORT_04', '3306'),
+            'database' => env('DB_DATABASE_04', 'forge'),
+            'username' => env('DB_USERNAME_04', 'forge'),
+            'password' => env('DB_PASSWORD_04', ''),
+            'unix_socket' => env('DB_SOCKET', ''),
+            'charset' => 'utf8mb4',
+            'collation' => 'utf8mb4_unicode_ci',
+            'prefix' => '',
+            'prefix_indexes' => true,
+            'strict' => true,
+            'engine' => null,
+            'options' => extension_loaded('pdo_mysql') ? array_filter([
+                PDO::MYSQL_ATTR_SSL_CA => env('MYSQL_ATTR_SSL_CA'),
+            ]) : [],
+        ],
 
         'pgsql' => [
             'driver' => 'pgsql',
@@ -126,6 +145,20 @@ return [
             'database' => env('DB_DATABASE_2', 'forge'),
             'username' => env('DB_USERNAME_2', 'forge'),
             'password' => env('DB_PASSWORD_2', ''),
+            'charset' => 'utf8',
+            'prefix' => '',
+            'prefix_indexes' => true,
+            'encrypt' => 'yes', // alternatively, defer to an env variable
+            'trust_server_certificate' => 'true', // alternatively, defer to an env variable
+        ],
+        'sqlsrv_dev' => [
+            'driver' => env('DB_CONNECTION_sqlsrv_dev'),
+            'url' => env('DATABASE_URL_2'),
+            'host' => env('DB_HOST_sqlsrv_dev', '192.168.1.116'),
+            'port' => env('DB_PORT_sqlsrv_dev', '1433'),
+            'database' => env('DB_DATABASE_sqlsrv_dev', 'forge'),
+            'username' => env('DB_USERNAME_sqlsrv_dev', 'forge'),
+            'password' => env('DB_PASSWORD_sqlsrv_dev', ''),
             'charset' => 'utf8',
             'prefix' => '',
             'prefix_indexes' => true,

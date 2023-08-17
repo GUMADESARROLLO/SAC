@@ -57,7 +57,7 @@ Route::get('get_perfil_user', 'GmvApiController@get_perfil_user')->name('get_per
 
 //Rutas productos
 Route::get('product_id', 'GmvApiController@product_id')->name('product_id');
-Route::get('Articulos', 'GmvApiController@Articulos')->name('Articulos');
+Route::get('Articulos/{RUTA}', 'GmvApiController@Articulos')->name('Articulos/{RUTA}');
 Route::get('get_stat_articulo', 'GmvApiController@get_stat_articulo')->name('get_stat_articulo');
 Route::get('post_rpt_rutas', 'GmvApiController@post_rpt_rutas')->name('post_rpt_rutas');
 
@@ -77,7 +77,7 @@ Route::post('recibo_anular', 'GmvApiController@recibo_anular')->name('recibo_anu
 
 Route::get('getcomision/{RUTA}/{MONTH}/{YEAR}', 'GmvApiController@getcomision')->name('getcomision/{RUTA}/{MONTH}/{YEAR}');
 
-Route::get('pedidos', 'GmvApiController@setPedidos')->name('pedidos');
+Route::get('pedidos', 'GmvApiController@runInsertPedidos')->name('pedidos');
 Route::get('plan_crecimiento/{RUTA}/{CLIENTE}', 'GmvApiController@plan_crecimiento')->name('plan_crecimiento/{RUTA}/{CLIENTE}');
 Route::get('getHistoryItems/{RUTA}/{MONTH}/{YEAR}', 'GmvApiController@getHistoryItems')->name('getHistoryItems/{RUTA}/{MONTH}/{YEAR}');
 

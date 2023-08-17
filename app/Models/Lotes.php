@@ -3,11 +3,11 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-
+use Carbon\Carbon;
 
 class Lotes extends Model
 {
-    protected $connection = 'sqlsrv';
+    protected $connection = 'sqlsrv_dev';
     public $timestamps = false;
     protected $table = "PRODUCCION.dbo.iweb_lotes";
 
@@ -27,6 +27,22 @@ class Lotes extends Model
             $json["data"][$i]["FECHA_VENCIMIENTO"] = date('d/m/Y',strtotime($fila["FECHA_VENCIMIENTO"]));
             $i++;
         }
+        return $json;
+    }
+
+    public static function nextExpiringLot($ARTICULO)
+    {  
+        $json = array();
+
+        $qLote = Lotes::where('ARTICULO', $ARTICULO)->where('BODEGA', '002')->orderBy('fecha_vencimiento', 'DESC')->first();
+
+
+        $json = array(
+            'LOTE' => (isset($qLote)) ? $qLote->LOTE : 'null'  ,
+            'BODEGA' =>(isset($qLote)) ? $qLote->BODEGA : '002'   ,
+        );
+
+        
         return $json;
     }
 }
