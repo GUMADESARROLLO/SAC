@@ -7,7 +7,7 @@ use Carbon\Carbon;
 
 class Lotes extends Model
 {
-    protected $connection = 'sqlsrv_dev';
+    protected $connection = 'sqlsrv';
     public $timestamps = false;
     protected $table = "PRODUCCION.dbo.iweb_lotes";
 

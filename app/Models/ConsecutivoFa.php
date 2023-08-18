@@ -5,7 +5,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class ConsecutivoFa  extends Model
 {
-    protected $connection = 'sqlsrv_dev';
+    protected $connection = 'sqlsrv';
     public $timestamps = false;
     protected $table = "PRODUCCION.dbo.gmv_CONSECUTIVO_FA";
 

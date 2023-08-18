@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\DB;
 
 class PedidoUMK extends Model
 {
-    protected $connection = 'sqlsrv_dev';
+    protected $connection = 'sqlsrv';
     public $timestamps = false;
     protected $table = "Softland.umk.PEDIDO";
     //protected $table = "DESARROLLO.dbo.PEDIDO";
