@@ -22,7 +22,7 @@
                     <div class="col-8 col-sm-auto text-end ps-2">
                         <div id="table-customers-replace-element">
                             <div class="input-group" >
-                                <input class="form-control form-control-sm shadow-none search" type="search" placeholder="Buscar..." aria-label="search" id="id_txt_buscar" />
+                                <input class="form-control form-control-sm shadow-none search" type="search" placeholder="Buscar..." aria-label="search" id="id_txt_buscar_user" />
                                 <div class="input-group-text bg-transparent">
                                     <span class="fa fa-search fs--1 text-600"></span>
                                 </div>

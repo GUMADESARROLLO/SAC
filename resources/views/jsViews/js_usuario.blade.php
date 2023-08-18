@@ -27,8 +27,8 @@
             }
         });
     $("#tbl_usuarios_filter").hide();
-    $('#id_txt_buscar').on('keyup', function() {      
-        console.log(this.value)  
+    $('#id_txt_buscar_user').on('keyup', function() {     
+        var vTableUsuario = $('#tbl_usuarios').DataTable(); 
         vTableUsuario.search(this.value).draw();
     });
     $("#id_btn_new").click(function(){
