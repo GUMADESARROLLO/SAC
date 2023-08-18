@@ -30,19 +30,18 @@ class Lotes extends Model
         return $json;
     }
 
-    public static function nextExpiringLot($ARTICULO)
+    public static function nextExpiringLot($ARTICULO,$CANTIDAD)
     {  
-        $json = array();
+        $json  = array();
 
-        $qLote = Lotes::where('ARTICULO', $ARTICULO)->where('BODEGA', '002')->orderBy('fecha_vencimiento', 'DESC')->first();
+        $qLote = Lotes::where('ARTICULO', $ARTICULO)->where('BODEGA', '002')->where('CANT_DISPONIBLE', '>=', $CANTIDAD)->orderBy('fecha_vencimiento', 'DESC')->first();
 
-
-        $json = array(
+        $json  = array(
             'LOTE' => (isset($qLote)) ? $qLote->LOTE : 'null'  ,
             'BODEGA' =>(isset($qLote)) ? $qLote->BODEGA : '002'   ,
         );
 
         
-        return $json;
+        return $qLote;
     }
 }

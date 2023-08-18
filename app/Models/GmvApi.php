@@ -1292,7 +1292,7 @@ class GmvApi extends Model
     }
 
     public static function runInsertPedidos(Request $request){
-        //$Vendedor       = Usuario::getUsuarioVendedor();
+        $Vendedor       = Usuario::getUsuarioVendedor();
         $Desde = '2023-06-01 04:00:00';
         $Vendedor = Pedido::select('name')->where('created_at', '>=', $Desde)->WHERE('status',0)->groupBy('name')->get();
         $IDs_Pedidos    = array();
@@ -1309,7 +1309,6 @@ class GmvApi extends Model
             }
         }
         return $IDs_Pedidos;
-
     }
 
     
@@ -1392,7 +1391,6 @@ class GmvApi extends Model
             //echo  $Ruta. '->' . $Consecutivo_FA . ' -> '.$nuevoConsecutivo .' ( '.count($Lineas). ' ) <br>';
 
             for ($l=0; $l < count($Lineas) ; $l++){
-                $GUIDLINEA = PedidoLineaUMK::generateGUID();
 
                 //echo $l .' -> '.$value->code .' -> '.$nuevoConsecutivo .' -> '.$Lineas[$l]. '<br>';
                 
@@ -1411,11 +1409,11 @@ class GmvApi extends Model
                 $ARTICULO       = ARTICULO_PRECIO::WHERE('ARTICULO',$Articulo)->WHERE('NIVEL_PRECIO',$NIVEL_PRECIO)->first();
                 $PrecioUnitario = $ARTICULO->PRECIO;
 
-                $expLot         = Lotes::nextExpiringLot($Articulo);
-
                 $Monto_Pedido   += $Cantidad * $PrecioUnitario;
 
                 $ttUnidades     += $Cantidad;
+
+                $expLot         = Lotes::nextExpiringLot($Articulo,$Cantidad);
 
                 $lineass_a_insertar[$lineasArray] = array(
                     'PEDIDO' => $nuevoConsecutivo,
@@ -1447,7 +1445,7 @@ class GmvApi extends Model
                     'FASE' => NULL,
                     'NoteExistsFlag' => '0',
                     'RecordDate' => $DateRecord,
-                    'RowPointer' => $GUIDLINEA,
+                    'RowPointer' => PedidoLineaUMK::generateGUID(),
                     'CreatedBy' => 'FA/'.$UserCron,
                     'UpdatedBy' => 'FA/'.$UserCron,
                     'CreateDate' => $DateRecord
@@ -1457,6 +1455,9 @@ class GmvApi extends Model
                     
                     $cant_boni      = explode("+", $Bonifica);
                     $ttUnidades     += $cant_boni[1];
+
+                    $expLot         = Lotes::nextExpiringLot($Articulo,$ttUnidades);
+
 
                     $lineass_a_insertar[$b] = array(
                         'PEDIDO' => $nuevoConsecutivo,
@@ -1473,7 +1474,7 @@ class GmvApi extends Model
                         'CANTIDAD_A_FACTURA' => '0.0',
                         'CANTIDAD_FACTURADA' => '0.0',
                         'CANTIDAD_RESERVADA' => '0.0',
-                        'CANTIDAD_BONIFICAD' => '0.0',
+                        'CANTIDAD_BONIFICAD' => $cant_boni[1],
                         'CANTIDAD_CANCELADA' => '0.0',
                         'TIPO_DESCUENTO' => '',
                         'MONTO_DESCUENTO' => '0.0',
@@ -1488,7 +1489,7 @@ class GmvApi extends Model
                         'FASE' => NULL,
                         'NoteExistsFlag' => '0',
                         'RecordDate' => $DateRecord,
-                        'RowPointer' => $GUIDLINEA,
+                        'RowPointer' => PedidoLineaUMK::generateGUID(),
                         'CreatedBy' => 'FA/'.$UserCron,
                         'UpdatedBy' => 'FA/'.$UserCron,
                         'CreateDate' => $DateRecord
@@ -1579,7 +1580,7 @@ class GmvApi extends Model
                     'FECHA_APROBACION' => null,
                     'NoteExistsFlag' => '0',
                     'RecordDate' => $DateRecord,
-                    'RowPointer' => $GUID,
+                    'RowPointer' => PedidoLineaUMK::generateGUID(),
                     'CreatedBy' => 'FA/'.$UserCron,
                     'UpdatedBy' => 'FA/'.$UserCron,
                     'CreateDate' => $DateRecord
@@ -1618,12 +1619,14 @@ class GmvApi extends Model
             Pedido::whereIn("id", $IDs_Pedidos)->update([
                     'status' => '1'
                 ]);
+                
             CONSECUTIVO_FA::where("CODIGO_CONSECUTIVO", $Prefi_Pedido)->update([
                 'VALOR_CONSECUTIVO' => $nuevoConsecutivo
             ]);
 
         } catch (Exception $e) {
-            $mensaje =  'Excepción capturada: ' . $e->getMessage() . "\n";   
+            $mensaje =  'Excepción capturada: ' . $e->getMessage() . "\n"; 
+            dd($mensaje);
             return response()->json($mensaje);
         }
 
