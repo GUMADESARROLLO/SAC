@@ -40,6 +40,6 @@ class RunPedidosCommand extends Command
     {
         $scheduleController = new ScheduleController();
         $scheduleController->RunPedidos();
-        $this->info('Tarea de Pedidos ejecutada correctamente.');
+        $this->info('Tarea de Insert Cliente Verificados ejecutada correctamente.');
     }
 }
