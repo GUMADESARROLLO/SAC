@@ -7,6 +7,8 @@ use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Http\Request;
 use GuzzleHttp\Client;
 
+
+
 class ScheduleController extends Controller
 {
     public function CalcVinneta() 
@@ -24,5 +26,14 @@ class ScheduleController extends Controller
         \Log::channel('Schedule_pedidos')->info("Ejecucion de Tarea de Pedidos ");
 
         
+    }
+
+    public function ImportVerification()  {
+
+        $url = route('Verification');
+        $client = new Client(['verify' => false]);
+        $client->get($url);
+
+        \Log::channel('Schedule')->info("Ejecucion de Tarea de Importacion de Clientes Verificados ");
     }
 }

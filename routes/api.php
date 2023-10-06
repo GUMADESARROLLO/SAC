@@ -81,5 +81,7 @@ Route::get('pedidos', 'GmvApiController@runInsertPedidos')->name('pedidos');
 Route::get('plan_crecimiento/{RUTA}/{CLIENTE}', 'GmvApiController@plan_crecimiento')->name('plan_crecimiento/{RUTA}/{CLIENTE}');
 Route::get('getHistoryItems/{RUTA}/{MONTH}/{YEAR}', 'GmvApiController@getHistoryItems')->name('getHistoryItems/{RUTA}/{MONTH}/{YEAR}');
 
+Route::get('Verification', 'GmvApiController@runVerification')->name('Verification');
+
 
 
