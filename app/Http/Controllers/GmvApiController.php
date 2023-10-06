@@ -275,8 +275,17 @@ class GmvApiController extends Controller{
         $VerificationMysql = VerificationMysql::get()->toArray();
         
         VerificationSqlsrv::truncate();
-        
-        VerificationSqlsrv::insert($VerificationMysql); 
+
+
+        foreach (array_chunk($VerificationMysql, 20) as $Chunk)
+        {
+            $insert_verificacion = [];
+            foreach($Chunk as $p) {
+                $insert_verificacion[] = $p;
+            }
+
+            VerificationSqlsrv::insert($insert_verificacion);
+        }
 
     }
     public function getHistoryItems($Ruta,$nMonth,$nYear)
