@@ -78,6 +78,15 @@ if ( typeof jQuery != "undefined" )
         .dBorder {
             border: 1px solid #ccc !important;
         }
+        .modal.custom {
+            outline:none;
+            
+        }
+
+        .modal.custom .modal-dialog {
+            width:50%!important;
+            margin:0 auto;
+        }
     </style>
 </head>
 <body>

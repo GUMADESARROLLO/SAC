@@ -30,6 +30,7 @@
                 Cliente   : slCli,
                 FechaVi   : dtIni,
                 Descrip   : Descr,
+                _token  : "{{ csrf_token() }}" 
             },
             async: true,
             success: function(response) {
@@ -238,7 +239,8 @@
 
                     var eventData = {
                         id: eventId,
-                        date: eventDate
+                        date: eventDate,
+                        _token  : "{{ csrf_token() }}" 
                     };
 
                     $.ajax({

@@ -66,3 +66,8 @@ Route::get('getmonitoring/{d1}/{d2}', 'HomeController@getmonitoring')->name('get
 // ACTUALIZAR IMAGEN DEL ARTICULO
 Route::post('imgArticulo', 'HomeController@imgArticulo')->name('imgArticulo');
 
+
+Route::get('getDataVisita', 'ScheduleController@getDataVisita')->name('getDataVisita');
+Route::post('UpdateVisita', 'ScheduleController@UpdateVisita')->name('UpdateVisita');
+
+Route::post('AddVisita', 'ScheduleController@AddVisita')->name('AddVisita');

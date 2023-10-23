@@ -18,6 +18,7 @@ use App\Models\PedidoComentario;
 use App\Models\Usuario;
 use App\Models\Factura;
 use App\Models\Estadisticas;
+use App\Models\ClientesFull;
 use App\Models\Comision;
 use App\Models\PlanCrecimiento;
 use App\Models\Promocion;
@@ -63,6 +64,7 @@ class HomeController extends Controller {
         $Normal ='';
         $SAC = '';
         $Lista_SAC = Usuario::getUsuariosSAC();  
+        $Clientes      = ClientesFull::get();
         
         if (Session::get('rol') == '1' || Session::get('rol') == '2' || Session::get('rol') == '9') {
             $SAC = 'active';
@@ -70,7 +72,7 @@ class HomeController extends Controller {
             $Normal = 'active';
         }
         
-        return view('Principal.Estadisticas', compact('Lista_SAC','SAC','Normal'));
+        return view('Principal.Estadisticas', compact('Lista_SAC','SAC','Normal','Clientes'));
         
     }
 
