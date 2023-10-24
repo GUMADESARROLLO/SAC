@@ -48,6 +48,8 @@ class HomeController extends Controller {
         $Normal ='';
         $SAC = '';
         $Lista_SAC = Usuario::getUsuariosSAC();  
+
+        
         
         if (Session::get('rol') == '1' || Session::get('rol') == '2' || Session::get('rol') == '9') {
             $SAC = 'active';
@@ -64,15 +66,14 @@ class HomeController extends Controller {
         $Normal ='';
         $SAC = '';
         $Lista_SAC = Usuario::getUsuariosSAC();  
-        $Clientes      = ClientesFull::get();
-        
+        $Vendedor = Vendedor::getVendedor();
         if (Session::get('rol') == '1' || Session::get('rol') == '2' || Session::get('rol') == '9') {
             $SAC = 'active';
         } else {
             $Normal = 'active';
         }
         
-        return view('Principal.Estadisticas', compact('Lista_SAC','SAC','Normal','Clientes'));
+        return view('Principal.Estadisticas', compact('Lista_SAC','SAC','Normal','Vendedor'));
         
     }
 

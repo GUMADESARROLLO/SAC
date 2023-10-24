@@ -14,6 +14,7 @@
             <div class="card-header">
               <div class="row gx-0 align-items-center">
                 <div class="col-auto d-flex justify-content-end order-md-1">
+                <button class="btn icon-item icon-item-sm shadow-none p-0 me-1 ms-md-2" type="button" id="btnReutilizar" data-bs-toggle="tooltip" title="Reutilizar Visitas"><span class="fas fa-history"></span></button>
                   <button class="btn icon-item icon-item-sm shadow-none p-0 me-1 ms-md-2" type="button" data-event="prev" data-bs-toggle="tooltip" title="Previous"><span class="fas fa-arrow-left"></span></button>
                   <button class="btn icon-item icon-item-sm shadow-none p-0 me-1 me-lg-2" type="button" data-event="next" data-bs-toggle="tooltip" title="Next"><span class="fas fa-arrow-right"></span></button>
                 </div>
@@ -23,12 +24,14 @@
                 <div class="col col-md-auto d-flex justify-content-end order-md-3">
                   <button class="btn btn-falcon-primary btn-sm" type="button" data-event="today">Hoy</button>
                 </div>
+                
                 <div class="col-md-auto d-md-none">
                   <hr />
                 </div>
                 <div class="col-auto d-flex order-md-0">
                   <button class="btn btn-primary btn-sm" type="button" data-bs-toggle="modal" data-bs-target="#addEventModal"> <span class="fas fa-plus me-2"></span>Agendar</button>
                 </div>
+               
                 <div class="col d-flex justify-content-end order-md-2">
                   <div class="dropdown font-sans-serif me-md-2">
                     <button class="btn btn-falcon-default text-600 btn-sm dropdown-toggle dropdown-caret-none" type="button" 
@@ -77,7 +80,7 @@
                 </div>
                 <div class="modal-body p-card">
                   <div class="mb-3">
-                    <label class="fs-0" for="pArticulos">CLIENTES PARA <span>{{$Ruta}}</span> : </label>
+                    <label class="fs-0" for="pArticulos">CLIENTES PARA <span id="id_ruta">{{$Ruta}}</span> : </label>
                     
                     <select class="form-select js-choice" id="sclCliente" size="1" name="organizerSingle" data-options='{"removeItemButton":true,"placeholder":true}'>
                       <option value="-1" valor="0" selected="selected">SELECCIONE</option>

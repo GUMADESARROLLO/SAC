@@ -5,6 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Exception;
 use Illuminate\Http\Request;
+use DateTime;
+use DateInterval;
 
 class Visita extends Model {
     protected $table = "tbl_visitas";
@@ -20,11 +22,13 @@ class Visita extends Model {
                 $Cliente    = $request->input('Cliente');
                 $FechaVi    = $request->input('FechaVi');
                 $Descrip    = $request->input('Descrip');
+                $Ruta       = $request->input('Ruta');
 
                 $iCliente   = ClientesFull::where('CLIENTE',$Cliente)->first();
 
                 $obj = new Visita();   
                 $obj->cliente       = $Cliente;   
+                $obj->ruta          = $Ruta;
                 $obj->nombre        = $iCliente->NOMBRE;                
                 $obj->fechavisita   = $FechaVi;
                 $obj->descripcion   = $Descrip;
@@ -40,10 +44,49 @@ class Visita extends Model {
         }
         
     }
-    public static function getData(){
+    public static function reutilizar(Request $request)
+    {
+
+        if ($request->ajax()) {
+            try {
+                
+                $ruta       = $request->input('ruta');
+                $dtIni      = $request->input('startDate');
+                $dtEnd      = $request->input('endDate');
+                
+                $NewFechas  = [];
+
+                $Clientes_Visitas = Visita::where('activo', 'S')
+                ->where('ruta', $ruta)
+                ->whereBetween('fechavisita', [$dtIni, $dtEnd])
+                ->get();
+
+
+                foreach ($Clientes_Visitas as $key => $f) {
+                    $dt = new DateTime($f->fechavisita);
+                    $dt->add(new DateInterval('P1W')); 
+                    $NewFechas[] = [
+                        'ruta'      => $f->ruta,
+                        'cliente'   => $f->cliente, 
+                        'nombre'    => $f->nombre,
+                        'activo'    => 'S',
+                        'fechavisita'   => $dt->format('Y-m-d H:i:s')
+                    ];
+                }
+                $response = Visita::insert($NewFechas); 
+                return $response;
+                
+            } catch (Exception $e) {
+                $mensaje =  'Excepción capturada: ' . $e->getMessage() . "\n";
+                return response()->json($mensaje);
+            }
+        }
+        
+    }
+    public static function getData($Ruta){
         $array = array();
 
-        $result = Visita::where('activo','S')->get();
+        $result = Visita::where('activo','S')->where('ruta',$Ruta)->get();
 
         foreach($result as $key => $row ){
             $array[$key] = [

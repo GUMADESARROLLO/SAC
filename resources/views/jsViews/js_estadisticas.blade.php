@@ -95,20 +95,8 @@
 
     }
 
-
-function mdlCalendar() {
-
-  var mdlCalendar = document.querySelector(Selectors.MODAL_CALENDAR);
-  var showCalendar = new window.bootstrap.Modal(mdlCalendar);
-  showCalendar.show();
-  
-  setTimeout(function() {
-    $('#btnToday').trigger('click');
-  }, 1000);
-
-
-}
    
+ 
     
     function Estadisticas(Data){
 
@@ -150,9 +138,6 @@ function mdlCalendar() {
                                   <p class="mb-1 lh-1">`+ d.VENDEDOR + ' | ' + d.NOMBRE+`</p>
                                   <p class="mb-0 fs--1">`+ d.SKU + ` SKUs &bull; Tendencia: `+ d.TENDENCIA + ` &bull; Optimo. `+ Data['Dias_porcent'] + ` </p>
                                   <P class="mb-0 fs--1">`+d.ZONA+` </p>
-                                </div>
-                                <div class="avatar avatar-2xl">
-                                    <div class="d-inline-block"  ><span class="far fa-calendar-alt fs-5" onclick="mdlCalendar()"  data-fa-transform="down-2"></span></div>
                                 </div>
                               </div>
                             </div>
@@ -293,7 +278,11 @@ function mdlCalendar() {
 
         $("#id_rutas").html($Rutas);
 
+       
+
     }    
+
+    
     
     function Build_Echart_bar(data) {
 

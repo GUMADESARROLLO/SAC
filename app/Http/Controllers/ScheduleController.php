@@ -52,11 +52,19 @@ class ScheduleController extends Controller
         return response()->json($response);
 
     }
-    public function getDataVisita(Request $request){
+    public function reutilizar(Request $request){
 
-        $Visita = Visita::getData();
+        $response = Visita::reutilizar($request);
+        
+        return response()->json($response);
+
+    }
+
+    
+    public function getDataVisita($Ruta){
+
+        $Visita = Visita::getData($Ruta);
         return response()->json($Visita);
-
     }
 
     public function UpdateVisita(Request $request){

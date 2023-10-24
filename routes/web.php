@@ -67,7 +67,7 @@ Route::get('getmonitoring/{d1}/{d2}', 'HomeController@getmonitoring')->name('get
 Route::post('imgArticulo', 'HomeController@imgArticulo')->name('imgArticulo');
 
 
-Route::get('getDataVisita', 'ScheduleController@getDataVisita')->name('getDataVisita');
+Route::get('getDataVisita/{RUTA}/', 'ScheduleController@getDataVisita')->name('getDataVisita/{RUTA}/');
 Route::post('UpdateVisita', 'ScheduleController@UpdateVisita')->name('UpdateVisita');
 
 Route::post('AddVisita', 'ScheduleController@AddVisita')->name('AddVisita');

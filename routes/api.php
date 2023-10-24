@@ -85,9 +85,10 @@ Route::get('Verification', 'GmvApiController@runVerification')->name('Verificati
 
 Route::get('Schedule/{RUTA}/', 'ScheduleController@getSchedule')->name('Schedule/{RUTA}/');
 Route::post('AddVisita', 'ScheduleController@AddVisita')->name('AddVisita');
-Route::get('getDataVisita', 'ScheduleController@getDataVisita')->name('getDataVisita');
+Route::get('getDataVisita/{RUTA}/', 'ScheduleController@getDataVisita')->name('getDataVisita/{RUTA}/');
 Route::post('UpdateVisita', 'ScheduleController@UpdateVisita')->name('UpdateVisita');
 Route::get('rmVisita/{RUTA}', 'ScheduleController@rmVisita')->name('rmVisita/{RUTA}');
+Route::post('reutilizar', 'ScheduleController@reutilizar')->name('reutilizar');
 
 
 

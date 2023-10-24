@@ -39,6 +39,7 @@
     <link href="{{ asset('css/theme_gumadesk/css/user.min.css') }}" rel="stylesheet" id="user-style-default">
     <link href="{{ asset('js/theme_gumadesk/vendors/choices/choices.min.css') }}" rel="stylesheet" >
     <link href="{{ asset('css/jquery.dataTables.min.css') }}" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/pikaday/css/pikaday.css">
     <script>
         var linkRTL = document.getElementById('style-rtl');
         var userLinkRTL = document.getElementById('user-style-rtl');
@@ -137,7 +138,7 @@ if ( typeof jQuery != "undefined" )
     <script src="{{ asset('js/Numeral.js') }}"></script>
     <script src="{{ asset('js/app.js') }}"></script>
     <script src="{{ asset('js/jquery-3.5.1.js') }}"></script>
-    
+    <script src="https://cdn.jsdelivr.net/npm/pikaday/pikaday.js"></script>
     <script src="{{ asset('js/sweetalert2.all.min.js') }}"></script>
     <script src="{{ asset('js/jquery.dataTables.min.js') }}"></script>    
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.8.0/jszip.js"></script>

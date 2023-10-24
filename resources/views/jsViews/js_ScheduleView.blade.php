@@ -1,6 +1,4 @@
 <script type="text/javascript">
-
-
     var dta_calendar = []  
     var table = ''
     var nMes   = $("#IdSelectMes option:selected").val();           
@@ -13,7 +11,7 @@
             weekdaysMin: 'Do_Lu_Ma_Mi_Ju_Vi_Sa'.split('_')
         }
     );
-    var RUTA  = $("#id_ruta").text();  
+    var RUTA  = $("#sclVendedor option:selected").val();  
     getDataCalendar(RUTA)
 
 
@@ -21,9 +19,6 @@
         var slCli   = $("#sclCliente option:selected").val();  
         var dtIni   = $("#StartDate").val();
         var Descr   = $("#Description").val(); 
-        var Ruta_   = $("#id_ruta").text(); 
-
-        
 
 
         if (slCli > 0) {
@@ -35,8 +30,7 @@
                 Cliente   : slCli,
                 FechaVi   : dtIni,
                 Descrip   : Descr,
-                Ruta      : Ruta_,
-                _token    : "{{ csrf_token() }}" 
+                _token  : "{{ csrf_token() }}" 
             },
             async: true,
             success: function(response) {
@@ -67,105 +61,6 @@
         }
     })
 
-    $("#btnReutilizar").click(function(){ 
-
-        var calendar_title = $(".calendar-title").text();
-        var RUTA  = $("#id_ruta").text(); 
-
-        let datepicker
-
-      
-
-
-
-        Swal.fire({
-        title: 'Reutilizar del ' + calendar_title,
-        text: "¿Desea continuar con esta acción?",
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Si!',
-        showLoaderOnConfirm: true,
-        preConfirm: () => {
-
-            Swal.fire({
-                title: 'Defina el Rango de Fecha',
-                html:
-                    '<input id="start-date" class="form-control swal2-input" type="text" placeholder="Fecha de inicio">' +
-                    '<input id="end-date" class="form-control swal2-input" type="text" placeholder="Fecha de fin">',
-                    inputValue: moment().format('YYYY-MM-DDTHH:mm:ss'), // Formato MySQL
-                inputAttributes: {
-                    autocapitalize: 'off'
-                },
-                preConfirm: () => {
-                    const startDateInput = document.getElementById('start-date');
-                    const endDateInput = document.getElementById('end-date');
-
-                    const startDate = moment(startDateInput.value, 'YYYY-MM-DD');
-                    const endDate = moment(endDateInput.value, 'YYYY-MM-DD');
-
-                    if (!startDateInput.value || !endDateInput.value) {
-                        Swal.showValidationMessage('Ambas fechas son requeridas');
-                        return false;
-                    }
-
-                    if (!startDate.isValid() || !endDate.isValid() || startDate.isSameOrAfter(endDate)) {
-                        Swal.showValidationMessage('Las fechas no son válidas');
-                        return false;
-                    }
-
-                    return [startDate.format('YYYY-MM-DD'), endDate.format('YYYY-MM-DD')];
-                },
-                didOpen: () => {
-                    new Pikaday({ field: document.getElementById('start-date') });
-                    new Pikaday({ field: document.getElementById('end-date') });
-                }
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    const [startDate, endDate] = result.value;
-
-                    $.ajax({
-                        url: "../reutilizar",
-                        type: 'POST',
-                        data:{
-                                startDate    : startDate,
-                                endDate      : endDate,
-                                ruta         : RUTA,
-                                _token       : "{{ csrf_token() }}" 
-                            },
-                        async: true,
-                        success: function(response) {
-                            Swal.fire({
-                            title: 'Ajuste realizados',
-                            icon: 'success',
-                            showCancelButton: false,
-                            confirmButtonColor: '#3085d6',
-                            cancelButtonColor: '#d33',
-                            confirmButtonText: 'OK'
-                            }).then((result) => {
-                            if (result.isConfirmed) {
-                                location.reload();
-                                }
-                            })
-                        },
-                        error: function(response) {
-                        }
-                    }).done(function(data) {
-                        
-                    });
-
-
-                }
-            });
-            
-        
-
-        },
-            allowOutsideClick: () => !Swal.isLoading()
-        });
-
-    })
     
     appCalendarInit(dta_calendar)
     
@@ -187,7 +82,6 @@
             }
         }
     }
-  
     /*-----------------------------------------------
     |   Calendar
     -----------------------------------------------*/
@@ -230,7 +124,6 @@
         </div>
         </div>
         <div class="modal-footer d-flex justify-content-end bg-light px-card border-top-0">
-        <button class="btn btn-success btn-sm activo" type="button" onclick=" rmVisita(${event.extendedProps.id_event})"> REMOVER</button>
         </div>
         `;
     };
@@ -326,14 +219,7 @@
 
                 },
                 dateClick: function dateClick(info) {
-                    var day_ = new Date(info.dateStr);
-
-                    var flatpickr = document.querySelector(Selectors.EVENT_START_DATE)._flatpickr;
-
-                    flatpickr.setDate([info.dateStr]);
-
-                    var modal = new window.bootstrap.Modal(addEventModal);
-                    modal.show();
+                  
 
                 },
                 editable: true,
@@ -421,7 +307,15 @@
         });
     }
 
+    $("#crm-schedule-tab").click(function(){
+        setTimeout(function() {
+            $('#btnToday').trigger('click');
+        }, 1000);
+    })
 
+    $('#sclVendedor').on('change', function(){
+        getDataCalendar(this.value)
+    });
     function getDataCalendar(Ruta){
         var annio = moment().format('M');
         dta_calendar = []
@@ -460,52 +354,7 @@
                 //alert('error');
             }
         });
-        
-        return dta_calendar;
-        
+        appCalendarInit(dta_calendar)
+        //return dta_calendar;
     }
-
-   
-    function rmVisita(id){
-        Swal.fire({
-        title: '¡Se removera la visita para este Cliente!',
-        text: "¿Desea continuar con esta acción?",
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Si!',
-        showLoaderOnConfirm: true,
-        preConfirm: () => {
-            $.ajax({
-                url: "../rmVisita/"+id,
-                type: 'GET',
-                async: true,
-                success: function(response) {
-                    Swal.fire({
-                    title: 'Removido',
-                    icon: 'success',
-                    showCancelButton: false,
-                    confirmButtonColor: '#3085d6',
-                    cancelButtonColor: '#d33',
-                    confirmButtonText: 'OK'
-                    }).then((result) => {
-                    if (result.isConfirmed) {
-                        location.reload();
-                        }
-                    })
-                },
-                error: function(response) {
-                }
-            }).done(function(data) {
-                
-            });
-        },
-            allowOutsideClick: () => !Swal.isLoading()
-        });
-    }
-
-
-
-  
 </script>
