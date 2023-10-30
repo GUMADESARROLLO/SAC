@@ -14,19 +14,19 @@
             <div class="row justify-content-center g-0">
               <div class="col-lg-9 col-xl-8 col-xxl-6">
                 <div class="card">
-                  <div class="card-header bg-circle-shape bg-shape text-center p-2"><a class="font-sans-serif fw-bolder fs-4 z-index-1 position-relative link-light light" href="!#">SAC UNIMARK S,A</a></div>
+                  <div class="card-header bg-circle-shape bg-shape text-center p-2"><a class="font-sans-serif fw-bolder fs-4 z-index-1 position-relative link-light light" href="!#">UNIMARK S,A</a></div>
                   <div class="card-body p-4">
                     <div class="row flex-between-center">
                       <div class="col-auto">
                         <h3>Acceso</h3>
                       </div>
-                      <div class="col-auto fs--1 text-600 invisible"><span class="mb-0 fw-semi-bold">Creado por </span> <span><a href="../../../pages/authentication/split/register.html">Informatica 2022</a></span></div>
+                      <div class="col-auto fs--1 text-600 "><span class="mb-0 fw-semi-bold">Creado por </span> <span><a href="../../../pages/authentication/split/register.html">Informatica {{date('Y')}}</a></span></div>
                     </div>
                     <form method="POST" action="{{ route('login') }}">
                     @csrf
                       <div class="mb-3">
                         <label class="form-label" for="username">Nombre de Usuario</label>
-                        <input id="username" type="text" class="form-control @error('username') is-invalid @enderror" name="username" value="{{ old('username') }}" required autocomplete="username" autofocus placeholder="Nombre de usuario">
+                        <input id="username" type="text" class="form-control @error('username') is-invalid @enderror" name="username" value="{{ old('username') }}" required autocomplete="username" autofocus placeholder="Digite su nombre de Usuario">
                         @error('username')
                             <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
                         @enderror
@@ -35,7 +35,7 @@
                       <div class="d-flex justify-content-between">
                             <label class="form-label" for="card-password">Contraseña</label>
                           </div>
-                    <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" required autocomplete="current-password" placeholder="Contraseña">
+                    <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" required autocomplete="current-password" placeholder="Ingrese su Contraseña">
                         @error('password')
                         <span class="invalid-feedback" role="alert">
                             <strong>{{ $message }}</strong>
@@ -52,7 +52,7 @@
                         <div class="col-auto"><a class="fs--1" href="../../../pages/authentication/split/forgot-password.html">Forgot Password?</a></div>
                       </div>
                       <div class="mb-3">
-                        <button class="btn btn-primary d-block w-100 mt-3" type="submit" name="submit">{{ __('Inicio') }}</button>
+                        <button class="btn btn-primary d-block w-100 mt-3" type="submit" name="submit">{{ __('ACCEDER') }}</button>
                       </div>
                     </form>
                    

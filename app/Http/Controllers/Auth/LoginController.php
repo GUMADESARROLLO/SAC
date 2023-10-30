@@ -17,18 +17,14 @@ class LoginController extends Controller
 
     public function redirectTo() {
 
-        /*$role = Auth::User()->activeRole();
+        $role = Auth::User()->id_rol;
+        
+        if ($role != 11) {
+            return 'Home';
+        } else {
+            return 'Schedule';
+        }
 
-        switch ($role) {
-            case '1':
-                return 'Home';
-            break;
-            default:
-                return '/login';
-            break;
-            
-        }*/
-        return 'Home';
     }
 
     /**

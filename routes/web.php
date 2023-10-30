@@ -69,5 +69,5 @@ Route::post('imgArticulo', 'HomeController@imgArticulo')->name('imgArticulo');
 
 Route::get('getDataVisita/{RUTA}/', 'ScheduleController@getDataVisita')->name('getDataVisita/{RUTA}/');
 Route::post('UpdateVisita', 'ScheduleController@UpdateVisita')->name('UpdateVisita');
-
+Route::get('Schedule', 'ScheduleController@getSchedule')->name('Schedule');
 Route::post('AddVisita', 'ScheduleController@AddVisita')->name('AddVisita');

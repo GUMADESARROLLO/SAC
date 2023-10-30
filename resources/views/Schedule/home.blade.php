@@ -10,6 +10,7 @@
     <main class="main" id="top">
       <div class="container-fluid" data-layout="container">
         <div class="content">
+        @include('layouts.nav_importacion')
           <div class="card mb-3 overflow-hidden">
             <div class="card-header">
               <div class="row gx-0 align-items-center">

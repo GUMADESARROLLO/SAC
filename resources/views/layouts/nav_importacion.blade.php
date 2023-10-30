@@ -5,7 +5,7 @@
 <a class="navbar-brand me-1 me-sm-3" href="{{ url('/') }}">
   <div class="row gx-0 align-items-center">
     <h6 class="text-primary fs--1 mb-0">Bienvenido a </h6>
-    <h4 class="text-primary fw-bold mb-0">PLATAFORMA <span class="text-info fw-medium">SAC</span></h4>
+    <h4 class="text-primary fw-bold mb-0">UNIMARK <span class="text-info fw-medium">S,A</span></h4>
   </div>
 </a>
 

@@ -7,7 +7,7 @@ use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Http\Request;
 use GuzzleHttp\Client;
 use App\Models\Visita;
-
+use Illuminate\Support\Facades\Auth;
 use App\Models\ClientesFull;
 
 class ScheduleController extends Controller
@@ -38,7 +38,8 @@ class ScheduleController extends Controller
         \Log::channel('Schedule')->info("Ejecucion de Tarea de Importacion de Clientes Verificados ");
     }
 
-    public function getSchedule($Ruta){
+    public function getSchedule(){
+        $Ruta = Auth::User()->username;
 
         $Clientes      = ClientesFull::WHERE('VENDEDOR',$Ruta)->get();
         return view('Schedule.home', compact('Clientes','Ruta'));     
