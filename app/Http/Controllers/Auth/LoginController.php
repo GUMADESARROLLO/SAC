@@ -20,10 +20,18 @@ class LoginController extends Controller
         $role = Auth::User()->id_rol;
         
         if ($role != 11) {
-            return 'Home';
+
+            if ($role === 12) {
+                return 'Devoluciones';
+            } else {
+                return 'Home';
+            }
+            
         } else {
             return 'Schedule';
         }
+
+        
 
     }
 
