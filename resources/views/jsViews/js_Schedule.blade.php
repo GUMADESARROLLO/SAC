@@ -428,7 +428,7 @@
 
         $.ajax({
             type: "GET",
-            url: '../getDataVisita/' + Ruta, 
+            url: 'getDataVisita/' + Ruta, 
             async: false,
             dataType: "json",
             success: function(data){
