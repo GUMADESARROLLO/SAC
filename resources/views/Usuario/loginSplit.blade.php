@@ -20,7 +20,7 @@
                       <div class="col-auto">
                         <h3>Acceso</h3>
                       </div>
-                      <div class="col-auto fs--1 text-600 "><span class="mb-0 fw-semi-bold">Creado por </span> <span><a href="../../../pages/authentication/split/register.html">Informatica {{date('Y')}}</a></span></div>
+                      <div class="col-auto fs--1 text-600 "><span class="mb-0 fw-semi-bold">Creado por </span> <span><a href="#">Informática {{date('Y')}}</a></span></div>
                     </div>
                     <form method="POST" action="{{ route('login') }}">
                     @csrf
