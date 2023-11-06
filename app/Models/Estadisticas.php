@@ -52,7 +52,7 @@ class Estadisticas extends Model
         $sql_exec = '';
         
 
-        if (Session::get('rol') == '9') {
+        if (Session::get('rol') == '9' || Session::get('rol') == '13') {
             
             $id_user = Auth::id();            
             $data_ruta = Estadisticas::get_rutas_group($id_user);
@@ -250,7 +250,7 @@ class Estadisticas extends Model
         $sql_exec = '';
         
 
-        if (Session::get('rol') == '9') {
+        if (Session::get('rol') == '9' || Session::get('rol') == '13') {
             $id_user = Auth::id();            
             $data_ruta = Estadisticas::get_rutas_group($id_user);
             $Rutas = " AND VENDEDOR IN ( ".$data_ruta['ruta']." ) ";
@@ -287,7 +287,7 @@ class Estadisticas extends Model
         $sql_exec = '';
         
 
-        if (Session::get('rol') == '9') {
+        if (Session::get('rol') == '9' || Session::get('rol') == '13') {
             $id_user = Auth::id();            
             $data_ruta = Estadisticas::get_rutas_group($id_user);
             $Rutas = " AND VENDEDOR IN ( ".$data_ruta['ruta']." ) ";
