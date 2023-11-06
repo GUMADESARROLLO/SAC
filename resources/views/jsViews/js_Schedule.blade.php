@@ -29,7 +29,7 @@
         if (slCli > 0) {
 
             $.ajax({
-            url: "../AddVisita",
+            url: "AddVisita",
             type: 'post',
             data: {
                 Cliente   : slCli,
