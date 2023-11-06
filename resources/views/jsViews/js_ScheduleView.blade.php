@@ -24,7 +24,7 @@
         if (slCli > 0) {
 
             $.ajax({
-            url: "../AddVisita",
+            url: "./AddVisita",
             type: 'post',
             data: {
                 Cliente   : slCli,
@@ -236,7 +236,7 @@
 
                     $.ajax({
                         type: 'POST',
-                        url: '../UpdateVisita', 
+                        url: './UpdateVisita', 
                         data: eventData,
                         success: function(response) {
                         },
@@ -322,7 +322,7 @@
 
         $.ajax({
             type: "GET",
-            url: '../getDataVisita/' + Ruta, 
+            url: './getDataVisita/' + Ruta, 
             async: false,
             dataType: "json",
             success: function(data){

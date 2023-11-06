@@ -478,7 +478,7 @@
         showLoaderOnConfirm: true,
         preConfirm: () => {
             $.ajax({
-                url: "../rmVisita/"+id,
+                url: "./rmVisita/"+id,
                 type: 'GET',
                 async: true,
                 success: function(response) {
