@@ -37,6 +37,9 @@ use PHPExcel_Style;
 use PHPExcel_Style_Border;
 use Session;
 
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Redis;
+
 class HomeController extends Controller {
     public function __construct()
     {
@@ -133,6 +136,7 @@ class HomeController extends Controller {
             'Estadistica'   => Estadisticas::getData($d1,$d2),           
         );
         return response()->json($dtaHome);
+        
     }
 
     public function getData()
