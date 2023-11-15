@@ -298,17 +298,20 @@
                     var dtIni = isValue(info.event.extendedProps.dtIni,'N/D',true)
                     var dtEnd = isValue(info.event.extendedProps.dtEnd,'N/D',true)
 
+                    console.log(dtIni)
+                    console.log(dtEnd)
+
                     dtInit = (dtIni === 'N/D')? horaInicio: dtIni
                     dtEnd  = (dtEnd === 'N/D')? horaInicio.add(45, 'minutes') : dtEnd
                     $("#eventLabel").val(efect).change();
                     
 
                     var formattedDtInit = moment(dtInit).format("h:mm A");
-
-                    // Formatear dtEnd en formato de 12 horas con AM/PM
                     var formattedDtEnd = moment(dtEnd).format("h:mm A");
 
-                    // Asignar los valores formateados a los elementos HTML
+                    console.log(formattedDtInit)
+                    console.log(formattedDtEnd)
+
                     $("#timepicker_ini").val(formattedDtInit);
                     $("#timepicker_end").val(formattedDtEnd);
                     
