@@ -95,7 +95,9 @@ class Visita extends Model {
                 'descripcion'   => $row->descripcion,
                 'nombre'        => $row->nombre,
                 'cliente'       => $row->cliente,
-                'activo'        => $row->activo,
+                'efectiva'      => $row->efectiva,
+                'time_ini'      => $row->time_ini,
+                'time_end'      => $row->time_end,
             ];
            
         }
@@ -112,6 +114,32 @@ class Visita extends Model {
                 
                 $response =   Visita::where('id',  $id)->update([
                     "fechavisita" => $date,
+                ]);
+
+                return response()->json($response);
+
+
+            } catch (Exception $e) {
+                $mensaje =  'Excepción capturada: ' . $e->getMessage() . "\n";
+                return response()->json($mensaje);
+            }
+        }
+
+    }
+    public static function CheckVisita(Request $request)
+    {
+        if ($request->ajax()) {
+            try {
+
+                $id             = $request->input('id');
+                $startDate      = $request->input('startDate');
+                $endDate        = $request->input('endDate');
+                $isEfective     = $request->input('isEfective');
+                
+                $response =   Visita::where('id',  $id)->update([
+                    "time_ini" => $startDate,
+                    "time_end" => $endDate,
+                    "efectiva" => $isEfective,
                 ]);
 
                 return response()->json($response);

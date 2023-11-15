@@ -206,14 +206,25 @@
                 },
                 events: eventList,
                 eventClick: function eventClick(info) {
-                    var template = getTemplate(info.event);
-                    document.querySelector(Selectors.EVENT_DETAILS_MODAL_CONTENT).innerHTML = template;
+               
 
-                    if(info.event.extendedProps.activo == "S"){
-                        $(".activo").removeClass('btn-success');
-                        $(".activo").addClass('btn-danger');
-                        $(".activo").text('REMOVER');
-                    }
+                    var descr = isValue(info.event.extendedProps.description,'N/D',true).split(' ').slice(0, 1000).join(' ')
+                    var dtIni = isValue(info.event.extendedProps.dtIni,'N/D',true)
+                    var dtEnd = isValue(info.event.extendedProps.dtEnd,'N/D',true)
+                    var efect = isValue(info.event.extendedProps.efectiva,0,true)
+                    
+
+                    $("#id_lbl_title_event").text(moment(info.start).locale('es').format("dddd, MMM D, YYYY"));
+                    $("#NameClient").val(info.event.title);
+                    $("#eventDescription").val(descr);
+                    
+                    
+                   
+                    $("#eventLabel").val(efect).change();
+
+                    $("#timepicker_ini").val(dtIni);                    
+                    $("#timepicker_end").val(dtEnd);
+                    
                     var modal = new window.bootstrap.Modal(eventDetailsModal);
                     modal.show();
 
@@ -328,11 +339,14 @@
             success: function(data){
                 $.each(data,function(key, registro) {
                     
-                    var color = "";
-                    if(registro.activo ==  "N"){
+                    var color = "bg-soft-warning";
+
+                    if(registro.efectiva ==  2){
                         color = 'bg-soft-danger';
                     }else{
-                        color = 'bg-soft-success';
+                        if(registro.efectiva ==  1) {
+                            color = 'bg-soft-success';
+                        }
                     }
 
                     dta_calendar.push({
@@ -342,7 +356,9 @@
                             'cliente'       : registro.cliente,
                             'start'         : registro.fechaInicio,
                             'description'   : registro.descripcion,
-                            'activo'        : registro.activo,
+                            'efectiva'      : registro.efectiva,
+                            'dtIni'         : registro.time_ini,
+                            'dtEnd'         : registro.time_end,
                             'className'     : color
                         })
 

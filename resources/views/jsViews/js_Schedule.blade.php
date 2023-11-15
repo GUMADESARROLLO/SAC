@@ -1,6 +1,7 @@
 <script type="text/javascript">
+ 
 
-
+    
     var dta_calendar = []  
     var table = ''
     var nMes   = $("#IdSelectMes option:selected").val();           
@@ -16,6 +17,7 @@
     var RUTA  = $("#id_ruta").text();  
     getDataCalendar(RUTA)
 
+   
 
     $("#AddVisita").click(function(){
         var slCli   = $("#sclCliente option:selected").val();  
@@ -29,7 +31,7 @@
         if (slCli > 0) {
 
             $.ajax({
-            url: "AddVisita",
+            url: "../AddVisita",
             type: 'post',
             data: {
                 Cliente   : slCli,
@@ -200,39 +202,8 @@
         
     };
     function getTemplate(event) {
-        return `
-        <div class="modal-header bg-light ps-card pe-5 border-bottom-0">
-        <div>
-            <h5 class="modal-title mb-0">${event.title}</h5>
-        </div>
-        <button type="button" class="btn-close position-absolute end-0 top-0 mt-3 me-3" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body px-card pb-card pt-1 fs--1">
-        
-            <div class="d-flex mt-3">
-                ${getStackIcon('fas fa-align-left')}
-                <div class="flex-1">
-                <h6>Descripción</h6>
-                <p class="mb-0">
-                ${isValue(event.extendedProps.description,'N/D',true).split(' ').slice(0, 1000).join(' ')}
-                </p>
-                </div>
-            </div>
-            <div class="d-flex mt-3">
-                ${getStackIcon('fas fa-calendar-check')}
-                <div class="flex-1">
-                    <h6>Fecha de visita</h6>
-                    <p class="mb-1">
-                    ${ moment(event.start).locale('es').format("dddd, MMMM D, YYYY") } 
-                    </p>
-                </div>
-            </div>
-        </div>
-        </div>
-        <div class="modal-footer d-flex justify-content-end bg-light px-card border-top-0">
-        <button class="btn btn-success btn-sm activo" type="button" onclick=" rmVisita(${event.extendedProps.id_event})"> REMOVER</button>
-        </div>
-        `;
+      
+        return ``;
     };
 
     function appCalendarInit(events) {
@@ -249,6 +220,8 @@
             EVENT_DETAILS_MODAL_CONTENT: '#eventDetailsModal .modal-content',
             EVENT_START_DATE: '#addEventModal [name="startDate"]',
             EVENT_END_DATE: '#addEventModal [name="endDate"]',
+
+
             INPUT_TITLE: '[name="title"]'
         };
 
@@ -313,14 +286,25 @@
                 },
                 events: eventList,
                 eventClick: function eventClick(info) {
-                    var template = getTemplate(info.event);
-                    document.querySelector(Selectors.EVENT_DETAILS_MODAL_CONTENT).innerHTML = template;
+                    var horaInicio = moment(info.start);
+                    var desripcion = isValue(info.event.extendedProps.description,'N/D',true).split(' ').slice(0, 1000).join(' ')
+                    var efect = isValue(info.event.extendedProps.efectiva,0,true)
 
-                    if(info.event.extendedProps.activo == "S"){
-                        $(".activo").removeClass('btn-success');
-                        $(".activo").addClass('btn-danger');
-                        $(".activo").text('REMOVER');
-                    }
+                    $("#id_event").text(info.event.extendedProps.id_event)   
+                    $("#id_lbl_title_event").text(moment(info.start).locale('es').format("dddd, MMM D, YYYY"));
+                    $("#NameClient").val(info.event.title);
+                    $("#eventDescription").val(desripcion);
+
+                    var dtIni = isValue(info.event.extendedProps.dtIni,'N/D',true)
+                    var dtEnd = isValue(info.event.extendedProps.dtEnd,'N/D',true)
+
+                    dtInit = (dtIni === 'N/D')? horaInicio.format("H:mm") : dtIni
+                    dtEnd  = (dtEnd === 'N/D')? horaInicio.add(45, 'minutes').format("H:mm") : dtEnd
+                    $("#eventLabel").val(efect).change();
+
+                    $("#timepicker_ini").val(dtInit);                    
+                    $("#timepicker_end").val(dtEnd);
+                    
                     var modal = new window.bootstrap.Modal(eventDetailsModal);
                     modal.show();
 
@@ -428,17 +412,20 @@
 
         $.ajax({
             type: "GET",
-            url: 'getDataVisita/' + Ruta, 
+            url: '../getDataVisita/' + Ruta, 
             async: false,
             dataType: "json",
             success: function(data){
                 $.each(data,function(key, registro) {
                     
-                    var color = "";
-                    if(registro.activo ==  "N"){
+                    var color = "bg-soft-warning";
+
+                    if(registro.efectiva ==  2){
                         color = 'bg-soft-danger';
                     }else{
-                        color = 'bg-soft-success';
+                        if(registro.efectiva ==  1) {
+                            color = 'bg-soft-success';
+                        }
                     }
 
                     dta_calendar.push({
@@ -448,7 +435,9 @@
                             'cliente'       : registro.cliente,
                             'start'         : registro.fechaInicio,
                             'description'   : registro.descripcion,
-                            'activo'        : registro.activo,
+                            'efectiva'      : registro.efectiva,
+                            'dtIni'         : registro.time_ini,
+                            'dtEnd'         : registro.time_end,
                             'className'     : color
                         })
 
@@ -465,8 +454,47 @@
         
     }
 
-   
-    function rmVisita(id){
+    function ConfirmedVisita(){
+        var id              =  $("#id_event").text();
+        var isEfective      = $("#eventLabel option:selected").val(); 
+        var timepicker_ini  =  $("#timepicker_ini").val();
+        var timepicker_end  =  $("#timepicker_end").val();
+
+        $.ajax({
+            url: "../CheckVisita",
+            type: 'POST',
+            data:{
+                id          : id,
+                startDate   : timepicker_ini,
+                endDate     : timepicker_end,
+                isEfective  : isEfective,
+                _token      : "{{ csrf_token() }}" 
+                },
+            async: true,
+            success: function(response) {
+                Swal.fire({
+                title: 'Ajustado',
+                icon: 'success',
+                showCancelButton: false,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'OK'
+                }).then((result) => {
+                if (result.isConfirmed) {
+                    location.reload();
+                    }
+                })
+            },
+            error: function(response) {
+            }
+        }).done(function(data) {
+            
+        });
+
+    }
+    function rmVisita(){
+        var id =  $("#id_event").text();
+
         Swal.fire({
         title: '¡Se removera la visita para este Cliente!',
         text: "¿Desea continuar con esta acción?",
@@ -478,7 +506,7 @@
         showLoaderOnConfirm: true,
         preConfirm: () => {
             $.ajax({
-                url: "./rmVisita/"+id,
+                url: "../rmVisita/"+id,
                 type: 'GET',
                 async: true,
                 success: function(response) {
@@ -505,7 +533,7 @@
         });
     }
 
-
+   
 
   
 </script>

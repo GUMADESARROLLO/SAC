@@ -117,7 +117,7 @@ if ( typeof jQuery != "undefined" )
     <script src="{{ asset('js/theme_gumadesk/vendors/is/is.min.js') }}"></script>
     <script src="{{ asset('js/theme_gumadesk/vendors/swiper/swiper-bundle.min.js') }}"></script>
     <script src="{{ asset('js/theme_gumadesk/vendors/glightbox/glightbox.min.js') }}"></script>    
-    <script src="{{ asset('js/theme_gumadesk/flatpickr.js') }}"></script>
+  
     <script src="{{ asset('js/theme_gumadesk/vendors/echarts/echarts.min.js') }}"></script>    
     <script src="{{ asset('js/theme_gumadesk/world.js') }}"></script>
     <script src="{{ asset('js/theme_gumadesk/vendors/plyr/plyr.polyfilled.min.js') }}"></script>    
@@ -147,6 +147,7 @@ if ( typeof jQuery != "undefined" )
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.8.0/xlsx.js"></script>
     <script src="https://cdn.datatables.net/select/1.4.0/js/dataTables.select.min.js"></script>
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script src="{{ asset('js/theme_gumadesk/flatpickr.js') }}"></script>
     @yield('metodosjs')
     
     @include('sweet::alert')
@@ -164,6 +165,7 @@ if ( typeof jQuery != "undefined" )
                 return ($.type(is_return) == 'boolean' && is_return === true ? value : true);
             }
         }
+      
     </script>
 
     

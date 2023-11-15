@@ -38,13 +38,15 @@ class ScheduleController extends Controller
         \Log::channel('Schedule')->info("Ejecucion de Tarea de Importacion de Clientes Verificados ");
     }
 
-    public function getSchedule(){
-        $Ruta = Auth::User()->username;
+    public function getSchedule(Request $request, $ruta = null){
+        
+        $Ruta = $ruta ?? (Auth::user() ? Auth::user()->username : null);
 
         $Clientes      = ClientesFull::WHERE('VENDEDOR',$Ruta)->get();
         return view('Schedule.home', compact('Clientes','Ruta'));     
 
     }
+    
 
     public function AddVisita(Request $request){
 
@@ -52,6 +54,13 @@ class ScheduleController extends Controller
         
         return response()->json($response);
 
+    }
+
+    public function CheckVisita(Request $request)
+    {
+        $response = Visita::CheckVisita($request);
+        
+        return response()->json($response);
     }
     public function reutilizar(Request $request){
 

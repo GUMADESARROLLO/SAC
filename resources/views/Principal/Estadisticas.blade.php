@@ -301,9 +301,44 @@
 
     <div class="modal fade" id="eventDetailsModal" tabindex="-1">
           <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content border"></div>
+            <div class="modal-content border">
+              <div class="modal-content border">
+                  <div class="modal-header px-card bg-light border-bottom-0">
+                    <h5 class="modal-title">Visita:  <span id="id_lbl_title_event"> </span></h5>
+                    <span id="id_event" style="display:none">0</span>
+                  <button class="btn-close me-n1" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
+                  </div>
+                  <div class="modal-body p-card">
+                  <div class="mb-3">
+                      <label class="fs-0" for="NameClient">Nombre de Cliente</label>
+                      <input class="form-control" id="NameClient" type="text" name="title" />
+                  </div>
+                  <div class="mb-3">
+                      <label class="fs-0" for="eventLabel">Visita fue:</label>
+                      <select class="form-select" id="eventLabel" name="label">
+                          <option value="0">N/D</option>
+                          <option value="1">Efectiva</option>
+                          <option value="2">No Efectiva</option>
+                      </select>
+                  </div>
+                  <div class="mb-3">
+                      <label class="fs-0" for="eventStartDate">Hora Inicio</label>
+                      <input class="form-control datetimepicker initTimers" id="timepicker_ini" type="text" placeholder="H:i" data-options='{"enableTime":true,"noCalendar":true,"dateFormat":"H:i","disableMobile":false}' />
+                  </div>
+                  <div class="mb-3">
+                      <label class="fs-0" for="eventEndDate">Hora Fin</label>
+                      <input class="form-control datetimepicker initTimers" id="timepicker_end"  type="text" placeholder="H:i" data-options='{"enableTime":true,"noCalendar":true,"dateFormat":"H:i","disableMobile":false}' />
+                  </div>
+                  <div class="mb-3">
+                      <label class="fs-0" for="eventDescription">Description</label>
+                      <textarea class="form-control" rows="3" name="description" id="eventDescription"></textarea>
+                  </div>
+                  
+                  </div>
+              </div>
+            </div>
           </div>
         </div>
-
+       
 </main>
 @endsection('content')

@@ -71,6 +71,8 @@ Route::get('getDataVisita/{RUTA}/', 'ScheduleController@getDataVisita')->name('g
 Route::post('UpdateVisita', 'ScheduleController@UpdateVisita')->name('UpdateVisita');
 Route::get('Schedule', 'ScheduleController@getSchedule')->name('Schedule');
 Route::post('AddVisita', 'ScheduleController@AddVisita')->name('AddVisita');
+Route::post('CheckVisita', 'ScheduleController@CheckVisita')->name('CheckVisita');
+
 Route::get('rmVisita/{RUTA}', 'ScheduleController@rmVisita')->name('rmVisita/{RUTA}');
 
 

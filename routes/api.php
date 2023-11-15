@@ -83,6 +83,7 @@ Route::get('getHistoryItems/{RUTA}/{MONTH}/{YEAR}', 'GmvApiController@getHistory
 
 Route::get('Verification', 'GmvApiController@runVerification')->name('Verification');
 
+Route::post('CheckVisita', 'ScheduleController@CheckVisita')->name('CheckVisita');
 Route::get('Schedule/{RUTA}/', 'ScheduleController@getSchedule')->name('Schedule/{RUTA}/');
 Route::post('AddVisita', 'ScheduleController@AddVisita')->name('AddVisita');
 Route::get('getDataVisita/{RUTA}/', 'ScheduleController@getDataVisita')->name('getDataVisita/{RUTA}/');
