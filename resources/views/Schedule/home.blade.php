@@ -8,10 +8,12 @@
     <!--    Main Content-->
     <!-- ===============================================-->
     <main class="main" id="top">
-      <div class="container-fluid" data-layout="container">
+      <div class="container-fluid " data-layout="container">
         <div class="content">
-          @include('layouts.nav_importacion')
-          <div class="card mb-3 overflow-hidden">
+          @if(!request()->is('api*'))
+              @include('layouts.nav_importacion')
+          @endif
+          <div class="card mb-3 overflow-hidden mt-3">
             <div class="card-header">
               <div class="row gx-0 align-items-center">
                 <div class="col-auto d-flex justify-content-end order-md-1">
@@ -61,7 +63,7 @@
               </div>
             </div>
             <div class="card-body p-0">
-              <div class="calendar-outline" id="appCalendar"></div>
+              <div class="calendar-outline " id="appCalendar"></div>
             </div>
           </div>
         </div>
