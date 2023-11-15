@@ -135,10 +135,13 @@ class Visita extends Model {
                 $startDate      = $request->input('startDate');
                 $endDate        = $request->input('endDate');
                 $isEfective     = $request->input('isEfective');
+
+                $startDateFormatted = date('H:i', strtotime($startDate));
+                $endDateFormatted = date('H:i', strtotime($endDate));
                 
                 $response =   Visita::where('id',  $id)->update([
-                    "time_ini" => $startDate,
-                    "time_end" => $endDate,
+                    "time_ini" => $endDateFormatted,
+                    "time_end" => $endDateFormatted,
                     "efectiva" => $isEfective,
                 ]);
 
