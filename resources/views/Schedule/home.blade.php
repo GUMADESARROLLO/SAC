@@ -91,11 +91,11 @@
                   </div>
                   <div class="mb-3">
                       <label class="fs-0" for="eventStartDate">Hora Inicio</label>
-                      <input class="form-control datetimepicker" id="timepicker_ini" type="text" placeholder="H:i" data-options='{"enableTime":true,"noCalendar":true,"dateFormat":"H:i","disableMobile":false,time_24hr: true}' />
+                      <input class="form-control datetimepicker" id="timepicker_ini" type="text" placeholder="H:i" data-options='{"enableTime":true,"noCalendar":true,"dateFormat":"H:i","disableMobile":false}' />
                   </div>
                   <div class="mb-3">
                       <label class="fs-0" for="eventEndDate">Hora Fin</label>
-                      <input class="form-control datetimepicker" id="timepicker_end" type="text" placeholder="H:i" data-options='{"enableTime":true,"noCalendar":true,"dateFormat":"H:i","disableMobile":false,time_24hr: true}' />
+                      <input class="form-control datetimepicker" id="timepicker_end" type="text" placeholder="H:i" data-options='{"enableTime":true,"noCalendar":true,"dateFormat":"H:i","disableMobile":false}' />
                   </div>
                   <div class="mb-3">
                       <label class="fs-0" for="eventDescription">Description</label>
