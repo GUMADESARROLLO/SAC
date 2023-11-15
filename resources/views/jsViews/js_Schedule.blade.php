@@ -52,8 +52,7 @@
                     confirmButtonText: 'OK'
                     }).then((result) => {
                         if (result.isConfirmed) {
-                            //location.reload();
-                            getDataCalendar(RUTA)
+                            window.location.reload(true);
                         }   
                     })
                 }
@@ -148,8 +147,7 @@
                             confirmButtonText: 'OK'
                             }).then((result) => {
                             if (result.isConfirmed) {
-                                //location.reload();
-                                getDataCalendar(RUTA)
+                                window.location.reload(true);
                                 }
                             })
                         },
@@ -521,8 +519,7 @@
                     confirmButtonText: 'OK'
                     }).then((result) => {
                     if (result.isConfirmed) {
-                        //location.reload();
-                        getDataCalendar(RUTA)
+                        window.location.reload(true);
                         }
                     })
                 },
