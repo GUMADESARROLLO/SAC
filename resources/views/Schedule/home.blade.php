@@ -71,10 +71,10 @@
           <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content border">
               <div class="modal-content border">
-                  <div class="modal-header px-card border-bottom-0 bg-light">
+                  <div class="modal-header px-card border-bottom-0 " id="id_modal_header">
                     <h5 class="modal-title">Visita:  <span id="id_lbl_title_event"> </span></h5>
                     <span id="id_event" style="display:none">0</span>
-                  <button class="btn-close me-n1" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <button class="btn-close me-n1" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
                   </div>
                   <div class="modal-body p-card">
                   <div class="mb-3">
@@ -89,13 +89,16 @@
                           <option value="2">No Efectiva</option>
                       </select>
                   </div>
+                 
                   <div class="mb-3">
-                      <label class="fs-0" for="eventStartDate">Hora Inicio</label>
-                      <input class="form-control datetimepicker" id="timepicker_ini" type="text" placeholder="H:i" data-options='{"enableTime":true,"noCalendar":true,"dateFormat":"H:i","disableMobile":false,"time_24hr": true}' />
+                      <label class="fs-0" for="eventStartDate">Hora Inicio: </label>
+                      <input class="form-control" id="timepicker_ini" type="time"/>
+                     
+
                   </div>
                   <div class="mb-3">
-                      <label class="fs-0" for="eventEndDate">Hora Fin</label>
-                      <input class="form-control datetimepicker" id="timepicker_end" type="text" placeholder="H:i" data-options='{"enableTime":true,"noCalendar":true,"dateFormat":"H:i","disableMobile":false,"time_24hr": true}' />
+                      <label class="fs-0" for="eventEndDate">Hora Fin: </label>
+                      <input class="form-control" id="timepicker_end" type="time"  />
                   </div>
                   <div class="mb-3">
                       <label class="fs-0" for="eventDescription">Description</label>

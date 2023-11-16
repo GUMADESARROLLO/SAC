@@ -286,6 +286,22 @@
                 },
                 events: eventList,
                 eventClick: function eventClick(info) {
+
+
+                    var color = "bg-soft-warning";
+                    
+                    if(info.event.extendedProps.efectiva ==  2){
+                        color = 'bg-soft-danger';
+                    }else{
+                        if(info.event.extendedProps.efectiva ==  1) {
+                            color = 'bg-soft-success';
+                        }
+                    }
+
+
+                    
+                    $("#id_modal_header").addClass(color);
+
                     var horaInicio = moment(info.start);
                     var desripcion = isValue(info.event.extendedProps.description,'N/D',true).split(' ').slice(0, 1000).join(' ')
                     var efect = isValue(info.event.extendedProps.efectiva,0,true)
@@ -298,22 +314,15 @@
                     var dtIni = isValue(info.event.extendedProps.dtIni,'N/D',true)
                     var dtEnd = isValue(info.event.extendedProps.dtEnd,'N/D',true)
 
-                    console.log(dtIni)
-                    console.log(dtEnd)
 
-                    dtInit = (dtIni === 'N/D')? horaInicio: dtIni
-                    dtEnd  = (dtEnd === 'N/D')? horaInicio.add(45, 'minutes') : dtEnd
+                    dtInit = (dtIni === 'N/D')? horaInicio.format("HH:mm"):  moment(dtIni, "HH:mm:ss").format("HH:mm");
+                    dtEnd  = (dtEnd === 'N/D')? horaInicio.add(45, 'minutes').format("HH:mm") : moment(dtEnd, "HH:mm:ss").format("HH:mm")
+
                     $("#eventLabel").val(efect).change();
-                    
+                    $("#timepicker_ini").val(dtInit);
+                    $("#timepicker_end").val(dtEnd);
 
-                    var formattedDtInit = moment(dtInit).format("h:mm A");
-                    var formattedDtEnd = moment(dtEnd).format("h:mm A");
-
-                    console.log(formattedDtInit)
-                    console.log(formattedDtEnd)
-
-                    $("#timepicker_ini").val(formattedDtInit);
-                    $("#timepicker_end").val(formattedDtEnd);
+        
                     
                     var modal = new window.bootstrap.Modal(eventDetailsModal);
                     modal.show();
