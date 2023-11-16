@@ -84,7 +84,7 @@
                   <div class="mb-3">
                       <label class="fs-0" for="eventLabel">Visita fue:</label>
                       <select class="form-select" id="eventLabel" name="label">
-                          <option value="0">N/D</option>
+                          <option value="0">Programada</option>
                           <option value="1">Efectiva</option>
                           <option value="2">No Efectiva</option>
                       </select>

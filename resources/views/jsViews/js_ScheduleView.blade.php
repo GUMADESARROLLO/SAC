@@ -339,7 +339,7 @@
             success: function(data){
                 $.each(data,function(key, registro) {
                     
-                    var color = "bg-soft-warning";
+                    var color = "bg-soft-info";
 
                     if(registro.efectiva ==  2){
                         color = 'bg-soft-danger';
