@@ -81,7 +81,7 @@
 
 
         Swal.fire({
-        title: 'Reutilizar del ' + calendar_title,
+        title: 'Reutilizar Plan de Trabajo',
         text: "¿Desea continuar con esta acción?",
         icon: 'warning',
         showCancelButton: true,
@@ -92,7 +92,7 @@
         preConfirm: () => {
 
             Swal.fire({
-                title: 'Defina el Rango de Fecha',
+                title: 'Defina el Rango de Fecha a Reutilizar',
                 html:
                     '<input id="start-date" class="form-control swal2-input" type="text" placeholder="Fecha de inicio">' +
                     '<input id="end-date" class="form-control swal2-input" type="text" placeholder="Fecha de fin">',
