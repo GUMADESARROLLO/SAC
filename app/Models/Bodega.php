@@ -20,7 +20,7 @@ class Bodega extends Model
             return Bodega::WHERE('ARTICULO',$IdArticulo)->get();
         } elseif($Rol == 9) {
             return Bodega::WHERE('ARTICULO',$IdArticulo)->whereNotIn('BODEGA',['001','003','006'])->get();
-        }elseif($Rol == 10){
+        }elseif($Rol == 13){
             return Bodega::WHERE('ARTICULO',$IdArticulo)->whereIn('BODEGA',['002'])->get();
         }
         
