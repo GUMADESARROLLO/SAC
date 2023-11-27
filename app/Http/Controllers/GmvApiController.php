@@ -270,7 +270,7 @@ class GmvApiController extends Controller{
     public static function runVerification()
     {
 
-        VerificationMysql::where('Lati', 0.00)->orWhere('Longi', 0.00)->delete();
+        VerificationMysql::where('Lati', '0.00')->orWhere('Longi', '0.00')->delete();
         
         $VerificationMysql = VerificationMysql::get()->toArray();
         
