@@ -40,6 +40,6 @@ class ImportVerificationCommand extends Command
     {
         $scheduleController = new ScheduleController();
         $scheduleController->ImportVerification();
-        $this->info('Tarea de Pedidos ejecutada correctamente.');
+        $this->info('Tarea de Importar Clentes Verificados, ejecutada correctamente.');
     }
 }
