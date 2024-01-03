@@ -8,6 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Redis;
 
 class Inventario extends Model
 {
@@ -22,19 +24,20 @@ class Inventario extends Model
     
     public static function getArticulosSinFav()
     {
-        $articulos_favoritos = array();
+        //$articulos_favoritos = array();
         $lista_negra = array();
 
-        $Lista_articulos_Favoritos = ArticuloFavoritos::all();
-        $getListaNegra = DB::connection('sqlsrv')->select('SELECT * FROM PRODUCCION.dbo.tbl_articulos_lista_negra');
+        $ArticuloFavoritosCache = cache()->remember('ArticuloFavoritos', now()->addMinutes(5), function () {
+            return ArticuloFavoritos::all();
+        })->pluck('Articulo')->toArray();
 
-        foreach ($Lista_articulos_Favoritos as $rec){
-            $articulos_favoritos[] = $rec->Articulo;
-        }
-        foreach($getListaNegra as $lista){
+        $ArticuloListaNegraCache = cache()->remember('ArticuloListaNegraCache', now()->addMinutes(5), function () {
+            return DB::connection('sqlsrv')->select('SELECT * FROM PRODUCCION.dbo.tbl_articulos_lista_negra');
+        });
+        foreach($ArticuloListaNegraCache as $lista){
             $lista_negra[] = $lista->articulo;
         }
-        return Inventario::whereNotIn('ARTICULO',$articulos_favoritos)->whereNotIn('ARTICULO',$lista_negra)->get();
+        return Inventario::whereNotIn('ARTICULO',$ArticuloFavoritosCache)->whereNotIn('ARTICULO',$lista_negra)->get();
         
     }
     public static function getArticulosFavoritos()
@@ -42,18 +45,21 @@ class Inventario extends Model
         $articulos_favoritos = array();
         $listaArticulos = $json =  array();
         $i = 0;
-       
 
-        $Lista_articulos_Favoritos = ArticuloFavoritos::all();
-        
-        foreach ($Lista_articulos_Favoritos as $rec){
-            $articulos_favoritos[] = $rec->Articulo;
+        $cachedArticulosArray = Redis::get('ArticuloFavoritos' );
+        if ($cachedArticulosArray) {
+            $ArticuloCache = $cachedArticulosArray;
+        } else {
+            $ArticuloCache = cache()->remember('ArticuloFavoritos', now()->addMinutes(5), function () {
+                return ArticuloFavoritos::all();
+            })->pluck('Articulo')->toArray();
         }
-         
         
-        $listaArticulos = Inventario::whereIn('ARTICULO',$articulos_favoritos)->get();
-        $Info_Articulo = Productos::whereIn('product_sku', $articulos_favoritos)->get();
+        $listaArticulos = Inventario::whereIn('ARTICULO',$ArticuloCache)->get();
+        $Info_Articulo = Productos::whereIn('product_sku', $ArticuloCache)->get();
+
         foreach($listaArticulos as $item){
+
             $img = "item.png";
             $json[$i]['ARTICULO'] = $item->ARTICULO;
             $json[$i]['CLASE_TERAPEUTICA'] = $item->CLASE_TERAPEUTICA;
@@ -75,8 +81,18 @@ class Inventario extends Model
                 }
             }
             $json[$i]['IMG_NOMBRE'] = $img;
-            $json[$i]['IMG_URL'] = Storage::Disk('s3')->temporaryUrl('product/'.$img, now()->addMinutes(5));
-           $i++;
+        
+            $cachedImageUrl = Redis::get('Arti_Url_Img_' . $item->ARTICULO);
+            if ($cachedImageUrl) {
+                $imgUrl = $cachedImageUrl;
+            } else {
+                $imgUrl = Storage::disk('s3')->temporaryUrl('product/'.$img, now()->addMinutes(5));
+                Redis::setex('Arti_Url_Img_' . $item->ARTICULO, 300, $imgUrl); 
+            }
+
+            $json[$i]['IMG_URL'] = $imgUrl;
+
+            $i++;
         }
         //dd($json);
         return $json;

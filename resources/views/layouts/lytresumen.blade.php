@@ -2,7 +2,7 @@
 <html lang="en-US" dir="ltr">
 <!--<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">-->
 <meta charset="UTF-8">
-<title>PLATAFORMA | SAC</title>
+<title>PLATAFORMA | UNIMARKSA S,A</title>
 
 <head>
 <style>

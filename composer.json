@@ -13,6 +13,7 @@
         "fideloper/proxy": "^4.4",
         "fruitcake/laravel-cors": "^2.0",
         "guzzlehttp/guzzle": "^7.7",
+        "jenssegers/date": "^4.0",
         "laravel/framework": "^7.29",
         "laravel/tinker": "^2.5",
         "laravel/ui": "^2.0",
@@ -23,6 +24,7 @@
         "nesbot/carbon": "^2.67",
         "phpoffice/phpexcel": "dev-master",
         "phpoffice/phpspreadsheet": "^1.26",
+        "predis/predis": "^2.2",
         "ramsey/uuid": "^4.2",
         "rap2hpoutre/laravel-log-viewer": "^2.2",
         "uxweb/sweet-alert": "^2.0"

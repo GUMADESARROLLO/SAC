@@ -19,7 +19,7 @@ class Usuario extends Model {
 
     public static function getUsuarios()
     {
-        return Usuario::where('activo','S')->get();
+        return Usuario::where('activo','S')->whereNotIn('id_rol',['11'])->get();
     }
     public static function getUsuarioVendedor()
     {

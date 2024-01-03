@@ -81,5 +81,15 @@ Route::get('pedidos', 'GmvApiController@runInsertPedidos')->name('pedidos');
 Route::get('plan_crecimiento/{RUTA}/{CLIENTE}', 'GmvApiController@plan_crecimiento')->name('plan_crecimiento/{RUTA}/{CLIENTE}');
 Route::get('getHistoryItems/{RUTA}/{MONTH}/{YEAR}', 'GmvApiController@getHistoryItems')->name('getHistoryItems/{RUTA}/{MONTH}/{YEAR}');
 
+Route::get('Verification', 'GmvApiController@runVerification')->name('Verification');
+
+Route::post('CheckVisita', 'ScheduleController@CheckVisita')->name('CheckVisita');
+Route::get('Schedule/{RUTA}/', 'ScheduleController@getSchedule')->name('Schedule/{RUTA}/');
+Route::post('AddVisita', 'ScheduleController@AddVisita')->name('AddVisita');
+Route::get('getDataVisita/{RUTA}/', 'ScheduleController@getDataVisita')->name('getDataVisita/{RUTA}/');
+Route::post('UpdateVisita', 'ScheduleController@UpdateVisita')->name('UpdateVisita');
+Route::get('rmVisita/{RUTA}', 'ScheduleController@rmVisita')->name('rmVisita/{RUTA}');
+Route::post('reutilizar', 'ScheduleController@reutilizar')->name('reutilizar');
+
 
 

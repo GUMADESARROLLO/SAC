@@ -18,6 +18,7 @@ use App\Models\PedidoComentario;
 use App\Models\Usuario;
 use App\Models\Factura;
 use App\Models\Estadisticas;
+use App\Models\ClientesFull;
 use App\Models\Comision;
 use App\Models\PlanCrecimiento;
 use App\Models\Promocion;
@@ -36,6 +37,9 @@ use PHPExcel_Style;
 use PHPExcel_Style_Border;
 use Session;
 
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Redis;
+
 class HomeController extends Controller {
     public function __construct()
     {
@@ -47,6 +51,8 @@ class HomeController extends Controller {
         $Normal ='';
         $SAC = '';
         $Lista_SAC = Usuario::getUsuariosSAC();  
+
+        
         
         if (Session::get('rol') == '1' || Session::get('rol') == '2' || Session::get('rol') == '9') {
             $SAC = 'active';
@@ -63,14 +69,17 @@ class HomeController extends Controller {
         $Normal ='';
         $SAC = '';
         $Lista_SAC = Usuario::getUsuariosSAC();  
-        
+        $Vendedor = Vendedor::ListVendedorPlanTrabajo();
+
+
         if (Session::get('rol') == '1' || Session::get('rol') == '2' || Session::get('rol') == '9') {
             $SAC = 'active';
         } else {
             $Normal = 'active';
         }
+
         
-        return view('Principal.Estadisticas', compact('Lista_SAC','SAC','Normal'));
+        return view('Principal.Estadisticas', compact('Lista_SAC','SAC','Normal','Vendedor'));
         
     }
 
@@ -127,6 +136,7 @@ class HomeController extends Controller {
             'Estadistica'   => Estadisticas::getData($d1,$d2),           
         );
         return response()->json($dtaHome);
+        
     }
 
     public function getData()
@@ -250,7 +260,6 @@ class HomeController extends Controller {
     }
 
     public function insert_promocion(Request $request){
-              
         try{
 
             $titulo = $request->title;
@@ -266,17 +275,10 @@ class HomeController extends Controller {
 
                 if($request->hasFile('nuevaImagen')){
                     $file = $request->file('nuevaImagen');
-                    
-                    //Path Kubernetes
-                    //$destino = $_SERVER["DOCUMENT_ROOT"]."/images/promocion/";
-
-                    //PATH DOCKER
-                    //$destino = $_SERVER["DOCUMENT_ROOT"]."/SAC/public/images/promocion/";
 
                     $name = time() . '-' . $file->getClientOriginalName();
                     Storage::disk('s3')->put('Promociones/'.$name, file_get_contents($file));
-                    //move_uploaded_file($file->getRealPath(),$destino.$name);
-                    //copy($file->getRealPath(), $destino.$name);
+                
                 }
                 
                 $promocion->titulo = $titulo;
@@ -318,16 +320,11 @@ class HomeController extends Controller {
 
                 if($request->hasFile('eNuevaImagen')){
                     $file = $request->file('eNuevaImagen');
-                    //Path Kubernetes
-                    //$destino = $_SERVER["DOCUMENT_ROOT"]."/images/promocion/";
-
-                    //PATH DOCKER
-                    //$destino = $_SERVER["DOCUMENT_ROOT"]."/SAC/public/images/promocion/";
                     
                     $name = time() . '-' . $file->getClientOriginalName();
-                    //move_uploaded_file($file->getRealPath(),$destino.$name);
+                    
                     Storage::disk('s3')->put('Promociones/'.$name, file_get_contents($file));
-                    //copy($file->getRealPath(), $destino.$name);
+                    
                 }
 
                 $promocion = DB::table('tbl_promocion')->where('id', $id)->update(['titulo'=>$titulo,'descripcion'=>$descripcion,'articulo'=>$articulo[0],'nombre'=>$articulo[1],'image'=>$name,'fechaInicio'=>$fechaIni,'fechaFinal'=>$fechaFin,'activo'=>$at]);

@@ -5,14 +5,14 @@ namespace App\Console\Commands;
 use Illuminate\Console\Command;
 use App\Http\Controllers\ScheduleController;
 
-class RunPedidosCommand extends Command
+class ImportVerificationCommand extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'run:pedidos';
+    protected $signature = 'import:verification';
 
     /**
      * The console command description.
@@ -39,7 +39,7 @@ class RunPedidosCommand extends Command
     public function handle()
     {
         $scheduleController = new ScheduleController();
-        $scheduleController->RunPedidos();
-        $this->info('Tarea de Insert Cliente Verificados ejecutada correctamente.');
+        $scheduleController->ImportVerification();
+        //$this->info('Tarea de Importar Clentes Verificados, ejecutada correctamente.');
     }
 }

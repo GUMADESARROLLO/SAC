@@ -6,6 +6,8 @@ use GMP;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
+use App\Models\VerificationSqlsrv;
+use App\Models\VerificationMysql;
 
 class GmvApiController extends Controller{
 
@@ -264,6 +266,27 @@ class GmvApiController extends Controller{
         $obj = GmvApi::runInsertPedidos($request);
 
         return response()->json($obj);
+    }
+    public static function runVerification()
+    {
+
+        VerificationMysql::where('Lati', '0.00')->orWhere('Longi', '0.00')->delete();
+        
+        $VerificationMysql = VerificationMysql::get()->toArray();
+        
+        VerificationSqlsrv::truncate();
+
+
+        foreach (array_chunk($VerificationMysql, 20) as $Chunk)
+        {
+            $insert_verificacion = [];
+            foreach($Chunk as $p) {
+                $insert_verificacion[] = $p;
+            }
+
+            VerificationSqlsrv::insert($insert_verificacion);
+        }
+
     }
     public function getHistoryItems($Ruta,$nMonth,$nYear)
     {

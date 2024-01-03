@@ -66,3 +66,16 @@ Route::get('getmonitoring/{d1}/{d2}', 'HomeController@getmonitoring')->name('get
 // ACTUALIZAR IMAGEN DEL ARTICULO
 Route::post('imgArticulo', 'HomeController@imgArticulo')->name('imgArticulo');
 
+
+Route::get('getDataVisita/{RUTA}/', 'ScheduleController@getDataVisita')->name('getDataVisita/{RUTA}/');
+Route::post('UpdateVisita', 'ScheduleController@UpdateVisita')->name('UpdateVisita');
+Route::get('Schedule', 'ScheduleController@getSchedule')->name('Schedule');
+Route::post('AddVisita', 'ScheduleController@AddVisita')->name('AddVisita');
+Route::post('CheckVisita', 'ScheduleController@CheckVisita')->name('CheckVisita');
+
+Route::get('rmVisita/{RUTA}', 'ScheduleController@rmVisita')->name('rmVisita/{RUTA}');
+
+
+Route::get('Devoluciones', 'DevolucionesController@getDevoluciones')->name('Devoluciones');
+Route::post('getDevoluciones', 'DevolucionesController@getData')->name('getDevoluciones');
+Route::post('reutilizar', 'ScheduleController@reutilizar')->name('reutilizar');

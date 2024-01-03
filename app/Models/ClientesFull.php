@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 use Session;
 
-class  ClientesInfo extends Model
+class  ClientesFull extends Model
 {
     protected $connection = 'sqlsrv';
     public $timestamps = false;

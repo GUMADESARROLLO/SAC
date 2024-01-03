@@ -1,6 +1,8 @@
 <script type="text/javascript">
 
-   
+  var Selectors = {
+          MODAL_CALENDAR: '#ShowEventModal',
+      };
 
     function abbrNum(number, decPlaces) {    
         decPlaces = Math.pow(10,decPlaces);
@@ -92,6 +94,9 @@
       Build_Echart_bar(dta_ventas_mercados)
 
     }
+
+   
+ 
     
     function Estadisticas(Data){
 
@@ -124,10 +129,11 @@
                           <div class="row justify-content-between">
                             <div class="col">
                               <div class="d-flex">
-                                <div class="avatar avatar-2xl status-online">
+                                
+                              <div class="avatar avatar-2xl status-online">
                                   <img class="rounded-circle" src="{{ asset('images/user/avatar-4.jpg') }}" alt="" />
-
                                 </div>
+                                
                                 <div class="flex-1 align-self-center ms-2">
                                   <p class="mb-1 lh-1">`+ d.VENDEDOR + ' | ' + d.NOMBRE+`</p>
                                   <p class="mb-0 fs--1">`+ d.SKU + ` SKUs &bull; Tendencia: `+ d.TENDENCIA + ` &bull; Optimo. `+ Data['Dias_porcent'] + ` </p>
@@ -272,8 +278,12 @@
 
         $("#id_rutas").html($Rutas);
 
+       
+
     }    
 
+    
+    
     function Build_Echart_bar(data) {
 
       
