@@ -75,6 +75,7 @@
                           <th>INFO RUTAS</th>
                           <th class="text-center">VISITAS COMISIONES</th>
                           <th class="text-center">VISITAS PLAN DE CRECIMIENTO</th>
+                          <th class="text-center">VISITAS PEDIDOS</th>
                           <th class="text-center">TOTAL DE VISITAS</th>
                         </tr>
                       </thead>

@@ -57,7 +57,7 @@ Route::get('get_perfil_user', 'GmvApiController@get_perfil_user')->name('get_per
 
 //Rutas productos
 Route::get('product_id', 'GmvApiController@product_id')->name('product_id');
-Route::get('Articulos', 'GmvApiController@Articulos')->name('Articulos');
+Route::get('Articulos/{RUTA}', 'GmvApiController@Articulos')->name('Articulos/{RUTA}');
 Route::get('get_stat_articulo', 'GmvApiController@get_stat_articulo')->name('get_stat_articulo');
 Route::get('post_rpt_rutas', 'GmvApiController@post_rpt_rutas')->name('post_rpt_rutas');
 
@@ -75,11 +75,21 @@ Route::get('get_history_lotes', 'GmvApiController@get_history_lotes')->name('get
 Route::get('post_historico_factura', 'GmvApiController@post_historico_factura')->name('post_historico_factura');
 Route::post('recibo_anular', 'GmvApiController@recibo_anular')->name('recibo_anular');
 
-
-
 Route::get('getcomision/{RUTA}/{MONTH}/{YEAR}', 'GmvApiController@getcomision')->name('getcomision/{RUTA}/{MONTH}/{YEAR}');
+
+Route::get('pedidos', 'GmvApiController@runInsertPedidos')->name('pedidos');
 Route::get('plan_crecimiento/{RUTA}/{CLIENTE}', 'GmvApiController@plan_crecimiento')->name('plan_crecimiento/{RUTA}/{CLIENTE}');
 Route::get('getHistoryItems/{RUTA}/{MONTH}/{YEAR}', 'GmvApiController@getHistoryItems')->name('getHistoryItems/{RUTA}/{MONTH}/{YEAR}');
+
+Route::get('Verification', 'GmvApiController@runVerification')->name('Verification');
+
+Route::post('CheckVisita', 'ScheduleController@CheckVisita')->name('CheckVisita');
+Route::get('Schedule/{RUTA}/', 'ScheduleController@getSchedule')->name('Schedule/{RUTA}/');
+Route::post('AddVisita', 'ScheduleController@AddVisita')->name('AddVisita');
+Route::get('getDataVisita/{RUTA}/', 'ScheduleController@getDataVisita')->name('getDataVisita/{RUTA}/');
+Route::post('UpdateVisita', 'ScheduleController@UpdateVisita')->name('UpdateVisita');
+Route::get('rmVisita/{RUTA}', 'ScheduleController@rmVisita')->name('rmVisita/{RUTA}');
+Route::post('reutilizar', 'ScheduleController@reutilizar')->name('reutilizar');
 
 
 

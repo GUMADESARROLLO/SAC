@@ -6,6 +6,7 @@ use App\Providers\RouteServiceProvider;
 use Closure;
 use Illuminate\Support\Facades\Auth;
 
+
 class RedirectIfAuthenticated
 {
     /**
@@ -19,7 +20,20 @@ class RedirectIfAuthenticated
     public function handle($request, Closure $next, $guard = null)
     {
         if (Auth::guard($guard)->check()) {
-            return redirect(RouteServiceProvider::HOME);
+            
+            $role = Auth::User()->id_rol;
+        
+            if ($role != 11) {
+    
+                if ($role === 12) {
+                    return redirect('Devoluciones');
+                } else {
+                    return redirect(RouteServiceProvider::HOME);
+                }
+                
+            } else {
+                return redirect('Schedule');
+            }
         }
 
         return $next($request);

@@ -4,14 +4,16 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel="shortcut icon" href="{{ url('images/favicon.png') }}" />
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
+    
 
     <!-- ===============================================-->
     <!--    Document Title-->
     <!-- ===============================================-->
-    <title>PLATAFORMA | SAC </title>
+    <title>PLATAFORMA | UNIMARK S,A </title>
 
 
     <!-- ===============================================-->
@@ -20,6 +22,7 @@
     
     <script src="{{ asset('js/theme_gumadesk/config.js') }}"></script>
     <script src="{{ asset('js/theme_gumadesk/vendors/overlayscrollbars/OverlayScrollbars.min.js') }}"></script>
+    
     <link href="{{ asset('js/theme_gumadesk/vendors/flatpickr/flatpickr.min.css') }}" rel="stylesheet" >
     <link href="{{ asset('js/theme_gumadesk/vendors/glightbox/glightbox.min.css') }}" rel="stylesheet" >
     <link href="{{ asset('js/theme_gumadesk/vendors/plyr/plyr.css') }}" rel="stylesheet" >
@@ -38,6 +41,7 @@
     <link href="{{ asset('css/theme_gumadesk/css/user.min.css') }}" rel="stylesheet" id="user-style-default">
     <link href="{{ asset('js/theme_gumadesk/vendors/choices/choices.min.css') }}" rel="stylesheet" >
     <link href="{{ asset('css/jquery.dataTables.min.css') }}" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/pikaday/css/pikaday.css">
     <script>
         var linkRTL = document.getElementById('style-rtl');
         var userLinkRTL = document.getElementById('user-style-rtl');
@@ -77,6 +81,15 @@ if ( typeof jQuery != "undefined" )
         .dBorder {
             border: 1px solid #ccc !important;
         }
+        .modal.custom {
+            outline:none;
+            
+        }
+
+        .modal.custom .modal-dialog {
+            width:50%!important;
+            margin:0 auto;
+        }
     </style>
 </head>
 <body>
@@ -104,7 +117,7 @@ if ( typeof jQuery != "undefined" )
     <script src="{{ asset('js/theme_gumadesk/vendors/is/is.min.js') }}"></script>
     <script src="{{ asset('js/theme_gumadesk/vendors/swiper/swiper-bundle.min.js') }}"></script>
     <script src="{{ asset('js/theme_gumadesk/vendors/glightbox/glightbox.min.js') }}"></script>    
-    <script src="{{ asset('js/theme_gumadesk/flatpickr.js') }}"></script>
+  
     <script src="{{ asset('js/theme_gumadesk/vendors/echarts/echarts.min.js') }}"></script>    
     <script src="{{ asset('js/theme_gumadesk/world.js') }}"></script>
     <script src="{{ asset('js/theme_gumadesk/vendors/plyr/plyr.polyfilled.min.js') }}"></script>    
@@ -127,13 +140,14 @@ if ( typeof jQuery != "undefined" )
     <script src="{{ asset('js/Numeral.js') }}"></script>
     <script src="{{ asset('js/app.js') }}"></script>
     <script src="{{ asset('js/jquery-3.5.1.js') }}"></script>
-    
+    <script src="https://cdn.jsdelivr.net/npm/pikaday/pikaday.js"></script>
     <script src="{{ asset('js/sweetalert2.all.min.js') }}"></script>
     <script src="{{ asset('js/jquery.dataTables.min.js') }}"></script>    
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.8.0/jszip.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.8.0/xlsx.js"></script>
     <script src="https://cdn.datatables.net/select/1.4.0/js/dataTables.select.min.js"></script>
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script src="{{ asset('js/theme_gumadesk/flatpickr.js') }}"></script>
     @yield('metodosjs')
     
     @include('sweet::alert')
@@ -151,6 +165,8 @@ if ( typeof jQuery != "undefined" )
                 return ($.type(is_return) == 'boolean' && is_return === true ? value : true);
             }
         }
+
+      
     </script>
 
     

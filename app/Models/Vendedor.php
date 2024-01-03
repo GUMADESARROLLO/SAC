@@ -2,8 +2,10 @@
 
 namespace App\Models;
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
+use Session;
 
 
 class Vendedor extends Model
@@ -15,7 +17,7 @@ class Vendedor extends Model
 
     public static function getVendedor()
     {  
-        return Vendedor::whereNotIn('VENDEDOR',['F01','F12','F02','F18',"F15",'F24',"F23","F22"])->get();
+        return Vendedor::whereNotIn('VENDEDOR',['F01','F12','F02',"F15","F23","F22"])->get();
         //return Vendedor::whereIn('VENDEDOR',['F05'])->get();
     }
 
@@ -24,4 +26,22 @@ class Vendedor extends Model
 
         return $rZonas;
     }
+    public static function ListVendedorPlanTrabajo(){  
+        if (Session::get('rol') == '9' || Session::get('rol') == '13') {
+            $id_user = Auth::id();            
+            $data_ruta = Estadisticas::get_rutas_group($id_user);
+            $Rutas = isset($data_ruta['ruta']) ? explode(',', $data_ruta['ruta']) : [];
+            $Rutas = array_filter(array_unique($Rutas));
+            $Rutas = array_map(function($ruta) {
+                return trim($ruta, "'");
+            }, $Rutas);
+        } else {
+            $Rutas = [];
+        }
+
+    $vendedores = Vendedor::whereIn('VENDEDOR', $Rutas)->get();
+
+    return $vendedores;
+    }
+
 }

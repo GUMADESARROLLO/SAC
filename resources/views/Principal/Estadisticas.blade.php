@@ -1,6 +1,7 @@
 @extends('layouts.lyt_gumadesk')
 @section('metodosjs')
 @include('jsViews.js_estadisticas')
+@include('jsViews.js_ScheduleView')
 @endsection
 @section('content')
 
@@ -191,19 +192,15 @@
            
            
        
-            <div class="row g-3">
-           
+            <div class="row g-3">           
               <div class="col-md-12 col-xxl-12">
-
-              
-
-
                 <div class="card">
                   <div class="card-header d-flex flex-between-center ps-0 py-0 border-bottom">
                     <ul class="nav nav-tabs border-0 flex-nowrap tab-active-caret" id="crm-revenue-chart-tab" role="tablist" data-tab-has-echarts="data-tab-has-echarts">
                       <li class="nav-item" role="presentation"><a class="nav-link py-3 mb-0 active" id="crm-revenue-tab" data-bs-toggle="tab" href="#crm-revenue" role="tab" aria-controls="crm-revenue" aria-selected="true">Ventas por Dia</a></li>                    
                       <li class="nav-item" role="presentation"><a class="nav-link py-3 mb-0" id="sale-path-tab" data-bs-toggle="tab" href="#sale-path" role="tab" aria-controls="sale-path" aria-selected="true">Ventas por Ruta</a></li>
                       <li class="nav-item" role="presentation"><a class="nav-link py-3 mb-0" id="crm-profit-tab" data-bs-toggle="tab" href="#crm-profit" role="tab" aria-controls="crm-profit" aria-selected="false">Mis Rutas</a></li>
+                      <li class="nav-item" role="presentation"><a class="nav-link py-3 mb-0" id="crm-schedule-tab" data-bs-toggle="tab" href="#crm-schedule" role="tab" aria-controls="crm-schedule" aria-selected="false">Plan de trabajo</a></li>
                     </ul>                 
                   </div>
                   <div class="card-body">
@@ -223,6 +220,73 @@
                             <div class="row fs--1 px-1 py-0" id="id_rutas"></div>
                           </div>
 
+                          <div class="tab-pane" id="crm-schedule" role="tabpanel" aria-labelledby="crm-schedule-tab">
+
+                          <div class="card mb-3 overflow-hidden">
+                            <div class="card-header">
+                              <div class="row align-items-center">
+
+                                <div class="col-auto d-flex justify-content-end order-md-1">
+                                  <button class="btn icon-item icon-item-sm shadow-none p-0 me-1 ms-md-2" type="button" data-event="prev" data-bs-toggle="tooltip" title="Previous"><span class="fas fa-arrow-left"></span></button>
+                                  <button class="btn icon-item icon-item-sm shadow-none p-0 me-1 me-lg-2" type="button" data-event="next" data-bs-toggle="tooltip" title="Next"><span class="fas fa-arrow-right"></span></button>
+                                </div>
+
+                                <div class="col-auto col-md-auto order-md-2">
+                                  <h4 class="mb-0 fs-0 fs-sm-1 fs-lg-2 calendar-title"></h4>
+                                </div>
+                                
+                                
+                                <div class="col col-md-auto d-flex justify-content-end order-md-3">
+                                  <button class="btn btn-falcon-primary btn-sm" type="button" data-event="today" id="btnToday">Hoy</button>
+                                </div>
+
+                                <div class="col col-md-auto d-flex justify-content-end order-md-3">
+                                  <select class="form-select " id="sclVendedor" >
+                                    @foreach ($Vendedor as $v)
+                                      <option value="{{$v->VENDEDOR}}" valor="{{$v->VENDEDOR}}">{{$v->VENDEDOR}} - {{  strtoupper($v->NOMBRE)}}</option>
+                                    @endforeach
+                                    
+                                  </select>
+                                
+                                </div>
+                              
+                                <div class="col d-flex justify-content-end order-md-2">
+                                  <div class="dropdown font-sans-serif me-md-2">
+                                    <button class="btn btn-falcon-default text-600 btn-sm dropdown-toggle dropdown-caret-none" type="button" 
+                                    id="email-filter" data-bs-toggle="dropdown" data-boundary="viewport" aria-haspopup="true" aria-expanded="false">
+                                        <span data-view-title="data-view-title">Semana</span><span class="fas fa-sort ms-2 fs--1"></span>
+                                    </button>
+                                    <div class="dropdown-menu dropdown-menu-end border py-2" aria-labelledby="email-filter">
+                                        <a class="dropdown-item d-flex justify-content-between" href="#!" data-fc-view="dayGridMonth">Mes
+                                            <span class="icon-check"><span class="fas fa-check" data-fa-transform="down-4 shrink-4"></span></span>
+                                        </a>
+                                        <a class="active dropdown-item d-flex justify-content-between" href="#!" data-fc-view="timeGridWeek">Semana
+                                            <span class="icon-check"><span class="fas fa-check" data-fa-transform="down-4 shrink-4"></span></span>
+                                        </a>
+                                        <a class="dropdown-item d-flex justify-content-between" href="#!" data-fc-view="timeGridDay">Día
+                                            <span class="icon-check"><span class="fas fa-check" data-fa-transform="down-4 shrink-4"></span></span>
+                                        </a>
+                                        <a class="dropdown-item d-flex justify-content-between" href="#!" data-fc-view="listWeek">Lista
+                                            <span class="icon-check"><span class="fas fa-check" data-fa-transform="down-4 shrink-4"></span></span>
+                                        </a>
+                                        <a class="dropdown-item d-flex justify-content-between" href="#!" data-fc-view="listYear">Año
+                                            <span class="icon-check"><span class="fas fa-check" data-fa-transform="down-4 shrink-4"></span></span>
+                                        </a>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="card-body p-0">
+                              <div class="calendar-outline" id="appCalendar"></div>
+                            </div>
+                          </div>
+                            
+
+                            
+                          </div>
+           
+
                         </div>
                       </div>
                     </div>
@@ -232,7 +296,49 @@
           </div>
     
           </div>
-      
+          
     </div>
+
+    <div class="modal fade" id="eventDetailsModal" tabindex="-1">
+          <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border">
+              <div class="modal-content border">
+                  <div class="modal-header px-card bg-light border-bottom-0">
+                    <h5 class="modal-title">Visita:  <span id="id_lbl_title_event"> </span></h5>
+                    <span id="id_event" style="display:none">0</span>
+                  <button class="btn-close me-n1" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
+                  </div>
+                  <div class="modal-body p-card">
+                  <div class="mb-3">
+                      <label class="fs-0" for="NameClient">Nombre de Cliente</label>
+                      <input class="form-control" id="NameClient" type="text" name="title" />
+                  </div>
+                  <div class="mb-3">
+                      <label class="fs-0" for="eventLabel">Visita fue:</label>
+                      <select class="form-select" id="eventLabel" name="label">
+                          <option value="0">N/D</option>
+                          <option value="1">Efectiva</option>
+                          <option value="2">No Efectiva</option>
+                      </select>
+                  </div>
+                  <div class="mb-3">
+                      <label class="fs-0" for="eventStartDate">Hora Inicio</label>
+                      <input class="form-control datetimepicker initTimers" id="timepicker_ini" type="text" placeholder="H:i" data-options='{"enableTime":true,"noCalendar":true,"dateFormat":"H:i","disableMobile":false}' />
+                  </div>
+                  <div class="mb-3">
+                      <label class="fs-0" for="eventEndDate">Hora Fin</label>
+                      <input class="form-control datetimepicker initTimers" id="timepicker_end"  type="text" placeholder="H:i" data-options='{"enableTime":true,"noCalendar":true,"dateFormat":"H:i","disableMobile":false}' />
+                  </div>
+                  <div class="mb-3">
+                      <label class="fs-0" for="eventDescription">Description</label>
+                      <textarea class="form-control" rows="3" name="description" id="eventDescription"></textarea>
+                  </div>
+                  
+                  </div>
+              </div>
+            </div>
+          </div>
+        </div>
+       
 </main>
 @endsection('content')

@@ -16,6 +16,7 @@ class Logs extends Model {
         $Visitas = Logs::select('RUTA', 
                 DB::raw("count(CASE WHEN MODULO = 'Comisiones' THEN MODULO END) AS Comisiones"), 
                 DB::raw("count(CASE WHEN MODULO = 'PlanCrecimiento' THEN MODULO END) AS PlanCrecimiento"), 
+                DB::raw("count(CASE WHEN MODULO = 'Pedido' THEN MODULO END) AS Pedido"), 
                 DB::raw("count(MODULO) AS tTotal"))
             ->whereBetween('FECHA', [$d1, $d2])
             ->groupBy('RUTA')
@@ -37,6 +38,7 @@ class Logs extends Model {
 
                 $json[$i]['Comisiones']   = $value->Comisiones;
                 $json[$i]['PlanCrecimiento']   = $value->PlanCrecimiento;
+                $json[$i]['Pedido']   = $value->Pedido;
                 $json[$i]['tTotal']   = $value->tTotal;
                 
 

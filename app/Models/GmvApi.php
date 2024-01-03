@@ -18,9 +18,7 @@ use Illuminate\Support\Facades\Storage;
 
 class GmvApi extends Model
 {  
-    public static function Articulos(Request $request){
-
-        $CODIGO_RUTA = $request->input('Ruta');
+    public static function Articulos($CODIGO_RUTA){
 
         $PROYECTO_B = array("F19", "F21", "F22", "F23");
         $Lista = (in_array($CODIGO_RUTA , $PROYECTO_B)) ? '20' : '80' ;
@@ -41,10 +39,11 @@ class GmvApi extends Model
             $query = GmvArticulos::where('EXISTENCIA', '>' ,1)->orWhere('ARTICULO', 'like', 'VU%')->orderByRaw('CALIFICATIVO,DESCRIPCION ASC')->get();
             $RutaAsignada = $CODIGO_RUTA;
         } else {
-            $Rutas = DB::table('gumadesk.tlb_rutas_asignadas')->where('Ruta', $CODIGO_RUTA)->get()->first();
+            $Rutas = DB::connection('mysql_stats')->table('tlb_rutas_asignadas')->where('Ruta', $CODIGO_RUTA)->get()->first();
+        
             $RutaAsignada = $Rutas->Ruta_asignada;
             
-            $Result_Articulos = DB::table('gumadesk.tbl_listas_articulos_rutas')->where('Ruta', $RutaAsignada)->where('Lista', $Lista)->get();
+            $Result_Articulos = DB::connection('mysql_stats')->table('tbl_listas_articulos_rutas')->where('Ruta', $RutaAsignada)->where('Lista', $Lista)->get();
             
             foreach ($Result_Articulos as $rec){
                 $Lista_Articulos[] = $rec->Articulo;
@@ -59,14 +58,13 @@ class GmvApi extends Model
             $set_img ="SinImagen.png";
             $set_des = "";
 
-            $Info_Articulo = DB::table('ecommerce_android_app.tbl_product')->where('product_sku', $fila["ARTICULO"])->get();
-
+            $Info_Articulo = DB::connection('mysql_pedido')->table('tbl_product')->where('product_sku', $fila["ARTICULO"])->get();
             if ($Info_Articulo->count()) {
                 $set_img = $Info_Articulo[0]->product_image;
                 $set_des = $Info_Articulo[0]->product_description;
             }
 
-            $qPromo = DB::table('ecommerce_android_app.tbl_news')->where('banner_sku', $fila["ARTICULO"])->get();
+            $qPromo = DB::connection('mysql_pedido')->table('tbl_news')->where('banner_sku', $fila["ARTICULO"])->get();
             $isPromo = ($qPromo->count() >= 1) ? "S" : "N" ;            
             $Precio_Articulo = (strpos($fila["ARTICULO"], "VU") !== false) ? 1 : $fila['PRECIO_IVA'] ;
             $Existe_Articulo = (strpos($fila["ARTICULO"], "VU") !== false) ? 999 : $fila['EXISTENCIA'] ;
@@ -109,8 +107,8 @@ class GmvApi extends Model
             $json[$i]['category_name']            = "Medicina";
             $json[$i]['product_price']            = number_format($Precio_Articulo,2,'.','');
             $json[$i]['product_status']           = "Available";
-            $json[$i]['product_image']            = $set_img;
-            $json[$i]['img_url']                  = Storage::temporaryUrl('product/'.$set_img, now()->addMinutes(5));
+            $json[$i]['product_image']            = Storage::Disk('s3')->temporaryUrl('product/'.$set_img, now()->addMinutes(5));
+            //$json[$i]['img_url']                  = Storage::temporaryUrl('product/'.$set_img, now()->addMinutes(5));
             $json[$i]['product_description']      = $set_des;
             $json[$i]['product_quantity']         = str_replace(',', '', number_format($Existe_Articulo,2));
             $json[$i]['currency_id']              = "105";
@@ -144,11 +142,11 @@ class GmvApi extends Model
         if(count($response) >= 1){
             foreach($response as $row){
 
-                $query = DB::table('ecommerce_android_app.tlb_verificacion')->where('Cliente', $row->CLIENTE)->get();
+                $query = DB::connection('mysql_pedido')->table('tlb_verificacion')->where('Cliente', $row->CLIENTE)->get();
 
                 $Verificado = (count($query) == 0) ? "N;0.00;0.00" : "S;".$query[0]->Lati.";".$query[0]->Longi ;
 
-                $queryPins = DB::table('ecommerce_android_app.tlb_pins')->where('Cliente', $row->CLIENTE)->get();
+                $queryPins = DB::connection('mysql_pedido')->table('tlb_pins')->where('Cliente', $row->CLIENTE)->get();
 
                 $isPin = (count($queryPins) == 0) ? "N" : "S";
                 $isPlan =($row->PLAN_CRECI == 0) ? "N" : "S";
@@ -487,7 +485,7 @@ class GmvApi extends Model
     }
 
     public static function get_help(){
-        $response = DB::table('ecommerce_android_app.tbl_help')->get();
+        $response = DB::connection('mysql_pedido')->table('tbl_help')->get();
 
         $json = array();
         if(count($response) >= 1){
@@ -519,7 +517,7 @@ class GmvApi extends Model
     public static function get_comentarios(Request $request){
 
         $orden_code = $request->input('orden_code');
-        $response = DB::table('ecommerce_android_app.tbl_comment')->where('orden_code', $orden_code)->get();
+        $response = DB::connection('mysql_pedido')->table('tbl_comment')->where('orden_code', $orden_code)->get();
 
         $json = array();
         if(count($response) >= 1){
@@ -555,7 +553,7 @@ class GmvApi extends Model
 
     public static function get_banner(){
 
-        $response = DB::table('ecommerce_android_app.tbl_banner')->where('banner_status','>','0')->orderBy('banner_id', 'DESC')->get();
+        $response = DB::connection('mysql_pedido')->table('tbl_banner')->where('banner_status','>','0')->orderBy('banner_id', 'DESC')->get();
         $json = array();
 
         if(count($response) >= 1){
@@ -1291,5 +1289,348 @@ class GmvApi extends Model
                 return array('Error'=>'Try Again');
             }
         }
+    }
+
+    public static function runInsertPedidos(Request $request){
+        $Vendedor       = Usuario::getUsuarioVendedor();
+        $Desde = '2023-06-01 04:00:00';
+        $Vendedor = Pedido::select('name')->where('created_at', '>=', $Desde)->WHERE('status',0)->groupBy('name')->get();
+        $IDs_Pedidos    = array();
+        foreach ($Vendedor as $key => $v) {
+            $nPedidos = GmvApi::setPedidos(
+                $v->getUsuario->username,
+                $v->getUsuario->CONSECUTIVO_FA
+            );
+            if($nPedidos > 0){
+                $IDs_Pedidos[] = array(
+                    'Ruta'      => $v->getUsuario->username,
+                    'Pedidos'   => $nPedidos
+                );
+            }
+        }
+        return $IDs_Pedidos;
+    }
+
+    
+    public static function setPedidos($Ruta,$Consecutivo_FA)
+    {
+
+
+        $Consecutivos = ConsecutivoFa::getConsecutivos();
+
+        $index_key = array_search($Consecutivo_FA, array_column($Consecutivos, 'PTV')); 
+
+        // Obtener el primer día del mes actual
+        //$primerDia = date('Y-m-01', strtotime('now'));
+        $Desde = '2023-06-01 04:00:00';
+
+        // Obtener el último día del mes actual
+        //$ultimoDia = date('Y-m-t', strtotime('now'));
+        //$Hasta = $ultimoDia . ' 23:00:00';     
+        
+
+        $Pedidos = Pedido::where('created_at', '>=', $Desde)->WHERE('status',0)->WHERE('name',$Ruta)->get();
+        $pedidos_a_insertar = array();
+        $lineass_a_insertar = array();
+        $IDs_Pedidos        = array();
+        $PedidosInserted    = array();
+
+
+        $PedidoCodigo = $Consecutivos[$index_key]['VALOR_CONSECUTIVO'];
+        $Prefi_Pedido = $Consecutivos[$index_key]['CODIGO_CONSECUTIVO'];
+        $lineasArray  = 0;
+        
+        foreach ($Pedidos as $key => $value) {
+            $OrdenList = '';
+            $IDs_Pedidos[] = $value->id;
+
+            $ultimoConsecutivo = $PedidoCodigo;
+    
+            $ultimoNumero       = intval(substr($ultimoConsecutivo, 6));
+            $nuevoNumero        = $ultimoNumero + ($key + 1);
+            $nuevoConsecutivo   = sprintf($Consecutivo_FA.'-%06d', $nuevoNumero);
+            $patronBonificado   = '/^\d+\+\d+$/';
+
+            $Cliente_Pedido     = trim($value->email);
+            $Cliente_Pedido     = trim(str_replace('-', '', $Cliente_Pedido));
+
+            #$Monto_Pedido       = $value->order_total;
+            #$Monto_Pedido       = number_format((float) str_replace(',', '', $Monto_Pedido), 2, '.', '');
+            $Monto_Pedido       = 0;
+
+
+            $ttUnidades         = '0.00';
+
+            $UserCron           = 'GMV';
+            $b                  = 30;
+            
+            $OBSERVACIONES      = 'Id Pedido Referencia: ' . $value->code;
+
+
+            
+            $PedidoFecha      = date('Y-m-d 00:00:00.000');
+            $DateRecord       = date("Y-m-d H:i:s.v");
+            $PedidoCliente    = ClientesInfo::WHERE('CLIENTE',$Cliente_Pedido)->get();
+
+            $Cliente        = $PedidoCliente[0]->CLIENTE;
+            $NOMBRE         = $PedidoCliente[0]->NOMBRE;
+            $DiGeo1         = $PedidoCliente[0]->DIVISION_GEOGRAFICA1;
+            $DiGeo2         = $PedidoCliente[0]->DIVISION_GEOGRAFICA2;
+            $DIRECCION      = $PedidoCliente[0]->DIRECCION;
+            $VENDEDOR       = $PedidoCliente[0]->VENDEDOR;
+            $COBRADOR       = $PedidoCliente[0]->COBRADOR;
+            $NIVEL_PRECIO   = $PedidoCliente[0]->NIVEL_PRECIO;
+            $GUID           = PedidoUMK::generateGUID();
+
+            $PedidosInserted[$key]['PEDIDO']    = $nuevoConsecutivo;
+            $PedidosInserted[$key]['VENDEDOR']  = $VENDEDOR;
+            
+        
+            $Lineas = array_slice(explode("],", preg_replace('/\[Orden :*?\]/s', '', $value->order_list)), 0,-1);
+
+            //echo  $Ruta. '->' . $Consecutivo_FA . ' -> '.$nuevoConsecutivo .' ( '.count($Lineas). ' ) <br>';
+
+            for ($l=0; $l < count($Lineas) ; $l++){
+
+                //echo $l .' -> '.$value->code .' -> '.$nuevoConsecutivo .' -> '.$Lineas[$l]. '<br>';
+                
+                $Lineas_detalles     = explode(";", substr($Lineas[$l], 1));
+
+
+                $Articulo = $Lineas_detalles[1];
+                $Cantidad = $Lineas_detalles[0];
+                $Bonifica = $Lineas_detalles[3];
+                
+                $Cantidad = number_format((float) str_replace(',', '', $Cantidad), 2, '.', '');
+
+
+                $isBonif = (preg_match($patronBonificado, $Bonifica)) ? TRUE : FALSE ;
+
+                $ARTICULO       = ARTICULO_PRECIO::WHERE('ARTICULO',$Articulo)->WHERE('NIVEL_PRECIO',$NIVEL_PRECIO)->first();
+                $PrecioUnitario = $ARTICULO->PRECIO;
+
+                $Monto_Pedido   += $Cantidad * $PrecioUnitario;
+
+                $ttUnidades     += $Cantidad;
+
+                $expLot         = Lotes::nextExpiringLot($Articulo,$Cantidad);
+
+                $lineass_a_insertar[$lineasArray] = array(
+                    'PEDIDO' => $nuevoConsecutivo,
+                    'PEDIDO_LINEA' => $l + 1,
+                    'BODEGA' => $expLot['BODEGA'],
+                    'LOTE' => $expLot['LOTE'],
+                    'LOCALIZACION' => NULL,
+                    'ARTICULO' => $Articulo,
+                    'ESTADO' => 'N',
+                    'FECHA_ENTREGA' => $PedidoFecha,
+                    'LINEA_USUARIO' => $l,
+                    'PRECIO_UNITARIO' => $PrecioUnitario,
+                    'CANTIDAD_PEDIDA' => $Cantidad,
+                    'CANTIDAD_A_FACTURA' => '0.0',
+                    'CANTIDAD_FACTURADA' => '0.0',
+                    'CANTIDAD_RESERVADA' => '0.0',
+                    'CANTIDAD_BONIFICAD' => '0.0',
+                    'CANTIDAD_CANCELADA' => '0.0',
+                    'TIPO_DESCUENTO' => '',
+                    'MONTO_DESCUENTO' => '0.0',
+                    'PORC_DESCUENTO' => '0.0',
+                    'DESCRIPCION' => '',
+                    'COMENTARIO' => '',
+                    'PEDIDO_LINEA_BONIF' => NULL,
+                    'UNIDAD_DISTRIBUCIO' => NULL,
+                    'FECHA_PROMETIDA' => $PedidoFecha,
+                    'LINEA_ORDEN_COMPRA' => NULL,
+                    'PROYECTO' => NULL,
+                    'FASE' => NULL,
+                    'NoteExistsFlag' => '0',
+                    'RecordDate' => $DateRecord,
+                    'RowPointer' => PedidoLineaUMK::generateGUID(),
+                    'CreatedBy' => 'FA/'.$UserCron,
+                    'UpdatedBy' => 'FA/'.$UserCron,
+                    'CreateDate' => $DateRecord
+                );
+
+                if($isBonif){
+                    
+                    $cant_boni      = explode("+", $Bonifica);
+                    $ttUnidades     += $cant_boni[1];
+
+                    $expLot         = Lotes::nextExpiringLot($Articulo,$ttUnidades);
+
+
+                    $lineass_a_insertar[$b] = array(
+                        'PEDIDO' => $nuevoConsecutivo,
+                        'PEDIDO_LINEA' => $b,
+                        'BODEGA' => $expLot['BODEGA'],
+                        'LOTE' => $expLot['LOTE'],
+                        'LOCALIZACION' => NULL,
+                        'ARTICULO' => $Articulo,
+                        'ESTADO' => 'N',
+                        'FECHA_ENTREGA' => $PedidoFecha,
+                        'LINEA_USUARIO' => $l,
+                        'PRECIO_UNITARIO' => '0.0',
+                        'CANTIDAD_PEDIDA' => '0.0',
+                        'CANTIDAD_A_FACTURA' => '0.0',
+                        'CANTIDAD_FACTURADA' => '0.0',
+                        'CANTIDAD_RESERVADA' => '0.0',
+                        'CANTIDAD_BONIFICAD' => $cant_boni[1],
+                        'CANTIDAD_CANCELADA' => '0.0',
+                        'TIPO_DESCUENTO' => '',
+                        'MONTO_DESCUENTO' => '0.0',
+                        'PORC_DESCUENTO' => '0.0',
+                        'DESCRIPCION' => '',
+                        'COMENTARIO' => '',
+                        'PEDIDO_LINEA_BONIF' => $l +1,
+                        'UNIDAD_DISTRIBUCIO' => NULL,
+                        'FECHA_PROMETIDA' => $PedidoFecha,
+                        'LINEA_ORDEN_COMPRA' => NULL,
+                        'PROYECTO' => NULL,
+                        'FASE' => NULL,
+                        'NoteExistsFlag' => '0',
+                        'RecordDate' => $DateRecord,
+                        'RowPointer' => PedidoLineaUMK::generateGUID(),
+                        'CreatedBy' => 'FA/'.$UserCron,
+                        'UpdatedBy' => 'FA/'.$UserCron,
+                        'CreateDate' => $DateRecord
+                    );
+
+                    $b++;
+
+                }
+
+                $pedidos_a_insertar[$key] = array(
+                    'PEDIDO' => $nuevoConsecutivo,
+                    'ESTADO' => 'N',
+                    'FECHA_PEDIDO' => $PedidoFecha,
+                    'FECHA_PROMETIDA' => $PedidoFecha,
+                    'FECHA_PROX_EMBARQU' => $PedidoFecha,
+                    'FECHA_ULT_EMBARQUE' => $PedidoFecha,
+                    'FECHA_ULT_CANCELAC' => '1980-01-01 00:00:00.000',
+                    'ORDEN_COMPRA' => null,
+                    'FECHA_ORDEN' => $PedidoFecha,
+                    'TARJETA_CREDITO' => ' ',
+                    'EMBARCAR_A' => $NOMBRE,
+                    'DIREC_EMBARQUE' => 'ND',
+                    'DIRECCION_FACTURA' => $DIRECCION,
+                    'RUBRO1' => null,
+                    'RUBRO2' => null,
+                    'RUBRO3' => null,
+                    'RUBRO4' => null,
+                    'RUBRO5' => null,
+                    'OBSERVACIONES' => $OBSERVACIONES,
+                    'COMENTARIO_CXC' => null,
+                    'TOTAL_MERCADERIA' => $Monto_Pedido,
+                    'MONTO_ANTICIPO' => '.00000000',
+                    'MONTO_FLETE' => '.00000000',
+                    'MONTO_SEGURO' => '.00000000',
+                    'MONTO_DOCUMENTACIO' => '.00000000',
+                    'TIPO_DESCUENTO1' => 'P',
+                    'TIPO_DESCUENTO2' => 'P',
+                    'MONTO_DESCUENTO1' => '.00000000',
+                    'MONTO_DESCUENTO2' => '.00000000',
+                    'PORC_DESCUENTO1' => '.00000000',
+                    'PORC_DESCUENTO2' => '.00000000',
+                    'TOTAL_IMPUESTO1' => '.00000000',
+                    'TOTAL_IMPUESTO2' => '.00000000',
+                    'TOTAL_A_FACTURAR' => $Monto_Pedido,
+                    'PORC_COMI_VENDEDOR' => '.00000000',
+                    'PORC_COMI_COBRADOR' => '.00000000',
+                    'TOTAL_CANCELADO' => '.00000000',
+                    'TOTAL_UNIDADES' => $ttUnidades,
+                    'IMPRESO' => 'N',
+                    'FECHA_HORA' => '2023-06-06 08:59:22.537',
+                    'DESCUENTO_VOLUMEN' => '.00000000',
+                    'TIPO_PEDIDO' => 'N',
+                    'MONEDA_PEDIDO' => 'L',
+                    'VERSION_NP' => '1',
+                    'AUTORIZADO' => 'N',
+                    'DOC_A_GENERAR' => 'F',
+                    'CLASE_PEDIDO' => 'N',
+                    'MONEDA' => 'L',
+                    'NIVEL_PRECIO' => $NIVEL_PRECIO,
+                    'COBRADOR' => $COBRADOR,
+                    'RUTA' => 'ND',
+                    'USUARIO' => $UserCron,
+                    'CONDICION_PAGO' => '30',
+                    'BODEGA' => '002',
+                    'ZONA' => 'ND',
+                    'VENDEDOR' => $VENDEDOR,
+                    'CLIENTE' => $Cliente,
+                    'CLIENTE_DIRECCION' => $Cliente,
+                    'CLIENTE_CORPORAC' => $Cliente,
+                    'CLIENTE_ORIGEN' => $Cliente,
+                    'PAIS' => 'NI',
+                    'SUBTIPO_DOC_CXC' => '0',
+                    'TIPO_DOC_CXC' => 'FAC',
+                    'BACKORDER' => 'N',
+                    'CONTRATO' => null,
+                    'PORC_INTCTE' => '.00000000',
+                    'DESCUENTO_CASCADA' => 'S',
+                    'TIPO_CAMBIO' => null,
+                    'FIJAR_TIPO_CAMBIO' => 'N',
+                    'ORIGEN_PEDIDO' => 'F',
+                    'DESC_DIREC_EMBARQUE' => null,
+                    'DIVISION_GEOGRAFICA1' => $DiGeo1,
+                    'DIVISION_GEOGRAFICA2' => $DiGeo2,
+                    'BASE_IMPUESTO1' => null,
+                    'BASE_IMPUESTO2' => null,
+                    'NOMBRE_CLIENTE' => $NOMBRE,
+                    'FECHA_PROYECTADA' => $PedidoFecha,
+                    'FECHA_APROBACION' => null,
+                    'NoteExistsFlag' => '0',
+                    'RecordDate' => $DateRecord,
+                    'RowPointer' => PedidoLineaUMK::generateGUID(),
+                    'CreatedBy' => 'FA/'.$UserCron,
+                    'UpdatedBy' => 'FA/'.$UserCron,
+                    'CreateDate' => $DateRecord
+                );
+
+                $lineasArray++;
+
+            }
+
+            
+        }
+        try {
+
+
+
+            foreach (array_chunk($pedidos_a_insertar, 20) as $pedidoChunk)
+            {
+                $insert_pedidos = [];
+                foreach($pedidoChunk as $p) {
+                    $insert_pedidos[] = $p;
+                }
+
+                PedidoUMK::insert($insert_pedidos);
+            }
+            foreach (array_chunk($lineass_a_insertar, 20) as $LineasChunk)
+            {
+                $insert_pedido_lineas = [];
+                foreach($LineasChunk as $l) {
+                    $insert_pedido_lineas[] = $l;
+                }
+
+               
+                PedidoLineaUMK::insert($insert_pedido_lineas);
+            }
+
+            Pedido::whereIn("id", $IDs_Pedidos)->update([
+                    'status' => '1'
+                ]);
+                
+            CONSECUTIVO_FA::where("CODIGO_CONSECUTIVO", $Prefi_Pedido)->update([
+                'VALOR_CONSECUTIVO' => $nuevoConsecutivo
+            ]);
+
+        } catch (Exception $e) {
+            $mensaje =  'Excepción capturada: ' . $e->getMessage() . "\n"; 
+            dd($mensaje);
+            return response()->json($mensaje);
+        }
+
+        return count($IDs_Pedidos);
+
     }
 }

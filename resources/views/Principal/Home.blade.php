@@ -12,18 +12,18 @@
         <div class="content">            
 
             @include('layouts.nav_importacion')
-            @if (Session::get('rol') != '10')  
+            @if (Session::get('rol') != '10' || Session::get('rol') != '13')  
             <div class="col-md-12 col-xxl-12 mb-3">
-              
+              <input type="hidden" id="userId" value="{{ Session::get('rol') }}">
               <div class="card h-100">
                 
                 <div class="card-header">
                   <div class="d-flex position-relative align-items-center">
                     <div class="flex-1">
                       <div class="d-flex flex-between-center">
-                      <h6 class="mb-0">Mi progreso</h6>
-                      <a class="btn btn-link btn-sm px-0 shadow-none" href="estadisticas">Ver más<span class="fas fa-arrow-right ms-1 fs--2"></span></a>
-                  </div>
+                        <h6 class="mb-0">Mi progreso</h6>
+                        <a class="btn btn-link btn-sm px-0 shadow-none" href="estadisticas">Ver más<span class="fas fa-arrow-right ms-1 fs--2"></span></a>
+                      </div>
                     </div>
                   </div>
                  
@@ -167,6 +167,7 @@
 
               <div class="card">
                 <div class="card-header d-flex flex-between-center ps-0 py-0 border-bottom">
+                  
                   <ul class="nav nav-tabs border-0 flex-nowrap tab-active-caret" id="crm-revenue-chart-tab" role="tablist" data-tab-has-echarts="data-tab-has-echarts">
                   
 
@@ -183,8 +184,11 @@
                     
 
                   </ul>
+
+                  
                   <div class="dropdown font-sans-serif btn-reveal-trigger">
-                    <div id="id_loading" class="spinner-border" role="status"><span class="visually-hidden">Loading...</span></div>
+                      <div id="id_loading" class="spinner-border" role="status"><span class="visually-hidden">Loading...</span></div>
+                     
                   </div>
                 </div>
                 
@@ -222,7 +226,7 @@
                               </div>
                             </div>
                           </div>
-                          <table id="tbl_inventario" class="table table-striped overflow-hidden" style="width:100%"></table>
+                          <table id="tbl_inventario" class="table table-striped overflow-hidden " style="width:100%"></table>
                         </div>
 
                         <div class="tab-pane" id="crm-profit" role="tabpanel" aria-labelledby="crm-profit-tab">
@@ -450,6 +454,9 @@
                           <h6 class="mb-2" id="id_reglas">Cargando ... </h6>
                         </div>
                         <div class="col-auto">
+                        </div>
+                        
+                        <div class="col-auto">
                           <div class="row g-sm-4">
                             <div class="col-12 col-sm-auto">
                               <div class="mb-3 pe-4 border-sm-end border-200">
@@ -487,8 +494,12 @@
                                 </div>
                               </div>
                             </div>
+                            
                           </div>
                         </div>
+                        <div id="artImg">
+                            
+                          </div>
                       </div>
                     </div>
                     <div class="card-header">                    

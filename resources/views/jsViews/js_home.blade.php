@@ -271,21 +271,22 @@
                     });
                 }
 
-                return  ` <td class="align-middle">
-                    <div class="d-flex align-items-center position-relative"><img class="rounded-1 border border-200" src="{{ asset('images/item.png') }}"alt="" width="60">
+                return  ` <td class="align-middle ">
+                    <div class="d-flex align-items-center position-relative">
+                            <img class="rounded-1 border border-200 img-fluid" src="`+row.IMG_URL+`" arti="`+row.ARTICULO+`" descr="`+row.DESCRIPCION+`" nombreImg="`+row.IMG_NOMBRE+`" alt="" width="60">
                         <div class="flex-1 ms-3">
                         
-                        <div class="d-flex align-items-center">
-                            <h6 class="mb-1 fw-semi-bold text-nowrap"><a href="#!" onclick=" OpenModal(`+"'" + row.ARTICULO+"'" +`)"> <strong>`+  row.ARTICULO +`</strong></a> : `+row.DESCRIPCION.toUpperCase() +`</h6>
-                            `+  regla +`
-                        </div>
-                        <p class="fw-semi-bold mb-0 text-500"></p>   
+                            <div class="d-flex align-items-center">
+                                <h6 class="mb-1 fw-semi-bold text-nowrap"><a href="#!" onclick=" OpenModal(`+"'" + row.ARTICULO+"'"+`)"> <strong>`+  row.ARTICULO +`</strong></a> : `+row.DESCRIPCION.toUpperCase() +`</h6>
+                                `+  regla +`
+                            </div>
+                            <p class="fw-semi-bold mb-0 text-500"></p>   
                         
-                        <div class="row g-0 fw-semi-bold text-center py-2"> 
-                            <div class="col-auto"><a class="rounded-2 d-flex align-items-center me-3 text-700" href="#!"><span class="ms-1 fas fa-boxes text-primary" ></span><span class="ms-1"> `+ numeral(total).format('0,00.00')  +` `+ row.UNIDAD_ALMACEN +`</span></a></div>
-                            <div class="col-auto d-flex align-items-center"><span class="badge rounded-pill ms-3 badge-soft-primary"><span class="fas fa-check"></span> C$. `+ numeral(row.PRECIO_FARMACIA).format('0,00.00')  +`</span></div>
-                                
-                        </div>
+                            <div class="row g-0 fw-semi-bold text-center py-2"> 
+                                <div class="col-auto"><a class="rounded-2 d-flex align-items-center me-3 text-700" href="#!"><span class="ms-1 fas fa-boxes text-primary" ></span><span class="ms-1"> `+ numeral(total).format('0,00.00')  +` `+ row.UNIDAD_ALMACEN +`</span></a></div>
+                                <div class="col-auto d-flex align-items-center"><span class="badge rounded-pill ms-3 badge-soft-primary"><span class="fas fa-check"></span> C$. `+ numeral(row.PRECIO_FARMACIA).format('0,00.00')  +`</span></div>
+                                    
+                            </div>
                         </div>
                     </div>
                 </td> `
@@ -330,10 +331,10 @@
                 {"title": "TELEFONO 1","data": "TELEFONO1"},
                 {"title": "TELEFONO 2","data": "TELEFONO2"},
                 ]
-        tbl_header_inventarios_liq =  [                
+    tbl_header_inventarios_liq =  [                
                 {"title": "ARTICULO","data": "ARTICULO", "render": function(data, type, row, meta) {
                 return ` <td class="align-middle">
-                    <div class="d-flex align-items-center position-relative"><img class="rounded-1 border border-200" src="{{ asset('images/item.png') }}"alt="" width="60">
+                    <div class="d-flex align-items-center position-relative"><img class="rounded-1 border border-200 img-fluid" src="`+row.IMG_URL+`"alt="" width="60">
                         <div class="flex-1 ms-3">
                         
                         <div class="d-flex align-items-center">
@@ -937,7 +938,6 @@
                 regla +='<span class="badge rounded-pill fs--2 bg-200 text-primary ms-1"><span class="fas fa-caret-up me-1"></span>'+value+'</span>'
                 
             });
-
             $("#id_reglas").html(regla);
             $("#id_codigo_articulo").html(data[0].InfoArticulo[0].ARTICULO);
             $("#lbl_unidad").html(data[0].InfoArticulo[0].UNIDAD);            
@@ -1297,5 +1297,85 @@ var tooltipFormatter = function tooltipFormatter(params) {
         });    
 
     }
+
+    $(document).on('click', '.img-fluid', function (e) {
+        articulo = $(this).attr('arti');
+        descripcion = $(this).attr('descr');
+        nombreImg = $(this).attr('nombreImg');
+        user = $('#userId').val();
+        
+        if(nombreImg == "item.png" && user == 1){
+            Swal.fire({
+            title: '¡Desea ingresar una imagen para este articulo!',
+            text: "¿Desea continuar con esta acción?",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Si!',
+            showLoaderOnConfirm: true,
+            preConfirm: () => {
+                Swal.fire({
+                    title: 'Ingrese una Imagen',
+                    html: '<form role="form" action="imgArticulo" method="post" enctype="multipart/form-data">'+
+                            '@csrf'+
+                            '<input type="hidden" value="'+articulo+'" name="sku">'+
+                            '<input type="hidden" value="'+descripcion+'" name="nombre">'+
+                            '<div class="form-group">'+
+                            '<div class="panel">SUBIR IMAGEN</div>'+
+                            '<input type="file" class="nuevaImagen" name="nuevaImagen" required>'+
+                            '</div>'+
+                            '<div class="modal-footer">'+
+                            '<div class="col-md-12 text-center">'+
+                            '<button type="submit" class="btn btn-primary">Subir</button>'+
+                            '</div>'+
+                            '</div>'+
+                        '</form>',
+                    showCancelButton: false,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Ok!',
+                    showConfirmButton: false,
+                    showLoaderOnConfirm: true,
+                    preConfirm: (result) => {
+                                              
+                    },
+                    allowOutsideClick: () => !Swal.isLoading()
+                })
+                
+            },
+                allowOutsideClick: () => !Swal.isLoading()
+            });
+        }else{
+    
+            url_image = $(this).attr('src');
+            Swal.fire({
+                showCloseButton: true,
+                closeButtonColor: '#d33',
+                showConfirmButton: false,
+                imageUrl: url_image,
+                imageAlt: 'Custom image',
+            })
+
+            $(".swal2-popup").css('width', '50%');
+        }
+    })   
+
+    $(".nuevaImagen").change(function(){
+
+        var imagen = this.files[0];
+
+        var datosImagen = new FileReader;
+        datosImagen.readAsDataURL(imagen);
+
+        $(datosImagen).on("load", function(event){
+
+            var rutaImagen = event.target.result;
+
+            $(".previsualizar").attr("src", rutaImagen);
+
+        })
+
+    })
     
 </script>

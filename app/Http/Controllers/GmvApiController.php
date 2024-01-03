@@ -6,12 +6,14 @@ use GMP;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
+use App\Models\VerificationSqlsrv;
+use App\Models\VerificationMysql;
 
 class GmvApiController extends Controller{
 
-    public function Articulos(Request $request)
+    public function Articulos($Ruta)
     {   
-        $obj = GmvApi::Articulos($request);
+        $obj = GmvApi::Articulos($Ruta);
         
         return response()->json($obj);
     }
@@ -260,12 +262,39 @@ class GmvApiController extends Controller{
         return response()->json($Comision);
         
     }
+    public function runInsertPedidos(Request $request){
+        $obj = GmvApi::runInsertPedidos($request);
+
+        return response()->json($obj);
+    }
+    public static function runVerification()
+    {
+
+        VerificationMysql::where('Lati', '0.00')->orWhere('Longi', '0.00')->delete();
+        
+        $VerificationMysql = VerificationMysql::get()->toArray();
+        
+        VerificationSqlsrv::truncate();
+
+
+        foreach (array_chunk($VerificationMysql, 20) as $Chunk)
+        {
+            $insert_verificacion = [];
+            foreach($Chunk as $p) {
+                $insert_verificacion[] = $p;
+            }
+
+            VerificationSqlsrv::insert($insert_verificacion);
+        }
+
+    }
     public function getHistoryItems($Ruta,$nMonth,$nYear)
     {
         $InserteDate = date('Y-m-d');        
         $rowInsert   = "INSERT INTO tbl_logs (RUTA,FECHA, MODULO) VALUES ('$Ruta','$InserteDate', 'Items8020')";
         $Comision = Comision::getHistoryItems($Ruta,$nMonth,$nYear);
         return response()->json($Comision);
-        
     }
+
+   
 }
