@@ -23,7 +23,7 @@ class uFACTURA_LINEA extends Model
 
         foreach ($result as $key => $row) {
             $array[$key]['FACTURAS'] = $row->FACTURA;
-            $array[$key]['FCT_DATE'] = \Date::parse($row->FECHA_FACTURA)->format('D, M d, Y');
+            $array[$key]['FCT_DATE'] = Date::parse($row->FECHA_FACTURA)->format('D, M d, Y');
             $array[$key]['FCT_RUTA'] = $row->VENDEDOR;
             $array[$key]['FCT_NAME'] = $row->NOMBRE;
             $array[$key]['FCT_ARTI'] = $row->ARTICULO;
