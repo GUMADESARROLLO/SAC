@@ -162,7 +162,6 @@ return [
         Illuminate\Validation\ValidationServiceProvider::class,
         Illuminate\View\ViewServiceProvider::class,
         UxWeb\SweetAlert\SweetAlertServiceProvider::class,
-        Jenssegers\Date\DateServiceProvider::class,
         /*
          * Package Service Providers...
          */
@@ -232,7 +231,6 @@ return [
         'Alert' => UxWeb\SweetAlert\SweetAlert::class,
         'PDF' => Barryvdh\DomPDF\Facade::class,
         'Excel' => Maatwebsite\Excel\Facades\Excel::class,
-        'Date' => Jenssegers\Date\Date::class,
     ],
 
 ];
