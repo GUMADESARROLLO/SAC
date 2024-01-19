@@ -187,15 +187,16 @@ class Visita extends Model {
         //$fechaIni = '2024-01-10 00:00:00';
         //$fechaFin = '2024-01-10 23:59:59';
 
+      
+
         $visitas = Visita::whereBetween('fechavisita', [$fechaIni, $fechaFin])->pluck('cliente')->toArray();
+       
         
         $ordenes = MasterPedidos::whereIn('Cliente', $visitas)->whereBetween('created_at', [$fechaIni, $fechaFin])->get();
-        
+     
         foreach($ordenes as $or){
             $pedido = $or->code.' / C$ '.number_format($or->Valor,2,'.',',');
             $cliente = $or->Cliente;
-            $json[$i]['cliente'] = $cliente;
-
 
             if (!isset($pedidosAgrupados[$cliente])) {
                 $pedidosAgrupados[$cliente] = [];
@@ -203,8 +204,9 @@ class Visita extends Model {
 
             $pedidosAgrupados[$cliente][] = $pedido;
             
-            $i++;
         }
+
+        dd($pedidosAgrupados);
        
         foreach ($pedidosAgrupados as $cliente => $pedidos) {
             $pedidosConcatenados = implode(' | ', $pedidos);

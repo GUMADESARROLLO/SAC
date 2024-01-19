@@ -28,6 +28,12 @@ class ScheduleController extends Controller
 
         
     }
+    public function CronCheckVisita()  {
+
+        $url = route('getVisita');
+        $Cron = new Client(['verify' => false]);
+        $Cron->get($url);
+    }
 
     public function ImportVerification()  {
 

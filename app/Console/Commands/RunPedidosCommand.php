@@ -39,7 +39,8 @@ class RunPedidosCommand extends Command
     public function handle()
     {
         $scheduleController = new ScheduleController();
-        $scheduleController->RunPedidos();
+        //$scheduleController->RunPedidos();
+        $scheduleController->CronCheckVisita();
         $this->info('Tarea de Insert Cliente Verificados ejecutada correctamente.');
     }
 }
