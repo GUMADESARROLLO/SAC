@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\DB;
 
 use App\Models\VerificationSqlsrv;
 use App\Models\VerificationMysql;
+use App\Models\Visita;
 
 class GmvApiController extends Controller{
 
@@ -270,7 +271,7 @@ class GmvApiController extends Controller{
     public static function runVerification()
     {
 
-        VerificationMysql::where('Lati', 0.00)->orWhere('Longi', 0.00)->delete();
+        VerificationMysql::where('Lati', '0.00')->orWhere('Longi', '0.00')->delete();
         
         $VerificationMysql = VerificationMysql::get()->toArray();
         
@@ -296,5 +297,9 @@ class GmvApiController extends Controller{
         return response()->json($Comision);
     }
 
+    public static function getVisitas(){
+        $visita = Visita::validarVisita();
+        return response()->json($visita);
+    }
    
 }

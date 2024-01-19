@@ -81,7 +81,7 @@
 
 
         Swal.fire({
-        title: 'Reutilizar del ' + calendar_title,
+        title: 'Reutilizar Plan de Trabajo',
         text: "¿Desea continuar con esta acción?",
         icon: 'warning',
         showCancelButton: true,
@@ -92,7 +92,7 @@
         preConfirm: () => {
 
             Swal.fire({
-                title: 'Defina el Rango de Fecha',
+                title: 'Defina el Rango de Fecha a Reutilizar',
                 html:
                     '<input id="start-date" class="form-control swal2-input" type="text" placeholder="Fecha de inicio">' +
                     '<input id="end-date" class="form-control swal2-input" type="text" placeholder="Fecha de fin">',
@@ -286,6 +286,22 @@
                 },
                 events: eventList,
                 eventClick: function eventClick(info) {
+
+
+                    var color = "bg-soft-info";
+                    
+                    if(info.event.extendedProps.efectiva ==  2){
+                        color = 'bg-soft-danger';
+                    }else{
+                        if(info.event.extendedProps.efectiva ==  1) {
+                            color = 'bg-soft-success';
+                        }
+                    }
+
+
+                    
+                    $("#id_modal_header").addClass(color);
+
                     var horaInicio = moment(info.start);
                     var desripcion = isValue(info.event.extendedProps.description,'N/D',true).split(' ').slice(0, 1000).join(' ')
                     var efect = isValue(info.event.extendedProps.efectiva,0,true)
@@ -298,12 +314,15 @@
                     var dtIni = isValue(info.event.extendedProps.dtIni,'N/D',true)
                     var dtEnd = isValue(info.event.extendedProps.dtEnd,'N/D',true)
 
-                    dtInit = (dtIni === 'N/D')? horaInicio.format("H:mm") : dtIni
-                    dtEnd  = (dtEnd === 'N/D')? horaInicio.add(45, 'minutes').format("H:mm") : dtEnd
-                    $("#eventLabel").val(efect).change();
 
-                    $("#timepicker_ini").val(dtInit);                    
+                    dtInit = (dtIni === 'N/D')? horaInicio.format("HH:mm"):  moment(dtIni, "HH:mm:ss").format("HH:mm");
+                    dtEnd  = (dtEnd === 'N/D')? horaInicio.add(45, 'minutes').format("HH:mm") : moment(dtEnd, "HH:mm:ss").format("HH:mm")
+
+                    $("#eventLabel").val(efect).change();
+                    $("#timepicker_ini").val(dtInit);
                     $("#timepicker_end").val(dtEnd);
+
+        
                     
                     var modal = new window.bootstrap.Modal(eventDetailsModal);
                     modal.show();
@@ -418,7 +437,7 @@
             success: function(data){
                 $.each(data,function(key, registro) {
                     
-                    var color = "bg-soft-warning";
+                    var color = "bg-soft-info";
 
                     if(registro.efectiva ==  2){
                         color = 'bg-soft-danger';

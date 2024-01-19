@@ -24,7 +24,7 @@ class ScheduleController extends Controller
         $url = route('pedidos');
         $client = new Client(['verify' => false]);
         $client->get($url);
-        \Log::channel('Schedule_pedidos')->info("Ejecucion de Tarea de Pedidos ");
+        //\Log::channel('Schedule_pedidos')->info("Ejecucion de Tarea de Pedidos ");
 
         
     }
@@ -35,7 +35,7 @@ class ScheduleController extends Controller
         $client = new Client(['verify' => false]);
         $client->get($url);
 
-        \Log::channel('Schedule')->info("Ejecucion de Tarea de Importacion de Clientes Verificados ");
+        //\Log::channel('Schedule')->info("Ejecucion de Tarea de Importacion de Clientes Verificados ");
     }
 
     public function getSchedule(Request $request, $ruta = null){
