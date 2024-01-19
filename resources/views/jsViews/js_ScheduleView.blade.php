@@ -212,8 +212,8 @@
                     var dtIni = isValue(info.event.extendedProps.dtIni,'N/D',true)
                     var dtEnd = isValue(info.event.extendedProps.dtEnd,'N/D',true)
                     var efect = isValue(info.event.extendedProps.efectiva,0,true)
-                    
-
+                    var orden = isValue(info.event.extendedProps.orden,'N/D',true).split('|').join('<br>')
+                    console.log(orden)
                     $("#id_lbl_title_event").text(moment(info.start).locale('es').format("dddd, MMM D, YYYY"));
                     $("#NameClient").val(info.event.title);
                     $("#eventDescription").val(descr);
@@ -224,7 +224,9 @@
 
                     $("#timepicker_ini").val(dtIni);                    
                     $("#timepicker_end").val(dtEnd);
-                    
+
+                    $("#ordenes").html(orden);
+
                     var modal = new window.bootstrap.Modal(eventDetailsModal);
                     modal.show();
 
@@ -359,6 +361,7 @@
                             'efectiva'      : registro.efectiva,
                             'dtIni'         : registro.time_ini,
                             'dtEnd'         : registro.time_end,
+                            'orden'         : registro.orden,
                             'className'     : color
                         })
 
