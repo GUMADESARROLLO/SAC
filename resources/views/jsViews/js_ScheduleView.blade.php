@@ -212,8 +212,22 @@
                     var dtIni = isValue(info.event.extendedProps.dtIni,'N/D',true)
                     var dtEnd = isValue(info.event.extendedProps.dtEnd,'N/D',true)
                     var efect = isValue(info.event.extendedProps.efectiva,0,true)
-                    var orden = isValue(info.event.extendedProps.orden,'N/D',true).split('|').join('<br>')
+                    var orden = isValue(info.event.extendedProps.orden,'',true).split(';')
                     
+                    var ordenes = '';
+
+                    if(orden != ''){
+                        orden.forEach(function (item){
+                            var ordenS = item.split('/')
+                           
+                            ordenes += '<div class="col-sm-6">'+ordenS[0].replace('[',"")+'</div>'+
+                            '<div class="col-sm-6" style="text-align: right">'+ordenS[1].replace(']',"")+'</div>'
+                        })
+                        $("#eventOrden").show();                   
+                    }else{
+                        $("#eventOrden").hide();
+                    }
+
                     $("#id_lbl_title_event").text(moment(info.start).locale('es').format("dddd, MMM D, YYYY"));
                     $("#NameClient").val(info.event.title);
                     $("#eventDescription").val(descr);
@@ -225,7 +239,10 @@
                     $("#timepicker_ini").val(dtIni);                    
                     $("#timepicker_end").val(dtEnd);
 
-                    $("#ordenes").html(orden);
+                    $('#ordenes')
+                        .empty()
+                        .append(ordenes);
+                    
 
                     var modal = new window.bootstrap.Modal(eventDetailsModal);
                     modal.show();

@@ -184,10 +184,8 @@ class Visita extends Model {
 
         $fechaIni = Carbon::now()->startOfDay();
         $fechaFin = Carbon::now()->endOfDay();
-        //$fechaIni = '2024-01-10 00:00:00';
-        //$fechaFin = '2024-01-10 23:59:59';
-
-      
+        //$fechaIni = '2024-01-12 00:00:00';
+        //$fechaFin = '2024-01-12 23:59:59';
 
         $visitas = Visita::whereBetween('fechavisita', [$fechaIni, $fechaFin])->pluck('cliente')->toArray();
        
@@ -195,7 +193,7 @@ class Visita extends Model {
         $ordenes = MasterPedidos::whereIn('Cliente', $visitas)->whereBetween('created_at', [$fechaIni, $fechaFin])->get();
      
         foreach($ordenes as $or){
-            $pedido = $or->code.' / C$ '.number_format($or->Valor,2,'.',',');
+            $pedido = '['.$or->code.' / C$ '.number_format($or->Valor,2,'.',',').']';
             $cliente = $or->Cliente;
 
             if (!isset($pedidosAgrupados[$cliente])) {
@@ -206,10 +204,10 @@ class Visita extends Model {
             
         }
 
-        dd($pedidosAgrupados);
+        //dd($pedidosAgrupados);
        
         foreach ($pedidosAgrupados as $cliente => $pedidos) {
-            $pedidosConcatenados = implode(' | ', $pedidos);
+            $pedidosConcatenados = implode(' ; ', $pedidos);
         
             Visita::where('cliente', $cliente)
                 ->whereBetween('fechavisita', [$fechaIni, $fechaFin])
