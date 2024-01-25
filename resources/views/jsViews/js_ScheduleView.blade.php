@@ -234,10 +234,13 @@
                     
                     
                    
-                    $("#eventLabel").val(efect).change();
+                    //$("#eventLabel").val(efect).change();
+                    $("#eventLabel").hide();
 
-                    $("#timepicker_ini").val(dtIni);                    
-                    $("#timepicker_end").val(dtEnd);
+                    //$("#timepicker_ini").val(dtIni);                    
+                    //$("#timepicker_end").val(dtEnd);
+                    $("#timepicker_ini").hide();                    
+                    $("#timepicker_end").hide();
 
                     $('#ordenes')
                         .empty()

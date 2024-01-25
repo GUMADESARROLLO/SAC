@@ -198,6 +198,7 @@ class Visita extends Model {
 
             if (!isset($pedidosAgrupados[$cliente])) {
                 $pedidosAgrupados[$cliente] = [];
+                $json[] = $cliente;
             }
 
             $pedidosAgrupados[$cliente][] = $pedido;
@@ -213,6 +214,12 @@ class Visita extends Model {
                 ->whereBetween('fechavisita', [$fechaIni, $fechaFin])
                 ->update(['efectiva' => 1, 'orden' => $pedidosConcatenados]);
         }
+
+        Visita::whereNotIn('cliente', $json)
+                ->where('efectiva', 0)
+                ->whereBetween('fechavisita', [$fechaIni, $fechaFin])
+                ->update(['efectiva' => 2]);
+
         
         return $pedidosAgrupados;
     }
