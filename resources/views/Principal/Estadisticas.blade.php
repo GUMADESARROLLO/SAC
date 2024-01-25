@@ -333,9 +333,8 @@
                       <label class="fs-0" for="eventDescription">Description</label>
                       <textarea class="form-control" rows="3" name="description" id="eventDescription"></textarea>
                   </div>
-                  <div class="mb-3">
-                      <label class="fs-0" for="eventOrden">Pedido:</label><br>
-                      <label class="fs-0" id="ordenes"></label>
+                  <label class="fs-0" id="eventOrden">Pedido:</label><br>
+                  <div class="row col-12" id="ordenes">
                       
                   </div>
                   
