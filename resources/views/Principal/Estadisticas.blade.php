@@ -314,7 +314,7 @@
                       <input class="form-control" id="NameClient" type="text" name="title" />
                   </div>
                   <div class="mb-3">
-                      <label class="fs-0" for="eventLabel">Visita fue:</label>
+                      <label class="fs-0" for="eventLabel" style="display: none;">Visita fue:</label>
                       <select class="form-select" id="eventLabel" name="label">
                           <option value="0">N/D</option>
                           <option value="1">Efectiva</option>
@@ -322,11 +322,11 @@
                       </select>
                   </div>
                   <div class="mb-3">
-                      <label class="fs-0" for="eventStartDate">Hora Inicio</label>
+                      <label class="fs-0" for="eventStartDate" style="display: none;">Hora Inicio</label>
                       <input class="form-control datetimepicker initTimers" id="timepicker_ini" type="text" placeholder="H:i" data-options='{"enableTime":true,"noCalendar":true,"dateFormat":"H:i","disableMobile":false}' />
                   </div>
                   <div class="mb-3">
-                      <label class="fs-0" for="eventEndDate">Hora Fin</label>
+                      <label class="fs-0" for="eventEndDate" style="display: none;">Hora Fin</label>
                       <input class="form-control datetimepicker initTimers" id="timepicker_end"  type="text" placeholder="H:i" data-options='{"enableTime":true,"noCalendar":true,"dateFormat":"H:i","disableMobile":false}' />
                   </div>
                   <div class="mb-3">
