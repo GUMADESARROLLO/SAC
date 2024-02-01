@@ -30,7 +30,7 @@ class ScheduleController extends Controller
     }
     public function CronCheckVisita()  {
 
-        $url = route('getVisita');
+        $url = route('CronCheckVisita');
         $Cron = new Client(['verify' => false]);
         $Cron->get($url);
     }

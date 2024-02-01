@@ -297,7 +297,7 @@ class GmvApiController extends Controller{
         return response()->json($Comision);
     }
 
-    public static function getVisitas(){
+    public static function CronCheckVisita(){
         $visita = Visita::validarVisita();
         return response()->json($visita);
     }
