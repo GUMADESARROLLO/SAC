@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\DB;
 
 use App\Models\VerificationSqlsrv;
 use App\Models\VerificationMysql;
+use App\Models\Visita;
 
 class GmvApiController extends Controller{
 
@@ -296,5 +297,9 @@ class GmvApiController extends Controller{
         return response()->json($Comision);
     }
 
+    public static function CronCheckVisita(){
+        $visita = Visita::validarVisita();
+        return response()->json($visita);
+    }
    
 }

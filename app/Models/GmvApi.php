@@ -192,7 +192,7 @@ class GmvApi extends Model
             $date        = $request->input('date');
             $server_url  = $request->input('server_url');
 
-            $obj = new GmvPedidos();
+            $obj = new GmvPedisdos();
             
             $obj->code          = $code;
             $obj->name          = $name;
@@ -1633,4 +1633,5 @@ class GmvApi extends Model
         return count($IDs_Pedidos);
 
     }
+
 }
