@@ -82,8 +82,8 @@
                       <input class="form-control" id="NameClient" type="text" name="title" />
                   </div>
                   <div class="mb-3">
-                      <label class="fs-0" for="eventLabel">Visita fue:</label>
-                      <select class="form-select" id="eventLabel" name="label">
+                      <label class="fs-0" for="eventLabel" style="display: none">Visita fue:</label>
+                      <select class="form-select" id="eventLabel" name="label" style="display: none">
                           <option value="0">Programada</option>
                           <option value="1">Efectiva</option>
                           <option value="2">No Efectiva</option>
@@ -91,18 +91,22 @@
                   </div>
                  
                   <div class="mb-3">
-                      <label class="fs-0" for="eventStartDate">Hora Inicio: </label>
-                      <input class="form-control" id="timepicker_ini" type="time"/>
+                      <label class="fs-0" for="eventStartDate" style="display: none">Hora Inicio: </label>
+                      <input class="form-control" id="timepicker_ini" type="time" style="display: none"/>
                      
 
                   </div>
                   <div class="mb-3">
-                      <label class="fs-0" for="eventEndDate">Hora Fin: </label>
-                      <input class="form-control" id="timepicker_end" type="time"  />
+                      <label class="fs-0" for="eventEndDate" style="display: none">Hora Fin: </label>
+                      <input class="form-control" id="timepicker_end" type="time"  style="display: none"/>
                   </div>
                   <div class="mb-3">
                       <label class="fs-0" for="eventDescription">Description</label>
                       <textarea class="form-control" rows="3" name="description" id="eventDescription"></textarea>
+                  </div>
+                  <label class="fs-0" id="eventOrden">Pedido:</label><br>
+                  <div class="row col-12" id="ordenes">
+                      
                   </div>
                   
                   </div>
