@@ -37,7 +37,7 @@ Route::get('get_recibos_colector', 'GmvApiController@get_recibos_colector')->nam
 Route::get('del_recibo_colector', 'GmvApiController@del_recibo_colector')->name('del_recibo_colector');
 Route::get('get_recibos_adjuntos/{Recibo}', 'GmvApiController@get_recibos_adjuntos')->name('get_recibos_adjuntos/{Recibo}');
 Route::post('post_adjunto', 'GmvApiController@post_adjunto')->name('post_adjunto');
-Route::get('getVisita', "GmvApiController@getVisitas")->name('getVisita');
+Route::get('CronCheckVisita', "GmvApiController@runCronCheckVisita")->name('CronCheckVisita');
 
 //Rutas varias
 Route::get('get_help', 'GmvApiController@get_help')->name('get_help');
