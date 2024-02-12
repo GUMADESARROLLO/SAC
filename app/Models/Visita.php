@@ -56,7 +56,7 @@ class Visita extends Model {
                 
                 $ruta       = $request->input('ruta');
                 $dtIni      = $request->input('startDate');
-                $dtEnd      = $request->input('endDate');sac.
+                $dtEnd      = $request->input('endDate');
                 
                 $NewFechas  = [];
 
