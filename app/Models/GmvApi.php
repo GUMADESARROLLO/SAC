@@ -476,7 +476,7 @@ class GmvApi extends Model
                 $array[$i]['mId']               = $row->id;
                 $array[$i]['mRecibo']           = $row->id_recibo;
                 $array[$i]['mNombreImagen']     = $row->Nombre_imagen;
-                $array[$i]['imagen_url']        = Storage::Disk('s3_tmp')->temporaryUrl('Adjuntos-Recibos/'.$row->Nombre_imagen, now()->addMinutes(5));
+                $array[$i]['imagen_url']        = Storage::Disk('s3')->temporaryUrl('Adjuntos-Recibos/'.$row->Nombre_imagen, now()->addMinutes(5));
                 $i++;
             }
         }
