@@ -268,6 +268,14 @@ class GmvApiController extends Controller{
 
         return response()->json($obj);
     }
+
+    public function Promociones(Request $request){
+        $obj = GmvApi::Promociones($request);
+
+        return response()->json($obj);
+    }
+
+    
     public static function runVerification()
     {
 
