@@ -484,6 +484,47 @@ class GmvApi extends Model
         return $array;
     }
 
+    
+
+    public static function Promociones(Request $request){
+        $Array = array();
+
+        $Promociones = Promocion::where('activo','S')->get();
+
+        foreach ($Promociones as $Key => $value) {
+            
+            $Imagen = "" ;
+
+            if ($value->articulo === 0 ) {
+                $Imagen = Storage::temporaryUrl('Promociones/'.$value->image, now()->addMinutes(5));
+            } else {
+                $NameFile = Productos::where('product_sku', $value->articulo)->pluck('product_image');
+
+
+
+                $Imagen = ($NameFile->count() > 0 ) ? "https://apps.gumacorp.com/gmv3/upload/product/" . $NameFile[0] : Storage::temporaryUrl('Promociones/'.$value->image, now()->addMinutes(5)) ;
+            
+            }
+            
+
+            $Array[$Key] = [
+                'articulo' => $value->articulo,
+                'titulo' => $value->titulo,
+                'descripcion' => $value->descripcion,
+                'fechaInicio' => $value->fechaInicio,
+                'fechaFinal' => $value->fechaFinal,
+                'Imagen' => $Imagen,
+            ];
+        }
+        
+
+
+
+        return $Array;
+    }
+
+
+
     public static function get_help(){
         $response = DB::connection('mysql_pedido')->table('tbl_help')->get();
 

@@ -92,5 +92,7 @@ Route::post('UpdateVisita', 'ScheduleController@UpdateVisita')->name('UpdateVisi
 Route::get('rmVisita/{RUTA}', 'ScheduleController@rmVisita')->name('rmVisita/{RUTA}');
 Route::post('reutilizar', 'ScheduleController@reutilizar')->name('reutilizar');
 
+Route::get('Promociones', 'GmvApiController@Promociones')->name('Promociones');
+
 
 
