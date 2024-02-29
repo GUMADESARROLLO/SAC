@@ -7,6 +7,7 @@ use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Http\Request;
 use GuzzleHttp\Client;
 use App\Models\Visita;
+use App\Models\GmvApi;
 use Illuminate\Support\Facades\Auth;
 use App\Models\ClientesFull;
 
@@ -93,6 +94,13 @@ class ScheduleController extends Controller
 
         $Visita = Visita::rmVisita($Id);
         return response()->json($Visita);
+
+    }
+
+    public function CheckPromo()
+    {
+        $CronCheckPromo = GmvApi::CronCheckPromo();
+        return response()->json($CronCheckPromo);
 
     }
 }

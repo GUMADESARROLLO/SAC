@@ -93,6 +93,6 @@ Route::get('rmVisita/{RUTA}', 'ScheduleController@rmVisita')->name('rmVisita/{RU
 Route::post('reutilizar', 'ScheduleController@reutilizar')->name('reutilizar');
 
 Route::get('Promociones', 'GmvApiController@Promociones')->name('Promociones');
-
+Route::get('CheckPromo', 'GmvApiController@CronCheckPromo')->name('CheckPromo');
 
 

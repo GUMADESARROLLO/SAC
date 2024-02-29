@@ -269,11 +269,7 @@ class GmvApiController extends Controller{
         return response()->json($obj);
     }
 
-    public function Promociones(Request $request){
-        $obj = GmvApi::Promociones($request);
-
-        return response()->json($obj);
-    }
+  
 
     
     public static function runVerification()
@@ -308,6 +304,15 @@ class GmvApiController extends Controller{
     public static function runCronCheckVisita(){
         $visita = Visita::validarVisita();
         return response()->json($visita);
+    }
+
+    public static function CronCheckPromo(){
+        $CronCheckPromo = GmvApi::CronCheckPromo();
+        return response()->json($CronCheckPromo);
+    }
+    public function Promociones(Request $request){
+        $obj = GmvApi::Promociones($request);
+        return response()->json($obj);
     }
    
 }
