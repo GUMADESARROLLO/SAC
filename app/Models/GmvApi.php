@@ -523,7 +523,8 @@ class GmvApi extends Model
     public static function CronCheckPromo(){
         $Array = array();
 
-        $Promociones = Promocion::where('activo', 'S')->get();
+        $Promociones = Promocion::where('activo', 'S')->whereDate('fechaFinal', '<', now()->toDateString())->get();
+
         foreach ($Promociones as $Key => $value) {
             
             $value->activo = 'N';
