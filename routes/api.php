@@ -94,5 +94,7 @@ Route::post('reutilizar', 'ScheduleController@reutilizar')->name('reutilizar');
 
 Route::get('Promociones', 'GmvApiController@Promociones')->name('Promociones');
 
+Route::get('UpdateVendedores', 'ScheduleController@UpdateVendedores')->name('UpdateVendedores');
+
 
 

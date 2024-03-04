@@ -44,4 +44,37 @@ class Vendedor extends Model
     return $vendedores;
     }
 
+    public static function UpdateVendedores() {
+        $Vendedor = Vendedor::all();
+
+        $Array_rutas_gmv     = [] ;
+        $Array_rutas_gnet    = [] ;
+
+        foreach ($Vendedor as $k => $v) {
+        
+            $Array_rutas_gmv[$k] = [
+                'username'     => $v->VENDEDOR,
+                'Name'         => $v->NOMBRE,
+            ];
+
+            $Array_rutas_gnet[$k] = [
+                'vendedor'     => $v->VENDEDOR,
+                'nombre'       => $v->NOMBRE,
+            ];
+
+
+        }
+        $userInstance = new UsuarioVendedor;
+        \Batch::update($userInstance, $Array_rutas_gmv, 'username');
+
+        $userInstanceGNET = new UserGNET;
+        \Batch::update($userInstanceGNET, $Array_rutas_gnet, 'vendedor');
+
+
+        $array_merge = array_merge($Array_rutas_gmv,$Array_rutas_gnet);
+        return $array_merge;
+
+
+    }
+
 }
