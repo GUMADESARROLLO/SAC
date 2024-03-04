@@ -516,12 +516,31 @@ class GmvApi extends Model
                 'Imagen' => $Imagen,
             ];
         }
-        
-
-
 
         return $Array;
     }
+
+    public static function CronCheckPromo(){
+        $Array = array();
+
+        $Promociones = Promocion::where('activo', 'S')->get();
+        foreach ($Promociones as $Key => $value) {
+            
+            $value->activo = 'N';
+            $value->save();
+            
+            $Array[$Key] = [
+                'articulo' => $value->articulo,
+                'titulo' => $value->titulo,
+                'descripcion' => $value->descripcion,
+                'fechaInicio' => $value->fechaInicio,
+                'fechaFinal' => $value->fechaFinal,
+            ];
+            
+        }
+        return COUNT($Array);
+    }
+
 
 
 
