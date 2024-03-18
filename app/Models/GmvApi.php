@@ -523,6 +523,9 @@ class GmvApi extends Model
     public static function CronCheckPromo(){
         $Array = array();
 
+        //ACTUALIZAR VIGENCIAS DE LISTA DE PRECIOS CUSTOMIZADAS
+        DB::connection('sqlsrv')->select("EXEC PRODUCCION.dbo.UPDATE_NIVEL_PRECIO");
+
         $Promociones = Promocion::where('activo', 'S')->whereDate('fechaFinal', '<', now()->toDateString())->get();
 
         foreach ($Promociones as $Key => $value) {
