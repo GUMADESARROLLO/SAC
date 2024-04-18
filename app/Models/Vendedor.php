@@ -62,6 +62,11 @@ class Vendedor extends Model
                 'nombre'       => $v->NOMBRE,
             ];
 
+            $Array_rutas_sac[$k] = [
+                'username'     => $v->VENDEDOR,
+                'nombre'       => $v->NOMBRE,
+            ];
+
 
         }
         $userInstance = new UsuarioVendedor;
@@ -69,6 +74,9 @@ class Vendedor extends Model
 
         $userInstanceGNET = new UserGNET;
         \Batch::update($userInstanceGNET, $Array_rutas_gnet, 'vendedor');
+
+        $userInstanceSAC = new Usuario;
+        \Batch::update($userInstanceSAC, $Array_rutas_sac, 'username');
 
 
         $array_merge = array_merge($Array_rutas_gmv,$Array_rutas_gnet);
