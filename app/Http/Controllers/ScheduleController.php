@@ -7,8 +7,10 @@ use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Http\Request;
 use GuzzleHttp\Client;
 use App\Models\Visita;
+use App\Models\GmvApi;
 use Illuminate\Support\Facades\Auth;
 use App\Models\ClientesFull;
+use App\Models\Vendedor;
 
 class ScheduleController extends Controller
 {
@@ -27,6 +29,12 @@ class ScheduleController extends Controller
         //\Log::channel('Schedule_pedidos')->info("Ejecucion de Tarea de Pedidos ");
 
         
+    }
+    public function CronCheckVisita()  {
+
+        $url = route('CronCheckVisita');
+        $Cron = new Client(['verify' => false]);
+        $Cron->get($url);
     }
 
     public function ImportVerification()  {
@@ -87,6 +95,17 @@ class ScheduleController extends Controller
 
         $Visita = Visita::rmVisita($Id);
         return response()->json($Visita);
+
+    }
+
+    public function UpdateVendedores() {
+        $Vendedor = Vendedor::UpdateVendedores();
+        return response()->json($Vendedor);
+    }
+    public function CheckPromo()
+    {
+        $CronCheckPromo = GmvApi::CronCheckPromo();
+        return response()->json($CronCheckPromo);
 
     }
 }

@@ -2,14 +2,18 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Exception;
 use Illuminate\Http\Request;
 use DateTime;
 use DateInterval;
+use Illuminate\Support\Facades\DB;
+use SoapClient;
+use SoapFault;
 
 class Visita extends Model {
-    protected $table = "tbl_visitas";
+    protected $table = "db_sac_app.tbl_visitas";
 
  
     
@@ -52,7 +56,7 @@ class Visita extends Model {
                 
                 $ruta       = $request->input('ruta');
                 $dtIni      = $request->input('startDate');
-                $dtEnd      = $request->input('endDate');sac.
+                $dtEnd      = $request->input('endDate');
                 
                 $NewFechas  = [];
 
@@ -87,7 +91,6 @@ class Visita extends Model {
         $array = array();
 
         $result = Visita::where('activo','S')->where('ruta',$Ruta)->get();
-
         foreach($result as $key => $row ){
             $array[$key] = [
                 'id'            => $row->id,
@@ -98,6 +101,7 @@ class Visita extends Model {
                 'efectiva'      => $row->efectiva,
                 'time_ini'      => $row->time_ini,
                 'time_end'      => $row->time_end,
+                'orden'         => $row->orden,
             ];
            
         }
@@ -165,5 +169,58 @@ class Visita extends Model {
             $mensaje =  'Excepción capturada: ' . $e->getMessage() . "\n";
             return response()->json($mensaje);
         }
+    }
+
+    public function ordenes(){
+        return $this->hasMany('App\Models\GmvPedidos', 'name', 'ruta');
+    }
+
+
+    public static function validarVisita(){
+
+        $json = array();
+        $pedidosAgrupados = [];
+        $i = 0;
+
+        $fechaIni = Carbon::now()->startOfDay();
+        $fechaFin = Carbon::now()->endOfDay();
+        //$fechaIni = '2024-01-12 00:00:00';
+        //$fechaFin = '2024-01-12 23:59:59';
+
+        $visitas = Visita::whereBetween('fechavisita', [$fechaIni, $fechaFin])->pluck('cliente')->toArray();
+       
+        
+        $ordenes = MasterPedidos::whereIn('Cliente', $visitas)->whereBetween('created_at', [$fechaIni, $fechaFin])->get();
+     
+        foreach($ordenes as $or){
+            $pedido = '['.$or->code.' / C$ '.number_format($or->Valor,2,'.',',').']';
+            $cliente = $or->Cliente;
+
+            if (!isset($pedidosAgrupados[$cliente])) {
+                $pedidosAgrupados[$cliente] = [];
+                $json[] = $cliente;
+            }
+
+            $pedidosAgrupados[$cliente][] = $pedido;
+            
+        }
+
+        //dd($pedidosAgrupados);
+       
+        foreach ($pedidosAgrupados as $cliente => $pedidos) {
+            $pedidosConcatenados = implode(' ; ', $pedidos);
+        
+            Visita::where('cliente', $cliente)
+                ->whereBetween('fechavisita', [$fechaIni, $fechaFin])
+                ->update(['efectiva' => 1, 'orden' => $pedidosConcatenados]);
+        }
+
+        Visita::whereNotIn('cliente', $json)
+                ->where('efectiva', 0)
+                ->whereBetween('fechavisita', [$fechaIni, $fechaFin])
+                ->update(['efectiva' => 2]);
+
+        
+        return $pedidosAgrupados;
     }
 }

@@ -65,6 +65,7 @@ return [
             'endpoint' => env('AWS_ENDPOINT'),
             'use_path_style_endpoint' => env('AWS_USE_PATH_STYLE_ENDPOINT',true),
         ],
+        // REMOVER CUANDO SE RESTAURE EL ENRUTAMIENTOS DE LAS IP PUBLICAS
         'dpromo' => [
             'driver' => 'local',
             'root' => storage_path('app/promocion'),

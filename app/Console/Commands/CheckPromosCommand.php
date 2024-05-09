@@ -5,21 +5,21 @@ namespace App\Console\Commands;
 use Illuminate\Console\Command;
 use App\Http\Controllers\ScheduleController;
 
-class RunPedidosCommand extends Command
+class CheckPromosCommand extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'run:pedidos';
+    protected $signature = 'run:promos';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Command description';
+    protected $description = 'Esta verificando si la promociones se a Vencido';
 
     /**
      * Create a new command instance.
@@ -40,7 +40,7 @@ class RunPedidosCommand extends Command
     {
         $scheduleController = new ScheduleController();
         //$scheduleController->RunPedidos();
-        $scheduleController->CronCheckVisita();
-        $this->info('Tarea de Insert Cliente Verificados ejecutada correctamente.');
+        $scheduleController->CheckPromo();
+        $this->info('Tarea de Verifica vigencia de las promociones.');
     }
 }
