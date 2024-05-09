@@ -80,10 +80,10 @@
                   </div>
                   <div class="mb-3">
                     <label class="fs-0" for="pArticulos">Articulo</label>
-                    <select class="form-select" id="pArticulo" name="label">
+                    <select class="form-select js-choice" id="pArticulo" name="label">
                       <option value="0!" valor="0" selected="selected">SELECCIONE</option>
                       @foreach ($articulos as $art)
-                        <option value="{{$art->ARTICULO}}!{{strtoupper($art->DESCRIPCION)}}" valor="{{$art->ARTICULO}}">{{strtoupper($art->DESCRIPCION)}}</option>
+                        <option value="{{$art->ARTICULO}}!{{strtoupper($art->DESCRIPCION)}}" valor="{{$art->ARTICULO}}">{{$art->ARTICULO}} - {{strtoupper($art->DESCRIPCION) }}</option>
                       @endforeach
                       
                     </select>
@@ -143,7 +143,7 @@
                     <select class="form-select" id="ePArticulo" name="eLabel">
                       <option value="0!" valor="0" selected="selected">SELECCIONE</option>
                       @foreach ($articulos as $art)
-                        <option value="{{$art->ARTICULO}}!{{strtoupper($art->DESCRIPCION)}}" valor="{{$art->ARTICULO}}">{{strtoupper($art->DESCRIPCION)}}</option>
+                        <option value="{{$art->ARTICULO}}!{{strtoupper($art->DESCRIPCION)}}" valor="{{$art->ARTICULO}}"> {{$art->ARTICULO}} - {{strtoupper($art->DESCRIPCION) }}</option>
                       @endforeach
                       
                     </select>

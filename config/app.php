@@ -176,6 +176,7 @@ return [
         App\Providers\RouteServiceProvider::class,
         Barryvdh\DomPDF\ServiceProvider::class,
         Maatwebsite\Excel\ExcelServiceProvider::class,
+        Mavinoo\Batch\BatchServiceProvider::class,
 
     ],
 
@@ -231,6 +232,7 @@ return [
         'Alert' => UxWeb\SweetAlert\SweetAlert::class,
         'PDF' => Barryvdh\DomPDF\Facade::class,
         'Excel' => Maatwebsite\Excel\Facades\Excel::class,
+        'Batch' => Mavinoo\Batch\BatchFacade::class,
     ],
 
 ];
