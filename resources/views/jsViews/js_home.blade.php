@@ -259,7 +259,7 @@
     });
     tbl_header_inventarios =  [                
                 {"title": "ARTICULO","data": "ARTICULO", "render": function(data, type, row, meta) {
-                var regla='';
+                var regla = cuarentena = '';
 
                 var total = parseFloat( numeral(row['total']).format('00.00')) + parseFloat( numeral(row['005']).format('00.00')) 
 
@@ -269,6 +269,12 @@
                     $.each( myArray, function( key, value ) {
                         regla +='<span class="badge rounded-pill ms-3 badge-soft-primary"><span class="fas fa-check"></span> '+value+'</span>'
                     });
+                }
+
+                if(row.cuarentena != null){
+                    cuarentena = `<div class="col-auto d-flex align-items-center"><span class="badge rounded-pill ms-3 badge-soft-warning"> En cuarentena </span></div>`;
+                } else{
+                    cuarentena = '';
                 }
 
                 return  ` <td class="align-middle ">
@@ -284,8 +290,8 @@
                         
                             <div class="row g-0 fw-semi-bold text-center py-2"> 
                                 <div class="col-auto"><a class="rounded-2 d-flex align-items-center me-3 text-700" href="#!"><span class="ms-1 fas fa-boxes text-primary" ></span><span class="ms-1"> `+ numeral(total).format('0,00.00')  +` `+ row.UNIDAD_ALMACEN +`</span></a></div>
-                                <div class="col-auto d-flex align-items-center"><span class="badge rounded-pill ms-3 badge-soft-primary"><span class="fas fa-check"></span> C$. `+ numeral(row.PRECIO_FARMACIA).format('0,00.00')  +`</span></div>
-                                    
+                                <div class="col-auto d-flex align-items-center"><span class="badge rounded-pill ms-3 badge-soft-primary"><span class="fas fa-check"></span> C$. `+ numeral(row.PRECIO_FARMACIA).format('0,00.00')  +`</span></div>                                
+                                `+cuarentena+`
                             </div>
                         </div>
                     </div>
@@ -942,6 +948,8 @@
             $("#id_codigo_articulo").html(data[0].InfoArticulo[0].ARTICULO);
             $("#lbl_unidad").html(data[0].InfoArticulo[0].UNIDAD);            
             $("#id_nombre_articulo").html(data[0].InfoArticulo[0].DESCRIPCION.toUpperCase());
+            $("#opcion1").val(data[0].InfoArticulo[0].ARTICULO);
+            data[0].InfoArticulo[0]['cuarentena'] != null ? $("#opcion1").prop('checked',true) : $("#opcion1").prop('checked',false);
 
             initTable_modal('#tbl_bodegas',data[0].Bodega,tbl_header_bodega);
             //initTable_modal('#tbl_lista_precios',data[0].NivelPrecio,tbl_header_nivel_precio);
@@ -1378,4 +1386,55 @@ var tooltipFormatter = function tooltipFormatter(params) {
 
     })
     
+    $("#opcion1").click(function(){
+        Articulo = $(this)[0];
+        if(Articulo.checked){
+            $.ajax({
+                url: "insertCuarentena",
+                type: 'post',
+                data: {                
+                    Articulo    : $(Articulo).val(),
+                    Opcion      : 1,      
+                    _token      : "{{ csrf_token() }}" 
+                },
+                async: true,
+                success: function(response) {
+                    Swal.fire("Guardar", "El producto ha sido puesto en cuarentana", "success").then((result) => {
+                        if (result.isConfirmed) {
+                            location.reload();
+                            }
+                        });
+                },
+                error: function(response) {
+                    
+                }
+            }).done(function(data) {
+                
+            });
+        }else{
+            $.ajax({
+                url: "insertCuarentena",
+                type: 'post',
+                data: {                
+                    Articulo   : $(Articulo).val(),
+                    Opcion      : 2,    
+                    _token      : "{{ csrf_token() }}" 
+                },
+                async: true,
+                success: function(response) {console.log(response);
+                    Swal.fire("Liberar", "El producto ya no esta en cuarentana", "success").then((result) => {
+                        if (result.isConfirmed) {
+                            location.reload();
+                            }
+                        });
+                },
+                error: function(response) {
+                    
+                }
+            }).done(function(data) {
+                
+            });   
+        }
+    })
+
 </script>

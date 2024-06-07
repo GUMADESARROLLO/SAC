@@ -47,6 +47,19 @@
                             location.reload();
                         }   
                     })
+                }else{
+                    Swal.fire({
+                    title: 'Visita repetida',
+                    icon: 'warning',
+                    showCancelButton: false,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'OK'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            location.reload();
+                        }   
+                    })
                 }
             },
             error: function(response) {

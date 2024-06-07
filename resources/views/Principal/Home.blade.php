@@ -260,8 +260,10 @@
                           <div class="row">
 
                               @foreach($promocion as $promo)
-                                  <div class="col-sm-3 col-xs-3" style=""><div class="card text-white bg-dark mb-3" style="width: 100%;">
-                                  
+                                  <div class="col-sm-4 col-xs-4" style=""><div class="card text-white bg-dark mb-5" style="width: 100%;">
+                                    <div class="">
+                                      <img class="card-img-top" src="{{$promo->image_url}}" alt="" height="220px" />
+                                    </div>
                                     <div class="card-body" style="height:150px">
                                         <div class="col">
                                           <div class="d-flex">
@@ -494,6 +496,10 @@
                             </div>
                             
                           </div>
+                          <div class="checkbox-container text-right">
+                            <input type="checkbox" id="opcion1" name="opciones[]" value="">
+                            <label for="opcion1">Cuarentena</label>
+                        </div>
                         </div>
                         <div id="artImg">
                             
