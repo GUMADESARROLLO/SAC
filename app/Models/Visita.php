@@ -28,8 +28,7 @@ class Visita extends Model {
                 $Descrip    = $request->input('Descrip');
                 $Ruta       = $request->input('Ruta');
 
-
-                $iCliente   = ClientesFull::where('CLIENTE',$Cliente)->first();
+                $iCliente   = ClientesFull::where('CLIENTE',$Cliente)->first();          
 
                 $checkVisit = Visita::where('cliente', $Cliente)->where('fechaVisita', 'LIKE', '%'.date('Y-m-d',strtotime($FechaVi)).'%')->first();
 
@@ -45,9 +44,10 @@ class Visita extends Model {
                     $response = $obj->save();
 
                     return $response;
+                }else{
+                    return false;
                 }
-
-                return false;
+                
                 
             } catch (Exception $e) {
                 $mensaje =  'Excepción capturada: ' . $e->getMessage() . "\n";

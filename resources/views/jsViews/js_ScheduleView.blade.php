@@ -48,18 +48,7 @@
                         }   
                     })
                 }else{
-                    Swal.fire({
-                    title: 'Visita repetida',
-                    icon: 'warning',
-                    showCancelButton: false,
-                    confirmButtonColor: '#3085d6',
-                    cancelButtonColor: '#d33',
-                    confirmButtonText: 'OK'
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            location.reload();
-                        }   
-                    })
+                    Swal.fire('Visita repetida',"Ya tiene agendada una visita para este día",'warning');
                 }
             },
             error: function(response) {
