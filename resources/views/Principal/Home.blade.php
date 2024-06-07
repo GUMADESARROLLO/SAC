@@ -494,6 +494,10 @@
                             </div>
                             
                           </div>
+                          <div class="checkbox-container text-right">
+                            <input type="checkbox" id="opcion1" name="opciones[]" value="">
+                            <label for="opcion1">Cuarentena</label>
+                        </div>
                         </div>
                         <div id="artImg">
                             
