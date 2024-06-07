@@ -494,6 +494,12 @@
                             </div>
                             
                           </div>
+                          @if (Session::get('rol') == '1' || Session::get('rol') == '2') 
+                            <div class="checkbox-container mr-5" style="text-align: right;">
+                              <input type="checkbox" id="opcion1" name="opciones[]" value="">
+                              <label for="opcion1" style="margin-right: 10px;">Cuarentena</label>
+                            </div>
+                          @endif
                         </div>
                         <div id="artImg">
                             

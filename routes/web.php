@@ -79,3 +79,5 @@ Route::get('rmVisita/{RUTA}', 'ScheduleController@rmVisita')->name('rmVisita/{RU
 Route::get('Devoluciones', 'DevolucionesController@getDevoluciones')->name('Devoluciones');
 Route::post('getDevoluciones', 'DevolucionesController@getData')->name('getDevoluciones');
 Route::post('reutilizar', 'ScheduleController@reutilizar')->name('reutilizar');
+
+Route::post('insertCuarentena', 'HomeController@insertCuarentena')->name('insertCuarentena');
