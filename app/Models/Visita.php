@@ -34,6 +34,19 @@ class Visita extends Model {
                 $checkVisit = Visita::where('cliente', $Cliente)->where('fechaVisita', 'LIKE', '%'.date('Y-m-d',strtotime($FechaVi)).'%')->first();
 
                 if($checkVisit == null){
+                    $obj = new Visita();   
+                    $obj->cliente       = $Cliente;   
+                    $obj->ruta          = $Ruta;
+                    $obj->nombre        = $iCliente->NOMBRE;                
+                    $obj->fechavisita   = $FechaVi;
+                    $obj->descripcion   = $Descrip;
+                    $obj->activo        = 'S';                 
+                    $response = $obj->save();
+                    
+
+                $checkVisit = Visita::where('cliente', $Cliente)->where('fechaVisita', 'LIKE', '%'.date('Y-m-d',strtotime($FechaVi)).'%')->first();
+
+                if($checkVisit == null){
                    
                     $obj = new Visita();   
                     $obj->cliente       = $Cliente;   
@@ -45,9 +58,9 @@ class Visita extends Model {
                     $response = $obj->save();
 
                     return $response;
+                }else{
+                    return false;
                 }
-
-                return false;
                 
             } catch (Exception $e) {
                 $mensaje =  'Excepción capturada: ' . $e->getMessage() . "\n";

@@ -290,8 +290,8 @@
                         
                             <div class="row g-0 fw-semi-bold text-center py-2"> 
                                 <div class="col-auto"><a class="rounded-2 d-flex align-items-center me-3 text-700" href="#!"><span class="ms-1 fas fa-boxes text-primary" ></span><span class="ms-1"> `+ numeral(total).format('0,00.00')  +` `+ row.UNIDAD_ALMACEN +`</span></a></div>
-                                <div class="col-auto d-flex align-items-center"><span class="badge rounded-pill ms-3 badge-soft-primary"><span class="fas fa-check"></span> C$. `+ numeral(row.PRECIO_FARMACIA).format('0,00.00')  +`</span></div>                                
-                                `+cuarentena+`
+                                <div class="col-auto d-flex align-items-center"><span class="badge rounded-pill ms-3 badge-soft-primary"><span class="fas fa-check"></span> C$. `+ numeral(row.PRECIO_FARMACIA).format('0,00.00')  +`</span></div>
+                                 `+cuarentena+`
                             </div>
                         </div>
                     </div>
@@ -1385,7 +1385,7 @@ var tooltipFormatter = function tooltipFormatter(params) {
         })
 
     })
-    
+
     $("#opcion1").click(function(){
         Articulo = $(this)[0];
         if(Articulo.checked){
@@ -1399,11 +1399,7 @@ var tooltipFormatter = function tooltipFormatter(params) {
                 },
                 async: true,
                 success: function(response) {
-                    Swal.fire("Guardar", "El producto ha sido puesto en cuarentana", "success").then((result) => {
-                        if (result.isConfirmed) {
-                            location.reload();
-                            }
-                        });
+                    Swal.fire("Guardar", "El producto ha sido puesto en cuarentana", "success");
                 },
                 error: function(response) {
                     
@@ -1422,11 +1418,7 @@ var tooltipFormatter = function tooltipFormatter(params) {
                 },
                 async: true,
                 success: function(response) {console.log(response);
-                    Swal.fire("Liberar", "El producto ya no esta en cuarentana", "success").then((result) => {
-                        if (result.isConfirmed) {
-                            location.reload();
-                            }
-                        });
+                    Swal.fire("Liberar", "El producto ya no esta en cuarentana", "success");
                 },
                 error: function(response) {
                     
@@ -1436,5 +1428,5 @@ var tooltipFormatter = function tooltipFormatter(params) {
             });   
         }
     })
-
+    
 </script>
