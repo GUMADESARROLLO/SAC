@@ -5,6 +5,7 @@ namespace App\Models;
 use DateTime;
 use Exception;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
@@ -16,6 +17,10 @@ class Inventario extends Model
     protected $connection = 'sqlsrv';
     public $timestamps = false;
     protected $table = "PRODUCCION.dbo.iweb_articulos";
+
+    public function cuarentena(): HasOne{
+        return $this->hasOne(Cuarentena::class, 'ARTICULO', 'ARTICULO');
+    }
 
     public static function getArticulos()
     {
@@ -55,7 +60,7 @@ class Inventario extends Model
             })->pluck('Articulo')->toArray();
         }
         
-        $listaArticulos = Inventario::whereIn('ARTICULO',$ArticuloCache)->get();
+        $listaArticulos = Inventario::with('cuarentena')->whereIn('ARTICULO',$ArticuloCache)->get();
         $Info_Articulo = Productos::whereIn('product_sku', $ArticuloCache)->get();
 
         foreach($listaArticulos as $item){
@@ -91,6 +96,7 @@ class Inventario extends Model
             }
 
             $json[$i]['IMG_URL'] = $imgUrl;
+            $json[$i]['cuarentena'] = $item->cuarentena;
 
             $i++;
         }

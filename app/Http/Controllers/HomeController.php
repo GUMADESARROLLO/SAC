@@ -20,6 +20,7 @@ use App\Models\Factura;
 use App\Models\Estadisticas;
 use App\Models\ClientesFull;
 use App\Models\Comision;
+use App\Models\Cuarentena;
 use App\Models\PlanCrecimiento;
 use App\Models\Promocion;
 use App\Models\Logs;
@@ -198,7 +199,7 @@ class HomeController extends Controller {
     public function getDataArticulo($idArticulo)
     {
         $dtaArticulo[] = array(
-            'InfoArticulo'          => Inventario::where('ARTICULO', $idArticulo)->get(),
+            'InfoArticulo'          => Inventario::with('cuarentena')->where('ARTICULO', $idArticulo)->get(),
             'NivelPrecio'           => NivelPrecio::getNivelPrecio($idArticulo),
             'Bodega'                => Bodega::getBodega($idArticulo),
         );
@@ -491,4 +492,30 @@ class HomeController extends Controller {
         $result = Inventario::imgArticulo($request);
         return $result;
     }
+
+    public function insertCuarentena(Request $request){
+        try{
+            $articulo = $request->input('Articulo');
+            $op = $request->input('Opcion');
+            if($op == 1){
+                $created_at = today();
+
+                $cuarentena = new Cuarentena();
+
+                $cuarentena->ARTICULO = $articulo;
+                $cuarentena->created_at = $created_at;
+                
+                $response = $cuarentena->save();
+            }else{
+                $response = Cuarentena::where('ARTICULO', $articulo)->delete();
+            }
+
+            
+        }catch (Exception $e) {
+            $mensaje =  'Excepción capturada: ' . $e->getMessage() . "\n";
+            alert()->error($mensaje, 'ERROR')->persistent('Close');
+            return redirect()->back();
+        }
+    }
+
 }
