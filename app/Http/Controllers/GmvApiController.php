@@ -301,5 +301,10 @@ class GmvApiController extends Controller{
         $visita = Visita::validarVisita();
         return response()->json($visita);
     }
+
+    public function Promociones(Request $request){
+        $obj = GmvApi::Promociones($request);
+        return response()->json($obj);
+    }
    
 }
