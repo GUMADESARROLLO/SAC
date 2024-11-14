@@ -292,7 +292,7 @@ class Comision extends Model{
             $json[$key] = array(
                 'VENDEDOR' => $value->VENDEDOR,
                 'ARTICULO' => $value->ARTICULO,
-                'DESCRIPCION' => $value->DESCRIPCION,
+                'DESCRIPCION' => strtoupper($value->DESCRIPCION),
                 'Venta' => $value->Venta,
                 'Aporte' => $value->Aporte,
                 'Acumulado' => $value->Acumulado,

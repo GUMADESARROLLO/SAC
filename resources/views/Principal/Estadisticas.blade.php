@@ -2,6 +2,7 @@
 @section('metodosjs')
 @include('jsViews.js_estadisticas')
 @include('jsViews.js_ScheduleView')
+@include('jsViews.js_skus')
 @endsection
 @section('content')
 
@@ -201,6 +202,8 @@
                       <li class="nav-item" role="presentation"><a class="nav-link py-3 mb-0" id="sale-path-tab" data-bs-toggle="tab" href="#sale-path" role="tab" aria-controls="sale-path" aria-selected="true">Ventas por Ruta</a></li>
                       <li class="nav-item" role="presentation"><a class="nav-link py-3 mb-0" id="crm-profit-tab" data-bs-toggle="tab" href="#crm-profit" role="tab" aria-controls="crm-profit" aria-selected="false">Mis Rutas</a></li>
                       <li class="nav-item" role="presentation"><a class="nav-link py-3 mb-0" id="crm-schedule-tab" data-bs-toggle="tab" href="#crm-schedule" role="tab" aria-controls="crm-schedule" aria-selected="false">Plan de trabajo</a></li>
+                      
+                      <li class="nav-item" role="presentation"><a class="nav-link py-3 mb-0" id="crm-skus-tab" data-bs-toggle="tab" href="#crm-skus" role="tab" aria-controls="crm-skus" aria-selected="false">SKUs 80/20</a></li>
                     </ul>                 
                   </div>
                   <div class="card-body">
@@ -222,70 +225,165 @@
 
                           <div class="tab-pane" id="crm-schedule" role="tabpanel" aria-labelledby="crm-schedule-tab">
 
-                          <div class="card mb-3 overflow-hidden">
-                            <div class="card-header">
-                              <div class="row align-items-center">
+                            <div class="card mb-3 overflow-hidden">
+                              <div class="card-header">
+                                <div class="row align-items-center">
 
-                                <div class="col-auto d-flex justify-content-end order-md-1">
-                                  <button class="btn icon-item icon-item-sm shadow-none p-0 me-1 ms-md-2" type="button" data-event="prev" data-bs-toggle="tooltip" title="Previous"><span class="fas fa-arrow-left"></span></button>
-                                  <button class="btn icon-item icon-item-sm shadow-none p-0 me-1 me-lg-2" type="button" data-event="next" data-bs-toggle="tooltip" title="Next"><span class="fas fa-arrow-right"></span></button>
-                                </div>
+                                  <div class="col-auto d-flex justify-content-end order-md-1">
+                                    <button class="btn icon-item icon-item-sm shadow-none p-0 me-1 ms-md-2" type="button" data-event="prev" data-bs-toggle="tooltip" title="Previous"><span class="fas fa-arrow-left"></span></button>
+                                    <button class="btn icon-item icon-item-sm shadow-none p-0 me-1 me-lg-2" type="button" data-event="next" data-bs-toggle="tooltip" title="Next"><span class="fas fa-arrow-right"></span></button>
+                                  </div>
 
-                                <div class="col-auto col-md-auto order-md-2">
-                                  <h4 class="mb-0 fs-0 fs-sm-1 fs-lg-2 calendar-title"></h4>
-                                </div>
-                                
-                                
-                                <div class="col col-md-auto d-flex justify-content-end order-md-3">
-                                  <button class="btn btn-falcon-primary btn-sm" type="button" data-event="today" id="btnToday">Hoy</button>
-                                </div>
+                                  <div class="col-auto col-md-auto order-md-2">
+                                    <h4 class="mb-0 fs-0 fs-sm-1 fs-lg-2 calendar-title"></h4>
+                                  </div>
+                                  
+                                  
+                                  <div class="col col-md-auto d-flex justify-content-end order-md-3">
+                                    <button class="btn btn-falcon-primary btn-sm" type="button" data-event="today" id="btnToday">Hoy</button>
+                                  </div>
 
-                                <div class="col col-md-auto d-flex justify-content-end order-md-3">
-                                  <select class="form-select " id="sclVendedor" >
-                                    @foreach ($Vendedor as $v)
-                                      <option value="{{$v->VENDEDOR}}" valor="{{$v->VENDEDOR}}">{{$v->VENDEDOR}} - {{  strtoupper($v->NOMBRE)}}</option>
-                                    @endforeach
-                                    
-                                  </select>
+                                  <div class="col col-md-auto d-flex justify-content-end order-md-3">
+                                    <select class="form-select " id="sclVendedor" >
+                                      @foreach ($Vendedor as $v)
+                                        <option value="{{$v->VENDEDOR}}" valor="{{$v->VENDEDOR}}">{{$v->VENDEDOR}} - {{  strtoupper($v->NOMBRE)}}</option>
+                                      @endforeach
+                                      
+                                    </select>
+                                  
+                                  </div>
                                 
-                                </div>
-                              
-                                <div class="col d-flex justify-content-end order-md-2">
-                                  <div class="dropdown font-sans-serif me-md-2">
-                                    <button class="btn btn-falcon-default text-600 btn-sm dropdown-toggle dropdown-caret-none" type="button" 
-                                    id="email-filter" data-bs-toggle="dropdown" data-boundary="viewport" aria-haspopup="true" aria-expanded="false">
-                                        <span data-view-title="data-view-title">Semana</span><span class="fas fa-sort ms-2 fs--1"></span>
-                                    </button>
-                                    <div class="dropdown-menu dropdown-menu-end border py-2" aria-labelledby="email-filter">
-                                        <a class="dropdown-item d-flex justify-content-between" href="#!" data-fc-view="dayGridMonth">Mes
-                                            <span class="icon-check"><span class="fas fa-check" data-fa-transform="down-4 shrink-4"></span></span>
-                                        </a>
-                                        <a class="active dropdown-item d-flex justify-content-between" href="#!" data-fc-view="timeGridWeek">Semana
-                                            <span class="icon-check"><span class="fas fa-check" data-fa-transform="down-4 shrink-4"></span></span>
-                                        </a>
-                                        <a class="dropdown-item d-flex justify-content-between" href="#!" data-fc-view="timeGridDay">Día
-                                            <span class="icon-check"><span class="fas fa-check" data-fa-transform="down-4 shrink-4"></span></span>
-                                        </a>
-                                        <a class="dropdown-item d-flex justify-content-between" href="#!" data-fc-view="listWeek">Lista
-                                            <span class="icon-check"><span class="fas fa-check" data-fa-transform="down-4 shrink-4"></span></span>
-                                        </a>
-                                        <a class="dropdown-item d-flex justify-content-between" href="#!" data-fc-view="listYear">Año
-                                            <span class="icon-check"><span class="fas fa-check" data-fa-transform="down-4 shrink-4"></span></span>
-                                        </a>
+                                  <div class="col d-flex justify-content-end order-md-2">
+                                    <div class="dropdown font-sans-serif me-md-2">
+                                      <button class="btn btn-falcon-default text-600 btn-sm dropdown-toggle dropdown-caret-none" type="button" 
+                                      id="email-filter" data-bs-toggle="dropdown" data-boundary="viewport" aria-haspopup="true" aria-expanded="false">
+                                          <span data-view-title="data-view-title">Semana</span><span class="fas fa-sort ms-2 fs--1"></span>
+                                      </button>
+                                      <div class="dropdown-menu dropdown-menu-end border py-2" aria-labelledby="email-filter">
+                                          <a class="dropdown-item d-flex justify-content-between" href="#!" data-fc-view="dayGridMonth">Mes
+                                              <span class="icon-check"><span class="fas fa-check" data-fa-transform="down-4 shrink-4"></span></span>
+                                          </a>
+                                          <a class="active dropdown-item d-flex justify-content-between" href="#!" data-fc-view="timeGridWeek">Semana
+                                              <span class="icon-check"><span class="fas fa-check" data-fa-transform="down-4 shrink-4"></span></span>
+                                          </a>
+                                          <a class="dropdown-item d-flex justify-content-between" href="#!" data-fc-view="timeGridDay">Día
+                                              <span class="icon-check"><span class="fas fa-check" data-fa-transform="down-4 shrink-4"></span></span>
+                                          </a>
+                                          <a class="dropdown-item d-flex justify-content-between" href="#!" data-fc-view="listWeek">Lista
+                                              <span class="icon-check"><span class="fas fa-check" data-fa-transform="down-4 shrink-4"></span></span>
+                                          </a>
+                                          <a class="dropdown-item d-flex justify-content-between" href="#!" data-fc-view="listYear">Año
+                                              <span class="icon-check"><span class="fas fa-check" data-fa-transform="down-4 shrink-4"></span></span>
+                                          </a>
+                                      </div>
                                     </div>
                                   </div>
                                 </div>
                               </div>
+                              <div class="card-body p-0">
+                                <div class="calendar-outline" id="appCalendar"></div>
+                              </div>
                             </div>
-                            <div class="card-body p-0">
-                              <div class="calendar-outline" id="appCalendar"></div>
-                            </div>
-                          </div>
                             
 
                             
                           </div>
-           
+
+                          <div class="tab-pane" id="crm-skus" role="tabpanel" aria-labelledby="crm-skus-tab">
+                            <div class="card-header">
+                              <div class="row align-items-center">
+                              <div class="col-auto d-flex justify-content-end order-md-1">
+
+                              
+
+                                <div class="row gy-2 gx-3 align-items-center">
+                                  <div class="col-auto">
+                                    <label class="visually-hidden" for="autoSizingInput">Name</label>
+                                    <div class="input-group">
+                                      <div class="input-group-text bg-transparent"><span class="fa fa-search fs--1 text-600"></span></div>
+                                      <input class="form-control form-control-sm shadow-none search" type="search" placeholder="Buscar SKU" aria-label="search" id="txt_search" />
+                                    </div>
+                                  </div>
+                                  <div class="col-auto">
+                                    <label class="visually-hidden" for="autoSizingSelect">Preference</label>
+                                    <select class="form-select" id="select_rows">
+                                      <option selected="selected" value="-1">Todos</option>
+                                      <option value="5">5</option>
+                                      <option value="10">10</option>
+                                    </select>
+                                  </div>
+                                  </div>
+
+
+                                  
+                                </div>
+                                <div class="col col-md-auto d-flex justify-content-end order-md-3 mb-3">
+
+                                  <div class="row g-3">
+                                    <div class="col-md-3">
+                                      <label class="form-label" for="inputState">Mes</label>
+                                      <select class="form-select" id="id_num_mes">    
+                                        <option value="1">Ene</option>
+                                        <option value="2">Feb</option>
+                                        <option value="3">Mar</option>
+                                        <option value="4">Abr</option>
+                                        <option value="5">May</option>
+                                        <option value="6">Jun</option>
+                                        <option value="7">Jul</option>
+                                        <option value="8">Ago</option>
+                                        <option value="9">Sep</option>
+                                        <option value="10">Oct</option>
+                                        <option value="11">Nov</option>
+                                        <option value="12">Dic</option>
+                                      </select>
+                                    </div>
+                                    <div class="col-md-3">
+                                      <label class="form-label" for="inputAno">Año</label>
+                                      <select class="form-select" id="id_num_anno">    
+                                        @for ($i = date('Y'); $i >= 2022; $i--)
+                                            <option value="{{ $i }}">{{ $i }}</option>
+                                        @endfor
+                                      </select>
+                                    </div>
+                                    
+                                      <div class="col-6">
+                                        <label class="form-label" for="inputZip">Vendedor</label>
+                                        <div class="input-group">
+                                        <select class="form-select " id="id_select_vendedor" >
+                                          @foreach ($Vendedor as $v)
+                                            <option value="{{$v->VENDEDOR}}" valor="{{$v->VENDEDOR}}">{{$v->VENDEDOR}} - {{  strtoupper($v->NOMBRE)}}</option>
+                                          @endforeach
+                                        </select>
+                                        <div class="input-group-text btn-primary" id="btn_buscar"><span class="fa fa-search fs--1 text-white"></span></div>
+                                      </div>
+                                    </div>
+                                    </div>
+                                  
+                                </div>
+                                <div class="col d-flex justify-content-end order-md-2">
+                                  
+                                </div>
+                            </div>
+                            <div class="card-body p-0">
+                              
+                            </div>
+
+                            <table id="dt_articulos" class="display" width="100%">
+                                <thead>
+                                  <tr>
+                                    <th>ARTICULO</th>
+                                    <th>DESCRIPCION</th>
+                                    <th>META</th>    
+                                    <th>EJECUTADO</th>
+                                    <th>CUMPLIMIENTO %</th>
+                                    <th>CLIENTES</th>
+                                  </tr>
+                                </thead>
+                              </table>
+                          </div>
+
+                          </div>
+
 
                         </div>
                       </div>
