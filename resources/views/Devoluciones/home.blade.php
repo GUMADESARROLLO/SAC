@@ -12,8 +12,13 @@
         
         <div class="content">            
             @include('layouts.nav_importacion')
+            
+            <div class="d-flex justify-content-center mb-2">
+                <div id="id_loading" class="spinner-border" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+            </div>
 
-            <div id="id_loading" class="spinner-border" role="status"><span class="visually-hidden">Loading...</span></div>
             <div class="card mb-3">
                 <div class="bg-holder d-none d-lg-block bg-card" >
                 </div>
