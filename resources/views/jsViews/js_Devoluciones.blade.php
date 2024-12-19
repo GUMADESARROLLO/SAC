@@ -35,9 +35,10 @@
             $("#tbl_facturas_decolucion tbody").html(rows_table);
 
             d.forEach(function(item, index) {
-                rows_table += `<tr class="border-200">
+                
+                rows_table += `<tr class="border-200" ` + item.FCT_BONI + ` >
                                 <td class="align-middle">
-                                    <h6 class="mb-0 text-nowrap">` + item.FCT_DESC + `</h6>
+                                    <h6 class="mb-0 text-nowrap"> ` + item.FCT_DESC + `</h6>
                                     <p class="mb-0">` + item.FCT_ARTI + `</p>
                                 </td>
                                 <td class="align-middle text-center">` + item.FCT_CANT + `</td>

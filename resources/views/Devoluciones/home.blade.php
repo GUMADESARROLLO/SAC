@@ -12,7 +12,7 @@
         
         <div class="content">            
             @include('layouts.nav_importacion')
-            
+
             <div class="d-flex justify-content-center mb-2">
                 <div id="id_loading" class="spinner-border" role="status">
                     <span class="visually-hidden">Loading...</span>
@@ -53,7 +53,7 @@
                         </div>
                     </div>
                 <div class="table-responsive fs--1">
-                    <table class="table table-striped border-bottom" id="tbl_facturas_decolucion">
+                    <table class="table border-bottom" id="tbl_facturas_decolucion">
                     <thead class="bg-200 text-900">
                         <tr>
                         <th class="border-0">ARTICULOS</th>
