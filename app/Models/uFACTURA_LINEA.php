@@ -21,16 +21,33 @@ class uFACTURA_LINEA extends Model
 
         $result = uFACTURA_LINEA::WHERE('FACTURA',$FCT)->get();
 
+        if ($result->isEmpty()) {
+            $array[0] = [
+                'FACTURAS' => ' 0000 ',
+                'FCT_DATE' => ' Mes 01, 2000  ',
+                'FCT_RUTA' => ' F00 ',
+                'FCT_NAME' => ' NOMBRE CLIENTE ',
+                'FCT_ARTI' => ' - ',
+                'FCT_DESC' => ' - ',
+                'FCT_CANT' => ' - ',
+                'FCT_LOTE' => ' - ',
+                'FCT_CLIE' => ' 0000 ',
+            ];
+        }
+
+
         foreach ($result as $key => $row) {
-            $array[$key]['FACTURAS'] = $row->FACTURA;
-            #$array[$key]['FCT_DATE'] = Date::parse($row->FECHA_FACTURA)->format('D, M d, Y');
-            $array[$key]['FCT_DATE'] = $row->FECHA_FACTURA;
-            $array[$key]['FCT_RUTA'] = $row->VENDEDOR;
-            $array[$key]['FCT_NAME'] = $row->NOMBRE;
-            $array[$key]['FCT_ARTI'] = $row->ARTICULO;
-            $array[$key]['FCT_DESC'] = strtoupper($row->DESCRIPCION);
-            $array[$key]['FCT_CANT'] = number_format($row->CANTIDAD,2);
-            $array[$key]['FCT_LOTE'] = $row->LOTE;
+            $array[$key] = [
+                'FACTURAS' => $row->FACTURA,
+                'FCT_DATE' => $row->FECHA_FACTURA,
+                'FCT_RUTA' => $row->VENDEDOR,
+                'FCT_NAME' => $row->NOMBRE,
+                'FCT_ARTI' => $row->ARTICULO,
+                'FCT_DESC' => strtoupper($row->DESCRIPCION),
+                'FCT_CANT' => number_format($row->CANTIDAD,2),
+                'FCT_LOTE' => $row->LOTE,
+                'FCT_CLIE' => $row->CLIENTE,
+            ];
         }
 
         return $array;

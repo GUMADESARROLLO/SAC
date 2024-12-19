@@ -12,27 +12,59 @@
         
         <div class="content">            
             @include('layouts.nav_importacion')
-              <div class="card">
-                <div class="card-header d-flex flex-between-center ps-0 py-0 border-bottom">
-                    <ul class="nav nav-tabs border-0 flex-nowrap tab-active-caret" id="crm-revenue-chart-tab" role="tablist" data-tab-has-echarts="data-tab-has-echarts">
-                        <li class="nav-item" role="presentation"><a class="nav-link py-3 mb-0 active" id="crm-revenue-tab" data-bs-toggle="tab" href="#crm-revenue" role="tab" aria-controls="crm-revenue" aria-selected="true"></a></li>                  
-                    </ul>
-                    <div class="dropdown font-sans-serif btn-reveal-trigger">
-                        <div id="id_loading" class="spinner-border" role="status"><span class="visually-hidden">Loading...</span></div>
-                    </div>
+
+            <div id="id_loading" class="spinner-border" role="status"><span class="visually-hidden">Loading...</span></div>
+            <div class="card mb-3">
+                <div class="bg-holder d-none d-lg-block bg-card" >
                 </div>
+                <!--/.bg-holder-->
+
+                <div class="card-body position-relative">
+                
+            
+                <div>
+                <div class="row justify-content-between">
+                    <div class="col">
+                      <div class="d-flex">                        
+                        <div class="flex-1 align-self-center">
+                          <p class="mb-1 lh-1"><a class="fw-semi-bold" href="#!" > <span id="lbl_nombre_cliente">  00000 - NOMBRE CLIENTE </span> </a> &bull; Ruta &bull; <a href="#!"> <span id="lbl_ruta"></span> </a> </p>
+                          <h5>Factura &bull; <span id="lbl_factura"> 0000 </span> </h5>
+                          <span id="lbl_fecha_factura">Mes 01, 2000</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                    
+                </div>
+                </div>
+            </div>
+           
+            <div class="card mb-3">
                 <div class="card-body">
-                    <div class="input-group" >
-                        <input class="form-control form-control-sm shadow-none search" type="search" placeholder="Digite el numero de Factura" aria-label="search" id="tbl_buscar_tbl_facturas" />
+                <div class="input-group mb-3" >
+                        <input class="form-control form-control-lg shadow-none search" type="search" placeholder="Numero de Factura" aria-label="search" id="tbl_buscar_tbl_facturas" />
                         <div class="input-group-text bg-grey" id="btn_search">
                             <span class="fa fa-search fs--1 text-600" ></span>
                         </div>
                     </div>
-                    <div class="table-responsive scrollbar mt-3">
-                    <table id="tbl_facturas" class="table table-striped overflow-hidden" style="width:100%"></table>
-                    </div>
+                <div class="table-responsive fs--1">
+                    <table class="table table-striped border-bottom" id="tbl_facturas_decolucion">
+                    <thead class="bg-200 text-900">
+                        <tr>
+                        <th class="border-0">ARTICULOS</th>
+                        <th class="border-0 text-center">CANTIDAD</th>
+                        <th class="border-0 text-end">LOTE</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        
+                        
+                    </tbody>
+                    </table>
                 </div>
-              </div>
+                
+                </div>
+            </div>
     </div>
 </main>
 @endsection('content')
