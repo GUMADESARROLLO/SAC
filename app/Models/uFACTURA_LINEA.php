@@ -41,7 +41,7 @@ class uFACTURA_LINEA extends Model
                 'FACTURAS' => $row->FACTURA,
                 'FCT_DATE' => $row->FECHA_FACTURA,
                 'FCT_RUTA' => $row->VENDEDOR,
-                'FCT_NAME' => $row->NOMBRE,
+                'FCT_NAME' => $row->NOMBRE_CLIENTE,
                 'FCT_ARTI' => $row->ARTICULO,
                 'FCT_DESC' => strtoupper($row->DESCRIPCION),
                 'FCT_CANT' => number_format($row->CANTIDAD,2),
