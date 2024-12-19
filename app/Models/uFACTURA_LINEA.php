@@ -15,14 +15,7 @@ class uFACTURA_LINEA extends Model
 
     public static function getData(Request $request)
     {  
-        $array = [];
-
-        $FCT    = $request->input('FACTURA');
-
-        $result = uFACTURA_LINEA::WHERE('FACTURA',$FCT)->get();
-
-        if ($result->isEmpty()) {
-            $array[0] = [
+        $array[0] = [
                 'FACTURAS' => ' 0000 ',
                 'FCT_DATE' => ' Mes 01, 2000  ',
                 'FCT_RUTA' => ' F00 ',
@@ -34,13 +27,13 @@ class uFACTURA_LINEA extends Model
                 'FCT_CLIE' => ' 0000 ',
                 'FCT_BONI' => ' N/D ',
             ];
-        }
+
+        $FCT    = $request->input('FACTURA');
+
+        $result = uFACTURA_LINEA::WHERE('FACTURA',$FCT)->get();
 
 
         foreach ($result as $key => $row) {
-
-
-
 
             $array[$key] = [
                 'FACTURAS' => $row->FACTURA,
