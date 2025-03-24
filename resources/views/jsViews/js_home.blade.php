@@ -272,7 +272,7 @@
                 }
 
                 if(row.cuarentena != null){
-                    cuarentena = `<div class="col-auto d-flex align-items-center"><span class="badge rounded-pill ms-3 badge-soft-warning"> En cuarentena </span></div>`;
+                    cuarentena = `<div class="col-auto d-flex align-items-center"><span class="badge rounded-pill ms-3 badge-soft-warning"> En Revisión </span></div>`;
                 } else{
                     cuarentena = '';
                 }
@@ -1399,7 +1399,7 @@ var tooltipFormatter = function tooltipFormatter(params) {
                 },
                 async: true,
                 success: function(response) {
-                    Swal.fire("Guardar", "El producto ha sido puesto en cuarentana", "success");
+                    Swal.fire("Guardar", "El producto ha sido puesto en revisión", "success");
                 },
                 error: function(response) {
                     
@@ -1418,7 +1418,7 @@ var tooltipFormatter = function tooltipFormatter(params) {
                 },
                 async: true,
                 success: function(response) {console.log(response);
-                    Swal.fire("Liberar", "El producto ya no esta en cuarentana", "success");
+                    Swal.fire("Correcto", "El producto ya no esta en revisión", "success");
                 },
                 error: function(response) {
                     

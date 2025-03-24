@@ -23,7 +23,6 @@ Route::post('/update_promocion', 'HomeController@update_promocion')->name('updat
 Route::get('dtaEstadisticas', 'HomeController@dtaEstadisticas')->name('dtaEstadisticas');
 
 
-
 Route::get('getMiProgreso/{d1}/{d2}', 'HomeController@getMiProgreso')->name('getMiProgreso/{d1}/{d2}');
 Route::get('getArticulosFavoritos', 'HomeController@getArticulosFavoritos')->name('getArticulosFavoritos');
 Route::get('getDataArticulo/{ID}', 'HomeController@getDataArticulo')->name('getDataArticulo');
