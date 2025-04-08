@@ -97,7 +97,7 @@ class Estadisticas extends Model
         ISNULL((SELECT  sum(T4.VentaNetaLocal) Venta FROM Softland.dbo.ANA_VentasTotales_MOD_Contabilidad_UMK T4  WHERE (DATEPART(week,T4.Fecha_de_factura)-1) = '".$w."' AND DATEPART(YY,T4.Fecha_de_factura) = '".$y."'  AND T4.VENDEDOR = T0.VENDEDOR    ), 0) AS SaleWeek,	
         ISNULL((SELECT COUNT(DISTINCT T1.ARTICULO) FROM PRODUCCION.dbo.view_master_pedidos_umk_v2 AS T1 WHERE T1.FECHA_PEDIDO BETWEEN '".$d1."' AND '".$d2."'AND T1.VENDEDOR = T0.VENDEDOR ), 0) AS SKU,	
         ISNULL((SELECT SUM(T1.TOTAL_LINEA) AS NoV FROM PRODUCCION.dbo.view_master_pedidos_umk_v2 AS T1 WHERE T1.FECHA_PEDIDO BETWEEN '".$d1."'  AND '".$d2."' AND T1.VENDEDOR = T0.VENDEDOR and   T1.PEDIDO NOT LIKE 'PT%'  ), 0) AS EJEC,
-        ISNULL((SELECT SUM(T1.TOTAL_LINEA) AS NoV FROM PRODUCCION.dbo.view_master_pedidos_umk_v2 AS T1 WHERE T1.FECHA_PEDIDO BETWEEN '".$d1."'  AND '".$d2."' AND T1.VENDEDOR = T0.VENDEDOR and   T1.PEDIDO LIKE 'PT%'    ), 0) AS SAC
+        ISNULL((SELECT SUM(T1.TOTAL_LINEA) AS NoV FROM PRODUCCION.dbo.view_master_pedidos_with_cadena AS T1 WHERE T1.FECHA_PEDIDO BETWEEN '".$d1."'  AND '".$d2."' AND T1.VENDEDOR = T0.VENDEDOR and   T1.PEDIDO LIKE 'PT%'    ), 0) AS SAC
     
         FROM
             PRODUCCION.dbo.view_master_pedidos_umk_v2 T0 	
