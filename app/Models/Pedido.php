@@ -107,6 +107,7 @@ class Pedido extends Model {
 
                 $response =   Pedido::where('id',  $id)->update([
                     "status" => $Valor,
+                    "updated_by" => Auth::user()->id,
                 ]);
 
                 //Pedido::SendNotifications($request);
