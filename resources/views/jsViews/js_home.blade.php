@@ -283,7 +283,7 @@
                         <div class="flex-1 ms-3">
                         
                             <div class="d-flex align-items-center">
-                                <h6 class="mb-1 fw-semi-bold text-nowrap"><a href="#!" onclick=" OpenModal(`+"'" + row.ARTICULO+"'"+`)"> <strong>`+  row.ARTICULO +`</strong></a> : `+row.DESCRIPCION.toUpperCase() +`</h6>
+                                <h6 class="mb-1 fw-semi-bold text-nowrap"><a href="#!" onclick=" OpenModal(`+"'" + row.ARTICULO+"'"+`,`+"'"+row.IMG_URL+"'"+`)"> <strong>`+  row.ARTICULO +`</strong></a> : `+row.DESCRIPCION.toUpperCase() +`</h6>
                                 `+  regla +`
                             </div>
                             <p class="fw-semi-bold mb-0 text-500"></p>   
@@ -929,7 +929,7 @@
                     return `<span class="badge rounded-pill ms-3 badge-soft-info ">`+ numeral(row.PRECIO).format('0,00.00')  +`</span> `
                 }},
                 ]
-    function OpenModal(Id){
+    function OpenModal(Id, img){
         var regla ='';
         var reglas_bonificadas;
         var myArray;
@@ -953,6 +953,8 @@
 
             initTable_modal('#tbl_bodegas',data[0].Bodega,tbl_header_bodega);
             //initTable_modal('#tbl_lista_precios',data[0].NivelPrecio,tbl_header_nivel_precio);
+            
+            $("#artImg").html('<img class="rounded-1 border border-200 img-fluid" src="'+img+'" alt="" width="200">');
 
             
             $("#id_precio_farmacia").html("C$ " + data[0].NivelPrecio[0].PRECIO)
@@ -1417,7 +1419,7 @@ var tooltipFormatter = function tooltipFormatter(params) {
                     _token      : "{{ csrf_token() }}" 
                 },
                 async: true,
-                success: function(response) {console.log(response);
+                success: function(response) {
                     Swal.fire("Correcto", "El producto ya no esta en revisión", "success");
                 },
                 error: function(response) {

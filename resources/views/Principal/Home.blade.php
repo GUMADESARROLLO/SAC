@@ -448,10 +448,10 @@
                   <div class="card h-100">
                     <div class="card-header">
                       <div class="row flex-between-center">
-                        <div class="col-auto">
-                          <h6 class="mb-2" id="id_reglas">Cargando ... </h6>
+                        <div class="col-4 d-flex align-items-center position-relative" id="artImg">
+                          
                         </div>
-                        <div class="col-auto">
+                        <div class="col-1">
                         </div>
                         
                         <div class="col-auto">
@@ -494,6 +494,9 @@
                             </div>
                             
                           </div>
+                          <div class="col-auto">
+                            <h6 class="mb-2" id="id_reglas">Cargando ... </h6>
+                          </div>
                           @if (Session::get('rol') == '1' || Session::get('rol') == '2') 
                             <div class="checkbox-container mr-5" style="text-align: right;">
                               <input type="checkbox" id="opcion1" name="opciones[]" value="">
@@ -501,9 +504,7 @@
                             </div>
                           @endif
                         </div>
-                        <div id="artImg">
-                            
-                          </div>
+                        
                       </div>
                     </div>
                     <div class="card-header">                    
