@@ -26,7 +26,7 @@
                     @csrf
                       <div class="mb-3">
                         <label class="form-label" for="username">Nombre de Usuario</label>
-                        <input id="username" type="text" class="form-control @error('username') is-invalid @enderror" name="username" value="{{ old('username') }}" required autocomplete="username" autofocus placeholder="Digite su nombre de Usuario">
+                        <input id="username" type="text" class="form-control @error('username') is-invalid @enderror" name="username" value="{{ old('username') }}" required autocomplete="username" autofocus placeholder="Nombre de Usuario">
                         @error('username')
                             <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
                         @enderror
@@ -35,21 +35,20 @@
                       <div class="d-flex justify-content-between">
                             <label class="form-label" for="card-password">Contraseña</label>
                           </div>
-                    <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" required autocomplete="current-password" placeholder="Ingrese su Contraseña">
+                    <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" required autocomplete="current-password" placeholder="Contraseña">
                         @error('password')
                         <span class="invalid-feedback" role="alert">
                             <strong>{{ $message }}</strong>
                         </span>
                     @enderror
                       </div>
-                      <div class="row flex-between-center invisible">
+                      <div class="row flex-between-center">
                         <div class="col-auto">
-                          <div class="form-check mb-0">
-                            <input class="form-check-input" type="checkbox" id="split-checkbox" />
-                            <label class="form-check-label mb-0" for="split-checkbox">Remember me</label>
+                          <div class="mb-0">
+                            <label class="mb-0" for="split-checkbox">{{ENV('APP_VERSION')}}</label>
                           </div>
                         </div>
-                        <div class="col-auto"><a class="fs--1" href="../../../pages/authentication/split/forgot-password.html">Forgot Password?</a></div>
+                        <div class="col-auto"><a class="fs--1" href="#!">Forgot Password?</a></div>
                       </div>
                       <div class="mb-3">
                         <button class="btn btn-primary d-block w-100 mt-3" type="submit" name="submit">{{ __('ACCEDER') }}</button>

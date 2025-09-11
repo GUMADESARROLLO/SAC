@@ -27,6 +27,7 @@ use App\Models\Logs;
 use Illuminate\Support\Str;
 Use UxWeb\SweetAlert\SweetAlert;
 use Exception;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Psy\Readline\Hoa\Console;
@@ -497,6 +498,7 @@ class HomeController extends Controller {
         try{
             $articulo = $request->input('Articulo');
             $op = $request->input('Opcion');
+            $id_user = Auth::id();
             if($op == 1){
                 $created_at = today();
 
@@ -504,13 +506,14 @@ class HomeController extends Controller {
 
                 $cuarentena->ARTICULO = $articulo;
                 $cuarentena->created_at = $created_at;
+                $cuarentena->id_user = $id_user;
                 
                 $response = $cuarentena->save();
             }else{
                 $response = Cuarentena::where('ARTICULO', $articulo)->delete();
             }
 
-            
+            return $id_user;
         }catch (Exception $e) {
             $mensaje =  'Excepción capturada: ' . $e->getMessage() . "\n";
             alert()->error($mensaje, 'ERROR')->persistent('Close');
