@@ -534,16 +534,23 @@ class GmvApi extends Model
         $orderBy = strtolower($OrderBy);
         $i = 0;
         $json = array();
-
-        $response = DB::connection('mysql_gumanet')->table('tbl_comentarios')->where('Autor', $Ruta)->orderBy('Fecha', $orderBy)->get();
+        
+        $response = gnetInteligenciaMercado::where('Autor', $Ruta)->orderBy('Fecha', $orderBy)->get();
 
         if(count($response) >= 1){
             foreach($response as $row){
-                $json[$i]['Titulo']    = $row->Titulo;
-                $json[$i]['Contenido'] = $row->Contenido;
-                $json[$i]['Fecha']     = $row->Fecha;
-                $json[$i]['Autor']     = $row->Autor;
-                $json[$i]['Imagen']    = Storage::temporaryUrl('news/'.$row->Imagen, now()->addMinutes(5));;
+                
+                $ImgUrl = ($row->Imagen === "") ? 'ND' : Storage::temporaryUrl('news/'.$row->Imagen , now()->addMinutes(5));
+
+                $json[$i] = [
+                    'IdPost'    => $row->id,
+                    'Titulo'    => $row->Titulo,
+                    'Contenido' => $row->Contenido,
+                    'Fecha'     => $row->Fecha,
+                    'Autor'     => $row->Autor,
+                    'Imagen'    => $ImgUrl,
+                    'Count'     => $row->getComentarios()->count() . ' Comentarios.'
+                ];
                 $i++;
             }
         }
@@ -963,9 +970,17 @@ class GmvApi extends Model
                 Storage::disk('s3')->put('news/'.$nama_imagen, base64_decode($imagektp));  
             }
 
-            $query = "INSERT INTO tbl_comentarios (Titulo,Contenido, Autor, Nombre,Fecha,Imagen,empresa,`Read`,updated_at) VALUES ('$Nombre','$Comentario', '$CodRuta', '$NamRuta','$Fecha','$nama_imagen','$Empresa','$Read','$Updated_at')";
-            $response = DB::connection('mysql_gumanet')->select($query);
-            //$response = DB::insert($query);
+            $response = gnetInteligenciaMercado::insert([
+                'Titulo' => $Nombre,
+                'Contenido' => $Comentario,
+                'Autor' => $CodRuta,
+                'Nombre' => $NamRuta,
+                'Fecha' => $Fecha,
+                'Imagen' => $nama_imagen,
+                'empresa' => $Empresa,
+                'Read' => $Read,
+                'updated_at' => $Updated_at
+            ]);
 
             if($response){
                 return array('Success'=>'Data Inserted Successfully');
