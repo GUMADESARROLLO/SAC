@@ -15,6 +15,7 @@ use Exception;
 
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\Storage;
+use App\Services\OneSignalService;
 
 class GmvApi extends Model
 {  
@@ -1055,6 +1056,22 @@ class GmvApi extends Model
             return response()->json($mensaje);
         }        
         
+    }
+
+    /**
+     * Envía una notificación push a un usuario específico.
+     *
+     * @param  string  $userId   ID del usuario (external_user_id o player_id)
+     * @param  string  $title    Título de la notificación
+     * @param  string  $message  Cuerpo del mensaje
+     * @param  array   $data     Datos adicionales (opcional)
+     * @return array   Respuesta de OneSignal
+     */
+    public static function sendNotification($userId, $title, $message, $data = [])
+    {
+        $oneSignal = app(OneSignalService::class);
+
+        return $oneSignal->sendToUser($userId, $title, $message, $data);
     }
 
 

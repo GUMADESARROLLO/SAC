@@ -208,6 +208,29 @@ class GmvApiController extends Controller{
         return response()->json($obj);
     }
 
+/**
+ * Envía una notificación push a un usuario específico.
+ * 
+ * @param  string  $userId   ID del usuario (external_user_id o player_id)
+ * @param  string  $title    Título de la notificación
+ * @param  string  $message  Cuerpo del mensaje
+ * @param  array   $data     Datos adicionales (opcional)
+ * @return array   Respuesta de OneSignal
+ */
+
+    public function SendNotification(Request $request)
+    {
+        $result = GmvApi::sendNotification(
+            env('ONESIGNAL_API_USR'),
+            '¡Hola!',                         
+            'Tienes un nuevo mensaje 🎉', 
+            ['tipo' => 'alerta']  
+        );
+
+
+        return response()->json($result);
+    }
+
     public function push_pin(Request $request){
         $obj = GmvApi::push_pin($request);
 
