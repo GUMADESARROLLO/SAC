@@ -191,6 +191,22 @@ class GmvApiController extends Controller{
 
         return response()->json($obj);
     }
+    public function post_add_comments_im(Request $request){
+        $obj = GmvApi::post_add_comments_im($request);
+
+        return response()->json($obj);
+    }
+
+    public function post_remove_post_im(Request $request){
+        $obj = GmvApi::post_remove_post_im($request);
+
+        return response()->json($obj);
+    }
+    public function remove_comments(Request $request){
+        $obj = GmvApi::remove_comments($request);
+
+        return response()->json($obj);
+    }
 
     public function push_pin(Request $request){
         $obj = GmvApi::push_pin($request);

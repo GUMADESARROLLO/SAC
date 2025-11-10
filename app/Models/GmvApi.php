@@ -993,6 +993,72 @@ class GmvApi extends Model
             return response()->json($mensaje);
         }
     }
+    public static function post_add_comments_im(Request $request){
+        try{
+            $IdPost          = $request->input('IdPost');
+            $Comment         = $request->input('Comment');
+            $CeatedBy        = $request->input('CeatedBy');            
+            $UpdatedAt       = date('Y-m-d H:i:s');
+        
+            $response = gnetInteligenciaComment::insert([
+                'id_post'    => $IdPost,
+                'comments'   => $Comment,
+                'created_by' => $CeatedBy,
+                'created_at' => $UpdatedAt
+            ]);
+
+            if($response){
+                return array('Success'=>'Data Inserted Successfully');
+            }else {
+                return array('Error'=>'Try Again');
+            }
+
+        }catch (Exception $e) {
+            $mensaje =  'Excepción capturada: ' . $e->getMessage() . "\n";
+            return response()->json($mensaje);
+        }
+    }
+    public static function post_remove_post_im(Request $request){
+        try{
+            $IdPost          = $request->input('IdPost');
+        
+            $rpPost     = gnetInteligenciaMercado::where('id', $IdPost)->delete();
+            $rpCommebts = gnetInteligenciaComment::where('id_post', $IdPost)->delete();
+
+            if($rpCommebts){
+                return array('Success'=>'Post Removed Successfully');
+            }else {
+                return array('Error'=>'Try Again');
+            }
+
+        }catch (Exception $e) {
+            $mensaje =  'Excepción capturada: ' . $e->getMessage() . "\n";
+            return response()->json($mensaje);
+        }        
+        
+    }
+
+    public static function remove_comments(Request $request){
+        try{
+            $IdComment          = $request->input('comment_id');
+        
+            $rpComments = gnetInteligenciaComment::where('id_comments', $IdComment)->delete();
+
+            if($rpComments){
+                return array('Success'=>'Comment Removed Successfully');
+            }else {
+                return array('Error'=>'Try Again');
+            }
+
+        }catch (Exception $e) {
+            $mensaje =  'Excepción capturada: ' . $e->getMessage() . "\n";
+            return response()->json($mensaje);
+        }        
+        
+    }
+
+
+    
 
     public static function post_update_datos(Request $request){
         $KeysSecret 	= "A7M";
