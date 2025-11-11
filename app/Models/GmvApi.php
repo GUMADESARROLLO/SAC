@@ -959,6 +959,7 @@ class GmvApi extends Model
             $NamRuta        = $request->input('sndNombre');
             $Comentario     = $request->input('snd_comentario');
             $imagektp       = $request->input('snd_image');
+            $IdOneSignal    = $request->input('IdOneSignal');
             $Empresa        = '1';
             $Read           = '0';
             $Updated_at     = date('Y-m-d H:i:s');
@@ -980,7 +981,8 @@ class GmvApi extends Model
                 'Imagen' => $nama_imagen,
                 'empresa' => $Empresa,
                 'Read' => $Read,
-                'updated_at' => $Updated_at
+                'updated_at' => $Updated_at,
+                'IdOneSignal' => $IdOneSignal
             ]);
 
             if($response){
@@ -998,14 +1000,16 @@ class GmvApi extends Model
         try{
             $IdPost          = $request->input('IdPost');
             $Comment         = $request->input('Comment');
-            $CeatedBy        = $request->input('CeatedBy');            
+            $CeatedBy        = $request->input('CeatedBy');
+            $IdOneSignal     = $request->input('IdOneSignal');       
             $UpdatedAt       = date('Y-m-d H:i:s');
         
             $response = gnetInteligenciaComment::insert([
                 'id_post'    => $IdPost,
                 'comments'   => $Comment,
                 'created_by' => $CeatedBy,
-                'created_at' => $UpdatedAt
+                'created_at' => $UpdatedAt,
+                'IdOneSignal' => $IdOneSignal
             ]);
 
             if($response){

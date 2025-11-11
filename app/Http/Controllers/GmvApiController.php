@@ -220,10 +220,13 @@ class GmvApiController extends Controller{
 
     public function SendNotification(Request $request)
     {
+        //$IdOneSignal = $request->input('IdOneSignal');
+        $IdOneSignal = env('ONESIGNAL_API_USR');
+        
         $result = GmvApi::sendNotification(
-            env('ONESIGNAL_API_USR'),
-            '¡Hola!',                         
-            'Tienes un nuevo mensaje 🎉', 
+            $IdOneSignal,
+            'Notificación',                         
+            'Respondieron tu comentario.', 
             ['tipo' => 'alerta']  
         );
 
