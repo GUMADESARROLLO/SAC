@@ -191,6 +191,48 @@ class GmvApiController extends Controller{
 
         return response()->json($obj);
     }
+    public function post_add_comments_im(Request $request){
+        $obj = GmvApi::post_add_comments_im($request);
+
+        return response()->json($obj);
+    }
+
+    public function post_remove_post_im(Request $request){
+        $obj = GmvApi::post_remove_post_im($request);
+
+        return response()->json($obj);
+    }
+    public function remove_comments(Request $request){
+        $obj = GmvApi::remove_comments($request);
+
+        return response()->json($obj);
+    }
+
+/**
+ * Envía una notificación push a un usuario específico.
+ * 
+ * @param  string  $userId   ID del usuario (external_user_id o player_id)
+ * @param  string  $title    Título de la notificación
+ * @param  string  $message  Cuerpo del mensaje
+ * @param  array   $data     Datos adicionales (opcional)
+ * @return array   Respuesta de OneSignal
+ */
+
+    public function SendNotification(Request $request)
+    {
+        //$IdOneSignal = $request->input('IdOneSignal');
+        $IdOneSignal = env('ONESIGNAL_API_USR');
+        
+        $result = GmvApi::sendNotification(
+            $IdOneSignal,
+            'Notificación',                         
+            'Respondieron tu comentario.', 
+            ['tipo' => 'alerta']  
+        );
+
+
+        return response()->json($result);
+    }
 
     public function push_pin(Request $request){
         $obj = GmvApi::push_pin($request);
