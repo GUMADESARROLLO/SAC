@@ -52,7 +52,7 @@ class Pedido extends Model {
                 }
 
                 $GrupoB = ['F2614', 'F2606', 'F2707', 'F2708', 'F2804', 'F2802', 'F2822'];
-                $Rutas = array_merge($Rutas, GrupoB);
+                $Rutas = array_merge($Rutas, $GrupoB);
                 
             }else{
                 $Usuario = Usuario::where('username',$SAC)->get();
