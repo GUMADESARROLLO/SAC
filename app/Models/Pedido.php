@@ -26,6 +26,7 @@ class Pedido extends Model {
     {
         $Rutas          = array();
         $Condicionales  = array();
+        $GrupoB         = array();
 
         $Estados        = ['PENDIENTE','PROCESADO','CANCELADO'];
         $ColorSt        = ['danger','success','info'];        
@@ -45,7 +46,7 @@ class Pedido extends Model {
 
             if($SAC == '0'){
                 $Vendedor = Vendedor::getVendedor();
-                
+
                 foreach ($Vendedor as $v){
                     $Rutas[] = $v->VENDEDOR;
                 }
