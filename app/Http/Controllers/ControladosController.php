@@ -136,7 +136,7 @@ class ControladosController extends Controller {
         /* ===== DESCARGA ===== */
 
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-		header('Content-Disposition: attachment;filename="Controlados '.$desde.' al '.$hasta.'.xlsx"');
+		header('Content-Disposition: attachment;filename="Controlados '.$Desde.' al '.$Hasta.'.xlsx"');
 		header('Cache-Control: max-age=0');
 
 		$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
