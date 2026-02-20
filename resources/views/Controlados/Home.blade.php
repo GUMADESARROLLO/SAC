@@ -1,4 +1,4 @@
-@extends('layouts.lyt_gumadesk')
+@extends('layouts.lyt_controlados')
 @section('metodosjs')
     @include('Controlados.js_controlados')
 @endsection

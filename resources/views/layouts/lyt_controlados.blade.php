@@ -43,6 +43,7 @@
     <link href="{{ asset('css/jquery.dataTables.min.css') }}" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/pikaday/css/pikaday.css">
     
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
     <script>
         var linkRTL = document.getElementById('style-rtl');
         var userLinkRTL = document.getElementById('user-style-rtl');
@@ -149,6 +150,10 @@ if ( typeof jQuery != "undefined" )
     <script src="https://cdn.datatables.net/select/1.4.0/js/dataTables.select.min.js"></script>
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <script src="{{ asset('js/theme_gumadesk/flatpickr.js') }}"></script>
+
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
     
 
 
