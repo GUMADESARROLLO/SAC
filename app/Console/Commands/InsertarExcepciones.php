@@ -31,7 +31,14 @@ class InsertarExcepciones extends Command
         $fecha = $this->argument('fecha') ?? date('Y-m-d');
 
         try {
+            // EXEC sp_gmv_insertar_excepciones @FechaInicio = '2026-02-01';
+
+
+            //DB::connection('sqlsrv')->statement('SET NOCOUNT ON; EXEC sp_gmv_masterArticulos_update');            
+            // RECUPERA TODO LO FACTURADO DE EXPANSION Y LO INSERTA EN LA TABLA DE EXCEPCIONES PARA QUE SE PUEDA CONSULTAR DESDE GMV
             DB::connection('sqlsrv')->statement('SET NOCOUNT ON; EXEC PRODUCCION.dbo.sp_gmv_insertar_excepciones @FechaInicio = ?', [$fecha]);
+
+
             $this->info("Stored procedure ejecutado correctamente para FechaInicio={$fecha}");
             return 0;
         } catch (\Exception $e) {
