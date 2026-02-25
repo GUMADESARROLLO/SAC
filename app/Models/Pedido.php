@@ -81,14 +81,6 @@ class Pedido extends Model {
         $query = Pedido::whereBetween('date_time', [$start, $end])->where($Condicionales)->whereIn('name',$Rutas)->get(); 
 
 
-        echo $start;
-        echo $end;
-        print_r($Condicionales);
-        dd();
-
-      
-
-
 
 
         $i = 0;
