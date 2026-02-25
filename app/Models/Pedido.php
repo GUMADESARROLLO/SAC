@@ -70,10 +70,6 @@ class Pedido extends Model {
                     $Rutas[] = $Rts->RUTA;
                 }
             }
-            if(Auth::id() == 10){
-                $GrupoB = ['F2614', 'F2606', 'F2707', 'F2708', 'F2804', 'F2822'];
-                $Rutas = array_merge($Rutas, $GrupoB);
-            }
         }
 
         if($Estado != -1){
@@ -85,6 +81,12 @@ class Pedido extends Model {
         
 
         $query = Pedido::whereBetween('date_time', [$start, $end])->where($Condicionales)->whereIn('name',$Rutas)->get(); 
+
+
+        echo $start;
+        echo $end;
+        print_r($Condicionales);
+        dd();
 
       
 
