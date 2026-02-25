@@ -26,6 +26,7 @@ class Pedido extends Model {
     {
         $Rutas          = array();
         $Condicionales  = array();
+        $GrupoB         = array();
 
         $Estados        = ['PENDIENTE','PROCESADO','CANCELADO'];
         $ColorSt        = ['danger','success','info'];        
@@ -36,15 +37,23 @@ class Pedido extends Model {
         $Estado     = $request->input('Estado');
         $SAC        = $request->input('SAC');
 
+
+      
+
         $rol = Session::get('rol');
         
-        if($rol == 1 || $rol ==2){
+        if($rol == 1 || $rol ==2 ){
 
             if($SAC == '0'){
                 $Vendedor = Vendedor::getVendedor();
+
                 foreach ($Vendedor as $v){
                     $Rutas[] = $v->VENDEDOR;
                 }
+
+                $GrupoB = ['F2614', 'F2606', 'F2707', 'F2708', 'F2804', 'F2802', 'F2822'];
+                $Rutas = array_merge($Rutas, $GrupoB);
+                
             }else{
                 $Usuario = Usuario::where('username',$SAC)->get();
                 foreach ($Usuario as $rec){            
@@ -54,8 +63,7 @@ class Pedido extends Model {
                 }
             }
             
-        }else{
-            
+        }else{            
             $Usuario = Usuario::where('id',Auth::id())->get();
             foreach ($Usuario as $rec){            
                 foreach ($rec->Detalles as $Rts){
@@ -68,22 +76,30 @@ class Pedido extends Model {
             $Condicionales[] = ['status', '=', $Estado];
         }
 
-        $query = Pedido::whereBetween('date_time', [$start, $end])->where($Condicionales)->whereIn('name',$Rutas)->get();
+        
 
- 
+        
+
+        $query = Pedido::whereBetween('date_time', [$start, $end])->where($Condicionales)->whereIn('name',$Rutas)->get(); 
+
+      
+
+
 
 
         $i = 0;
         $json = array();
         foreach ($query as $fila) {
+
+            $CodeRuta = substr($fila["name"], 0, 3);
+
             $json[$i]["id"]             = $fila["id"];
             $json[$i]["code"]           = $fila["code"];
             $json[$i]["CLIENTE"]        = $fila["email"];
             $json[$i]["DESCRIPCION"]    = $fila["phone"];
             $json[$i]["DIRECCION"]      = $fila["address"];
-
             $json[$i]["RUTA"]           = $fila["name"];
-            $json[$i]["VENDEDOR"]       = Vendedor::where('VENDEDOR',$fila["name"])->get()->pluck('NOMBRE')[0];            
+            $json[$i]["VENDEDOR"]       = Vendedor::where('VENDEDOR',$CodeRuta)->get()->pluck('NOMBRE')[0] ?? 'N/D';            
             $json[$i]["FECHA"]          = date('M d, Y h:i A', strtotime($fila["created_at"])) ;
             $json[$i]["ARTICULOS"]      = $fila["order_list"];
             $json[$i]["MONTO"]          = $fila["order_total"];

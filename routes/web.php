@@ -80,3 +80,10 @@ Route::post('getDevoluciones', 'DevolucionesController@getData')->name('getDevol
 Route::post('reutilizar', 'ScheduleController@reutilizar')->name('reutilizar');
 
 Route::post('insertCuarentena', 'HomeController@insertCuarentena')->name('insertCuarentena');
+
+Route::get('Controlados', 'ControladosController@getControlados')->name('Controlados');
+Route::post('GetDataControlados', 'ControladosController@GetDataControlados')->name('GetDataControlados');
+Route::get('ControladosExport/{Desde}/{Hasta}', 'ControladosController@ControladosExport')->name('ControladosExport');
+
+
+
