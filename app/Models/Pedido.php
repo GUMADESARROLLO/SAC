@@ -51,7 +51,7 @@ class Pedido extends Model {
                     $Rutas[] = $v->VENDEDOR;
                 }
 
-                $GrupoB = ['F2614', 'F2606', 'F2707', 'F2708', 'F2804', 'F2802', 'F2822','F2911'];
+                $GrupoB = ['F2614', 'F2606', 'F2707', 'F2708', 'F2804', 'F2802', 'F2822','F2911','F2503','F2513','F3009','F3010'];
                 $Rutas = array_merge($Rutas, $GrupoB);
                 
             }else{
