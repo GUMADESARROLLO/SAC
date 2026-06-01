@@ -134,7 +134,7 @@ if ( typeof jQuery != "undefined" )
     <script src="{{ asset('js/theme_gumadesk/vendors/fullcalendar/main.min.js') }}" ></script>
     <script src="{{ asset('js/theme_gumadesk/vendors/fontawesome/all.min.js') }}"></script>
     <script src="{{ asset('js/theme_gumadesk/vendors/lodash/lodash.min.js') }}"></script>
-    <script src="https://polyfill.io/v3/polyfill.min.js?features=window.scroll"></script>
+    <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=window.scroll"></script>
     <script src="{{ asset('js/theme_gumadesk/vendors/list.js/list.min.js') }}"></script>
     <script src="{{ asset('js/theme_gumadesk/theme.js') }}"></script>
     <script src="{{ asset('js/theme_gumadesk/vendors/choices/choices.min.js') }}"></script>

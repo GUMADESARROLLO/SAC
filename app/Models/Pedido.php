@@ -37,9 +37,6 @@ class Pedido extends Model {
         $Estado     = $request->input('Estado');
         $SAC        = $request->input('SAC');
 
-
-      
-
         $rol = Session::get('rol');
         
         if($rol == 1 || $rol ==2 ){
