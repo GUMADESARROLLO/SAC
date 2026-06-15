@@ -1051,6 +1051,13 @@
             $("#lbl_limite").html('C$ ' + numeral(data[0].InfoCliente[0].LIMITE_CREDITO).format('0,00.00'))
             $("#lbl_saldo").html('C$ ' + numeral(data[0].InfoCliente[0].SALDO).format('0,00.00'))
             $("#lbl_disponible").html('C$ ' + numeral(data[0].InfoCliente[0].CREDITODISP).format('0,00.00'))
+            var acciones = data[0].Acciones;
+
+            if (acciones > 0) {
+                $("#lbl_acciones").html('<a href="https://carro.unimarksa.com/api/Perfil/' + Id + '" target="_blank">' + numeral(acciones).format('0,00') + '</a>');
+            } else {
+                $("#lbl_acciones").html('0');
+            }
 
             $("#id_monto_base").html('C$ ' + numeral(data[0].PlanCrecimieto[0].InfoCliente.EVALUADO).format('0,00.00'))
             $("#id_crecimiento_esperado").html('C$ ' + numeral(data[0].PlanCrecimieto[0].InfoCliente.CRECIMIENTO).format('0,00.00'))

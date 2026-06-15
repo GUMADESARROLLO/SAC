@@ -564,17 +564,21 @@
                       <div class="d-flex">
                         <div class="flex-1">
                           <div class="row mb-2">
-                            <div class="col-4 border-end border-200">
-                              <h4 class="mb-0"> <span id="lbl_limite"></span> </h4>
+                            <div class="col-3 border-end border-200">
+                              <h4 class="mb-0"> <span id="lbl_limite">0.00</span></h4>
                               <p class="fs--1 text-600 mb-0">Limite de Credito</p>
                             </div>
-                            <div class="col-4 border-end text-center border-200">
-                              <h4 class="mb-0"> <span id="lbl_saldo"></span></h4>
+                            <div class="col-3 border-end text-center border-200">
+                              <h4 class="mb-0"> <span id="lbl_saldo">0.00</span></h4>
                               <p class="fs--1 text-600 mb-0">Saldo</p>
                             </div>
-                            <div class="col-4 text-center">
-                              <h4 class="mb-0"> <span id="lbl_disponible"></span> </h4>
+                            <div class="col-3 text-center border-end border-200">
+                              <h4 class="mb-0"> <span id="lbl_disponible">0.00</span></h4>
                               <p class="fs--1 text-600 mb-0">Disponible</p>
+                            </div>
+                            <div class="col-3 text-center">
+                              <h4 class="mb-0"> <span id="lbl_acciones">0</span> </h4>
+                              <p class="fs--1 text-600 mb-0">No. Acciones</p>
                             </div>
                           </div>
                           <hr class="my-4" />

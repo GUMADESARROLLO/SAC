@@ -175,6 +175,8 @@ class HomeController extends Controller {
 
         $Lista_articulos_Favoritos = ArticuloFavoritos::all();
         $getListaNegra = DB::connection('sqlsrv')->select('SELECT * FROM PRODUCCION.dbo.tbl_articulos_lista_negra');
+        $getRifas = DB::connection('sqlsrv')->select('SELECT * FROM PRODUCCION.dbo.view_sac_rifa_num_cliente WHERE CLIENTE = '.$idCliente);
+        $getNumRifas = !empty($getRifas) ? $getRifas[0]->TOTAL_ACCIONES : 0;
 
         foreach ($Lista_articulos_Favoritos as $rec){
             $articulos_favoritos[] = $rec->Articulo;
@@ -192,7 +194,8 @@ class HomeController extends Controller {
             'ClientesHistoricoFactura'      => ClientesHistoricoFactura::where('COD_CLIENTE', $idCliente)->orderBy('Dia', 'DESC')->get(),            
             'ArticulosNoFacturado'          => Inventario::whereNotIn('ARTICULO', function($q)  use ($idCliente){
                                                     $q->select('ARTICULO')->from('PRODUCCION.dbo.GMV3_hstCompra_3M')->where("CLIENTE", $idCliente);
-                                                })->whereIn('ARTICULO',$articulos_favoritos)->whereNotIn('ARTICULO', $lista_negra)->get(),            
+                                                })->whereIn('ARTICULO',$articulos_favoritos)->whereNotIn('ARTICULO', $lista_negra)->get(),
+            'Acciones'                      => $getNumRifas,
         );
 
         return response()->json($dtaCliente);
