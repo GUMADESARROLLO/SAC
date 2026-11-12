@@ -39,6 +39,9 @@ Route::post('SaveUsuario', 'UsuarioController@SaveUsuario')->name('SaveUsuario')
 Route::post('DeleteUsuario', 'UsuarioController@DeleteUsuario')->name('DeleteUsuario');
 Route::get('getRutas', 'UsuarioController@getRutas')->name('getRutas');
 
+// Equipo SAC: estados y reportes (vista previa con datos simulados)
+Route::get('EquipoSac', 'UsuarioController@getEquipoSac')->name('EquipoSac');
+
 Route::post('AsignarRuta', 'UsuarioController@AsignarRuta')->name('AsignarRuta');
 Route::post('RemoverRutaAsignada', 'UsuarioController@RemoverRutaAsignada')->name('RemoverRutaAsignada');
 

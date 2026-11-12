@@ -158,6 +158,11 @@
       $id('sacUActivoTxt').textContent = $id('sacUActivo').checked ? 'Activo · puede ingresar' : 'Inactivo · no puede ingresar';
     }
     $id('sacUActivo').addEventListener('change', pintarEstado);
+    // Equipo SAC (vista previa, no se envía al servidor)
+    function pintarEsSac() {
+      $id('sacUEsSacTxt').textContent = $id('sacUEsSac').checked ? 'Mide estados y tiempo efectivo' : 'No mide estados';
+    }
+    $id('sacUEsSac').addEventListener('change', pintarEsSac);
 
     function error(m) { $id('sacUErr').textContent = m || ''; $id('sacUErr').hidden = !m; }
 
@@ -171,6 +176,8 @@
       $id('sacUUser').value = u ? u.username : '';
       $id('sacURol').value = u ? u.id_rol : '';
       $id('sacUActivo').checked = u ? u.activo === 'S' : true;
+      $id('sacUEsSac').checked = u ? (u.id_rol === '9' || u.id_rol === '2') : false;
+      pintarEsSac();
       $id('sacUPass').value = ''; $id('sacUPass2').value = '';
       $id('sacUPass').placeholder = u ? 'Dejar vacío para mantener la actual' : 'Mínimo 8 caracteres';
       $id('sacUPassHint').textContent = u ? 'Mínimo 8 caracteres. Solo complétala si quieres restablecerla.' : 'Mínimo 8 caracteres. Obligatoria para un usuario nuevo.';

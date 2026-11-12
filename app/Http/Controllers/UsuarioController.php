@@ -38,6 +38,30 @@ class UsuarioController extends Controller {
         return view('Usuario.Home', compact('Usuarios', 'Roles', 'Rutas'));
     }
 
+    /**
+     * Equipo SAC: panel en vivo y reportes de estados.
+     * Vista previa: solo se leen los nombres de los SAC; estados, tiempos y pedidos se simulan en el navegador.
+     */
+    public function getEquipoSac()
+    {
+        if (!$this->puedeAdministrar()) {
+            return redirect()->route('Home');
+        }
+        $Sacs = Usuario::getUsuarios()
+            ->filter(function ($u) { return in_array((string) $u->id_rol, ['2', '9'], true) && $u->activo !== 'N'; })
+            ->map(function ($u) {
+                $t = trim((string) $u->nombre);
+                if (mb_strpos($t, '|') !== false) { $p = array_filter(array_map('trim', explode('|', $t))); $t = end($p) ?: $t; }
+                return [
+                    'id'       => $u->id,
+                    'nombre'   => mb_convert_case(mb_strtolower($t, 'UTF-8'), MB_CASE_TITLE, 'UTF-8'),
+                    'username' => strtoupper((string) $u->username),
+                ];
+            })->values();
+
+        return view('EquipoSac.Home', compact('Sacs'));
+    }
+
     public function SaveUsuario(Request $request)
     {
         if (!$this->puedeAdministrar()) {

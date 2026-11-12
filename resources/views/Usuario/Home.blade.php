@@ -187,6 +187,15 @@
             <span id="sacUActivoTxt">Activo · puede ingresar</span>
           </label>
         </div>
+        {{-- Vista previa: aún no se guarda (la marca real será users.es_sac) --}}
+        <div class="sac-pf">
+          <span class="form-label">Equipo SAC <span class="sac-tag sac-tag-info sac-tag-xs">Vista previa</span></span>
+          <label class="d-inline-flex align-items-center gap-2 m-0" style="cursor: pointer">
+            <span class="sac-switch sac-switch-ok"><input type="checkbox" role="switch" id="sacUEsSac"><span aria-hidden="true"></span></span>
+            <span id="sacUEsSacTxt">No mide estados</span>
+          </label>
+          <span class="sac-hint" style="margin-top: 2px">Si está activo, el usuario marca En línea, AFK o Almuerzo y aparece en los reportes de Equipo SAC.</span>
+        </div>
 
         <hr class="sac-hr">
         <p class="sac-sec">Acceso</p>
