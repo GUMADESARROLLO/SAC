@@ -332,22 +332,14 @@
       '<span class="sac-eq-th-ley">' + leyenda + '</span></th>' +
       dias.map(function (d) {
         return '<th scope="col" class="sac-eq-dia' + (mismoDia(d, HOY) ? ' is-hoy' : '') + (!esHabil(d) ? ' is-fds' : '') + '"><span class="sac-eq-dnum">' + d.getDate() + '</span><span class="sac-eq-dabr">' + DIAS_ABR[d.getDay()] + (variosMeses ? ' · ' + MESES[d.getMonth()].toUpperCase() : '') + '</span></th>';
-      }).join('') + '<th scope="col" class="sac-eq-col-tot"><span class="sac-eq-th">Total</span><span class="sac-eq-th-ley">' + esc(textoSemana()) + '</span></th></tr>';
+      }).join('') + '</tr>';
+    // El total del periodo solo va en el Excel (Exportar)
 
     var lista = sacsFiltrados().slice().sort(function (a, b) { return a.nombre.localeCompare(b.nombre); });
     document.getElementById('sacEqResBody').innerHTML = lista.length ? lista.map(function (s) {
-      var tot = { on: 0, afk: 0, lunch: 0 }, conDatos = 0;
-      var celdas = dias.map(function (d) {
-        var i = infoDia(s, d);
-        if (i.tipo === 'datos') { conDatos++; tot.on += i.t.on; tot.afk += i.t.afk; tot.lunch += i.t.lunch; }
-        return celdaDia(s, i);
-      }).join('');
-      var base = tot.on + tot.afk + tot.lunch;
-      return '<tr><th scope="row" class="sac-eq-col-sac">' + nombreSac(s) + '</th>' + celdas +
-        '<td class="sac-eq-col-tot">' + (conDatos
-          ? bloqueEstados(tot, base, pct(tot.on, base), false, '<strong>' + esc(s.nombre) + '</strong><span>Total ' + esc(textoSemana()) + '</span><span>En línea ' + durC(tot.on) + '</span><span>AFK ' + durC(tot.afk) + '</span><span>Descanso ' + durC(tot.lunch) + '</span><span>' + conDatos + (conDatos === 1 ? ' día' : ' días') + ' con registro</span>')
-          : '<span class="sac-muted">Sin registro</span>') + '</td></tr>';
-    }).join('') : '<tr><td colspan="' + (dias.length + 2) + '"><p class="sac-empty">No hay usuarios SAC activos.</p></td></tr>';
+      var celdas = dias.map(function (d) { return celdaDia(s, infoDia(s, d)); }).join('');
+      return '<tr><th scope="row" class="sac-eq-col-sac">' + nombreSac(s) + '</th>' + celdas + '</tr>';
+    }).join('') : '<tr><td colspan="' + (dias.length + 1) + '"><p class="sac-empty">No hay usuarios SAC activos.</p></td></tr>';
   }
 
   // =====================================================================

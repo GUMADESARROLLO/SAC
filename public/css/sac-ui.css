@@ -1371,7 +1371,7 @@ body.sac #crm-schedule .calendar-outline { border-top: 0; }
 .sac-eq-filtros .sac-eq-semana[hidden] { display: none !important; }
 body.sac .sac-eq-ico { width: 40px; padding: 0; }
 .sac-eq-sembox { border-top: 1px solid var(--sac-border-soft); }
-table.sac-eq-sem { width: 100%; min-width: 1040px; border-collapse: separate; border-spacing: 0; font-size: 13px; color: var(--sac-ink); }
+table.sac-eq-sem { width: 100%; min-width: 900px; border-collapse: separate; border-spacing: 0; font-size: 13px; color: var(--sac-ink); }
 .sac-eq-sem th, .sac-eq-sem td { border-bottom: 1px solid var(--sac-border-soft); border-left: 1px solid var(--sac-border-soft); padding: 10px 8px; vertical-align: middle; }
 .sac-eq-sem th:first-child, .sac-eq-sem td:first-child { border-left: 0; }
 .sac-eq-sem thead th { background: var(--sac-surface-2); font-weight: 500; }
