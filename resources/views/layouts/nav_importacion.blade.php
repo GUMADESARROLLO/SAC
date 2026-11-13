@@ -27,7 +27,6 @@
           <!-- <a class="dropdown-item" href="{{ route('CalendarPromocion') }}">Calendario de promociones</a> -->
           <a class="dropdown-item" href="{{ route('EquipoSac') }}">Equipo SAC</a>
           <a class="dropdown-item" href="{{ route('Usuarios') }}">Usuarios</a>
-          <a class="dropdown-item" href="{{ route('monitoring') }}">Monitoreo</a>
           <div class="dropdown-divider"></div>
         @endif
         <a class="dropdown-item" href="{{ route('logout') }}">Cerrar sesión</a>

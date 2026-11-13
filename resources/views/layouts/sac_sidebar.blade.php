@@ -60,7 +60,6 @@
             <!-- <a class="sac-ni {{ request()->routeIs('CalendarPromocion') ? 'on' : '' }}" href="{{ route('CalendarPromocion') }}" title="Calendario promociones">{!! $svg('cal') !!}<span class="sac-lbl">Calendario promociones</span></a> -->
             <a class="sac-ni {{ request()->routeIs('EquipoSac') ? 'on' : '' }}" href="{{ route('EquipoSac') }}" @if(request()->routeIs('EquipoSac')) aria-current="page" @endif title="Equipo SAC">{!! $svg('equipo') !!}<span class="sac-lbl">Equipo SAC</span></a>
             <a class="sac-ni {{ request()->routeIs('Usuarios') ? 'on' : '' }}" href="{{ route('Usuarios') }}" title="Usuarios">{!! $svg('users') !!}<span class="sac-lbl">Usuarios</span></a>
-            <a class="sac-ni {{ request()->routeIs('monitoring') ? 'on' : '' }}" href="{{ route('monitoring') }}" title="Monitoreo">{!! $svg('monitor') !!}<span class="sac-lbl">Monitoreo</span></a>
         </nav>
     @endif
 
