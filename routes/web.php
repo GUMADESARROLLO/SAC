@@ -9,6 +9,9 @@ Route::get('estadisticas', 'HomeController@getEstadistiacas')->name('estadistica
 Route::get('getStats/{d1}/{d2}', 'HomeController@getStats')->name('getStats/{d1}/{d2}');
 Route::get('/', 'Auth\LoginController@showLoginForm');
 Route::get('/logout', 'Auth\LoginController@logout');
+Route::get('sesionPing', 'EstadoSacController@ping')->name('sesionPing');
+Route::get('estado/mio', 'EstadoSacController@mio')->name('estadoMio');
+Route::post('estado', 'EstadoSacController@cambiar')->name('estadoCambiar');
 Route::get('ArticuloFavorito', 'HomeController@getArticuloFavorito')->name('ArticuloFavorito');
 Route::get('getData', 'HomeController@getData')->name('getData');
 
@@ -42,6 +45,9 @@ Route::get('getRutas', 'UsuarioController@getRutas')->name('getRutas');
 
 // Equipo SAC: estados y reportes (vista previa con datos simulados)
 Route::get('EquipoSac', 'UsuarioController@getEquipoSac')->name('EquipoSac');
+Route::get('EquipoSac/estados', 'EstadoSacController@equipo')->name('equipoEstados');
+Route::get('EquipoSac/resumenExcel', 'EstadoSacController@resumenExcel')->name('equipoResumenExcel');
+Route::get('EquipoSac/pedidos', 'EstadoSacController@pedidos')->name('equipoPedidos');
 
 Route::post('AsignarRuta', 'UsuarioController@AsignarRuta')->name('AsignarRuta');
 Route::post('RemoverRutaAsignada', 'UsuarioController@RemoverRutaAsignada')->name('RemoverRutaAsignada');

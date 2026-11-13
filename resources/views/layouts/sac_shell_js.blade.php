@@ -133,3 +133,42 @@
             }
         })();
     </script>
+    <script>
+        // Sesión única: si este usuario inició sesión en otro equipo, el servidor responde 401
+        // y esta pantalla vuelve al login con el aviso. Se revisa al usar el sistema y cada minuto.
+        (function () {
+            if (!window.jQuery || !document.getElementById('sacApp')) return;
+            var saliendo = false;
+            function alLogin() {
+                if (saliendo) return;
+                saliendo = true;
+                location.href = @json(route('login')) + '?sesion=otro';
+            }
+            function esCierre(xhr) { return xhr && xhr.status === 401 && xhr.responseJSON && xhr.responseJSON.sesion_cerrada; }
+            jQuery(document).ajaxError(function (e, xhr) { if (esCierre(xhr)) alLogin(); });
+            var ultima = 0;
+            function revisar() {
+                // Como mucho una revisión cada 3 s aunque se cambie de sección muy rápido
+                var ahora = Date.now();
+                if (saliendo || ahora - ultima < 3000) return;
+                ultima = ahora;
+                jQuery.ajax({ url: @json(route('sesionPing')), cache: false, global: false })
+                    .done(function (r) {
+                        // La misma revisión es la señal de vida del estado SAC: avisa el estado vigente al selector
+                        if (r && r.estado) document.dispatchEvent(new CustomEvent('sac:estado', { detail: r }));
+                    })
+                    .fail(function (xhr) { if (esCierre(xhr)) alLogin(); });
+            }
+            // Cada minuto, también con la pestaña en segundo plano: un SAC en AFK con el sistema
+            // minimizado sigue "presente". Si la señal se corta (apagó la máquina), pasa a Desconectado.
+            setInterval(revisar, 60000);
+            document.addEventListener('visibilitychange', function () { if (!document.hidden) revisar(); });
+            // Cambiar de sección dentro de la misma página (Home#pedidos, #promociones…) no recarga
+            // nada en el servidor, así que se revisa en ese momento: por el #, por las pestañas y por el menú.
+            window.addEventListener('hashchange', revisar);
+            document.addEventListener('shown.bs.tab', revisar);
+            document.addEventListener('click', function (e) {
+                if (e.target.closest && e.target.closest('.sac-ni, [data-sac-tab], [data-eq-tab], [data-bs-toggle="tab"]')) revisar();
+            }, true);
+        })();
+    </script>

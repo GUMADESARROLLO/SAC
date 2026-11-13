@@ -176,7 +176,7 @@
       $id('sacUUser').value = u ? u.username : '';
       $id('sacURol').value = u ? u.id_rol : '';
       $id('sacUActivo').checked = u ? u.activo === 'S' : true;
-      $id('sacUEsSac').checked = u ? (u.id_rol === '9' || u.id_rol === '2') : false;
+      $id('sacUEsSac').checked = u ? (u.id_rol === '9') : false;
       pintarEsSac();
       $id('sacUPass').value = ''; $id('sacUPass2').value = '';
       $id('sacUPass').placeholder = u ? 'Dejar vacío para mantener la actual' : 'Mínimo 8 caracteres';

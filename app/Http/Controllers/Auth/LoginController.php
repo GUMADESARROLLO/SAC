@@ -8,6 +8,8 @@ use Illuminate\Http\Request;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Support\Facades\DB;
 use App\Models\Usuario;
+use App\Http\Middleware\SesionUnica;
+use App\Models\EstadoSac;
 
 class LoginController extends Controller
 {
@@ -44,7 +46,12 @@ class LoginController extends Controller
     public function username() {
         return 'username';
     }
-    public function logout () {        
+    public function logout (Request $request) {
+        if (auth()->check()) {
+            // Al cerrar sesión el SAC pasa a Desconectado
+            try { if (EstadoSac::mide(session('rol'))) EstadoSac::cambiar(auth()->id(), 'off', 'logout'); } catch (\Throwable $e) { report($e); }
+            SesionUnica::liberar($request, auth()->id());
+        }
         auth()->logout();
         return redirect('/');
     }
@@ -80,6 +87,8 @@ class LoginController extends Controller
                     /**/
                     $request->session()->put('Rutas', $Rutas);
                 }
+                // Una sola sesión activa: si este usuario estaba abierto en otra máquina, esa se cierra
+                SesionUnica::registrar($request, Auth::id());
                 //$rol = DB::table('usuario_rol')->where('usuario_id', $queryResult)->pluck('rol_id');
                 //;
                 return $this->sendLoginResponse($request);

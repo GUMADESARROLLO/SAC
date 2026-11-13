@@ -39,6 +39,13 @@
         <p style="margin: 6px 0 0; font-size: 14.5px; color: var(--sac-muted)">Bienvenido de nuevo. Ingresa con tu usuario.</p>
       </div>
 
+      @if (session('sesion_cerrada') || request('sesion') === 'otro')
+        <div class="sac-login-aviso" role="alert">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"></path><path d="M12 9v4M12 17h.01"></path></svg>
+          <span>Tu sesión se cerró porque este usuario inició sesión en otro equipo. Cada persona debe usar su propio usuario.</span>
+        </div>
+      @endif
+
       <div class="sac-fld">
         <label class="sac-fl" for="username">Usuario</label>
         <span class="sac-inw @error('username') is-invalid @enderror">

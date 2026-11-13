@@ -194,7 +194,7 @@
             <span class="sac-switch sac-switch-ok"><input type="checkbox" role="switch" id="sacUEsSac"><span aria-hidden="true"></span></span>
             <span id="sacUEsSacTxt">No mide estados</span>
           </label>
-          <span class="sac-hint" style="margin-top: 2px">Si está activo, el usuario marca En línea, AFK o Almuerzo y aparece en los reportes de Equipo SAC.</span>
+          <span class="sac-hint" style="margin-top: 2px">Si está activo, el usuario marca En línea, AFK o Descanso y aparece en los reportes de Equipo SAC.</span>
         </div>
 
         <hr class="sac-hr">
