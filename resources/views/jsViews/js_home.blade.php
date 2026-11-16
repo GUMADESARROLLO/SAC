@@ -1315,9 +1315,6 @@
         $("#opcion1").prop('checked', false).val('');
         $("#sacInvRevision").addClass('d-none');
         $("#sacInvBodegas").html('<div class="sac-skel">' + Array(4).join('<div class="sac-skel-row"><i class="sac-skel-dot"></i><i style="flex:3"></i><i></i></div>') + '</div>');
-        var ini = sacIniciales(fila ? fila.DESCRIPCION : Id);
-        var imgTag = img ? '<img src="' + sacEsc(img) + '" alt="" onerror="this.remove()">' : '';
-        $("#sacInvHeadThumb").html(imgTag + '<span>' + sacEsc(ini) + '</span>');
         // Texto de respaldo siempre debajo; la foto va encima y se quita si no carga
         $("#artImg").html('<span class="sac-imodal-ph">' + SAC_ICO_IMG + 'Imagen del producto</span>' + (img ?
             '<img class="img-fluid" src="' + sacEsc(img) + '" alt="Imagen del producto" arti="' + sacEsc(Id) + '" descr="' + sacEsc(fila ? fila.DESCRIPCION : '') + '" nombreImg="' + sacEsc(fila ? fila.IMG_NOMBRE : '') + '" title="Toca para ampliar" onerror="this.remove()">' : ''));
@@ -1332,7 +1329,6 @@
             $("#lbl_unidad").text(info.UNIDAD || '');
             $("#id_nombre_articulo").text(String(info.DESCRIPCION || '').toUpperCase());
             $("#sacInvUnidad").text(info.UNIDAD ? ' · ' + info.UNIDAD : '');
-            $("#sacInvHeadThumb span").text(sacIniciales(info.DESCRIPCION));
 
             var reglas = String(info.REGLAS || '0') === '0' ? [] : String(info.REGLAS).split(',').map(function (r) { return $.trim(r); }).filter(Boolean);
             $("#id_reglas").html(reglas.length ? reglas.map(function (r) { return '<span class="sac-tag sac-tag-info">' + sacEsc(r.replace(/\s*\+\s*/g, ' + ')) + '</span>'; }).join('') : '<span class="sac-muted">Sin bonificación</span>');

@@ -645,7 +645,6 @@
             <div class="modal-content">
 
               <div class="sac-mhead">
-                <span class="sac-thumb sac-thumb-lg" id="sacInvHeadThumb" aria-hidden="true"></span>
                 <div class="sac-mhead-txt">
                   <h2 class="sac-mtitle sac-imodal-title"><span id="id_nombre_articulo">Cargando…</span><span class="sac-imodal-unit" id="sacInvUnidad"></span></h2>
                   <p class="sac-cli-sub mb-0"><span id="id_codigo_articulo"></span><span class="d-none" id="lbl_unidad"></span></p>
