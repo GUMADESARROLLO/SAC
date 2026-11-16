@@ -52,7 +52,7 @@
     <link href="{{ asset('js/theme_gumadesk/vendors/choices/choices.min.css') }}" rel="stylesheet" >
     <link href="{{ asset('css/jquery.dataTables.min.css') }}" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/pikaday/css/pikaday.css">
-    <link href="{{ asset('css/sac-ui.css') }}?v=61" rel="stylesheet">
+    <link href="{{ asset('css/sac-ui.css') }}?v=62" rel="stylesheet">
     
     <script>
         var linkRTL = document.getElementById('style-rtl');
@@ -115,7 +115,10 @@ if ( typeof jQuery != "undefined" )
         </div>
     @else
         <div class="sac-app" id="sacApp">
-            @include('layouts.sac_sidebar')
+            {{-- Devolución (rol 12) solo usa su pantalla: sin menú lateral. --}}
+            @if ((string) Session::get('rol') !== '12')
+                @include('layouts.sac_sidebar')
+            @endif
             <div class="sac-main" id="app">
                 @yield('content')
             </div>
