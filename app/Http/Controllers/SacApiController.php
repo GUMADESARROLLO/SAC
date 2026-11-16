@@ -79,14 +79,22 @@ class SacApiController extends Controller
         return response()->json($this->vigente($this->id($request)));
     }
 
-    /** Cambia el estado: on | afk | lunch | off. Responde el estado que quedó guardado. */
+    /**
+     * Cambia el estado: on | afk | lunch | off. Responde el estado que quedó guardado.
+     * motivo (opcional) marca los cambios que la app hace sola: "inactividad" (pasó a AFK o a
+     * Desconectado por no usar teclado ni mouse) o "regreso" (volvió a En línea tras un AFK automático).
+     */
     public function cambiar(Request $request)
     {
         $estado = $request->input('estado');
         if (!is_string($estado) || !in_array($estado, array_merge(EstadoSac::ESTADOS, ['off']), true)) {
             return response()->json(['mensaje' => 'El estado no es válido.'], 422);
         }
-        EstadoSac::cambiar($this->id($request), $estado);
+        $motivo = $request->input('motivo');
+        if ($motivo !== null && !in_array($motivo, EstadoSac::MOTIVOS_AUTO, true)) {
+            return response()->json(['mensaje' => 'El motivo no es válido.'], 422);
+        }
+        EstadoSac::cambiar($this->id($request), $estado, $motivo ?: 'manual');
         return response()->json($this->vigente($this->id($request)));
     }
 

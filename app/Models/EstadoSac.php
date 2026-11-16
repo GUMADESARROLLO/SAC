@@ -14,6 +14,7 @@ class EstadoSac
 {
     const TABLA = 'tbl_estado_log';
     const ESTADOS = ['on', 'afk', 'lunch'];          // 'off' = sin tramo abierto
+    const MOTIVOS_AUTO = ['inactividad', 'regreso'];  // cambios que la app de escritorio hace sola
     const SIN_SENAL_MIN = 3;                          // minutos sin señal para pasar a Desconectado
     // Solo los usuarios de tipo SAC (rol 9) miden tiempo: ven el selector y aparecen en Equipo SAC.
     // Admin y SAC_SUP solo consultan los reportes.
@@ -32,7 +33,7 @@ class EstadoSac
         return self::tabla()->where('user_id', $userId)->whereNull('fin')->orderByDesc('inicio')->first();
     }
 
-    /** Cambia el estado: cierra el tramo abierto y, si no es 'off', abre uno nuevo. */
+    /** Cambia el estado: cierra el tramo abierto (con el motivo $cierre) y, si no es 'off', abre uno nuevo. */
     public static function cambiar($userId, $estado, $cierre = 'manual')
     {
         $ahora = self::ahora();

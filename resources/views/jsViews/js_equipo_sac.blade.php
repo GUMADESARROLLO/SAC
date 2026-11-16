@@ -6,7 +6,8 @@
   'use strict';
 
   var NOMBRE = { on: 'En línea', afk: 'AFK', lunch: 'Descanso', off: 'Desconectado' };
-  var ORIGEN = { manual: 'Manual', sin_senal: 'Sin señal', logout: 'Cierre de sesión' };
+  var ORIGEN = { manual: 'Manual', sin_senal: 'Sin señal', logout: 'Cierre de sesión', inactividad: 'Inactividad', regreso: 'Regreso automático' };
+  var ORIGEN_AUTO = { inactividad: 1, regreso: 1 };  // cambios que hizo la app sola
   var ORDEN_ESTADO = { on: 0, afk: 1, lunch: 2, off: 3 };
   var MESES = ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic'];
   var DIA0 = 8 * 60, DIA1 = 18 * 60;   // eje de la línea de tiempo: 08:00 a 18:00
@@ -134,7 +135,7 @@
     tr.forEach(function (x, i) {
       var ant = tr[i - 1], sig = tr[i + 1];
       var pegadoAnt = ant && Math.abs(ant.b - x.a) < 0.02;
-      if (!x.previo) out.push({ d: d, min: x.a, s: s, de: pegadoAnt ? ant.e : 'off', a: x.e, dur: x.b - x.a, abierto: x.abierto, origen: 'manual' });
+      if (!x.previo) out.push({ d: d, min: x.a, s: s, de: pegadoAnt ? ant.e : 'off', a: x.e, dur: x.b - x.a, abierto: x.abierto, origen: (pegadoAnt && ORIGEN_AUTO[ant.cierre]) ? ant.cierre : 'manual' });
       var pegadoSig = sig && Math.abs(sig.a - x.b) < 0.02;
       if (x.cierre && !pegadoSig) out.push({ d: d, min: x.b, s: s, de: x.e, a: 'off', dur: null, abierto: false, origen: x.cierre });
     });
@@ -205,7 +206,7 @@
       var base = c.t.on + c.t.afk + c.t.lunch, ef = pct(c.t.on, base);
       var desde;
       if (c.act) desde = 'desde ' + hhmm(c.act.a) + ' · ' + dur(now - c.act.a);
-      else if (c.ult) desde = 'Desconectado desde ' + hhmm(c.ult.b) + (c.ult.cierre === 'sin_senal' ? ' · sin señal' : '');
+      else if (c.ult) desde = 'Desconectado desde ' + hhmm(c.ult.b) + (c.ult.cierre === 'sin_senal' ? ' · sin señal' : c.ult.cierre === 'inactividad' ? ' · por inactividad' : '');
       else desde = 'Sin marcar hoy';
       // Solo un aviso visual para el supervisor; no cambia el estado
       var alerta = c.act && ((c.e === 'afk' && now - c.act.a >= 15) || (c.e === 'lunch' && now - c.act.a >= 60));
@@ -238,7 +239,7 @@
     return out;
   }
   function tagOrigen(o) {
-    return '<span class="sac-tag ' + (o === 'sin_senal' ? 'sac-tag-warn' : 'sac-tag-neutral') + '">' + (ORIGEN[o] || 'Manual') + '</span>';
+    return '<span class="sac-tag ' + (o === 'sin_senal' || o === 'inactividad' ? 'sac-tag-warn' : 'sac-tag-neutral') + '">' + (ORIGEN[o] || 'Manual') + '</span>';
   }
   function pintarTablaBit(filas) {
     if (dtBit) { dtBit.clear().rows.add(filas).draw(); return; }

@@ -27,7 +27,7 @@ class CreateTblEstadoLogTable extends Migration
             $table->dateTime('inicio');
             $table->dateTime('fin')->nullable();
             $table->dateTime('visto_en');
-            $table->string('cierre', 12)->nullable();  // manual | sin_senal | logout
+            $table->string('cierre', 12)->nullable();  // manual | sin_senal | logout | inactividad | regreso
             $table->index(['user_id', 'fin']);
             $table->index(['inicio']);
             $table->index(['fin', 'visto_en']);
