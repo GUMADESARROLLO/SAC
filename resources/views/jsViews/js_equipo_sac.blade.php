@@ -197,7 +197,7 @@
       var seg = c.tr.map(function (x) {
         var a = Math.max(x.a, DIA0), b = Math.min(x.b, DIA1);
         if (b <= a) return '';
-        return '<i class="is-' + x.e + '" style="left:' + ((a - DIA0) * 100 / span).toFixed(2) + '%;width:calc(' + ((b - a) * 100 / span).toFixed(2) + '% - 2px)" data-tip="' + esc(tipTramo(c.s, x)) + '"></i>';
+        return '<i class="is-' + x.e + '" style="left:' + ((a - DIA0) * 100 / span).toFixed(2) + '%;width:max(6px, calc(' + ((b - a) * 100 / span).toFixed(2) + '% - 2px))" data-tip="' + esc(tipTramo(c.s, x)) + '"></i>';
       }).join('');
       var ahoraPos = ((Math.min(Math.max(now, DIA0), DIA1) - DIA0) * 100 / span).toFixed(2);
       var base = c.t.on + c.t.afk + c.t.lunch, ef = pct(c.t.on, base);
