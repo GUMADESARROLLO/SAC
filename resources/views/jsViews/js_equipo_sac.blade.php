@@ -10,7 +10,7 @@
   var ORIGEN_AUTO = { inactividad: 1, regreso: 1 };  // cambios que hizo la app sola
   var ORDEN_ESTADO = { on: 0, afk: 1, lunch: 2, off: 3 };
   var MESES = ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic'];
-  var DIA0 = 8 * 60, DIA1 = 18 * 60;   // eje de la línea de tiempo: 08:00 a 18:00
+  var DIA0 = 6 * 60, DIA1 = 18 * 60;   // eje de la línea de tiempo: 06:00 a 18:00
   var URL_ESTADOS = @json(route('equipoEstados'));
   var URL_EXCEL = @json(route('equipoResumenExcel'));
   var URL_PEDIDOS = @json(route('equipoPedidos'));
@@ -193,7 +193,7 @@
   function pintarVivo() {
     var tarjetas = tarjetasVivo(), now = ahoraMin();
     var ticks = '';
-    for (var h = 8; h <= 18; h += 2) ticks += '<span style="left:' + ((h * 60 - DIA0) * 100 / (DIA1 - DIA0)) + '%">' + h + '</span>';
+    for (var h = 6; h <= 18; h += 2) ticks += '<span style="left:' + ((h * 60 - DIA0) * 100 / (DIA1 - DIA0)) + '%">' + h + '</span>';
     var span = DIA1 - DIA0;
 
     document.getElementById('sacEqGrid').innerHTML = tarjetas.length ? tarjetas.map(function (c) {
