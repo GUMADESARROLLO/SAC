@@ -5,7 +5,7 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
 /**
- * Uso de aplicaciones que reporta la app de escritorio "SAC Estados" (pestaña Aplicaciones de Equipo SAC).
+ * Uso de aplicaciones que reporta la app de escritorio "GumaMeter" (pestaña Aplicaciones de Equipo SAC).
  *
  * tbl_uso_app: segundos acumulados por usuario, día y programa. Solo se guarda el nombre del
  * programa (p. ej. chrome.exe / "Google Chrome"); nunca títulos de ventana, páginas ni capturas.

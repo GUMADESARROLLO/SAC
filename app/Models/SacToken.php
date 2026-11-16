@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
 /**
- * Tokens de la app de escritorio "SAC Estados" guardados en tbl_sac_token (ver la migración).
+ * Tokens de la app de escritorio "GumaMeter" guardados en tbl_sac_token (ver la migración).
  * Sesión única: cada usuario tiene un solo token vigente; al entrar en otro equipo, el anterior deja
  * de servir (igual que SesionUnica en el navegador, pero sin relación con ella).
  * En la tabla solo se guarda el SHA-256 del token.

@@ -20,7 +20,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 
-// App de escritorio "SAC Estados" (bandeja de Windows): sesión única por usuario, solo rol SAC
+// App de escritorio "GumaMeter" (bandeja de Windows): sesión única por usuario, solo rol SAC
 Route::prefix('sac')->group(function () {
     Route::post('login', 'SacApiController@login');
     Route::middleware('sac.token')->group(function () {

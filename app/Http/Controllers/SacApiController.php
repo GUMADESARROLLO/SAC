@@ -12,7 +12,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
 /**
- * API de la app de escritorio "SAC Estados" (bandeja de Windows). Base: /api/sac.
+ * API de la app de escritorio "GumaMeter" (bandeja de Windows). Base: /api/sac.
  *
  *   POST /login   {username, password, dispositivo} -> {token, usuario{id,nombre,username}, estado, desde, ahora}
  *   GET  /estado                                     -> {estado, desde, ahora}

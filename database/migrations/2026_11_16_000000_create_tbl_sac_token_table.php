@@ -5,7 +5,7 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
 /**
- * Tokens de la app de escritorio "SAC Estados" (API /api/sac).
+ * Tokens de la app de escritorio "GumaMeter" (API /api/sac).
  *
  * Un solo token vigente por usuario (sesión única de la app). No tiene relación con la sesión del navegador,
  * así que no choca con la regla de sesión única (middleware SesionUnica).

@@ -8,7 +8,7 @@ use App\Models\Usuario;
 use Closure;
 
 /**
- * Autenticación de la app de escritorio "SAC Estados" (rutas /api/sac).
+ * Autenticación de la app de escritorio "GumaMeter" (rutas /api/sac).
  *
  * Lee el token de "Authorization: Bearer ..." y deja al usuario en
  * $request->attributes ('sac_usuario' y 'sac_token'). No usa la sesión del

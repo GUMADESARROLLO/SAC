@@ -23,7 +23,7 @@ class EstadoSacController extends Controller
      * Revisión de sesión que el navegador hace cada minuto. No hace nada por sí misma: el middleware
      * SesionUnica ya respondió 401 si este usuario inició sesión en otro equipo.
      * No cuenta como señal de vida del estado SAC: el estado y su latido son solo de la app de
-     * escritorio "SAC Estados" (SacApiController, /api/sac).
+     * escritorio "GumaMeter" (SacApiController, /api/sac).
      */
     public function ping()
     {
