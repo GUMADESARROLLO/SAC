@@ -14,7 +14,7 @@ class UsoApp
     const TABLA = 'tbl_uso_app';
     const TABLA_CAT = 'tbl_app_categoria';
     const INACTIVO = '(inactivo)';                       // tiempo sin teclado ni mouse
-    const CATEGORIAS = ['trabajo', 'comunicacion', 'otros'];
+    const CATEGORIAS = ['productivo', 'neutral', 'improductivo'];
     const MAX_SEG = 600;                                 // tope de segundos por reporte (la app envía cada 60 s)
     const MAX_APPS = 40;                                 // tope de programas por reporte
 
@@ -69,6 +69,22 @@ class UsoApp
             ->get()
             ->map(function ($f) {
                 return ['user_id' => (int) $f->user_id, 'proceso' => $f->proceso, 'nombre' => $f->nombre, 'segundos' => (int) $f->segundos];
+            })->values();
+    }
+
+    /** Segundos activos y sin actividad de cada usuario por día (para la carga de trabajo). */
+    public static function porDia($desde, $hasta, array $userIds)
+    {
+        return DB::table(self::TABLA)
+            ->select('user_id', 'fecha',
+                DB::raw("SUM(CASE WHEN proceso = '" . self::INACTIVO . "' THEN 0 ELSE segundos END) AS activo"),
+                DB::raw("SUM(CASE WHEN proceso = '" . self::INACTIVO . "' THEN segundos ELSE 0 END) AS inactivo"))
+            ->whereBetween('fecha', [$desde, $hasta])
+            ->whereIn('user_id', $userIds)
+            ->groupBy('user_id', 'fecha')
+            ->get()
+            ->map(function ($f) {
+                return ['user_id' => (int) $f->user_id, 'fecha' => substr((string) $f->fecha, 0, 10), 'activo' => (int) $f->activo, 'inactivo' => (int) $f->inactivo];
             })->values();
     }
 

@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Schema;
  * programa (p. ej. chrome.exe / "Google Chrome"); nunca títulos de ventana, páginas ni capturas.
  *  - proceso = '(inactivo)' -> tiempo sin teclado ni mouse (no es un programa).
  *  - fecha   -> la pone PHP (America/Managua) al recibir el reporte.
- * tbl_app_categoria: categoría que un supervisor le asigna a cada programa (trabajo | comunicacion | otros).
+ * tbl_app_categoria: categoría que un supervisor le asigna a cada programa (productivo | neutral | improductivo).
  */
 class CreateTblUsoAppTable extends Migration
 {

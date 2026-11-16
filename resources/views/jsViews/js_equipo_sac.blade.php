@@ -435,8 +435,13 @@
   // =====================================================================
   // 5) APLICACIONES — tiempo por programa (tbl_uso_app; lo envía la app de escritorio cada minuto)
   // =====================================================================
-  var CAT = { trabajo: 'Trabajo', comunicacion: 'Comunicación', otros: 'Otros' };
-  var APPS = { filas: [], cats: {}, inactivo: '(inactivo)' }, reqApp = 0, MAX_APPS_LISTA = 8, COLS_DET = 4;
+  var CAT = { productivo: 'Productivo', neutral: 'Neutral', improductivo: 'No productivo' };
+  var APPS = { filas: [], dias: [], cats: {}, inactivo: '(inactivo)' }, reqApp = 0, MAX_APPS_LISTA = 30, COLS_DET = 4;
+  var N_TOP = 6;                                         // aplicaciones con color propio; el resto va en "Otras"
+  // Carga de trabajo: límites de tiempo ACTIVO por día (segundos)
+  var CARGA = { poca: 4 * 3600, sobre: 7.5 * 3600 };
+  var CARGA_NOM = { sobre: 'Sobrecarga', sana: 'Saludable', poca: 'Poca carga' };
+  var CARGA_DET = { sobre: 'más de 7 h 30', sana: '4 h a 7 h 30', poca: 'menos de 4 h' };
   function durSeg(s) { return dur(s / 60); }
   function cargarApps(listo) {
     var mio = ++reqApp;
@@ -447,14 +452,14 @@
         estadoCarga(false);
         var srv = fechaSrv(r.ahora);
         if (srv) { desfase = srv - Date.now(); HOY = soloDia(srv); }
-        APPS = { filas: r.filas || [], cats: r.categorias || {}, inactivo: r.inactivo || '(inactivo)' };
+        APPS = { filas: r.filas || [], dias: r.dias || [], cats: r.categorias || {}, inactivo: r.inactivo || '(inactivo)' };
         listo();
       })
       .fail(function (xhr) {
         if (mio !== reqApp) return;
         estadoCarga(false);
         if (xhr && xhr.status === 401) return;
-        APPS.filas = [];
+        APPS.filas = []; APPS.dias = [];
         pintarApps((xhr && xhr.responseJSON && xhr.responseJSON.mensaje) || 'No se pudo cargar el uso de aplicaciones.');
       });
   }
@@ -475,11 +480,13 @@
       .sort(function (x, y) { return (y.activo + y.inactivo) - (x.activo + x.inactivo); });
     return { lista: lista, personas: personas, activo: activo, inactivo: inactivo };
   }
-  function selectCat(a) {
+  // Tres botones por aplicación; el marcado es la clasificación vigente
+  function botonesCat(a) {
     var act = APPS.cats[a.proceso] || '';
-    return '<select class="form-select sac-app-cat" data-app-cat="' + esc(a.proceso) + '" aria-label="Categoría de ' + esc(a.nombre) + '">' +
-      '<option value=""' + (act ? '' : ' selected') + ' disabled>Sin clasificar</option>' +
-      Object.keys(CAT).map(function (k) { return '<option value="' + k + '"' + (act === k ? ' selected' : '') + '>' + CAT[k] + '</option>'; }).join('') + '</select>';
+    return '<div class="sac-clasif-btns" role="group" aria-label="Clasificación de ' + esc(a.nombre) + '">' +
+      Object.keys(CAT).map(function (k) {
+        return '<button type="button" class="sac-clasif-btn is-' + k + '" data-app-cat="' + esc(a.proceso) + '" data-cat="' + k + '" aria-pressed="' + (act === k ? 'true' : 'false') + '">' + CAT[k] + '</button>';
+      }).join('') + '</div>';
   }
   function barraApp(nombre, extra, seg, total, max, tip) {
     return '<div class="sac-app-fila" data-tip="' + esc(tip) + '">' +
@@ -487,17 +494,101 @@
       '<div class="sac-app-val"><strong>' + durSeg(seg) + '</strong><span>' + (pct(seg, total) == null ? '' : pct(seg, total) + '%') + '</span></div></div>' +
       '<div class="sac-app-track" aria-hidden="true"><i style="width:' + (max > 0 ? Math.max(1, seg * 100 / max).toFixed(1) : 0) + '%"></i></div></div>';
   }
+  // Ranking de todo el equipo: fija el color de cada aplicación para que no cambie al filtrar por persona
+  function colorPorApp() {
+    var tot = {};
+    APPS.filas.forEach(function (f) { if (f.proceso !== APPS.inactivo && POR_ID[f.user_id]) tot[f.proceso] = (tot[f.proceso] || 0) + f.segundos; });
+    var mapa = {};
+    Object.keys(tot).sort(function (a, b) { return tot[b] - tot[a] || a.localeCompare(b); }).slice(0, N_TOP).forEach(function (p, i) { mapa[p] = i + 1; });
+    return mapa;
+  }
+
+  // Aplicaciones más usadas: lista de píldoras + dona
+  function pintarTop(r) {
+    var top = r.lista.slice(0, N_TOP), resto = r.lista.slice(N_TOP);
+    var fijo = colorPorApp(), usados = {}, libres = [];
+    top.forEach(function (a) { if (fijo[a.proceso]) usados[fijo[a.proceso]] = true; });
+    for (var n = 1; n <= N_TOP; n++) if (!usados[n]) libres.push(n);
+    var items = top.map(function (a) {
+      return { nombre: a.nombre, seg: a.seg, slot: fijo[a.proceso] || libres.shift(),
+        tip: '<strong>' + esc(a.nombre) + '</strong><span>' + esc(a.proceso) + '</span><span>' + durSeg(a.seg) + ' · ' + pct(a.seg, r.activo) + '% del tiempo activo</span>' };
+    });
+    var segResto = resto.reduce(function (s, x) { return s + x.seg; }, 0);
+    if (resto.length) items.push({ nombre: 'Otras ' + resto.length + (resto.length === 1 ? ' aplicación' : ' aplicaciones'), seg: segResto, slot: 0,
+      tip: '<strong>Otras aplicaciones</strong><span>' + esc(resto.slice(0, 6).map(function (x) { return x.nombre; }).join(', ')) + (resto.length > 6 ? '…' : '') + '</span><span>' + durSeg(segResto) + ' · ' + pct(segResto, r.activo) + '% del tiempo activo</span>' });
+
+    document.getElementById('sacEqTopLista').innerHTML = items.map(function (it) {
+      return '<div class="sac-apt-pill is-s' + it.slot + '" data-tip="' + esc(it.tip) + '"><i aria-hidden="true"></i><span class="sac-apt-nom">' + esc(it.nombre) + '</span>' +
+        '<strong>' + durSeg(it.seg) + '</strong><span class="sac-apt-pct">' + pct(it.seg, r.activo) + '%</span></div>';
+    }).join('');
+
+    // Dona: circunferencia = 100, así cada tramo mide su porcentaje; se deja un hueco entre tramos
+    var acum = 0, hueco = items.length > 1 ? 0.7 : 0;
+    var arcos = items.map(function (it) {
+      var p = it.seg * 100 / r.activo, largo = Math.max(0.4, p - hueco);
+      var arco = '<circle class="is-s' + it.slot + '" cx="21" cy="21" r="15.9155" fill="none" stroke-width="7" stroke-dasharray="' + largo.toFixed(2) + ' ' + (100 - largo).toFixed(2) + '" stroke-dashoffset="' + (25 - acum).toFixed(2) + '" data-tip="' + esc(it.tip) + '"></circle>';
+      acum += p;
+      return arco;
+    }).join('');
+    document.getElementById('sacEqTopDona').innerHTML =
+      '<svg viewBox="0 0 42 42" role="img" aria-label="Reparto del tiempo activo por aplicación">' + arcos + '</svg>' +
+      '<div class="sac-apt-centro"><strong>' + durSeg(r.activo) + '</strong><span>tiempo activo</span></div>';
+  }
+
+  // Carga de trabajo: cuántas personas hubo cada día en cada nivel, según su tiempo activo
+  function pintarCarga() {
+    var ids = {}; sacsFiltrados().forEach(function (s) { ids[s.id] = true; });
+    var fin = soloDia(F.hasta), ini = soloDia(F.desde), min7 = sumarDias(fin, -6);
+    if (ini > min7) ini = min7;
+    if (sumarDias(fin, -30) > ini) ini = sumarDias(fin, -30);
+    var porDia = {};
+    APPS.dias.forEach(function (x) { if (ids[x.user_id]) (porDia[x.fecha] = porDia[x.fecha] || []).push(x); });
+    var cols = [], max = 0;
+    for (var d = new Date(ini); d <= fin; d = sumarDias(d, 1)) {
+      var c = { d: new Date(d), sobre: 0, sana: 0, poca: 0, quien: { sobre: [], sana: [], poca: [] } };
+      (porDia[clave(d)] || []).forEach(function (x) {
+        var k = x.activo > CARGA.sobre ? 'sobre' : x.activo >= CARGA.poca ? 'sana' : 'poca';
+        c[k]++; c.quien[k].push(((POR_ID[x.user_id] || {}).nombre || '?') + ' · ' + durSeg(x.activo));
+      });
+      c.total = c.sobre + c.sana + c.poca;
+      max = Math.max(max, c.total);
+      cols.push(c);
+    }
+    var cada = Math.ceil(cols.length / 10);
+    // Eje: de 0 a un tope "redondo" (personas), con una línea guía por marca
+    var tope = Math.max(1, max), paso = tope <= 5 ? 1 : Math.ceil(tope / 4);
+    tope = Math.ceil(tope / paso) * paso;
+    max = tope;
+    var guias = '';
+    for (var g = 0; g <= tope; g += paso) guias += '<b style="bottom:' + (g * 100 / tope).toFixed(1) + '%"><span>' + g + '</span></b>';
+    document.getElementById('sacEqCarga').innerHTML = '<div class="sac-carga-cols' + (cols.length > 10 ? ' is-denso' : '') + '"><div class="sac-carga-guias" aria-hidden="true">' + guias + '</div>' + cols.map(function (c, i) {
+      var hoy = mismoDia(c.d, HOY);
+      var seg = ['sobre', 'sana', 'poca'].map(function (k) {
+        if (!c[k]) return '';
+        var tip = '<strong>' + CARGA_NOM[k] + ' · ' + fechaCorta(c.d) + (hoy ? ' (en curso)' : '') + '</strong>' + c.quien[k].map(function (q) { return '<span>' + esc(q) + '</span>'; }).join('');
+        return '<i class="is-' + k + '" style="height:' + (c[k] * 100 / max).toFixed(1) + '%" data-tip="' + esc(tip) + '">' + c[k] + '</i>';
+      }).join('');
+      var etiqueta = (i % cada === 0 || i === cols.length - 1) ? fechaCorta(c.d) + (hoy ? '<small>en curso</small>' : '') : '';
+      return '<div class="sac-carga-col' + (hoy ? ' is-hoy' : '') + '"><div class="sac-carga-barra">' + (seg || '<b class="sac-carga-nada" aria-label="Sin registros"></b>') + '</div><span class="sac-carga-dia">' + etiqueta + '</span></div>';
+    }).join('') + '</div>';
+    document.getElementById('sacEqCargaLey').innerHTML = ['sobre', 'sana', 'poca'].map(function (k) {
+      return '<span><i class="is-' + k + '" aria-hidden="true"></i>' + CARGA_NOM[k] + ' · ' + CARGA_DET[k] + '</span>';
+    }).join('');
+  }
+
   function pintarApps(error) {
     $('.sac-eq-err').remove();
     var r = resumenApps(), medido = r.activo + r.inactivo;
     var kp = document.getElementById('sacEqAppKpis'), li = document.getElementById('sacEqAppLista'),
-        pe = document.getElementById('sacEqAppPersonas'), de = document.getElementById('sacEqAppDet');
+        pe = document.getElementById('sacEqAppPersonas'), de = document.getElementById('sacEqAppDet'),
+        tl = document.getElementById('sacEqTopLista'), td = document.getElementById('sacEqTopDona');
     document.getElementById('sacEqAppSub').textContent = '';
+    pintarCarga();
     if (error || !medido) {
       var msg = error ? esc(error) + ' <button type="button" class="btn btn-link" data-eq-reintentar>Reintentar</button>'
         : 'Todavía no hay registros de uso en este periodo. Los envía la app de escritorio mientras el SAC está En línea o AFK.';
-      kp.innerHTML = ''; pe.innerHTML = ''; de.innerHTML = '';
-      li.innerHTML = '<p class="sac-empty">' + msg + '</p>';
+      kp.innerHTML = ''; pe.innerHTML = ''; de.innerHTML = ''; li.innerHTML = ''; td.innerHTML = '';
+      tl.innerHTML = '<p class="sac-empty">' + msg + '</p>';
       return;
     }
     var top = r.lista[0];
@@ -508,19 +599,18 @@
       kpi('Aplicación más usada', top ? esc(top.nombre) : '—', top ? durSeg(top.seg) + ', ' + pct(top.seg, r.activo) + '% del tiempo activo' : '');
 
     // Reparto por categoría (texto: la categoría no lleva color)
-    var porCat = { trabajo: 0, comunicacion: 0, otros: 0 }, sinCat = 0;
+    var porCat = { productivo: 0, neutral: 0, improductivo: 0 }, sinCat = 0;
     r.lista.forEach(function (a) { var c = APPS.cats[a.proceso]; if (c && porCat[c] != null) porCat[c] += a.seg; else sinCat += a.seg; });
     document.getElementById('sacEqAppSub').textContent = Object.keys(CAT).map(function (k) { return CAT[k] + ' ' + (pct(porCat[k], r.activo) || 0) + '%'; }).join(' · ') +
       (sinCat ? ' · Sin clasificar ' + pct(sinCat, r.activo) + '%' : '');
 
-    var visibles = r.lista.slice(0, MAX_APPS_LISTA), resto = r.lista.slice(MAX_APPS_LISTA);
-    var max = visibles.length ? visibles[0].seg : 0;
-    var segResto = resto.reduce(function (a, x) { return a + x.seg; }, 0);
-    li.innerHTML = visibles.map(function (a) {
-      return barraApp(a.nombre, selectCat(a), a.seg, r.activo, Math.max(max, segResto),
-        '<strong>' + esc(a.nombre) + '</strong><span>' + esc(a.proceso) + '</span><span>' + durSeg(a.seg) + ' · ' + pct(a.seg, r.activo) + '% del tiempo activo</span>');
-    }).join('') + (resto.length ? barraApp('Otras ' + resto.length + (resto.length === 1 ? ' aplicación' : ' aplicaciones'), '', segResto, r.activo, Math.max(max, segResto),
-      '<strong>Otras aplicaciones</strong><span>' + esc(resto.slice(0, 6).map(function (x) { return x.nombre; }).join(', ')) + (resto.length > 6 ? '…' : '') + '</span>') : '');
+    if (r.activo) pintarTop(r); else { tl.innerHTML = '<p class="sac-empty">Solo hay tiempo sin actividad en este periodo.</p>'; td.innerHTML = ''; }
+
+    // Clasificar: una fila por aplicación con sus tres botones
+    li.innerHTML = r.lista.slice(0, MAX_APPS_LISTA).map(function (a) {
+      return '<div class="sac-clasif-fila"><div class="sac-clasif-app"><span class="sac-clasif-nom">' + esc(a.nombre) + '</span>' +
+        '<span class="sac-clasif-sub">' + esc(a.proceso) + ' · ' + durSeg(a.seg) + '</span></div>' + botonesCat(a) + '</div>';
+    }).join('');
 
     pe.innerHTML = r.personas.map(function (p) {
       var tot = p.activo + p.inactivo, k = Object.keys(p.apps).sort(function (x, y) { return p.apps[y] - p.apps[x]; })[0];
@@ -542,22 +632,21 @@
         return '<tr><th scope="row">' + nombreSac(p.s) + '</th>' + tds + '<td class="text-end sac-num">' + (otras ? durSeg(otras) : '<span class="sac-muted">—</span>') + '</td><td class="text-end sac-num fw-bold">' + durSeg(p.activo) + '</td></tr>';
       }).join('') + '</tbody>';
   }
-  // Cambiar la categoría de una aplicación (vale para todo el equipo)
-  document.addEventListener('change', function (e) {
-    var s = e.target.closest ? e.target.closest('[data-app-cat]') : null;
-    if (!s) return;
-    var proceso = s.getAttribute('data-app-cat'), antes = APPS.cats[proceso] || '';
-    s.disabled = true;
-    $.ajax({ url: URL_APP_CAT, method: 'POST', data: { proceso: proceso, categoria: s.value },
+  // Clasificar una aplicación (vale para todo el equipo)
+  document.addEventListener('click', function (e) {
+    var b = e.target.closest ? e.target.closest('button[data-app-cat]') : null;
+    if (!b || b.getAttribute('aria-pressed') === 'true') return;
+    var proceso = b.getAttribute('data-app-cat'), cat = b.getAttribute('data-cat'), grupo = b.parentNode.querySelectorAll('button');
+    grupo.forEach(function (x) { x.disabled = true; });
+    $.ajax({ url: URL_APP_CAT, method: 'POST', data: { proceso: proceso, categoria: cat },
       headers: { 'X-CSRF-TOKEN': (document.querySelector('meta[name="csrf-token"]') || {}).content } })
-      .done(function () { APPS.cats[proceso] = s.value; if (F.tab === 'aplicaciones') pintarApps(); })
+      .done(function () { APPS.cats[proceso] = cat; if (F.tab === 'aplicaciones') pintarApps(); })
       .fail(function (xhr) {
-        s.disabled = false; s.value = antes;
+        grupo.forEach(function (x) { x.disabled = false; });
         if (xhr && xhr.status === 401) return;
-        alert((xhr && xhr.responseJSON && xhr.responseJSON.mensaje) || 'No se pudo guardar la categoría.');
+        alert((xhr && xhr.responseJSON && xhr.responseJSON.mensaje) || 'No se pudo guardar la clasificación.');
       });
   });
-
   function lenguaje(que) {
     return {
       search: '', searchPlaceholder: 'Buscar…', lengthMenu: '_MENU_ filas',

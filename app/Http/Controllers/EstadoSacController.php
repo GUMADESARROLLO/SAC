@@ -133,15 +133,20 @@ class EstadoSacController extends Controller
         if ((strtotime($hasta) - strtotime($desde)) / 86400 > 92) {
             return response()->json(['mensaje' => 'El rango máximo es de 3 meses.'], 422);
         }
+        $ids = EstadoSac::equipo()->pluck('id')->all();
+        // Carga de trabajo: los 7 días que terminan en "hasta", o el rango si es más largo (máximo 31)
+        $desdeDias = min($desde, date('Y-m-d', strtotime($hasta . ' -6 days')));
+        $desdeDias = max($desdeDias, date('Y-m-d', strtotime($hasta . ' -30 days')));
         return response()->json([
             'ahora'      => date('Y-m-d H:i:s'),
             'inactivo'   => UsoApp::INACTIVO,
-            'filas'      => UsoApp::reporte($desde, $hasta, EstadoSac::equipo()->pluck('id')->all()),
+            'filas'      => UsoApp::reporte($desde, $hasta, $ids),
+            'dias'       => UsoApp::porDia($desdeDias, $hasta, $ids),
             'categorias' => UsoApp::categorias(),
         ]);
     }
 
-    /** Asigna la categoría de un programa: trabajo | comunicacion | otros. */
+    /** Clasifica un programa: productivo | neutral | improductivo. */
     public function appCategoria(Request $request)
     {
         if (!in_array((string) Session::get('rol'), ['1', '2'], true)) {

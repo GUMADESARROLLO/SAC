@@ -1456,6 +1456,86 @@ body.sac select.sac-app-cat:focus { border-color: var(--sac-primary); }
 .sac-app-pie { margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--sac-border-soft); }
 .sac-app-tbl th[scope="col"] { font-size: 12.5px; font-weight: 600; color: var(--sac-ink-2); white-space: nowrap; }
 .sac-app-tbl td, .sac-app-tbl th { vertical-align: middle; }
+.sac-app-tbl td, .sac-app-tbl thead th { white-space: nowrap; }
 .sac-app-nota { padding: 14px 18px 18px; line-height: 1.5; }
 html[data-sac-theme="dark"] .sac-app-split .is-ina, html[data-sac-theme="dark"] .sac-app-ley .is-ina { background: #3A4766; }
 html[data-sac-theme="dark"] .sac-app-track i, html[data-sac-theme="dark"] .sac-app-split .is-act, html[data-sac-theme="dark"] .sac-app-ley .is-act { background: #5B6CE0; }
+
+/* Aplicaciones: carga de trabajo por día y aplicaciones más usadas (píldoras + dona) */
+.sac-eq { --sac-s1: #2a78d6; --sac-s2: #eb6834; --sac-s3: #1baf7a; --sac-s4: #eda100; --sac-s5: #e87ba4; --sac-s6: #6250d6; --sac-s0: #8792A8;
+  --sac-c-sobre: #C42B3A; --sac-c-sana: #1E9E57; --sac-c-poca: #D98A00; }
+html[data-sac-theme="dark"] .sac-eq { --sac-s1: #3987e5; --sac-s2: #d95926; --sac-s3: #199e70; --sac-s4: #c98500; --sac-s5: #d55181; --sac-s6: #9085e9; --sac-s0: #5A6787;
+  --sac-c-sobre: #E66767; --sac-c-sana: #15824A; --sac-c-poca: #B98626; }
+.is-s0 { --c: var(--sac-s0); } .is-s1 { --c: var(--sac-s1); } .is-s2 { --c: var(--sac-s2); } .is-s3 { --c: var(--sac-s3); }
+.is-s4 { --c: var(--sac-s4); } .is-s5 { --c: var(--sac-s5); } .is-s6 { --c: var(--sac-s6); }
+.sac-app-cols-2 { border-top: 0; }
+.sac-apt { display: flex; flex-wrap: wrap; gap: 20px 28px; align-items: center; margin-top: 12px; }
+.sac-apt-lista { flex: 999 1 300px; min-width: 0; display: flex; flex-direction: column; gap: 8px; }
+.sac-apt-pill { display: flex; align-items: center; gap: 10px; min-height: 36px; padding: 6px 14px; border-radius: 999px; font-size: 13.5px; color: var(--sac-ink);
+  background: color-mix(in srgb, var(--c) 14%, transparent); border: 1px solid color-mix(in srgb, var(--c) 45%, transparent); }
+.sac-apt-pill > i { flex: none; width: 10px; height: 10px; border-radius: 50%; background: var(--c); }
+.sac-apt-nom { flex: 1; min-width: 0; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.sac-apt-pill strong { font-family: var(--sac-font-num); font-size: 17px; font-weight: 700; letter-spacing: .01em; white-space: nowrap; }
+.sac-apt-pct { min-width: 34px; text-align: right; font-size: 12.5px; color: var(--sac-muted); font-variant-numeric: tabular-nums; }
+.sac-apt-dona { flex: 1 1 200px; max-width: 240px; margin: 0 auto; position: relative; }
+.sac-apt-dona svg { display: block; width: 100%; height: auto; transform: rotate(0deg); }
+.sac-apt-dona circle { stroke: var(--c); transition: stroke-width .12s ease; }
+.sac-apt-dona circle:hover { stroke-width: 8; }
+.sac-apt-centro { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; pointer-events: none; text-align: center; }
+.sac-apt-centro strong { font-family: var(--sac-font-num); font-size: 22px; font-weight: 700; line-height: 1.1; color: var(--sac-ink); }
+.sac-apt-centro span { font-size: 12px; color: var(--sac-muted); }
+.sac-carga { margin-top: 14px; }
+.sac-carga-cols { display: flex; gap: 6px; align-items: flex-end; border-bottom: 1px solid var(--sac-line-strong); padding: 0 4px; }
+.sac-carga-col { flex: 1 1 0; min-width: 0; display: flex; flex-direction: column; align-items: center; position: relative; }
+.sac-carga-barra { width: 100%; max-width: 46px; height: 150px; display: flex; flex-direction: column; justify-content: flex-end; gap: 2px; }
+.sac-carga-barra i { display: flex; align-items: center; justify-content: center; min-height: 18px; font-style: normal; font-size: 12px; font-weight: 700; color: #fff; }
+.sac-carga-barra i:first-child { border-radius: 4px 4px 0 0; }
+.sac-carga-barra .is-sobre, .sac-app-ley .is-sobre { background: var(--sac-c-sobre); }
+.sac-carga-barra .is-sana, .sac-app-ley .is-sana { background: var(--sac-c-sana); }
+.sac-carga-barra .is-poca, .sac-app-ley .is-poca { background: var(--sac-c-poca); }
+.sac-carga-barra .is-poca { color: #0b0b0b; }
+.sac-carga-nada { display: block; height: 2px; background: var(--sac-track); border-radius: 2px; }
+.sac-carga-dia { position: absolute; top: 100%; margin-top: 6px; font-size: 11.5px; color: var(--sac-muted); white-space: nowrap; text-align: center; line-height: 1.2; }
+.sac-carga-dia small { display: block; font-size: 10.5px; }
+.sac-carga-col.is-hoy .sac-carga-barra i { opacity: .7; }
+.sac-carga + .sac-app-ley { margin-top: 44px; gap: 6px 16px; }
+body.sac details.sac-app-clasif { border-top: 1px solid var(--sac-border-soft); padding: 14px 18px; }
+.sac-app-clasif summary { cursor: pointer; font-size: 14px; font-weight: 650; color: var(--sac-ink-2); min-height: 28px; }
+.sac-app-clasif[open] summary { margin-bottom: 6px; }
+.sac-app-clasif .sac-app-lista { max-width: 760px; }
+
+/* Aplicaciones: la primera fila son dos tarjetas iguales (gráfica | lista + dona) */
+body.sac .sac-main .sac-app-cols-mitad > section.sac-app-box, body.sac .sac-app-cols-mitad > .sac-app-box { flex: 1 1 480px; }
+.sac-apt { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 20px 28px; align-items: center; }
+.sac-apt-lista { flex: none; }
+.sac-apt-dona { flex: none; width: min(100%, 250px); max-width: none; margin: 0; justify-self: center; }
+@media (max-width: 1100px) { .sac-apt { grid-template-columns: minmax(0, 1fr); } }
+.sac-carga { margin-top: 18px; padding-left: 26px; }
+.sac-carga-cols { position: relative; gap: 4%; padding: 0 3%; justify-content: space-around; }
+.sac-carga-cols.is-denso { gap: 4px; padding: 0 4px; }
+.sac-carga-barra { height: 230px; max-width: 72px; position: relative; z-index: 1; }
+.sac-carga-guias { position: absolute; inset: 0; pointer-events: none; }
+.sac-carga-guias b { position: absolute; left: 0; right: 0; height: 0; border-top: 1px solid var(--sac-border-soft); }
+.sac-carga-guias b:first-child { border-top-color: transparent; }
+.sac-carga-guias span { position: absolute; right: 100%; top: -8px; margin-right: 8px; font-size: 11.5px; font-weight: 400; color: var(--sac-muted); font-variant-numeric: tabular-nums; }
+.sac-carga-nada { position: relative; z-index: 1; }
+
+/* Aplicaciones: tabla de clasificación (una fila por aplicación, tres botones) */
+.sac-clasif { display: flex; flex-direction: column; gap: 6px; margin-top: 12px; }
+.sac-clasif-fila { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 16px; padding: 8px 12px; border-radius: 8px; background: var(--sac-surface-2); }
+.sac-clasif-app { display: flex; flex-wrap: wrap; align-items: baseline; gap: 2px 12px; min-width: 0; }
+.sac-clasif-nom { font-size: 14.5px; font-weight: 600; color: var(--sac-ink); }
+.sac-clasif-sub { font-size: 12.5px; color: var(--sac-muted); }
+.sac-clasif-btns { display: flex; flex-wrap: wrap; gap: 8px; }
+body.sac .sac-clasif-btn { --k: var(--sac-muted); min-height: 32px; padding: 0 16px; border-radius: 999px; border: 1px solid var(--k); background: transparent; color: var(--k); font: inherit; font-size: 13px; font-weight: 600; cursor: pointer; transition: background-color .12s ease, color .12s ease; }
+body.sac .sac-clasif-btn.is-productivo { --k: var(--sac-ok-ink); }
+body.sac .sac-clasif-btn.is-neutral { --k: var(--sac-ink-3); }
+body.sac .sac-clasif-btn.is-improductivo { --k: var(--sac-bad-ink); }
+body.sac .sac-clasif-btn:hover { background: color-mix(in srgb, var(--k) 12%, transparent); }
+body.sac .sac-clasif-btn[aria-pressed="true"] { background: var(--k); color: var(--sac-surface); cursor: default; }
+body.sac .sac-clasif-btn:focus-visible { outline: 2px solid var(--sac-cyan); outline-offset: 2px; }
+body.sac .sac-clasif-btn:disabled { opacity: .6; cursor: progress; }
+html[data-sac-theme="dark"] body.sac .sac-clasif-btn.is-productivo { --k: #4CC38A; }
+html[data-sac-theme="dark"] body.sac .sac-clasif-btn.is-improductivo { --k: #FF98A2; }
+.sac-app-clasif .sac-clasif { max-width: none; }
+@media (prefers-reduced-motion: reduce) { body.sac .sac-clasif-btn { transition: none; } }

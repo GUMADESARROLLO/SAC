@@ -131,13 +131,23 @@
           {{-- ===== Aplicaciones: en qué programas se va el tiempo (lo reporta la app de escritorio) ===== --}}
           <div class="sac-eq-pane" data-eq-pane="aplicaciones" role="tabpanel" hidden>
             <div class="sac-kpis" id="sacEqAppKpis"></div>
-            <div class="sac-app-cols">
-              <section class="sac-app-box sac-app-box-wide" aria-labelledby="sacEqAppT1">
-                <h2 id="sacEqAppT1">Tiempo por aplicación</h2>
-                <p class="sac-muted" id="sacEqAppSub"></p>
-                <div class="sac-app-lista" id="sacEqAppLista"></div>
-                <p class="sac-muted sac-app-pie">La categoría se asigna una sola vez por aplicación y vale para todo el equipo.</p>
+            <div class="sac-app-cols sac-app-cols-mitad">
+              <section class="sac-app-box" aria-labelledby="sacEqAppT0">
+                <h2 id="sacEqAppT0">Carga de trabajo</h2>
+                <p class="sac-muted">Personas por día, según su tiempo activo</p>
+                <div class="sac-carga" id="sacEqCarga"></div>
+                <div class="sac-app-ley" id="sacEqCargaLey"></div>
               </section>
+              <section class="sac-app-box sac-app-box-wide" aria-labelledby="sacEqAppT1">
+                <h2 id="sacEqAppT1">Aplicaciones más usadas</h2>
+                <p class="sac-muted" id="sacEqAppSub"></p>
+                <div class="sac-apt">
+                  <div class="sac-apt-lista" id="sacEqTopLista"></div>
+                  <div class="sac-apt-dona" id="sacEqTopDona"></div>
+                </div>
+              </section>
+            </div>
+            <div class="sac-app-cols sac-app-cols-2">
               <section class="sac-app-box" aria-labelledby="sacEqAppT2">
                 <h2 id="sacEqAppT2">Por persona</h2>
                 <p class="sac-muted">Reparto del tiempo medido</p>
@@ -147,14 +157,19 @@
                 </div>
                 <div class="sac-app-lista" id="sacEqAppPersonas"></div>
               </section>
+              <section class="sac-app-box sac-app-box-wide sac-app-det" aria-labelledby="sacEqAppT3">
+                <h2 id="sacEqAppT3">Detalle por persona y aplicación</h2>
+                <p class="sac-muted">Tiempo activo en cada aplicación</p>
+                <div class="sac-app-scroll">
+                  <table class="table mb-0 sac-app-tbl" id="sacEqAppDet"></table>
+                </div>
+              </section>
             </div>
-            <section class="sac-app-box sac-app-det" aria-labelledby="sacEqAppT3">
-              <h2 id="sacEqAppT3">Detalle por persona y aplicación</h2>
-              <p class="sac-muted">Tiempo activo en cada aplicación</p>
-              <div class="sac-app-scroll">
-                <table class="table mb-0 sac-app-tbl" id="sacEqAppDet"></table>
-              </div>
-            </section>
+            <details class="sac-app-clasif" open>
+              <summary>Clasificar aplicaciones</summary>
+              <p class="sac-muted">Marca cada aplicación como productiva, neutral o no productiva. Se hace una sola vez y vale para todo el equipo.</p>
+              <div class="sac-clasif" id="sacEqAppLista"></div>
+            </details>
             <p class="sac-muted sac-app-nota">Qué se registra: el nombre del programa en primer plano y el tiempo, solo mientras la persona está En línea o AFK. No se guardan títulos de ventana, páginas visitadas, teclas ni capturas de pantalla. <strong>Sin actividad</strong> = más de 5 minutos sin teclado ni mouse. La app lo indica en su menú.</p>
           </div>
         </section>
