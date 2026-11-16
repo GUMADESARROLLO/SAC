@@ -52,7 +52,7 @@ class EstadoSac
         });
     }
 
-    /** Señal de vida del navegador: mantiene abierto el tramo actual (si no lleva ya demasiado sin señal). */
+    /** Señal de vida de la app de escritorio (POST /api/sac/latido): mantiene abierto el tramo actual (si no lleva ya demasiado sin señal). */
     public static function latido($userId)
     {
         self::tabla()->where('user_id', $userId)->whereNull('fin')->where('visto_en', '<', self::limiteSinSenal())
@@ -179,7 +179,7 @@ class EstadoSac
         })->values();
     }
 
-    /** Estado actual y "Mi día" del usuario, para el selector de la barra superior. */
+    /** Estado actual y "Mi día" del usuario. */
     public static function miDia($userId)
     {
         $hoy = date('Y-m-d');

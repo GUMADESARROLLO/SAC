@@ -153,14 +153,9 @@
                 if (saliendo || ahora - ultima < 3000) return;
                 ultima = ahora;
                 jQuery.ajax({ url: @json(route('sesionPing')), cache: false, global: false })
-                    .done(function (r) {
-                        // La misma revisión es la señal de vida del estado SAC: avisa el estado vigente al selector
-                        if (r && r.estado) document.dispatchEvent(new CustomEvent('sac:estado', { detail: r }));
-                    })
                     .fail(function (xhr) { if (esCierre(xhr)) alLogin(); });
             }
-            // Cada minuto, también con la pestaña en segundo plano: un SAC en AFK con el sistema
-            // minimizado sigue "presente". Si la señal se corta (apagó la máquina), pasa a Desconectado.
+            // Cada minuto, también con la pestaña en segundo plano
             setInterval(revisar, 60000);
             document.addEventListener('visibilitychange', function () { if (!document.hidden) revisar(); });
             // Cambiar de sección dentro de la misma página (Home#pedidos, #promociones…) no recarga

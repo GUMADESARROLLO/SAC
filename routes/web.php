@@ -10,8 +10,6 @@ Route::get('getStats/{d1}/{d2}', 'HomeController@getStats')->name('getStats/{d1}
 Route::get('/', 'Auth\LoginController@showLoginForm');
 Route::get('/logout', 'Auth\LoginController@logout');
 Route::get('sesionPing', 'EstadoSacController@ping')->name('sesionPing');
-Route::get('estado/mio', 'EstadoSacController@mio')->name('estadoMio');
-Route::post('estado', 'EstadoSacController@cambiar')->name('estadoCambiar');
 Route::get('ArticuloFavorito', 'HomeController@getArticuloFavorito')->name('ArticuloFavorito');
 Route::get('getData', 'HomeController@getData')->name('getData');
 

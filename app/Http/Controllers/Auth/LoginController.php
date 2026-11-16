@@ -9,7 +9,6 @@ use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Support\Facades\DB;
 use App\Models\Usuario;
 use App\Http\Middleware\SesionUnica;
-use App\Models\EstadoSac;
 
 class LoginController extends Controller
 {
@@ -48,8 +47,7 @@ class LoginController extends Controller
     }
     public function logout (Request $request) {
         if (auth()->check()) {
-            // Al cerrar sesión el SAC pasa a Desconectado
-            try { if (EstadoSac::mide(session('rol'))) EstadoSac::cambiar(auth()->id(), 'off', 'logout'); } catch (\Throwable $e) { report($e); }
+            // El estado SAC (En línea, AFK…) lo maneja solo la app de escritorio: salir de la web no lo cambia
             SesionUnica::liberar($request, auth()->id());
         }
         auth()->logout();

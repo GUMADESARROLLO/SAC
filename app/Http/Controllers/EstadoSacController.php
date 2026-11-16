@@ -10,7 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Session;
 
-/** Estados del equipo SAC: selector propio, señal de vida y datos para la página Equipo SAC. */
+/** Estados del equipo SAC: revisión de sesión del navegador y datos para la página Equipo SAC. */
 class EstadoSacController extends Controller
 {
     public function __construct()
@@ -18,44 +18,15 @@ class EstadoSacController extends Controller
         $this->middleware('auth');
     }
 
-    private function mide() { return EstadoSac::mide(Session::get('rol')); }
-
     /**
-     * Señal de vida (el navegador la envía cada minuto, también en segundo plano).
-     * Antes de llegar aquí, el middleware SesionUnica ya revisó que la sesión siga siendo la activa.
+     * Revisión de sesión que el navegador hace cada minuto. No hace nada por sí misma: el middleware
+     * SesionUnica ya respondió 401 si este usuario inició sesión en otro equipo.
+     * No cuenta como señal de vida del estado SAC: el estado y su latido son solo de la app de
+     * escritorio "SAC Estados" (SacApiController, /api/sac).
      */
     public function ping()
     {
-        if (!$this->mide()) return response()->noContent();
-        try {
-            EstadoSac::latido(Auth::id());
-            EstadoSac::cerrarSinSenal();
-            $act = EstadoSac::abierto(Auth::id());
-            return response()->json(['estado' => $act ? $act->estado : 'off', 'desde' => $act ? $act->inicio : null]);
-        } catch (\Throwable $e) {
-            report($e);
-            return response()->noContent();
-        }
-    }
-
-    /** Estado actual y "Mi día" del usuario. */
-    public function mio()
-    {
-        if (!$this->mide()) return response()->json(['mensaje' => 'Tu rol no registra estados.'], 403);
-        EstadoSac::latido(Auth::id());
-        return response()->json(EstadoSac::miDia(Auth::id()));
-    }
-
-    /** Cambia el estado del usuario: on | afk | lunch | off. */
-    public function cambiar(Request $request)
-    {
-        if (!$this->mide()) return response()->json(['mensaje' => 'Tu rol no registra estados.'], 403);
-        $estado = (string) $request->input('estado');
-        if (!in_array($estado, array_merge(EstadoSac::ESTADOS, ['off']), true)) {
-            return response()->json(['mensaje' => 'Estado no válido.'], 422);
-        }
-        EstadoSac::cambiar(Auth::id(), $estado);
-        return response()->json(EstadoSac::miDia(Auth::id()));
+        return response()->noContent();
     }
 
     /** Tramos del equipo para la página Equipo SAC (solo Admin y SAC Supervisor). */

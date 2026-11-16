@@ -10,7 +10,6 @@
   <div class="sac-top-title">Unimark S.A. · <strong id="sacTopTitle">@yield('sac_title', 'SAC')</strong></div>
 
   <div class="ms-auto d-flex align-items-center gap-2">
-    @include('layouts.sac_estado')
     <button class="sac-ib" type="button" data-sac-theme-toggle aria-pressed="false" aria-label="Cambiar a modo oscuro" title="Modo oscuro">
       <svg class="sac-ico-moon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"></path></svg>
       <svg class="sac-ico-sun" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2m-7.07-14.07 1.41 1.41m11.32 11.32 1.41 1.41M2 12h2m16 0h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"></path></svg>
