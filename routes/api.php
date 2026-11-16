@@ -28,6 +28,7 @@ Route::prefix('sac')->group(function () {
         Route::post('estado', 'SacApiController@cambiar');
         Route::post('latido', 'SacApiController@latido');
         Route::post('logout', 'SacApiController@logout');
+        Route::post('uso', 'SacApiController@uso');
     });
 });
 

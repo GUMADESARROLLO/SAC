@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Middleware\TokenSac;
 use App\Models\EstadoSac;
 use App\Models\SacToken;
+use App\Models\UsoApp;
 use App\Models\Usuario;
 use Illuminate\Cache\RateLimiter;
 use Illuminate\Http\Request;
@@ -18,6 +19,7 @@ use Illuminate\Support\Facades\Hash;
  *   POST /estado  {estado: on|afk|lunch|off}         -> {estado, desde, ahora}
  *   POST /latido                                     -> {estado, desde, ahora}
  *   POST /logout                                     -> {ok: true}
+ *   POST /uso     {apps:[{proceso,nombre,segundos}], inactivo} -> {ok: true}
  *
  * Errores, siempre con el campo "mensaje": 401 credenciales o token inválidos, 403 no es SAC
  * o está inactivo, 422 estado no válido, 429 demasiados intentos de inicio de sesión.
@@ -100,6 +102,18 @@ class SacApiController extends Controller
     {
         EstadoSac::cambiar($this->id($request), 'off', 'logout');
         SacToken::revocar($request->attributes->get('sac_token')->id);
+        return response()->json(['ok' => true]);
+    }
+
+    /**
+     * Uso de aplicaciones del último minuto (la app lo envía junto con el latido, solo En línea o AFK).
+     * apps = segundos con cada programa en primer plano; inactivo = segundos sin teclado ni mouse.
+     */
+    public function uso(Request $request)
+    {
+        $filas = UsoApp::limpiar($request->input('apps'), $request->input('inactivo'));
+        if ($filas === null) return response()->json(['mensaje' => 'El reporte de uso no es válido.'], 422);
+        UsoApp::registrar($this->id($request), $filas);
         return response()->json(['ok' => true]);
     }
 

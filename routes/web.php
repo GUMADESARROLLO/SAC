@@ -46,6 +46,8 @@ Route::get('EquipoSac', 'UsuarioController@getEquipoSac')->name('EquipoSac');
 Route::get('EquipoSac/estados', 'EstadoSacController@equipo')->name('equipoEstados');
 Route::get('EquipoSac/resumenExcel', 'EstadoSacController@resumenExcel')->name('equipoResumenExcel');
 Route::get('EquipoSac/pedidos', 'EstadoSacController@pedidos')->name('equipoPedidos');
+Route::get('EquipoSac/aplicaciones', 'EstadoSacController@aplicaciones')->name('equipoAplicaciones');
+Route::post('EquipoSac/appCategoria', 'EstadoSacController@appCategoria')->name('equipoAppCategoria');
 
 Route::post('AsignarRuta', 'UsuarioController@AsignarRuta')->name('AsignarRuta');
 Route::post('RemoverRutaAsignada', 'UsuarioController@RemoverRutaAsignada')->name('RemoverRutaAsignada');

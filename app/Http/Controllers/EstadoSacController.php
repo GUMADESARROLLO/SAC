@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\EstadoSac;
 use App\Models\Usuario;
+use App\Models\UsoApp;
 use App\Exports\ResumenEstadosXlsx;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use Illuminate\Http\Request;
@@ -113,5 +114,45 @@ class EstadoSacController extends Controller
         return response()->streamDownload(function () use ($libro) {
             (new Xlsx($libro))->save('php://output');
         }, $nombre, ['Content-Type' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'Cache-Control' => 'no-store']);
+    }
+
+    /** Uso de aplicaciones del equipo en el rango (pestaña Aplicaciones; solo Admin y SAC Supervisor). */
+    public function aplicaciones(Request $request)
+    {
+        if (!in_array((string) Session::get('rol'), ['1', '2'], true)) {
+            return response()->json(['mensaje' => 'No tienes permiso para ver el equipo.'], 403);
+        }
+        $fecha = function ($v, $defecto) {
+            $d = \DateTime::createFromFormat('!Y-m-d', (string) $v);
+            return ($d && $d->format('Y-m-d') === $v) ? $v : $defecto;
+        };
+        $hoy = date('Y-m-d');
+        $desde = $fecha($request->query('desde'), $hoy);
+        $hasta = $fecha($request->query('hasta'), $hoy);
+        if ($desde > $hasta) { [$desde, $hasta] = [$hasta, $desde]; }
+        if ((strtotime($hasta) - strtotime($desde)) / 86400 > 92) {
+            return response()->json(['mensaje' => 'El rango máximo es de 3 meses.'], 422);
+        }
+        return response()->json([
+            'ahora'      => date('Y-m-d H:i:s'),
+            'inactivo'   => UsoApp::INACTIVO,
+            'filas'      => UsoApp::reporte($desde, $hasta, EstadoSac::equipo()->pluck('id')->all()),
+            'categorias' => UsoApp::categorias(),
+        ]);
+    }
+
+    /** Asigna la categoría de un programa: trabajo | comunicacion | otros. */
+    public function appCategoria(Request $request)
+    {
+        if (!in_array((string) Session::get('rol'), ['1', '2'], true)) {
+            return response()->json(['mensaje' => 'No tienes permiso para clasificar aplicaciones.'], 403);
+        }
+        $proceso = mb_substr(mb_strtolower(trim((string) $request->input('proceso'))), 0, 120);
+        $categoria = (string) $request->input('categoria');
+        if ($proceso === '' || $proceso === UsoApp::INACTIVO || !in_array($categoria, UsoApp::CATEGORIAS, true)) {
+            return response()->json(['mensaje' => 'La categoría no es válida.'], 422);
+        }
+        UsoApp::categorizar($proceso, $categoria);
+        return response()->json(['ok' => true]);
     }
 }

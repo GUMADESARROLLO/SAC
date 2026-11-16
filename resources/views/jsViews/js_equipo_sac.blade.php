@@ -13,6 +13,8 @@
   var URL_ESTADOS = @json(route('equipoEstados'));
   var URL_EXCEL = @json(route('equipoResumenExcel'));
   var URL_PEDIDOS = @json(route('equipoPedidos'));
+  var URL_APPS = @json(route('equipoAplicaciones'));
+  var URL_APP_CAT = @json(route('equipoAppCategoria'));
 
   // ---------- Equipo: SAC y SAC Supervisor activos ----------
   var SACS = (window.SAC_EQ_SACS || []).slice();
@@ -430,6 +432,132 @@
     }));
   }
 
+  // =====================================================================
+  // 5) APLICACIONES — tiempo por programa (tbl_uso_app; lo envía la app de escritorio cada minuto)
+  // =====================================================================
+  var CAT = { trabajo: 'Trabajo', comunicacion: 'Comunicación', otros: 'Otros' };
+  var APPS = { filas: [], cats: {}, inactivo: '(inactivo)' }, reqApp = 0, MAX_APPS_LISTA = 8, COLS_DET = 4;
+  function durSeg(s) { return dur(s / 60); }
+  function cargarApps(listo) {
+    var mio = ++reqApp;
+    estadoCarga(true);
+    $.ajax({ url: URL_APPS, data: { desde: clave(F.desde), hasta: clave(F.hasta) }, cache: false })
+      .done(function (r) {
+        if (mio !== reqApp) return;
+        estadoCarga(false);
+        var srv = fechaSrv(r.ahora);
+        if (srv) { desfase = srv - Date.now(); HOY = soloDia(srv); }
+        APPS = { filas: r.filas || [], cats: r.categorias || {}, inactivo: r.inactivo || '(inactivo)' };
+        listo();
+      })
+      .fail(function (xhr) {
+        if (mio !== reqApp) return;
+        estadoCarga(false);
+        if (xhr && xhr.status === 401) return;
+        APPS.filas = [];
+        pintarApps((xhr && xhr.responseJSON && xhr.responseJSON.mensaje) || 'No se pudo cargar el uso de aplicaciones.');
+      });
+  }
+  // Agrupa lo cargado según el filtro de persona
+  function resumenApps() {
+    var ids = {}; sacsFiltrados().forEach(function (s) { ids[s.id] = true; });
+    var apps = {}, pers = {}, activo = 0, inactivo = 0;
+    APPS.filas.forEach(function (f) {
+      if (!ids[f.user_id]) return;
+      var p = pers[f.user_id] = pers[f.user_id] || { s: POR_ID[f.user_id], activo: 0, inactivo: 0, apps: {} };
+      if (f.proceso === APPS.inactivo) { p.inactivo += f.segundos; inactivo += f.segundos; return; }
+      var a = apps[f.proceso] = apps[f.proceso] || { proceso: f.proceso, nombre: f.nombre || f.proceso, seg: 0 };
+      a.seg += f.segundos; p.activo += f.segundos; activo += f.segundos;
+      p.apps[f.proceso] = (p.apps[f.proceso] || 0) + f.segundos;
+    });
+    var lista = Object.keys(apps).map(function (k) { return apps[k]; }).sort(function (x, y) { return y.seg - x.seg || x.nombre.localeCompare(y.nombre); });
+    var personas = Object.keys(pers).map(function (k) { return pers[k]; }).filter(function (p) { return p.s; })
+      .sort(function (x, y) { return (y.activo + y.inactivo) - (x.activo + x.inactivo); });
+    return { lista: lista, personas: personas, activo: activo, inactivo: inactivo };
+  }
+  function selectCat(a) {
+    var act = APPS.cats[a.proceso] || '';
+    return '<select class="form-select sac-app-cat" data-app-cat="' + esc(a.proceso) + '" aria-label="Categoría de ' + esc(a.nombre) + '">' +
+      '<option value=""' + (act ? '' : ' selected') + ' disabled>Sin clasificar</option>' +
+      Object.keys(CAT).map(function (k) { return '<option value="' + k + '"' + (act === k ? ' selected' : '') + '>' + CAT[k] + '</option>'; }).join('') + '</select>';
+  }
+  function barraApp(nombre, extra, seg, total, max, tip) {
+    return '<div class="sac-app-fila" data-tip="' + esc(tip) + '">' +
+      '<div class="sac-app-cab"><div class="sac-app-nom"><span>' + esc(nombre) + '</span>' + extra + '</div>' +
+      '<div class="sac-app-val"><strong>' + durSeg(seg) + '</strong><span>' + (pct(seg, total) == null ? '' : pct(seg, total) + '%') + '</span></div></div>' +
+      '<div class="sac-app-track" aria-hidden="true"><i style="width:' + (max > 0 ? Math.max(1, seg * 100 / max).toFixed(1) : 0) + '%"></i></div></div>';
+  }
+  function pintarApps(error) {
+    $('.sac-eq-err').remove();
+    var r = resumenApps(), medido = r.activo + r.inactivo;
+    var kp = document.getElementById('sacEqAppKpis'), li = document.getElementById('sacEqAppLista'),
+        pe = document.getElementById('sacEqAppPersonas'), de = document.getElementById('sacEqAppDet');
+    document.getElementById('sacEqAppSub').textContent = '';
+    if (error || !medido) {
+      var msg = error ? esc(error) + ' <button type="button" class="btn btn-link" data-eq-reintentar>Reintentar</button>'
+        : 'Todavía no hay registros de uso en este periodo. Los envía la app de escritorio mientras el SAC está En línea o AFK.';
+      kp.innerHTML = ''; pe.innerHTML = ''; de.innerHTML = '';
+      li.innerHTML = '<p class="sac-empty">' + msg + '</p>';
+      return;
+    }
+    var top = r.lista[0];
+    kp.innerHTML =
+      kpi('Tiempo medido', durSeg(medido), 'En línea y AFK de ' + r.personas.length + (r.personas.length === 1 ? ' persona' : ' personas') + ' · ' + textoPeriodo()) +
+      kpi('Tiempo activo', durSeg(r.activo), pct(r.activo, medido) + '% del tiempo medido, usando teclado o mouse') +
+      kpi('Sin actividad', durSeg(r.inactivo), pct(r.inactivo, medido) + '%, más de 5 min sin teclado ni mouse') +
+      kpi('Aplicación más usada', top ? esc(top.nombre) : '—', top ? durSeg(top.seg) + ', ' + pct(top.seg, r.activo) + '% del tiempo activo' : '');
+
+    // Reparto por categoría (texto: la categoría no lleva color)
+    var porCat = { trabajo: 0, comunicacion: 0, otros: 0 }, sinCat = 0;
+    r.lista.forEach(function (a) { var c = APPS.cats[a.proceso]; if (c && porCat[c] != null) porCat[c] += a.seg; else sinCat += a.seg; });
+    document.getElementById('sacEqAppSub').textContent = Object.keys(CAT).map(function (k) { return CAT[k] + ' ' + (pct(porCat[k], r.activo) || 0) + '%'; }).join(' · ') +
+      (sinCat ? ' · Sin clasificar ' + pct(sinCat, r.activo) + '%' : '');
+
+    var visibles = r.lista.slice(0, MAX_APPS_LISTA), resto = r.lista.slice(MAX_APPS_LISTA);
+    var max = visibles.length ? visibles[0].seg : 0;
+    var segResto = resto.reduce(function (a, x) { return a + x.seg; }, 0);
+    li.innerHTML = visibles.map(function (a) {
+      return barraApp(a.nombre, selectCat(a), a.seg, r.activo, Math.max(max, segResto),
+        '<strong>' + esc(a.nombre) + '</strong><span>' + esc(a.proceso) + '</span><span>' + durSeg(a.seg) + ' · ' + pct(a.seg, r.activo) + '% del tiempo activo</span>');
+    }).join('') + (resto.length ? barraApp('Otras ' + resto.length + (resto.length === 1 ? ' aplicación' : ' aplicaciones'), '', segResto, r.activo, Math.max(max, segResto),
+      '<strong>Otras aplicaciones</strong><span>' + esc(resto.slice(0, 6).map(function (x) { return x.nombre; }).join(', ')) + (resto.length > 6 ? '…' : '') + '</span>') : '');
+
+    pe.innerHTML = r.personas.map(function (p) {
+      var tot = p.activo + p.inactivo, k = Object.keys(p.apps).sort(function (x, y) { return p.apps[y] - p.apps[x]; })[0];
+      var topP = k ? (r.lista.filter(function (a) { return a.proceso === k; })[0] || {}).nombre : null;
+      return '<div class="sac-app-fila" data-tip="' + esc('<strong>' + esc(p.s.nombre) + '</strong><span>Activo ' + durSeg(p.activo) + ' · ' + pct(p.activo, tot) + '%</span><span>Sin actividad ' + durSeg(p.inactivo) + ' · ' + pct(p.inactivo, tot) + '%</span>') + '">' +
+        '<div class="sac-app-cab"><div class="sac-app-nom"><span>' + esc(p.s.nombre) + '</span><small>' + esc(p.s.username) + '</small></div>' +
+        '<div class="sac-app-val"><strong>' + durSeg(tot) + '</strong></div></div>' +
+        '<div class="sac-app-split" aria-hidden="true"><i class="is-act" style="width:' + (p.activo * 100 / tot).toFixed(1) + '%"></i><i class="is-ina"></i></div>' +
+        '<div class="sac-app-sub"><span>Activo ' + durSeg(p.activo) + ' · Sin actividad ' + durSeg(p.inactivo) + '</span>' + (topP ? '<span>Más usada: ' + esc(topP) + '</span>' : '') + '</div></div>';
+    }).join('');
+
+    var cols = r.lista.slice(0, COLS_DET);
+    de.innerHTML = '<thead><tr><th scope="col">Persona</th>' + cols.map(function (a) { return '<th scope="col" class="text-end">' + esc(a.nombre) + '</th>'; }).join('') +
+      '<th scope="col" class="text-end">Otras</th><th scope="col" class="text-end">Activo</th></tr></thead><tbody>' +
+      r.personas.map(function (p) {
+        var enCols = 0;
+        var tds = cols.map(function (a) { var v = p.apps[a.proceso] || 0; enCols += v; return '<td class="text-end sac-num">' + (v ? durSeg(v) : '<span class="sac-muted">—</span>') + '</td>'; }).join('');
+        var otras = p.activo - enCols;
+        return '<tr><th scope="row">' + nombreSac(p.s) + '</th>' + tds + '<td class="text-end sac-num">' + (otras ? durSeg(otras) : '<span class="sac-muted">—</span>') + '</td><td class="text-end sac-num fw-bold">' + durSeg(p.activo) + '</td></tr>';
+      }).join('') + '</tbody>';
+  }
+  // Cambiar la categoría de una aplicación (vale para todo el equipo)
+  document.addEventListener('change', function (e) {
+    var s = e.target.closest ? e.target.closest('[data-app-cat]') : null;
+    if (!s) return;
+    var proceso = s.getAttribute('data-app-cat'), antes = APPS.cats[proceso] || '';
+    s.disabled = true;
+    $.ajax({ url: URL_APP_CAT, method: 'POST', data: { proceso: proceso, categoria: s.value },
+      headers: { 'X-CSRF-TOKEN': (document.querySelector('meta[name="csrf-token"]') || {}).content } })
+      .done(function () { APPS.cats[proceso] = s.value; if (F.tab === 'aplicaciones') pintarApps(); })
+      .fail(function (xhr) {
+        s.disabled = false; s.value = antes;
+        if (xhr && xhr.status === 401) return;
+        alert((xhr && xhr.responseJSON && xhr.responseJSON.mensaje) || 'No se pudo guardar la categoría.');
+      });
+  });
+
   function lenguaje(que) {
     return {
       search: '', searchPlaceholder: 'Buscar…', lengthMenu: '_MENU_ filas',
@@ -446,8 +574,9 @@
   // =====================================================================
   // Pestañas, filtros y exportación
   // =====================================================================
-  var PINTAR = { vivo: pintarVivo, bitacora: pintarBitacora, resumen: pintarResumen, pedidos: pintarPedidos };
+  var PINTAR = { vivo: pintarVivo, bitacora: pintarBitacora, resumen: pintarResumen, pedidos: pintarPedidos, aplicaciones: pintarApps };
   function refrescar() {
+    if (F.tab === 'aplicaciones') { cargarApps(function () { if (F.tab === 'aplicaciones') pintarApps(); }); return; }
     if (F.tab === 'pedidos') { cargarPedidos(function () { if (F.tab === 'pedidos') pintarPedidos(); }); return; }
     var tab = F.tab, a = F.desde, b = F.hasta;
     if (tab === 'vivo') { a = HOY; b = HOY; }
@@ -475,7 +604,7 @@
     var o = document.createElement('option'); o.value = s.id; o.textContent = s.nombre; sel.appendChild(o);
   });
   // El filtro de SAC se aplica sobre los datos ya cargados
-  sel.addEventListener('change', function () { F.sac = sel.value; if (F.tab === 'pedidos') pintarPedidos(); else if (!DATOS.cargado) refrescar(); else PINTAR[F.tab](); });
+  sel.addEventListener('change', function () { F.sac = sel.value; if (F.tab === 'pedidos') pintarPedidos(); else if (F.tab === 'aplicaciones') pintarApps(); else if (!DATOS.cargado) refrescar(); else PINTAR[F.tab](); });
 
   // Fechas: dos selectores separados, como en Pedidos
   var ES = {
@@ -554,6 +683,17 @@
       (F.sac ? filasPed.filter(function (p) { return p.sacId === F.sac; }) : filasPed).forEach(function (p) {
         filas.push([p.id, p.cliente, p.nombre, p.ruta, p.sac, fh(p.rec), fh(p.pro), p.resp == null ? '' : Math.round(p.resp), p.monto.toFixed(2), p.cancelado ? 'Cancelado' : 'Procesado']);
       });
+    }
+    if (F.tab === 'aplicaciones') {
+      filas.push(['SAC', 'Usuario', 'Aplicación', 'Programa', 'Categoría', 'Minutos']);
+      var visibles = {}; sacsFiltrados().forEach(function (s) { visibles[s.id] = s; });
+      APPS.filas.filter(function (f) { return visibles[f.user_id]; })
+        .sort(function (x, y) { return visibles[x.user_id].nombre.localeCompare(visibles[y.user_id].nombre) || y.segundos - x.segundos; })
+        .forEach(function (f) {
+          var ina = f.proceso === APPS.inactivo;
+          filas.push([visibles[f.user_id].nombre, visibles[f.user_id].username, ina ? 'Sin actividad' : f.nombre, ina ? '' : f.proceso,
+            ina ? '' : (CAT[APPS.cats[f.proceso]] || 'Sin clasificar'), (f.segundos / 60).toFixed(1)]);
+        });
     }
     var csv = '﻿' + filas.map(function (f) { return f.map(function (v) { v = String(v); return /[",;\n]/.test(v) ? '"' + v.replace(/"/g, '""') + '"' : v; }).join(','); }).join('\r\n');
     var url = URL.createObjectURL(new Blob([csv], { type: 'text/csv;charset=utf-8' }));

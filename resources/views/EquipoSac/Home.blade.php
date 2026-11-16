@@ -35,6 +35,7 @@
               <button type="button" class="nav-link" role="tab" data-eq-tab="bitacora" aria-selected="false">Bitácora</button>
               <button type="button" class="nav-link" role="tab" data-eq-tab="resumen" aria-selected="false">Resumen</button>
               <button type="button" class="nav-link" role="tab" data-eq-tab="pedidos" aria-selected="false">Pedidos</button>
+              <button type="button" class="nav-link" role="tab" data-eq-tab="aplicaciones" aria-selected="false">Aplicaciones</button>
             </div>
             <button type="button" class="btn btn-falcon-default ms-auto" id="sacEqExport">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><path d="m7 10 5 5 5-5M12 15V3"></path></svg>
@@ -125,6 +126,36 @@
                 <thead><tr><th>Pedido</th><th>Fecha</th><th>Cliente</th><th>Procesado por</th><th>Recibido</th><th>Procesado</th><th class="text-end">Respuesta</th><th class="text-end">Monto</th><th>Estado</th></tr></thead>
               </table>
             </div>
+          </div>
+
+          {{-- ===== Aplicaciones: en qué programas se va el tiempo (lo reporta la app de escritorio) ===== --}}
+          <div class="sac-eq-pane" data-eq-pane="aplicaciones" role="tabpanel" hidden>
+            <div class="sac-kpis" id="sacEqAppKpis"></div>
+            <div class="sac-app-cols">
+              <section class="sac-app-box sac-app-box-wide" aria-labelledby="sacEqAppT1">
+                <h2 id="sacEqAppT1">Tiempo por aplicación</h2>
+                <p class="sac-muted" id="sacEqAppSub"></p>
+                <div class="sac-app-lista" id="sacEqAppLista"></div>
+                <p class="sac-muted sac-app-pie">La categoría se asigna una sola vez por aplicación y vale para todo el equipo.</p>
+              </section>
+              <section class="sac-app-box" aria-labelledby="sacEqAppT2">
+                <h2 id="sacEqAppT2">Por persona</h2>
+                <p class="sac-muted">Reparto del tiempo medido</p>
+                <div class="sac-app-ley" aria-hidden="true">
+                  <span><i class="is-act"></i>Activo</span>
+                  <span><i class="is-ina"></i>Sin actividad</span>
+                </div>
+                <div class="sac-app-lista" id="sacEqAppPersonas"></div>
+              </section>
+            </div>
+            <section class="sac-app-box sac-app-det" aria-labelledby="sacEqAppT3">
+              <h2 id="sacEqAppT3">Detalle por persona y aplicación</h2>
+              <p class="sac-muted">Tiempo activo en cada aplicación</p>
+              <div class="sac-app-scroll">
+                <table class="table mb-0 sac-app-tbl" id="sacEqAppDet"></table>
+              </div>
+            </section>
+            <p class="sac-muted sac-app-nota">Qué se registra: el nombre del programa en primer plano y el tiempo, solo mientras la persona está En línea o AFK. No se guardan títulos de ventana, páginas visitadas, teclas ni capturas de pantalla. <strong>Sin actividad</strong> = más de 5 minutos sin teclado ni mouse. La app lo indica en su menú.</p>
           </div>
         </section>
       </div>
