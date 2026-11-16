@@ -106,7 +106,7 @@ class SacApiController extends Controller
     }
 
     /**
-     * Uso de aplicaciones del último minuto (la app lo envía junto con el latido, solo En línea o AFK).
+     * Uso de aplicaciones del último minuto (la app lo envía junto con el latido, en cualquier estado).
      * apps = segundos con cada programa en primer plano; inactivo = segundos sin teclado ni mouse.
      */
     public function uso(Request $request)

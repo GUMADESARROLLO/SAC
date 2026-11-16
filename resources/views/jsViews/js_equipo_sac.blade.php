@@ -586,14 +586,14 @@
     pintarCarga();
     if (error || !medido) {
       var msg = error ? esc(error) + ' <button type="button" class="btn btn-link" data-eq-reintentar>Reintentar</button>'
-        : 'Todavía no hay registros de uso en este periodo. Los envía la app de escritorio mientras el SAC está En línea o AFK.';
+        : 'Todavía no hay registros de uso en este periodo. Los envía la app de escritorio mientras el SAC tiene la sesión iniciada, en cualquier estado.';
       kp.innerHTML = ''; pe.innerHTML = ''; de.innerHTML = ''; li.innerHTML = ''; td.innerHTML = '';
       tl.innerHTML = '<p class="sac-empty">' + msg + '</p>';
       return;
     }
     var top = r.lista[0];
     kp.innerHTML =
-      kpi('Tiempo medido', durSeg(medido), 'En línea y AFK de ' + r.personas.length + (r.personas.length === 1 ? ' persona' : ' personas') + ' · ' + textoPeriodo()) +
+      kpi('Tiempo medido', durSeg(medido), 'Con la app abierta, ' + r.personas.length + (r.personas.length === 1 ? ' persona' : ' personas') + ' · ' + textoPeriodo()) +
       kpi('Tiempo activo', durSeg(r.activo), pct(r.activo, medido) + '% del tiempo medido, usando teclado o mouse') +
       kpi('Sin actividad', durSeg(r.inactivo), pct(r.inactivo, medido) + '%, más de 5 min sin teclado ni mouse') +
       kpi('Aplicación más usada', top ? esc(top.nombre) : '—', top ? durSeg(top.seg) + ', ' + pct(top.seg, r.activo) + '% del tiempo activo' : '');

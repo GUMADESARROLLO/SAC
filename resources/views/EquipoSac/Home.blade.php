@@ -170,7 +170,7 @@
               <p class="sac-muted">Marca cada aplicación como productiva, neutral o no productiva. Se hace una sola vez y vale para todo el equipo.</p>
               <div class="sac-clasif" id="sacEqAppLista"></div>
             </details>
-            <p class="sac-muted sac-app-nota">Qué se registra: el nombre del programa en primer plano y el tiempo, solo mientras la persona está En línea o AFK. No se guardan títulos de ventana, páginas visitadas, teclas ni capturas de pantalla. <strong>Sin actividad</strong> = más de 5 minutos sin teclado ni mouse. La app lo indica en su menú.</p>
+            <p class="sac-muted sac-app-nota">Qué se registra: el nombre del programa en primer plano y el tiempo, mientras la persona tiene la sesión iniciada en la app, en cualquier estado (En línea, AFK, Descanso o Desconectado). No se guardan títulos de ventana, páginas visitadas, teclas ni capturas de pantalla. <strong>Sin actividad</strong> = más de 5 minutos sin teclado ni mouse. La app lo indica en su menú.</p>
           </div>
         </section>
       </div>
